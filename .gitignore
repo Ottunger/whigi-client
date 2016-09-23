@@ -6,3 +6,4 @@ dist/*.map
 dist/*.js
 dist/*.css
 dist/index.html
+/.vscode
