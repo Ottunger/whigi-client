@@ -190,14 +190,14 @@ export class Trie {
         if(level == str.length) {
             if(cur.end) {
                 cur.end = false;
-                if(Object.getOwnPropertyNames(cur).length == 0)
+                if(Object.getOwnPropertyNames(cur.children).length == 0)
                     return true;
                 return false;
             }
         } else {
             if(this.deleteHelper(cur.children[str[level]], str, level + 1)) {
                 delete cur.children[str[level]];
-                return cur.end == false && Object.getOwnPropertyNames(cur).length == 0;
+                return cur.end == false && Object.getOwnPropertyNames(cur.children).length == 0;
             }
         }
         return false;
