@@ -252,8 +252,8 @@ export class Backend {
         for(var i = 0; i < this.rsa_key.length; i++) {
             try {
                 dec.setPrivateKey(this.rsa_key[i]);
-                dec = dec.decrypt(data);
-                return this.str2arr(dec);
+                var r = dec.decrypt(data);
+                return this.str2arr(r);
             } catch(e) {}
         }
         return undefined;
