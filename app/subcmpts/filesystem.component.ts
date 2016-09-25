@@ -316,6 +316,7 @@ export class Filesystem implements OnInit {
             return '/';
         }
         var key = (this.mode == 'data')? this.folders : this.folders.replace(/^[^\/]*\//, '');
+        key = (!!key && key != '')? key : '__stupid';
         return this.translate.instant(key) == key? undefined : key;
     }
     
