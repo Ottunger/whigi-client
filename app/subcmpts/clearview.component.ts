@@ -36,7 +36,7 @@ enableProdMode();
         <div *ngIf="is_dated">
             <div *ngFor="let p of computeValues(); let i = index">
                 <div>{{ 'actualFrom' | translate }}
-                    <div class='input-group date' id='pick-id{{ p }}'>
+                    <div class='input-group date' id='pick-id-rem{{ i }}'>
                         <input type='text' class="form-control" readonly="readonly"/>
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-calendar"></span>
@@ -97,8 +97,10 @@ export class Clearview {
         if(!this.values) {
             this.values = JSON.parse(this.decr_data);
             for(var i = 0; i < this.values.length; i++) {
-                window.$('#pick-id' + this.values[i]).datetimepicker();
-                window.$('#pick-id' + this.values[i]).datetimepicker('date', window.moment(this.values[i].from));
+                setTimeout(function() {
+                    window.$('#pick-id-rem' + i).datetimepicker();
+                    window.$('#pick-id-rem' + i).datetimepicker('date', window.moment(this.values[i].from));
+                });
                 this.values[i].from = new Date(this.values[i].from);
             }
             if(this.values.length == 0)
