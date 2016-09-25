@@ -155,17 +155,22 @@ export class Account implements OnInit, OnDestroy {
                 self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('//') : [];
                 for(var i = 0; i < self.data_list.length; i++) {
                     if((!(self.data_list[i] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[self.data_list[i]].shared_to)) && self.data_list[i] in self.backend.generics) {
-                        var ret = self.backend.data_trie.suggestions(self.data_list[i] + '/', '/').sort().filter(function(el: string): boolean {
-                            return el.charAt(el.length - 1) != '/';
-                        });
-                        var nice = false;
-                        for(var j = 0; j < ret.length; j++) {
-                            if(ret[j] in self.backend.profile.data && self.id_to in self.backend.profile.data[ret[j]].shared_to) {
-                                nice = true;
+                        if(self.backend.generics[self.data_list[i]][0].is_folder) {
+                            var ret = self.backend.data_trie.suggestions(self.data_list[i] + '/', '/').filter(function(el: string): boolean {
+                                return el.charAt(el.length - 1) != '/';
+                            });
+                            var nice = false;
+                            for(var j = 0; j < ret.length; j++) {
+                                if(ret[j] in self.backend.profile.data && self.id_to in self.backend.profile.data[ret[j]].shared_to) {
+                                    nice = true;
+                                    break;
+                                }
+                            }
+                            if(!nice) {
+                                all = false;
                                 break;
                             }
-                        }
-                        if(!nice) {
+                        } else {
                             all = false;
                             break;
                         }
