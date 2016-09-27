@@ -141,7 +141,7 @@ export class Account implements OnInit, OnDestroy {
             
             //We prepare HTTPS
             if(!/^http/.test(self.return_url_ok)) {
-                window.location.href = self.return_url_deny;
+                self.deny();
             }
             var parts = self.return_url_ok.split('https://');
             if(parts.length == 3) {
@@ -178,24 +178,16 @@ export class Account implements OnInit, OnDestroy {
                 }
                 if(all && (self.with_account == 'false' || ('keys/auth/' + self.id_to in self.backend.profile.data &&
                     self.id_to in self.backend.profile.data['keys/auth/' + self.id_to].shared_to))) {
-                    if(self.with_account == 'flow') {
-                        var arr = self.return_url_ok.split('/');
-                        arr.shift();
-                        arr.shift();
-                        arr.shift();
-                        self.router.navigate(arr);
-                    } else {
-                        window.location.href = self.return_url_ok;
-                    }
+                    self.ok();
                 }
             }, function() {
-                window.location.href = self.return_url_deny;
+                self.deny();
             });
             self.backend.getUser(self.id_to).then(function(user) {
                 self.requester = user;
                 self.check.tick();
             }, function(e) {
-                window.location.href = self.return_url_deny;
+                self.deny();
             });
         });
     }
@@ -292,23 +284,15 @@ export class Account implements OnInit, OnDestroy {
                 }
             }
             this.process(saves).then(function() {
-                if(self.with_account == 'flow') {
-                    var arr = self.return_url_ok.split('/');
-                    arr.shift();
-                    arr.shift();
-                    arr.shift();
-                    self.router.navigate(arr);
-                } else {
-                    window.location.href = self.return_url_ok;
-                }
+                self.ok();
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('account.err'));
                 window.setTimeout(function() {
-                    window.location.href = self.return_url_deny;
+                    self.deny();
                 }, 1500);
             });
         } else {
-            window.location.href = self.return_url_deny;
+            self.deny();
         }
     }
 
@@ -410,6 +394,50 @@ export class Account implements OnInit, OnDestroy {
             this.filter[folder] = ret[0];
         }
         return ret;
+    }
+
+    /**
+     * OK, which is a move and maybe some calls.
+     * @function ok
+     * @private
+     */
+    private ok() {
+        if(typeof Android !== undefined) {
+            try {
+                Android.ok();
+            } catch(e) {}
+        } else if(typeof webkit !== undefined && !!webkit.messageHandlers) {
+            try {
+                webkit.messageHandlers.ok.postMessage();
+            } catch(e) {}
+        }
+        if(this.with_account == 'flow') {
+            var arr = this.return_url_ok.split('/');
+            arr.shift();
+            arr.shift();
+            arr.shift();
+            this.router.navigate(arr);
+        } else {
+            window.location.href = this.return_url_ok;
+        }
+    }
+
+    /**
+     * Deny, which is a move and maybe some calls.
+     * @function deny
+     * @private
+     */
+    private deny() {
+        if(typeof Android !== undefined) {
+            try {
+                Android.deny();
+            } catch(e) {}
+        } else if(typeof webkit !== undefined && !!webkit.messageHandlers) {
+            try {
+                webkit.messageHandlers.deny.postMessage();
+            } catch(e) {}
+        }
+        window.location.href = this.return_url_deny;
     }
 
 }
