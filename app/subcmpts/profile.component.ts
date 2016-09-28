@@ -203,13 +203,15 @@ export class Profile implements OnInit {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
             return;
         }
-        if(this.password == this.password2) {
+        if(this.password == this.password2 && this.password.length >= 8) {
             this.backend.updateProfile(this.password, this.current_pwd).then(function() {
-                self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, self.backend.profile.data['keys/pwd/mine1'].shared_to).then(function() {
-                    self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, self.backend.profile.data['keys/pwd/mine2'].shared_to).then(function() {
+                self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to).then(function() {
+                    self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to).then(function() {
                         self.current_pwd = '';
                         self.password = '';
                         self.password2 = '';
+                        localStorage.setItem('key_decryption', window.sha256(self.password + self.backend.profile.salt));
+                        localStorage.setItem('psha', window.sha256(self.password));
                         self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
                     }, function(e) {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));

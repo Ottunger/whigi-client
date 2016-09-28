@@ -307,7 +307,7 @@ export class Dataview implements OnInit, OnDestroy {
         for(var i = 0; i < names.length; i++) {
             dict[names[i]] = this.timings[names[i]].ee;
         }
-        this.dataservice.modifyData(this.data_name, replacement, this.is_dated, dict, (this.is_generic && this.data_name != this.gen_name)).then(function() {
+        this.dataservice.modifyData(this.data_name, replacement, this.is_dated, this.version, dict, (this.is_generic && this.data_name != this.gen_name)).then(function() {
             self.new_datas = {};
             self.new_data = '';
             self.decr_data = replacement;

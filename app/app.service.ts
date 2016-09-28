@@ -175,12 +175,14 @@ export class Backend {
      * @function encryptMasterAESAsNumber
      * @public
      * @param {String} pwd Password.
-     * @param {String} salt User salt.
      * @param {Number[]} master_key Master key.
      * @return {Bytes} Encrypted master key.
      */
-    private encryptMasterAESAsNumber(pwd: string, salt: string, master_key: number[]): number[] {
-        return new window.aesjs.ModeOfOperation.ctr(this.toBytes(window.sha256(pwd + salt)), new window.aesjs.Counter(0)).encrypt(master_key);
+    private encryptMasterAESAsNumber(pwd: string): number[] {
+        if(!this.master_key) {
+            this.decryptMaster();
+        }
+        return new window.aesjs.ModeOfOperation.ctr(this.toBytes(window.sha256(pwd + this.profile.salt)), new window.aesjs.Counter(0)).encrypt(this.master_key);
     }
 
     /**
@@ -531,9 +533,9 @@ export class Backend {
     updateProfile(new_password: string, password: string): Promise {
         return this.backend(true, 'POST', {
             new_password: window.sha256(new_password),
-            encr_master_key: this.encryptMasterAESAsNumber(new_password, this.profile.salt, this.master_key),
+            encr_master_key: this.encryptMasterAESAsNumber(new_password),
             sha_master: window.sha256(window.sha256(this.arr2str(this.master_key))),
-            username: this.profile.username,
+            username: this.profile._id,
             password: window.sha256(password)
         }, 'profile/update', true, false);
     }
