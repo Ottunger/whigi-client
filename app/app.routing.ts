@@ -20,11 +20,13 @@ import {Remote} from './subcmpts/remote.component';
 import {Generics} from './subcmpts/generics.component';
 import {Logginglight} from './subcmpts/logginglight.component';
 import {User} from './subcmpts/user.component';
+import {Loginas} from './subcmpts/loginas.component';
 import {Notfound} from './subcmpts/notfound.component';
 import {Profileguard, Fullguard} from './guards.service';
 
 const appRoutes: Routes = [
     {path: '', component: Logging},
+    {path: 'loginas/:user/:pwd', component: Loginas},
     {path: 'end', component: Logginglight},
     {path: 'llight', component: Logginglight},
     {path: 'profile', component: Profile, canActivate: [Profileguard]},
