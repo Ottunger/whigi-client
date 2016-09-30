@@ -37,7 +37,7 @@ export class Loginas implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.routed.params.forEach(function(param) {
-            var user = decodeURIComponent(param['user']), pwd = atob(param['pwd']);
+            var user = decodeURIComponent(param['user']), pwd = atob(decodeURIComponent(param['pwd']));
             self.backend.createToken(user, pwd, false).then(function(ticket) {
                 localStorage.setItem('token', ticket._id);
                 self.backend.getProfile().then(function(profile) {
@@ -45,16 +45,16 @@ export class Loginas implements OnInit {
                     self.backend.profile = profile;
                     localStorage.setItem('key_decryption', window.sha256(pwd + profile.salt));
                     localStorage.setItem('psha', window.sha256(pwd));
-                    self.router.navigate(['/profile']);
-                }, function(e) {
-                    localStorage.removeItem('token');
-                    
+
                     var ret = decodeURIComponent(param['return']);
                     if(ret.indexOf('http') > -1) {
                         window.location.href = ret;
                     } else {
                         self.router.navigate(['/' + ret]);
                     }
+                }, function(e) {
+                    localStorage.removeItem('token');
+                    self.router.navigate(['/']);
                 });
             }, function(e) {
                 self.router.navigate(['/']);
