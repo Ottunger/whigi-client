@@ -136,8 +136,10 @@ export class Account implements OnInit, OnDestroy {
             self.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
             self.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
 
-            window.$('#pick3').datetimepicker();
-            window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));
+            setTimeout(function() {
+                window.$('#pick3').datetimepicker();
+                window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));
+            });
             
             //We prepare HTTPS
             if(!/^http/.test(self.return_url_ok)) {
