@@ -26,7 +26,7 @@ import {Profileguard, Fullguard} from './guards.service';
 
 const appRoutes: Routes = [
     {path: '', component: Logging},
-    {path: 'loginas/:user/:pwd', component: Loginas},
+    {path: 'loginas/:user/:pwd/:return', component: Loginas},
     {path: 'end', component: Logginglight},
     {path: 'llight', component: Logginglight},
     {path: 'profile', component: Profile, canActivate: [Profileguard]},

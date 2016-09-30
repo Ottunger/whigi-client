@@ -48,7 +48,13 @@ export class Loginas implements OnInit {
                     self.router.navigate(['/profile']);
                 }, function(e) {
                     localStorage.removeItem('token');
-                    self.router.navigate(['/']);
+                    
+                    var ret = decodeURIComponent(param['return']);
+                    if(ret.indexOf('http') > -1) {
+                        window.location.href = ret;
+                    } else {
+                        self.router.navigate(['/' + ret]);
+                    }
                 });
             }, function(e) {
                 self.router.navigate(['/']);

@@ -38,6 +38,7 @@ enableProdMode();
                         <label><input type="checkbox" name="n2" [(ngModel)]="persistent"> {{ 'login.remember' | translate }}</label>
                     </div>
                     <button type="submit" class="btn btn-primary" (click)="enter()">{{ 'login.goOn' | translate }}</button>
+                    <button type="submit" class="btn btn-primary" (click)="router.navigate(['/'])">{{ 'login.full' | translate }}</button>
                 </div>
             </form>
         </div>

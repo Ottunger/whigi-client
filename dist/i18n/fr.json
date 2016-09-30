@@ -50,6 +50,7 @@
    "login.titleMuted": " et de répendre le mot!",
    "login.mention": "Copyright Envict SCRL 2016",
    "login.usernameRec": "Nouvel utilisateur, ne peut contenir \"whigi\"",
+   "login.full": "Page d'accueil",
 
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Enlever toutes les authorisations et se déconnecter",
