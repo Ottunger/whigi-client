@@ -30,6 +30,7 @@ export class Dataview implements OnInit, OnDestroy {
     public new_id: string;
     public timings: {[id: string]: {la: Date, ee: Date, seen: boolean, ends: boolean, trigger: string}};
     public is_dated: boolean;
+    public is_storable: boolean;
     public new_trigger: string;
     public is_generic: boolean;
     public version: number;
@@ -53,6 +54,7 @@ export class Dataview implements OnInit, OnDestroy {
         this.decr_data = '[]';
         this.new_data_file = '';
         this.is_generic = false;
+        this.is_storable = false;
         this.timings = {};
         this.new_datas = {};
         this.filter = '';
@@ -334,11 +336,11 @@ export class Dataview implements OnInit, OnDestroy {
     register() {
         var self = this;
         var date: Date = window.$('#pick5').datetimepicker('date').toDate();
-        this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger).then(function(user, id) {
-            self.backend.profile.data[self.data_name].shared_to[user._id] = id;
+        this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger, this.is_storable).then(function(user, id) {
             self.timings[user._id] = {la: new Date(0), ee: date, seen: false,
                 ends: date.getTime() > (new Date).getTime(), trigger: self.new_trigger};
             self.new_id = '';
+            self.is_storable = false;
         }, function() {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
         });

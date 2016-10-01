@@ -31,6 +31,12 @@
                 <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'text'">
                     <input type="text" [(ngModel)]="new_data" name="s1" class="form-control">
                 </td>
+                <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                    <div class="form-group" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                        {{ k.descr_key | translate }}<br />
+                        <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
+                    </div>
+                </td>
                 <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
                     <input type="file" (change)="fileLoad($event)" name="n50" class="form-control">
                 </td>

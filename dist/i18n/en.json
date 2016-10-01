@@ -106,6 +106,7 @@
    "dataview.trigger": "Trigger on change HTTPS URL",
    "dataview.redirect": "Select another data source",
    "dataview.transferred": "Vault transferred",
+   "dataview.storable": "Transerrable vault",
 
    "vaultview.noData": "Cannot retrieve such vault. Maybe access was revoked...",
    "vaultview.expired": "This vault has expired...",

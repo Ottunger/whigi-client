@@ -106,6 +106,7 @@
    "dataview.trigger": "URL HTTPS de changement",
    "dataview.redirect": "Choisir une autre source",
    "dataview.transferred": "Valise transférée",
+   "dataview.storable": "Valise détachable",
 
    "vaultview.noData": "Impossible de lire le conteneur. Peut-être l'accès est-il supprimé...",
    "vaultview.expired": "Cette valise a expiré...",

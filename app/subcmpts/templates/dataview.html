@@ -2,7 +2,7 @@
 <button type="button" class="btn btn-primary" (click)="back(false)">{{ 'back' | translate }}</button>
 <button *ngIf="is_generic" type="button" class="btn btn-primary" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
 <br />
-<clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true" [is_folder]="is_generic && !!backend.generics[gen_name][version].mode == 'json_keys'"
+<clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true" [is_folder]="is_generic && backend.generics[gen_name][version].mode == 'json_keys'"
     (notify)="mod($event, false)" [gen_name]="gen_name" [is_generic]="is_generic" [version]="version"></clear-view>
 <br /><br />
 
@@ -45,6 +45,7 @@
                 <th>{{ 'dataview.lastAccess' | translate }}</th>
                 <th>{{ 'dataview.until' | translate }}</th>
                 <th>{{ 'dataview.trigger' | translate }}</th>
+                <th>{{ 'dataview.storable' | translate }}</th>
                 <th *ngIf="is_generic && data_name != gen_name">{{ 'dataview.redirect' | translate }}</th>
                 <th>{{ 'action' | translate }}</th>
             </tr>
@@ -60,6 +61,8 @@
                         </span>
                     </div>
                 </td>
+                <td *ngIf="!!timings[d] && !timings[d].seen">{{ 'dataview.neverSeen' | translate }}</td>
+                <td *ngIf="!timings[d]"></td>
                 <td *ngIf="!!timings[d] && timings[d].ends">
                     <div class='input-group date' id='pick-id2{{ d }}'>
                         <input type='text' class="form-control" readonly="readonly"/>
@@ -68,19 +71,17 @@
                         </span>
                     </div>
                 </td>
-                <td *ngIf="!!timings[d] && !timings[d].seen">{{ 'dataview.neverSeen' | translate }}</td>
                 <td *ngIf="!!timings[d] && !timings[d].ends">{{ 'dataview.forever' | translate }}</td>
-                <td *ngIf="!timings[d]"></td>
                 <td *ngIf="!timings[d]"></td>
                 <td *ngIf="!!timings[d]">{{ timings[d].trigger }}</td>
                 <td *ngIf="!timings[d]"></td>
 
+                <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>
                 <td *ngIf="is_generic && data_name != gen_name">
                     <select class="form-control" [(ngModel)]="filter">
                         <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
                     </select>
                 </td>
-
                 <td>
                     <button type="button" class="btn btn-primary" (click)="change(d)" [disabled]="filter==''">{{ 'redirect' | translate }}</button>
                     <button type="button" class="btn btn-default" (click)="revoke(d)">{{ 'remove' | translate }}</button>
@@ -98,6 +99,7 @@
                     </div>
                 </td>
                 <td><input type="text" [(ngModel)]="new_trigger" name="y1" class="form-control"></td>
+                <td><input type="checkbox" [(ngModel)]="is_storable" /></td>
                 <td *ngIf="is_generic && data_name != gen_name"></td>
                 <td><button type="button" class="btn btn-default" (click)="register()" [disabled]="!decr_data">{{ 'record' | translate }}</button></td>
             </tr>

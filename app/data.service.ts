@@ -170,17 +170,21 @@ export class Data {
                     for(var j = 0; j < insides.length; j++) {
                         self.backend.shared_with_me_trie.addMilestones(keys[i] + '/' + insides[j], '/');
                         self.backend.shared_with_me_trie.add(keys[i] + '/' + insides[j], self.backend.profile.shared_with_me[keys[i]][insides[j]]);
-                    }
-                    //If heavy is on, check if storable data
-                    if(resolve) {
-                        if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
-                            self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
-                                self.newData(vault.storable[2], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
-                                    self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[keys[i]][insides[j]],
-                                        self.backend.arr2str(self.backend.decryptRSA(vault.storable[0])));
-                                    self.listData(false);
+                        //If heavy is on, check if storable data
+                        if(resolve) {
+                            if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
+                                var k = keys[i], kk = insides[j];
+                                self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
+                                    self.newData(vault.storable[2], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
+                                        try {
+                                            self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kk],
+                                                self.backend.arr2str(self.backend.decryptRSA(vault.storable[0])));
+                                        } catch(e) {}
+                                        delete self.backend.profile.shared_with_me[k][kk];
+                                        self.listData(false);
+                                    }, function(e) {});
                                 }, function(e) {});
-                            }, function(e) {});
+                            }
                         }
                     }
                 }
@@ -321,8 +325,8 @@ export class Data {
     getVault(id: string): Promise {
         var self = this;
         return new Promise(function(resolve, reject) {
-            self.backend.getVault(id).then(function(vault) {console.log(vault.aes_crypted_shared_pub);
-                var aesKey: number[] = self.backend.decryptRSA(vault.aes_crypted_shared_pub);console.log(aesKey);
+            self.backend.getVault(id).then(function(vault) {
+                var aesKey: number[] = self.backend.decryptRSA(vault.aes_crypted_shared_pub);
                 self.backend.decryptAES(self.backend.str2arr(vault.data_crypted_aes), self.workerMgt(false, function(got) {
                     vault.decr_data = got;
                     resolve(vault);
@@ -344,9 +348,10 @@ export class Data {
      * @param {Number} version Vault version.
      * @param {Date} max_date Valid until.
      * @param {String} new_trigger URL to trigger.
+     * @param {Boolean} is_storable Create a storable vault.
      * @return {Promise} Whether went OK with remote profile and newly created vault.
      */
-    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger?: string): Promise {
+    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger?: string, is_storable?: boolean): Promise {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getUser(id).then(function(user) {
@@ -355,7 +360,7 @@ export class Data {
 
                 self.backend.encryptAES(decr_data, self.workerMgt(true, function(got) {
                     self.backend.createVault(name, real_name, user._id, got, aes_crypted_shared_pub, version,
-                        (max_date.getTime() < (new Date).getTime())? 0 : max_date.getTime(), new_trigger).then(function(res) {
+                        (max_date.getTime() < (new Date).getTime())? 0 : max_date.getTime(), new_trigger, is_storable).then(function(res) {
                         self.backend.profile.data[real_name].shared_to[user._id] = res._id;
                         resolve(user, res._id);
                     }, function(e) {

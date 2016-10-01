@@ -340,7 +340,7 @@ export class Backend {
             if(e.status == 412 && num < 4) {
                 self.backend(whigi, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
             } else {
-                if(e.status == 401 && token) { 
+                if(e.status == 403 && token) { 
                     self.router.navigate(['/end']);
                 }
                 reject(e);
@@ -715,11 +715,12 @@ export class Backend {
      * @param {Number} version Vault version.
      * @param {Number} expire_epoch Time for expiration.
      * @param {String} trigger URL that frontend should trigger upon change.
+     * @param {Boolean} storable Create a storable vault.
      * @return {Promise} JSON response from backend.
      */
     createVault(data_name: string, real_name: string, shared_to_id: string, data_crypted_aes: number[], aes_crypted_shared_pub: string,
-        version: number, expire_epoch?: number, trigger?: string): Promise {
-        return this.backend(true, 'POST', {
+        version: number, expire_epoch?: number, trigger?: string, storable?: boolean): Promise {
+        var post = {
             data_name: data_name,
             shared_to_id: shared_to_id,
             data_crypted_aes: this.arr2str(data_crypted_aes),
@@ -728,7 +729,11 @@ export class Backend {
             trigger: (!!trigger)? trigger : '',
             real_name: real_name,
             version: version
-        }, 'vault/new', true, true, true);
+        };
+        if(storable !== false) {
+            post['storable'] = true;
+        }
+        return this.backend(true, 'POST', post, 'vault/new', true, true, true);
     }
 
     /**
