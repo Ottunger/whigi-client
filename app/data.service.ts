@@ -84,6 +84,40 @@ export class Data {
     }
 
     /**
+     * Build up a generic and test it.
+     * @param {String} raw_data Source for data.
+     * @param {String} raw_data_file Source for file.
+     * @param {Object} data_source Source for keyed values.
+     * @param {String} gen_name Generic name.
+     * @param {Boolean} as_file Load as file.
+     * @return {String} Built up data or undefined if cannot pass test.
+     */
+    recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string {
+        //Build up the data, keys wrapping and date wrapping
+        if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'json_keys') {
+            var ret = {};
+            for(var i = 0; i < this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys.length; i++) {
+                ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key];
+            }
+            raw_data = JSON.stringify(ret);
+        }
+        if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].is_dated) {
+            raw_data = JSON.stringify([{
+                value: as_file? raw_data_file : raw_data,
+                from: (new Date).getTime()
+            }]);
+        } else {
+            raw_data = as_file? raw_data_file : raw_data;
+        }
+        //Test if the data passes the associated test
+        var test = raw_data, res = eval(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].validate);
+        if(!res) {
+            return undefined;
+        }
+        return raw_data
+    }
+
+    /**
      * Store the user data's. Build the trie's for data and whared_with_me.
      * @function listData
      * @public
@@ -166,7 +200,7 @@ export class Data {
     }
 
     /**
-     * Removes a data and associated vaults.
+     * Removes a data if no associated vaults.
      * @function remove
      * @public
      * @param {String} name Data name.

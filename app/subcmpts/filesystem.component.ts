@@ -160,7 +160,7 @@ export class Filesystem implements OnInit {
     register(as_file: boolean, is_dated: boolean) {
         var self = this, send;
         if(this.completeName() in this.backend.generics || (this.folders.slice(0, -1) in this.backend.generics && 
-            this.backend.generics[this.folders.slice(0, -1)][this.backend.generics[this.folders.slice(0, -1)].length - 1].is_folder)) {
+            this.backend.generics[this.folders.slice(0, -1)][this.backend.generics[this.folders.slice(0, -1)].length - 1].instantiable)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.generics'));
             return;
         }
@@ -312,12 +312,11 @@ export class Filesystem implements OnInit {
      * @return {String} A key to describe the folder or undefined.
      */
     hasKey(): string {
-        if(!this.folders || this.folders == '') {
-            return '/';
+        if(!this.folders) {
+            this.folders = '';
         }
-        var key = (this.mode == 'data')? this.folders : this.folders.replace(/^[^\/]*\//, '');
-        key = (!!key && key != '')? key : '__stupid';
-        return this.translate.instant(key) == key? undefined : key;
+        var test = (this.mode == 'data')? this.folders : this.folders.replace(/^[^\/]*\//, '');
+        return (test in this.backend.generics_paths)? this.backend.generics_paths[test].descr_key : undefined;
     }
     
 }

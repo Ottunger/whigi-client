@@ -55,7 +55,7 @@ export class Savekey implements OnInit, OnDestroy {
             self.value = window.decodeURIComponent(params['value']);
             self.return_url = window.decodeURIComponent(params['return_url']);
             if(self.key in self.backend.generics || (self.key.replace(/\/[^\/]*/, '') in self.backend.generics &&
-                self.backend.generics[self.key.replace(/\/[^\/]*/, '')][self.backend.generics[self.key.replace(/\/[^\/]*/, '')].length - 1].is_folder))
+                self.backend.generics[self.key.replace(/\/[^\/]*/, '')][self.backend.generics[self.key.replace(/\/[^\/]*/, '')].length - 1].instantiable))
                 window.location.href = self.return_url;
             self.dataservice.newData(self.key, self.value, params['is_dated'], 0).then(function() {
                 self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));

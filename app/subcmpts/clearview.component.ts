@@ -24,8 +24,8 @@ enableProdMode();
             </div>
             <div *ngIf="is_folder">
                 <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-                    {{ k | translate }}<br />
-                    <input type="text" [ngModel]="recover(k, decr_data)" name="s1" class="form-control" readonly>
+                    {{ k.descr_key | translate }}<br />
+                    <input type="text" [ngModel]="recover(k.descr_key, decr_data)" name="s1" class="form-control" readonly>
                 </div>
             </div>
 
@@ -42,8 +42,8 @@ enableProdMode();
                 </div>
                 <div *ngIf="is_folder">
                     <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-                        {{ k | translate }}<br />
-                        <input type="text" [ngModel]="recover(k, p.value)" name="s1" class="form-control" readonly>
+                        {{ k.descr_key | translate }}<br />
+                        <input type="text" [ngModel]="recover(k.descr_key, p.value)" name="s1" class="form-control" readonly>
                     </div>
                 </div>
 

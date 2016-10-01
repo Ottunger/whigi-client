@@ -41,17 +41,17 @@ enableProdMode();
             <div *ngFor="let p of data_list">
                 <h3>
                     {{ 'account.prefix' | translate }}{{ p }}
-                    <img *ngIf="!!backend.generics[p] && !!backend.generics[p][backend.generics[p].length - 1].img_url" class="featurette-image img-circle img-responsive pull-right" src="{{ backend.generics[p][backend.generics[p].length - 1].img_url }}">
-                    <img *ngIf="!backend.generics[p] || !backend.generics[p][backend.generics[p].length - 1].img_url" class="featurette-image img-circle img-responsive pull-right" src="favicon.png">
+                    <img *ngIf="!!backend.generics[p] && backend.generics[p][backend.generics[p].length - 1].icon != ''" class="featurette-image img-circle img-responsive pull-right" src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}">
+                    <img *ngIf="!backend.generics[p] || backend.generics[p][backend.generics[p].length - 1].icon == ''" class="featurette-image img-circle img-responsive pull-right" src="favicon.png">
                 </h3>
                 
                 <p *ngIf="!backend.generics[p]"><i>{{ 'account.notShared' | translate }}</i></p>
-                <div *ngIf="!!backend.generics[p] && !backend.generics[p][backend.generics[p].length - 1].is_folder">
+                <div *ngIf="!!backend.generics[p] && !backend.generics[p][backend.generics[p].length - 1].instantiable">
                     <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
-                    <input *ngIf="!backend.profile.data[p] && !backend.generics[p][backend.generics[p].length - 1].is_file" type="text" [(ngModel)]="new_data[p]" class="form-control">
-                    <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].is_file" type="file" (change)="fileLoad($event, p)" class="form-control">
+                    <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'text'" type="text" [(ngModel)]="new_data[p]" class="form-control">
+                    <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'file'" type="file" (change)="fileLoad($event, p)" class="form-control">
                 </div>
-                <div *ngIf="!!backend.generics[p] && backend.generics[p][backend.generics[p].length - 1].is_folder">
+                <div *ngIf="!!backend.generics[p] && backend.generics[p][backend.generics[p].length - 1].instantiable">
                     <select class="form-control" [(ngModel)]="filter[p]">
                         <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                     </select>
@@ -59,14 +59,14 @@ enableProdMode();
                         {{ 'account.nameField' | translate }}
                         <input type="text" [(ngModel)]="new_name[p]" name="s18" class="form-control">
                         {{ 'account.dataField' | translate }}
-                        <input type="text" *ngIf="!backend.generics[p][backend.generics[p].length - 1].is_file && !backend.generics[p][backend.generics[p].length - 1].json_keys" [(ngModel)]="new_data[p]" name="s1" class="form-control">
-                        <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].is_file && !!backend.generics[p][backend.generics[p].length - 1].json_keys">
+                        <input type="text" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'text'" [(ngModel)]="new_data[p]" name="s1" class="form-control">
+                        <div *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'json_keys'">
                             <div class="form-group" *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].json_keys">
-                                {{ k | translate }}<br />
-                                <input type="text" [(ngModel)]="new_datas[p][k]" name="s1" class="form-control">
+                                {{ k.descr_key | translate }}<br />
+                                <input type="text" [(ngModel)]="new_datas[p][k.descr_key]" name="s1" class="form-control">
                             </div>
                         </div>
-                        <input type="file" *ngIf="backend.generics[p][backend.generics[p].length - 1].is_file" (change)="fileLoad($event, p)" name="n50" class="form-control">
+                        <input type="file" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'file'" (change)="fileLoad($event, p)" name="n50" class="form-control">
                     </div>
                 </div>
             </div>
@@ -150,14 +150,31 @@ export class Account implements OnInit, OnDestroy {
                 self.return_url_ok = 'https://' + parts[1] + window.encodeURIComponent('https://' + parts[2]);
             }
 
-            //List data, check if permissions already granted
+            //List data
             self.dataservice.listData().then(function() {
-                var all = true;
+                var all = true, more = [];
                 self.ready = true;
-                self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('//') : [];
+                self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
+                //If we are asked for folders, go see what's underneath
+                for(var i = 0; i < self.data_list.length; i++) {
+                    if(self.data_list[i].charAt(self.data_list[i].length - 1) == '/') {
+                        more = more.concat(self.backend.generics_trie.suggestions(self.data_list[i]));
+                    }
+                }
+                i = 0;
+                while(i < self.data_list.length) {
+                    if(self.data_list[i].charAt(self.data_list[i].length - 1) == '/') {
+                        self.data_list.splice(i, 1);
+                    } else {
+                        i++;
+                    }
+                }
+                self.data_list = self.data_list.concat(more);
+
+                //Check if already granted
                 for(var i = 0; i < self.data_list.length; i++) {
                     if((!(self.data_list[i] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[self.data_list[i]].shared_to)) && self.data_list[i] in self.backend.generics) {
-                        if(self.backend.generics[self.data_list[i]][0].is_folder) {
+                        if(self.backend.generics[self.data_list[i]][0].instantiable) {
                             var ret = self.backend.data_trie.suggestions(self.data_list[i] + '/', '/').filter(function(el: string): boolean {
                                 return el.charAt(el.length - 1) != '/';
                             });
@@ -235,21 +252,15 @@ export class Account implements OnInit, OnDestroy {
             for(var i = 0; i < this.data_list.length; i++) {
                 var adata = this.data_list[i];
                 if(adata in this.backend.generics && ((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new'))) {
-                    if(!!this.backend.generics[adata][this.backend.generics[adata].length - 1].json_keys) {
-                        var ret = {};
-                        for(var i = 0; i < this.backend.generics[adata][this.backend.generics[adata].length - 1].json_keys.length; i++) {
-                            ret[this.backend.generics[adata][this.backend.generics[adata].length - 1].json_keys[i]] = this.new_datas[adata][this.backend.generics[adata][this.backend.generics[adata].length - 1].json_keys[i]];
-                        }
-                        this.new_data[adata] = JSON.stringify(ret);
+                    //Build and test
+                    this.new_data[adata] = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
+                    if(!this.new_data[adata]) {
+                        this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
+                        return;
                     }
-                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].is_dated) {
-                        this.new_data[adata] = JSON.stringify([{
-                            value: this.new_data[adata],
-                            from: 0
-                        }]);
-                    }
+                    //Build name and create
                     var name = adata;
-                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].is_folder) {
+                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].instantiable) {
                         name += '/' + this.new_name[adata];
                     }
                     saves.push({
@@ -272,7 +283,7 @@ export class Account implements OnInit, OnDestroy {
                     });
                 } else if(adata in this.backend.generics) {
                     var name = adata;
-                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].is_folder) {
+                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].instantiable) {
                         name += '/' + this.filter[adata];
                     }
                     saves.push({

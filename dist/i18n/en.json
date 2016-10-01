@@ -169,17 +169,19 @@
    "generics.title": "Create here your generic data",
    "generics.regexp": "Your input does not match expected format",
    "generics.descr": "Description",
+
+   "error.notfound": "Introuvable",
+
+   "_comment": "HERE START TRANSLATIONS FOR GENERICS",
+
    "generics.any": "Any module",
    "generics.profile": "Module 'profile'",
    "generics.corporate": "Module 'corporate'",
+
    "generics.email": "Emails",
    "generics.last_name": "Last name",
    "generics.first_name": "First name",
-   "generics.other_first_names": "Other first names",
-   "generics.birth_date": "Birth date (DD-MM-YYYY)",
    "generics.corporate_name": "Corporate names",
-   "generics.corporate_bcenum": "BCE codes",
-   "generics.corporate_creation_date": "Company creation dates (DD-MM-YYYY)",
    "generics.address": "Addresses",
    "generics.street": "Street",
    "generics.num": "House number",
@@ -188,10 +190,8 @@
    "generics.postcode": "Postcode",
    "generics.city": "City",
    "generics.country": "Country",
-   "generics.rrn": "National registry number",
 
    "/": "Root folder",
    "profile/": "Profile folder",
-
-   "error.notfound": "Not found"
+   "profile/corporate/": "Corporate profile"
 }

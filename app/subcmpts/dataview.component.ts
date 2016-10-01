@@ -21,7 +21,7 @@ enableProdMode();
         <button type="button" class="btn btn-primary" (click)="back(false)">{{ 'back' | translate }}</button>
         <button *ngIf="is_generic" type="button" class="btn btn-primary" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
         <br />
-        <clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true" [is_folder]="is_generic && !!backend.generics[gen_name][version].json_keys"
+        <clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true" [is_folder]="is_generic && !!backend.generics[gen_name][version].mode == 'json_keys'"
             (notify)="mod($event, false)" [gen_name]="gen_name" [is_generic]="is_generic" [version]="version"></clear-view>
         <br /><br />
 
@@ -39,14 +39,14 @@ enableProdMode();
             <input type="file" (change)="fileLoad($event)" class="form-control">
         </div>
         <div *ngIf="is_generic">
-            <input type="text" *ngIf="!backend.generics[gen_name][version].is_file && !backend.generics[gen_name][version].json_keys" [(ngModel)]="new_data" name="s1" class="form-control">
-            <div *ngIf="!backend.generics[gen_name][version].is_file && !!backend.generics[gen_name][version].json_keys">
+            <input type="text" *ngIf="backend.generics[gen_name][version].mode == 'text'" [(ngModel)]="new_data" name="s1" class="form-control">
+            <div *ngIf="backend.generics[gen_name][version].mode == 'json_keys'">
                 <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-                    {{ k | translate }}<br />
-                    <input type="text" [(ngModel)]="new_datas[k]" name="s1" class="form-control">
+                    {{ k.descr_key | translate }}<br />
+                    <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
                 </div>
             </div>
-            <input type="file" *ngIf="backend.generics[gen_name][version].is_file" (change)="fileLoad($event)" name="n50" class="form-control">
+            <input type="file" *ngIf="backend.generics[gen_name][version].mode == 'file'" (change)="fileLoad($event)" name="n50" class="form-control">
         </div>
 
 
@@ -200,7 +200,7 @@ export class Dataview implements OnInit, OnDestroy {
                 if(!!self.backend.generics[self.data_name]) {
                     self.is_generic = true;
                     self.gen_name = self.data_name;
-                } else if(!!self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')] && self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')][self.version].is_folder) {
+                } else if(!!self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')] && self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')][self.version].instantiable) {
                     self.is_generic = true;
                     self.gen_name = self.data_name.replace(/\/[^\/]*$/, '');
                 }
@@ -266,7 +266,7 @@ export class Dataview implements OnInit, OnDestroy {
         if(this.is_generic && !!this.backend.generics[this.gen_name][this.version].json_keys) {
             var ret = {};
             for(var i = 0; i < this.backend.generics[this.gen_name][this.version].json_keys.length; i++) {
-                ret[this.backend.generics[this.gen_name][this.version].json_keys[i]] = this.new_datas[this.backend.generics[this.gen_name][this.version].json_keys[i]];
+                ret[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key] = this.new_datas[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key];
             }
             this.new_data = JSON.stringify(ret);
         }

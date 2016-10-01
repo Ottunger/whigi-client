@@ -57,7 +57,8 @@ export class Application {
      * @param translate Translation service.
      */
     constructor(private translate: TranslateService) {
-        translate.addLangs(['en', 'fr']);
+        //Load translations on the fly
+        //translate.addLangs(['en', 'fr']);
         translate.setDefaultLang('en');
 
         if('lang' in sessionStorage) {

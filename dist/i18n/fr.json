@@ -169,17 +169,19 @@
    "generics.title": "Créez ici vos données génériques",
    "generics.regexp": "Votre entrée ne valide pas le format attendu",
    "generics.descr": "Description",
+
+   "error.notfound": "Introuvable",
+
+   "_comment": "HERE START TRANSLATIONS FOR GENERICS",
+
    "generics.any": "Nos registres",
    "generics.profile": "Registre 'profil'",
    "generics.corporate": "Registre 'entreprise'",
+
    "generics.email": "Emails",
    "generics.last_name": "Nom de famille",
    "generics.first_name": "Prénom",
-   "generics.other_first_names": "Autres prénoms",
-   "generics.birth_date": "Date de naissance (JJ-MM-AAAA)",
    "generics.corporate_name": "Noms d'entreprise",
-   "generics.corporate_bcenum": "Codes BCE",
-   "generics.corporate_creation_date": "Dates de création d'entreprise (JJ-MM-AAAA)",
    "generics.address": "Adresses",
    "generics.street": "Rue",
    "generics.num": "Numéro",
@@ -188,10 +190,8 @@
    "generics.postcode": "Code postal",
    "generics.city": "Ville",
    "generics.country": "Pays",
-   "generics.rrn": "Numéro d'ordre national",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",
-
-   "error.notfound": "Introuvable"
+   "profile/corporate/": "Profil d'entreprise"
 }

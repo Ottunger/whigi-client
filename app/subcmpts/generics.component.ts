@@ -37,38 +37,38 @@ enableProdMode();
                         <th>{{ 'action' | translate }}</th>
                     </tr>
                 </thead>
-                <tbody *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_folder">
+                <tbody *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
                     <tr>
-                        <td *ngIf="!!backend.generics[g][backend.generics[g].length - 1].img_url"><img src="{{ backend.generics[g][backend.generics[g].length - 1].img_url }}" /></td>
-                        <td *ngIf="!backend.generics[g][backend.generics[g].length - 1].img_url"><img src="favicon.png" /></td>
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != ''"><img src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" /></td>
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon == ''"><img src="favicon.png" /></td>
                         <td>{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</td>
                         <td>{{ g }}</td>
 
                         <td *ngIf="!!backend.profile.data[g]">
                             <i>{{ 'filesystem.mix' | translate }}</i>
                         </td>
-                        <td *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'text'">
                             <input type="text" [(ngModel)]="new_data" name="s1" class="form-control">
                         </td>
-                        <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
                             <input type="file" (change)="fileLoad($event)" name="n50" class="form-control">
                         </td>
 
                         <td *ngIf="!!backend.profile.data[g]">
                             <button type="button" class="btn btn-default" (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
                         </td>
-                        <td *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'file'">
                             <button type="button" class="btn btn-default" (click)="register(g, false)">{{ 'filesystem.record' | translate }}</button>
                         </td>
-                        <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
                             <button type="button" class="btn btn-default" (click)="register(g, true)" [disabled]="new_data_file==''">{{ 'filesystem.record' | translate }}</button>
                         </td>
                     </tr>
                 </tbody>
-                <tbody *ngIf="backend.generics[g][backend.generics[g].length - 1].is_folder">
+                <tbody *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                     <tr *ngFor="let d of dataNames(g)">
-                        <td *ngIf="!!backend.generics[g][backend.generics[g].length - 1].img_url"><img src="{{ backend.generics[g][backend.generics[g].length - 1].img_url }}" /></td>
-                        <td *ngIf="!backend.generics[g][backend.generics[g].length - 1].img_url"><img src="favicon.png" /></td>
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != ''"><img src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" /></td>
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon == ''"><img src="favicon.png" /></td>
                         <td>{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</td>
                         <td>{{ g }}/{{ d }}</td>
 
@@ -77,31 +77,31 @@ enableProdMode();
                         <td><button type="button" class="btn btn-default" (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }}</button></td>
                     </tr>
                     <tr>
-                        <td *ngIf="!!backend.generics[g][backend.generics[g].length - 1].img_url"><img src="{{ backend.generics[g][backend.generics[g].length - 1].img_url }}" /></td>
-                        <td *ngIf="!backend.generics[g][backend.generics[g].length - 1].img_url"><img src="favicon.png" /></td>
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != ''"><img src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" /></td>
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon == ''"><img src="favicon.png" /></td>
                         <td>{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</td>
                         <td>{{ g }}/<input type="text" [(ngModel)]="new_name" name="s1" class="form-control"></td>
 
-                        <td *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_file && !backend.generics[g][backend.generics[g].length - 1].json_keys">
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text'">
                             <input type="text" [(ngModel)]="new_data" name="s1" class="form-control">
                         </td>
-                        <td *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_file && !!backend.generics[g][backend.generics[g].length - 1].json_keys">
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                             <div class="form-group" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                {{ k | translate }}<br />
-                                <input type="text" [(ngModel)]="new_datas[k]" name="s1" class="form-control">
+                                {{ k.descr_key | translate }}<br />
+                                <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
                             </div>
                         </td>
-                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
                             <input type="file" (change)="fileLoad($event)" name="n50" class="form-control">
                         </td>
 
-                        <td *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'">
                             <button type="button" class="btn btn-default" (click)="register(g, false, new_name)"
-                                [disabled]="!!backend.generics[g][backend.generics[g].length - 1].is_folder && new_name == ''">{{ 'filesystem.record' | translate }}</button>
+                                [disabled]="!!backend.generics[g][backend.generics[g].length - 1].instantiable && new_name == ''">{{ 'filesystem.record' | translate }}</button>
                         </td>
-                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].is_file">
+                        <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
                             <button type="button" class="btn btn-default" (click)="register(g, true, new_name)"
-                                [disabled]="new_data_file=='' || (!!backend.generics[g][backend.generics[g].length - 1].is_folder && new_name == '')">{{ 'filesystem.record' | translate }}</button>
+                                [disabled]="new_data_file=='' || (!!backend.generics[g][backend.generics[g].length - 1].instantiable && new_name == '')">{{ 'filesystem.record' | translate }}</button>
                         </td>
                     </tr>
                 </tbody>
@@ -147,28 +147,13 @@ export class Generics implements OnInit {
     register(name: string, as_file: boolean, new_name?: string) {
         var self = this, send;
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
-        if(!!this.backend.generics[name][this.backend.generics[name].length - 1].regexp) {
-            var re = new RegExp(this.backend.generics[name][this.backend.generics[name].length - 1].regexp);
-            if(!re.test(this.new_data)) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('generics.regexp'));
-                return;
-            }
+        //Build and test
+        send = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, name, as_file);
+        if(!send) {
+            this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
+            return;
         }
-        if(!!this.backend.generics[name][this.backend.generics[name].length - 1].json_keys) {
-            var ret = {};
-            for(var i = 0; i < this.backend.generics[name][this.backend.generics[name].length - 1].json_keys.length; i++) {
-                ret[this.backend.generics[name][this.backend.generics[name].length - 1].json_keys[i]] = this.new_datas[this.backend.generics[name][this.backend.generics[name].length - 1].json_keys[i]];
-            }
-            this.new_data = JSON.stringify(ret);
-        }
-        if(this.backend.generics[name][this.backend.generics[name].length - 1].is_dated) {
-            send = JSON.stringify([{
-                value: as_file? this.new_data_file : this.new_data,
-                from: (new Date).getTime()
-            }]);
-        } else {
-            send = as_file? this.new_data_file : this.new_data;
-        }
+        //Create it
         this.dataservice.newData(name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.new_name = '';
             self.new_data = '';

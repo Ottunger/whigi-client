@@ -24,14 +24,26 @@ export class Backend {
     public master_key: number[];
     public generics: {[id: string]: [{
         is_dated: boolean,
-        is_file: boolean,
-        is_folder: boolean,
+        country: boolean,
+        instantiable: boolean,
         descr_key: string,
-        regexp?: string,
-        json_keys?: string[],
-        module: string,
-        img_url?: string
+        long_descr_key: string,
+        help_url: string,
+        icon: string,
+        mode: string,
+        enum: string,
+        validate: string,
+        module: string
+        json_keys: {descr_key: string, long_descr_key: string, help_url: string, mode: string, enum: string}[]
     }]};
+    public generics_trie: Trie;
+    public generics_paths: {[id: string]: {
+        country: string,
+        descr_key: string,
+        long_descr_key: string,
+        help_url: string,
+        icon: string
+    }};
     public EID_HOST = '192.168.1.61/api/v1/eid';
     public BASE_URL = 'https://192.168.1.61/api/v1/';
     public RESTORE_URL = 'https://192.168.1.61/api/v1/';
@@ -50,8 +62,16 @@ export class Backend {
         var self = this;
         this.data_loaded = false;
         this.rsa_key = [];
+        self.generics_trie = new Trie();
         this.backend(true, 'GET', {}, 'generics.json', false, false).then(function(response) {
             self.generics = response;
+            var keys = Object.getOwnPropertyNames(response);
+            for(var i = 0; i < keys.length; i++) {
+                self.generics_trie.add(keys[i], undefined);
+            }
+        });
+        this.backend(true, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
+            self.generics_paths = response;
         });
     }
 
@@ -418,6 +438,17 @@ export class Backend {
     private regCaptcha(): string {
         var v = window.grecaptcha.getResponse();
         return '?captcha=' + v;
+    }
+
+    /**
+     * Returns the list of a select.
+     * @function peekUser
+     * @public
+     * @param {String} known Select id.
+     * @return {Promise} JSON response from backend.
+     */
+    selectValues(known: string): Promise {
+        return this.backend(true, 'GET', {}, 'selects/' + known, false, false);
     }
 
     /**
