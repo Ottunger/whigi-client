@@ -55,7 +55,7 @@ export class Remote implements OnInit, OnDestroy {
             if(!/^https/.test(self.return_url)) {
                 self.end('null', self.backend.profile._id);
             }
-            self.dataservice.listData().then(function() {
+            self.dataservice.listData(false).then(function() {
                 if(!!self.backend.profile.data['keys/auth/' + self.id_to]) {
                     self.backend.getData(self.backend.profile.data['keys/auth/' + self.id_to].id).then(function(data) {
                         self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {

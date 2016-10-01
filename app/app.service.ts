@@ -442,13 +442,26 @@ export class Backend {
 
     /**
      * Returns the list of a select.
-     * @function peekUser
+     * @function selectValues
      * @public
      * @param {String} known Select id.
      * @return {Promise} JSON response from backend.
      */
     selectValues(known: string): Promise {
         return this.backend(true, 'GET', {}, 'selects/' + known, false, false);
+    }
+
+    /**
+     * Returns the transition schema for a changed generic.
+     * @function transitionSchema
+     * @public
+     * @param {String} name Generic name.
+     * @param {Number} as From version.
+     * @param {Number} to To version.
+     * @return {Promise} JSON response from backend.
+     */
+    transitionSchema(name: string, as: number, to: number): Promise {
+        return this.backend(true, 'GET', {}, 'schemas/' + encodeURIComponent(name) + '/' + as + '/' + to, false, false);
     }
 
     /**

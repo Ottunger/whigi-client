@@ -145,7 +145,7 @@ export class Logging implements OnInit {
                         self.backend.profile = user;
                         localStorage.setItem('key_decryption', window.sha256(self.password + user.salt));
                         localStorage.setItem('psha', window.sha256(self.password));
-                        self.dataservice.listData().then(function() {
+                        self.dataservice.listData(false).then(function() {
                             self.dataservice.newData('profile/email/restore', self.email, false, 0, true).then(function(email) {
                                 self.dataservice.newData('profile/recup_id', self.recup_id, false, 0, true).then(function(email) {
                                     if(self.recuperable) {

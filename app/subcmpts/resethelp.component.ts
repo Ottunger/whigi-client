@@ -50,7 +50,7 @@ export class Resethelp implements OnInit, OnDestroy {
         this.sub = this.routed.params.subscribe(function(params) {
             self.id = window.decodeURIComponent(params['id']);
             self.data_name = window.decodeURIComponent(params['data_name']);
-            self.dataservice.listData().then(function() {
+            self.dataservice.listData(false).then(function() {
                 self.dataservice.getVault(self.backend.profile.shared_with_me[self.id][self.data_name]).then(function(vault, got) {
                     self.backend.mixRestore(self.id, got).then(function() {
                         self.router.navigate(['/profile']);

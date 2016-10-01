@@ -54,7 +54,6 @@ export class Filesystem implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.dataservice.listData();
             if(!!params['folders'])
                 self.folders = params['folders'];
             self.mode = params['mode'];

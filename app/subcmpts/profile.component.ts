@@ -61,7 +61,7 @@ export class Profile implements OnInit {
                 });
             });
         }
-        this.dataservice.listData().then(function() {
+        this.dataservice.listData(true).then(function() {
             if(!!localStorage.getItem('return_url') && localStorage.getItem('return_url').length > 1) {
                 var ret = localStorage.getItem('return_url');
                 ret = JSON.parse(ret);

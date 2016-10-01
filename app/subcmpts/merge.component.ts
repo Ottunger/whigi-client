@@ -193,7 +193,7 @@ export class Merge {
         this.backend.getProfile().then(function(profile) {
             self.backend.profile = profile;
             self.check.tick();
-            self.dataservice.listData();
+            self.dataservice.listData(true);
         }, function(e) {
             delete self.backend.profile;
             self.notif.success(self.translate.instant('success'), self.translate.instant('merge.relog'));

@@ -90,7 +90,7 @@ export class Account implements OnInit, OnDestroy {
             }
 
             //List data
-            self.dataservice.listData().then(function() {
+            self.dataservice.listData(false).then(function() {
                 var all = true, more = [];
                 self.ready = true;
                 self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];

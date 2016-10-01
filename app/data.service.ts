@@ -122,9 +122,10 @@ export class Data {
      * Store the user data's. Build the trie's for data and whared_with_me.
      * @function listData
      * @public
+     * @param {Boolean} resolve Whether to perform heavy computations.
      * @return {Promise} Promise.
      */
-    listData(): Promise {
+    listData(resolve: boolean): Promise {
         var self = this;
 
         return new Promise(function(resolve, reject) {
@@ -141,6 +142,27 @@ export class Data {
                 for(var i = 0; i < keys.length; i++) {
                     self.backend.data_trie.addMilestones(keys[i], '/');
                     self.backend.data_trie.add(keys[i], self.backend.profile.data[keys[i]]);
+                    //If heavy is on, check for version discordance
+                    if(resolve) {
+                        var gen_name = undefined;
+                        if(!!self.backend.generics[keys[i]]) {
+                            gen_name = keys[i];
+                        } else if(!!self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')] && self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')][0].instantiable) {
+                            gen_name = keys[i].replace(/\/[^\/]*$/, '');
+                        }
+                        if(gen_name && add.data[keys[i]].version < self.backend.generics[gen_name].length - 1) {
+                            var name = keys[i];
+                            self.backend.transitionSchema(gen_name, add.data[keys[i]].version, self.backend.generics[gen_name].length - 1).then(function(js) {
+                                self.backend.getData(add.data[name].id).then(function(data) {
+                                    self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.workerMgt(false, function(got) {
+                                        got = window.eval.call(window, '(function(got) {' + js.js + '})')(got);
+                                        self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
+                                            add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable);
+                                    }));
+                                }, function(e) {});
+                            }, function(e) {});
+                        }
+                    }
                 }
                 keys = Object.getOwnPropertyNames(add.shared_with_me);
                 for(var i = 0; i < keys.length; i++) {
@@ -249,7 +271,7 @@ export class Data {
         function check(ok, nok) {
             i++;
             if(i >= max) {
-                self.listData();
+                self.listData(false);
                 if(went)
                     ok();
                 else
