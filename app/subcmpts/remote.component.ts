@@ -53,24 +53,25 @@ export class Remote implements OnInit, OnDestroy {
             self.challenge = params['challenge'];
             self.return_url = window.decodeURIComponent(params['return_url']);
             if(!/^https/.test(self.return_url)) {
-                self.end('null', self.backend.profile._id);
+                self.end('null', 'null', self.backend.profile._id);
             }
             self.dataservice.listData(false).then(function() {
                 if(!!self.backend.profile.data['keys/auth/' + self.id_to]) {
                     self.backend.getData(self.backend.profile.data['keys/auth/' + self.id_to].id).then(function(data) {
                         self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {
                             self.backend.encryptAES(self.challenge, self.dataservice.workerMgt(true, function(got) {
-                                self.end(btoa(self.backend.arr2str(got)), self.backend.profile._id);
+                                var send = got.map(function(el) { return el + ''; }).join('-');
+                                self.end(send, window.btoa(self.backend.arr2str(got)), self.backend.profile._id);
                             }), self.backend.toBytes(got));
                         }));
                     }, function(e) {
-                        self.end('null', self.backend.profile._id);
+                        self.end('null', 'null', self.backend.profile._id);
                     });
                 } else {
-                    self.end('null', self.backend.profile._id);
+                    self.end('null', 'null', self.backend.profile._id);
                 }
             }, function(e) {
-                self.end('null', self.backend.profile._id);
+                self.end('null', 'null', self.backend.profile._id);
             });
         });
     }
@@ -102,19 +103,20 @@ export class Remote implements OnInit, OnDestroy {
      * @function End
      * @private
      * @param {String} response Response.
+     * @param {String} r64 Response b64.
      * @param {String} user User.
      */
-    private end(response: string, user: string) {
+    private end(response: string, r64: string, user: string) {
         if(typeof Android !== undefined) {
             try {
-                Android.remote(response + ':' + user);
+                Android.remote(r64 + ':' + user);
             } catch(e) {}
         } else if(typeof webkit !== undefined && !!webkit.messageHandlers) {
             try {
-                webkit.messageHandlers.remote.postMessage(response + ':' + user);
+                webkit.messageHandlers.remote.postMessage(r64 + ':' + user);
             } catch(e) {}
         }
-        window.location.href = this.mixin(this.return_url, ['response=' + response, 'user=' + user]);
+        window.location.href = this.mixin(this.return_url, ['response=' + response, 'r64=' + r64, 'user=' + user]);
     }
 
 }
