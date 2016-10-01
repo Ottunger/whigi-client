@@ -13,15 +13,10 @@ import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 enableProdMode();
+import * as template from './templates/user.html';
 
 @Component({
-    template: `
-        <h2>{{ 'userinfo.title' | translate }}</h2>
-        <button type="button" class="btn btn-primary" (click)="back()">{{ 'back' | translate }}</button>
-        <br />
-
-        <user-info [user]="user"></user-info>
-    `
+    template: template
 })
 export class User implements OnInit, OnDestroy {
 

@@ -2,8 +2,9 @@
 /app/*.js
 /app/subcmpts/*.js
 /utils/*.js
-dist/*.map
-dist/*.js
-dist/*.css
-dist/index.html
+/dist/*.map
+/dist/*.js
+/dist/*.css
+/dist/index.html
+/dist/assets
 /.vscode

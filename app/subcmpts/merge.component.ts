@@ -12,31 +12,11 @@ import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
+import * as template from './templates/merge.html';
 
 @Component({
     selector: 'merge-account',
-    template: `
-        <form class="form-signin">
-            <div class="heading">
-                <h3 class="form-signin-heading">{{ 'merge.title' | translate }}</h3>
-                <p>{{ 'merge.explain' | translate }}</p>
-            </div>
-            <div class="form-group">
-                {{ 'merge.login' | translate }}<br />
-                <input type="text" [(ngModel)]="login" name="y1" class="form-control">
-            </div>
-            <div class="form-group">
-                {{ 'merge.pass' | translate }}<br />
-                <input type="password" [(ngModel)]="password" name="y0" class="form-control">
-            </div>
-            <div class="form-group">
-                <div class="checkbox">
-                    <label><input type="checkbox" [(ngModel)]="erase" name="y2"> {{ 'merge.erase' | translate }}</label>
-                </div>
-                <button type="submit" class="btn btn-danger" (click)="merge()">{{ 'merge.merge' | translate }}</button>
-            </div>
-        </form>
-    `
+    template: template
 })
 export class Merge {
 

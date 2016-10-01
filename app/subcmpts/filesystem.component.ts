@@ -14,93 +14,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
+import * as template from './templates/filesystem.html';
 
 @Component({
-    template: `
-        <h2>{{ dataservice.sanitarize(folders, true) }}</h2>
-        <button type="button" class="btn btn-primary" (click)="router.navigate(['/profile'])">{{ 'back' | translate }}</button>
-        <br />
-
-        <h3 *ngIf="!!hasKey()">{{ hasKey() | translate }}</h3><br />
-
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>{{ 'filesystem.data_name' | translate }}</th>
-                        <th>{{ 'filesystem.data' | translate }}</th>
-                        <th>{{ 'action' | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="info">
-                        <td></td>
-                        <td>{{ 'filesystem.folder' | translate }}</td>
-                        <td><button type="button" class="btn btn-default" (click)="getUp()" [disabled]="folders==''">{{ 'filesystem.getUp' | translate }}</button></td>
-                    </tr>
-                    <tr *ngFor="let d of folderNames()"  class="info">
-                        <td>{{ d }}</td>
-                        <td>{{ 'filesystem.folder' | translate }}</td>
-                        <td><button type="button" class="btn btn-default" (click)="select(d)">{{ 'filesystem.goTo' | translate }}</button></td>
-                    </tr>
-                    <tr *ngFor="let d of dataNames()">
-                        <td>{{ d }}</td>
-                        <td><i>{{ 'filesystem.mix' | translate }}</i></td>
-                        <td><button type="button" class="btn btn-default" (click)="view(d)">{{ 'filesystem.goTo' | translate }}</button></td>
-                    </tr>
-                    <tr *ngIf="mode=='data'" class="info">
-                        <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control"></td>
-                        <td>{{ 'filesystem.folder' | translate }}</td>
-                        <td>
-                            <button type="button" class="btn btn-default" (click)="select(data_name); data_name=''" [disabled]="!data_name || data_name==''">{{ 'filesystem.newFolder' | translate }}</button>
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                        <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control"></td>
-                        <td><input type="text" [(ngModel)]="data_value" name="s1" class="form-control"></td>
-                        <td>
-                            <button type="button" class="btn btn-default" (click)="register(false, false)">{{ 'filesystem.record' | translate }}</button>
-                        </td>
-                    </tr>
-                    <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                        <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control"></td>
-                        <td><input type="file" (change)="fileLoad($event)" name="n50" class="form-control"></td>
-                        <td>
-                            <button type="button" class="btn btn-default" (click)="register(true, false)" [disabled]="data_value_file==''">{{ 'filesystem.record' | translate }}</button>
-                        </td>
-                    </tr>
-
-                    <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                        <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control"></td>
-                        <td><input type="text" [(ngModel)]="data_value" name="s1" class="form-control"></td>
-                        <td>
-                            <div class='input-group date' id='pick1'>
-                                <input type='text' class="form-control" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                            <button type="button" class="btn btn-default" (click)="register(false, true)">{{ 'filesystem.record' | translate }}</button>
-                        </td>
-                    </tr>
-                    <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                        <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control"></td>
-                        <td><input type="file" (change)="fileLoad($event)" name="n50" class="form-control"></td>
-                        <td>
-                            <div class='input-group date' id='pick2'>
-                                <input type='text' class="form-control" />
-                                <span class="input-group-addon">
-                                    <span class="glyphicon glyphicon-calendar"></span>
-                                </span>
-                            </div>
-                            <button type="button" class="btn btn-default" (click)="register(true, true)" [disabled]="data_value_file==''">{{ 'filesystem.record' | translate }}</button>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    `
+    template: template
 })
 export class Filesystem implements OnInit {
 

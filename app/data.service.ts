@@ -5,6 +5,7 @@
  */
 
 'use strict';
+declare var window: any
 import {Injectable, ApplicationRef} from '@angular/core';
 import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
@@ -110,7 +111,7 @@ export class Data {
             raw_data = as_file? raw_data_file : raw_data;
         }
         //Test if the data passes the associated test
-        var test = raw_data, res = eval(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].validate);
+        var res = window.eval.call(window, '(function(test) {' + this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].validate + '})')(raw_data);
         if(!res) {
             return undefined;
         }

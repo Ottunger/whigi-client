@@ -14,71 +14,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
+import * as template from './templates/account.html';
 
 @Component({
-    template: `
-        <div style="box-shadow: 0 0 10px 10px black; padding: 10px;">
-            <h2>{{ 'account.question' | translate }}</h2>
-            <br />
-            <p>{{ 'account.explain' | translate }}</p>
-            <br />
-            <p>{{ 'account.id_to' | translate }}{{ id_to }}</p>
-            <br />
-            <p *ngIf="with_account != 'false'">{{ 'account.withAccount' | translate }}</p>
-            <br />
-            <div *ngIf="!forever">
-                {{ 'account.until' | translate }}
-                <div class='input-group date' id='pick3'>
-                    <input type='text' class="form-control" readonly="readonly" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
-            </div>
-            <p *ngIf="forever">{{ 'account.forever' | translate }}</p>
-            <br />
-
-            <div *ngFor="let p of data_list">
-                <h3>
-                    {{ 'account.prefix' | translate }}{{ p }}
-                    <img *ngIf="!!backend.generics[p] && backend.generics[p][backend.generics[p].length - 1].icon != ''" class="featurette-image img-circle img-responsive pull-right" src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}">
-                    <img *ngIf="!backend.generics[p] || backend.generics[p][backend.generics[p].length - 1].icon == ''" class="featurette-image img-circle img-responsive pull-right" src="favicon.png">
-                </h3>
-                
-                <p *ngIf="!backend.generics[p]"><i>{{ 'account.notShared' | translate }}</i></p>
-                <div *ngIf="!!backend.generics[p] && !backend.generics[p][backend.generics[p].length - 1].instantiable">
-                    <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
-                    <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'text'" type="text" [(ngModel)]="new_data[p]" class="form-control">
-                    <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'file'" type="file" (change)="fileLoad($event, p)" class="form-control">
-                </div>
-                <div *ngIf="!!backend.generics[p] && backend.generics[p][backend.generics[p].length - 1].instantiable">
-                    <select class="form-control" [(ngModel)]="filter[p]">
-                        <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
-                    </select>
-                    <div *ngIf="filter[p] == '/new'">
-                        {{ 'account.nameField' | translate }}
-                        <input type="text" [(ngModel)]="new_name[p]" name="s18" class="form-control">
-                        {{ 'account.dataField' | translate }}
-                        <input type="text" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'text'" [(ngModel)]="new_data[p]" name="s1" class="form-control">
-                        <div *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'json_keys'">
-                            <div class="form-group" *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].json_keys">
-                                {{ k.descr_key | translate }}<br />
-                                <input type="text" [(ngModel)]="new_datas[p][k.descr_key]" name="s1" class="form-control">
-                            </div>
-                        </div>
-                        <input type="file" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'file'" (change)="fileLoad($event, p)" name="n50" class="form-control">
-                    </div>
-                </div>
-            </div>
-            <br />
-
-            <button type="button" class="btn btn-warning" (click)="finish(true)" [disabled]="!ready">{{ 'account.ok' | translate }}</button>
-            <button type="button" class="btn btn-primary" (click)="finish(false)" [disabled]="!ready">{{ 'account.nok' | translate }}</button>
-            <br /><br />
-
-            <user-info [user]="requester"></user-info>
-        </div>
-    `
+    template: template
 })
 export class Account implements OnInit, OnDestroy {
 

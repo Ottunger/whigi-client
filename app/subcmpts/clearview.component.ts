@@ -11,47 +11,11 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 enableProdMode();
+import * as template from './templates/clearview.html';
 
 @Component({
     selector: 'clear-view',
-    template: `
-        <h3 *ngIf="is_generic">{{ backend.generics[gen_name][version].descr_key | translate }}</h3><br />
-        <div *ngIf="!is_dated">
-            <p>{{ 'actual' | translate }}</p>
-            <div *ngIf="!is_folder">
-                <input id="decrypted" *ngIf="decr_data.length < 150" type="text" [ngModel]="decr_data" class="form-control" readonly>
-                <input id="decrypted" *ngIf="decr_data.length >= 150" type="text" value="{{ 'dataview.tooLong' | translate }}" class="form-control" readonly>
-            </div>
-            <div *ngIf="is_folder">
-                <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-                    {{ k.descr_key | translate }}<br />
-                    <input type="text" [ngModel]="recover(k.descr_key, decr_data)" name="s1" class="form-control" readonly>
-                </div>
-            </div>
-
-            <button type="button" class="btn btn-primary" [disabled]="decr_data==''" (click)="dl(decr_data)">{{ 'download' | translate }}</button>
-            <button type="button" *ngIf="!is_folder && decr_data.length < 150" class="btn btn-primary btn-copier" data-clipboard-target="#decrypted">{{ 'copy' | translate }}</button>
-            <br />
-        </div>
-        <div *ngIf="is_dated">
-            <div *ngFor="let p of computeValues(); let i = index">
-                <div>{{ 'actualFrom' | translate }}{{ p.from.toLocaleString() }}</div>
-                <div *ngIf="!is_folder">
-                    <input *ngIf="p.value.length < 150" type="text" [ngModel]="p.value" class="form-control" readonly>
-                    <input *ngIf="p.value.length >= 150" type="text" value="{{ 'dataview.tooLong' | translate }}" class="form-control" readonly>
-                </div>
-                <div *ngIf="is_folder">
-                    <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-                        {{ k.descr_key | translate }}<br />
-                        <input type="text" [ngModel]="recover(k.descr_key, p.value)" name="s1" class="form-control" readonly>
-                    </div>
-                </div>
-
-                <button type="button" class="btn btn-primary" (click)="dl(p.value)">{{ 'download' | translate }}</button>
-                <button *ngIf="change" type="button" class="btn btn-warning" (click)="rem(i)" [disabled]="computeValues().length < 2">{{ 'remove' | translate }}</button>
-            </div>
-        </div>
-    `
+    template: template
 })
 export class Clearview {
 

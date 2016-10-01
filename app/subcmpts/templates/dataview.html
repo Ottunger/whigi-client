@@ -1,0 +1,106 @@
+<h2>{{ dataservice.sanitarize(data_name) }}</h2>
+<button type="button" class="btn btn-primary" (click)="back(false)">{{ 'back' | translate }}</button>
+<button *ngIf="is_generic" type="button" class="btn btn-primary" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
+<br />
+<clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true" [is_folder]="is_generic && !!backend.generics[gen_name][version].mode == 'json_keys'"
+    (notify)="mod($event, false)" [gen_name]="gen_name" [is_generic]="is_generic" [version]="version"></clear-view>
+<br /><br />
+
+<p *ngIf="!is_dated">{{ 'modify' | translate }}</p>
+<p *ngIf="!!is_dated && is_dated">{{ 'add' | translate }}</p>
+<div *ngIf="!!is_dated && is_dated" class='input-group date' id='pick4'>
+    <input type='text' class="form-control"/>
+    <span class="input-group-addon">
+        <span class="glyphicon glyphicon-calendar"></span>
+    </span>
+</div>
+
+<div *ngIf="!is_generic">
+    <input type="text" [(ngModel)]="new_data" [disabled]="new_data_file!=''" class="form-control">
+    <input type="file" (change)="fileLoad($event)" class="form-control">
+</div>
+<div *ngIf="is_generic">
+    <input type="text" *ngIf="backend.generics[gen_name][version].mode == 'text'" [(ngModel)]="new_data" name="s1" class="form-control">
+    <div *ngIf="backend.generics[gen_name][version].mode == 'json_keys'">
+        <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
+            {{ k.descr_key | translate }}<br />
+            <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
+        </div>
+    </div>
+    <input type="file" *ngIf="backend.generics[gen_name][version].mode == 'file'" (change)="fileLoad($event)" name="n50" class="form-control">
+</div>
+
+
+<button type="button" class="btn btn-primary" (click)="modify()" [disabled]="!decr_data">{{ 'filesystem.record' | translate }}</button>
+<button type="button" class="btn btn-warning" (click)="revokeAll()">{{ 'dataview.revokeAll' | translate }}</button>
+<button type="button" class="btn btn-danger" (click)="remove()"
+        [disabled]="shared() || !!backend.generics[data_name]">{{ 'remove' | translate }}</button>
+<br /><br />
+
+<div class="table-responsive">
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>{{ 'dataview.shared_to' | translate }}</th>
+                <th>{{ 'dataview.lastAccess' | translate }}</th>
+                <th>{{ 'dataview.until' | translate }}</th>
+                <th>{{ 'dataview.trigger' | translate }}</th>
+                <th *ngIf="is_generic && data_name != gen_name">{{ 'dataview.redirect' | translate }}</th>
+                <th>{{ 'action' | translate }}</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let d of sharedIds()">
+                <td><a (click)="user(d)">{{ d }}</a></td>
+                <td *ngIf="!!timings[d] && timings[d].seen">
+                    <div class='input-group date' id='pick-id{{ d }}'>
+                        <input type='text' class="form-control" readonly="readonly"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </td>
+                <td *ngIf="!!timings[d] && timings[d].ends">
+                    <div class='input-group date' id='pick-id2{{ d }}'>
+                        <input type='text' class="form-control" readonly="readonly"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </td>
+                <td *ngIf="!!timings[d] && !timings[d].seen">{{ 'dataview.neverSeen' | translate }}</td>
+                <td *ngIf="!!timings[d] && !timings[d].ends">{{ 'dataview.forever' | translate }}</td>
+                <td *ngIf="!timings[d]"></td>
+                <td *ngIf="!timings[d]"></td>
+                <td *ngIf="!!timings[d]">{{ timings[d].trigger }}</td>
+                <td *ngIf="!timings[d]"></td>
+
+                <td *ngIf="is_generic && data_name != gen_name">
+                    <select class="form-control" [(ngModel)]="filter">
+                        <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
+                    </select>
+                </td>
+
+                <td>
+                    <button type="button" class="btn btn-primary" (click)="change(d)" [disabled]="filter==''">{{ 'redirect' | translate }}</button>
+                    <button type="button" class="btn btn-default" (click)="revoke(d)">{{ 'remove' | translate }}</button>
+                </td>
+            </tr>
+            <tr>
+                <td><input type="text" [(ngModel)]="new_id" name="y0" class="form-control"></td>
+                <td></td>
+                <td>
+                    <div class='input-group date' id='pick5'>
+                        <input type='text' class="form-control"/>
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </td>
+                <td><input type="text" [(ngModel)]="new_trigger" name="y1" class="form-control"></td>
+                <td *ngIf="is_generic && data_name != gen_name"></td>
+                <td><button type="button" class="btn btn-default" (click)="register()" [disabled]="!decr_data">{{ 'record' | translate }}</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>

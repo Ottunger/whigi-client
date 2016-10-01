@@ -12,40 +12,11 @@ import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
+import * as template from './templates/userinfo.html';
 
 @Component({
     selector: 'user-info',
-    template: `
-        <h2>{{ 'userinfo.title' | translate }}</h2>
-        <h3>{{ 'userinfo.trustLevel' | translate }}{{ user.is_company }}</h3>
-        <h3>{{ 'userinfo.public' | translate }}</h3>
-        <p *ngIf="!!user.company_info && !!user.company_info.name">{{ 'userinfo.name' | translate }}{{ user.company_info.name }}</p>
-        <p *ngIf="!!user.company_info && !!user.company_info.bce">{{ 'userinfo.bce' | translate }}{{ user.company_info.bce }}</p>
-        <p *ngIf="!!user.company_info && !!user.company_info.rrn">{{ 'generics.rrn' | translate }}: {{ user.company_info.rrn }}</p>
-        <p *ngIf="!!user.company_info && getAddr() != ''">{{ 'userinfo.addr' | translate }}: {{ getAddr() }}</p>
-
-        <div *ngIf="user._id == backend.profile._id">
-            <form class="form-signin">
-                <div class="heading">
-                    <h3 class="form-signin-heading">{{ 'userinfo.set' | translate }}</h3>
-                </div>
-                <div class="form-group">
-                    {{ 'userinfo.name' | translate }}<br />
-                    <input type="text" [(ngModel)]="backend.profile.company_info.name" name="n1" class="form-control">
-                </div>
-                <div class="form-group">
-                    {{ 'userinfo.bce' | translate }}<br />
-                    <input type="text" [(ngModel)]="bce" name="n2" class="form-control">
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" (click)="modify()">{{ 'userinfo.modify' | translate }}</button>
-                    <button type="submit" class="btn btn-default" (click)="load()">{{ 'userinfo.load' | translate }}</button>
-                    <button type="button" class="btn btn-primary" (click)="goCompany()">{{ 'userinfo.goCompany' | translate }}</button>
-                    <button type="button" class="btn btn-default" [disabled]="user.is_company != 9" (click)="goBCE()">{{ 'userinfo.goBCE' | translate }}</button>
-                </div>
-            </form>
-        </div>
-    `
+    template: template
 })
 export class Userinfo {
 

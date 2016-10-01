@@ -16,9 +16,7 @@ import {Data} from '../data.service';
 enableProdMode();
 
 @Component({
-    template: `
-
-    `
+    template: ''
 })
 export class Resethelp implements OnInit, OnDestroy {
 

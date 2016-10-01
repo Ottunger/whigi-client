@@ -16,9 +16,7 @@ import {Backend} from '../app.service';
 enableProdMode();
 
 @Component({
-    template: `
-
-    `
+    template: ''
 })
 export class Remote implements OnInit, OnDestroy {
 

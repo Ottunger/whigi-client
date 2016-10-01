@@ -13,91 +13,10 @@ import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
+import * as template from './templates/profile.html';
 
 @Component({
-    template: `
-        <h2>{{ backend.profile._id }}</h2>
-        <button type="button" class="btn btn-primary" (click)="logout(false)">{{ 'profile.logout' | translate }}</button>
-        <button type="button" class="btn btn-danger" (click)="logout(true)">{{ 'profile.logoutAll' | translate }}</button>
-        <br /><br />
-
-        <button type="button" class="btn btn-primary" (click)="router.navigate(['/filesystem', 'data'])">{{ 'profile.mine' | translate }}</button>
-        <button type="button" class="btn btn-primary" (click)="router.navigate(['/filesystem', 'vault'])">{{ 'profile.shared' | translate }}</button>
-        <button type="button" class="btn btn-primary" (click)="router.navigate(['/generics'])">{{ 'profile.generics' | translate }}</button>
-        <br /><br />
-
-        <form class="form-signin">
-            <div class="heading">
-                <h3 class="form-signin-heading">{{ 'profile.change' | translate }}</h3>
-            </div>
-            <div class="form-group">
-                {{ 'profile.current' | translate }}<br />
-                <input type="password" [(ngModel)]="current_pwd" name="n0" class="form-control" required>
-            </div>
-            <div class="checkbox">
-                <label><input type="checkbox" name="n90" [(ngModel)]="use_pwd" checked> {{ 'login.use_pwd' | translate }}</label>
-            </div>
-            <div class="form-group">
-                {{ 'profile.new' | translate }}<br />
-                <input type="password" [(ngModel)]="password" name="n4" class="form-control" [disabled]="!use_pwd" required>
-            </div>
-            <div class="form-group">
-                {{ 'profile.new' | translate }}<br />
-                <input type="password" [(ngModel)]="password2" name="n5" class="form-control" [disabled]="!use_pwd" required>
-            </div>
-            <div class="form-group">
-                {{ 'login.password_file' | translate }}<br />
-                <input type="file" (change)="fileLoad($event)" name="n50" class="form-control" [disabled]="use_pwd" required>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary" (click)="update()">{{ 'profile.change' | translate }}</button>
-            </div>
-        </form>
-        <br /><br />
-
-        <merge-account></merge-account>
-        <br /><br />
-
-        <form class="form-signin">
-            <div class="heading">
-                <h3 class="form-signin-heading">{{ 'profile.revoke' | translate }}</h3>
-            </div>
-            <div class="form-group">
-                {{ 'profile.revokeID' | translate }}<br />
-                <input type="text" [(ngModel)]="revoke_id" name="n100" class="form-control" required>
-            </div>
-            <div class="form-group">
-                <button type="submit" class="btn btn-warning" (click)="revokeAll()">{{ 'profile.revoke' | translate }}</button>
-            </div>
-        </form>
-        <br /><br />
-
-        <div class="heading">
-            <h3 class="form-signin-heading">{{ 'profile.oauth' | translate }}</h3>
-        </div>
-        <div class="table-responsive">
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>{{ 'oauth.for_id' | translate }}</th>
-                        <th>{{ 'oauth.prefix' | translate }}</th>
-                        <th>{{ 'action' | translate }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let d of backend.profile.oauth">
-                        <td>{{ d.for_id }}</td>
-                        <td>{{ d.prefix }}</td>
-                        <td><button type="button" class="btn btn-alarm" (click)="remove(d.id)">{{ 'remove' | translate }}</button></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <br /><br />
-
-        <user-info [user]="backend.profile"></user-info>
-        <br />
-    `
+    template: template
 })
 export class Profile implements OnInit {
 

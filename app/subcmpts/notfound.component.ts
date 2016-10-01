@@ -8,11 +8,10 @@
 import {Component, enableProdMode} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 enableProdMode();
+import * as template from './templates/notfound.html';
 
 @Component({
-    template: `
-        <h2>{{ 'error.notfound' | translate }}</h2>
-    `
+    template: template
 })
 export class Notfound {
 

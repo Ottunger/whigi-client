@@ -12,8 +12,7 @@ import {Backend} from '../app.service';
 enableProdMode();
 
 @Component({
-    template: `
-    `
+    template: ''
 })
 export class Loginas implements OnInit {
 
