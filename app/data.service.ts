@@ -171,6 +171,18 @@ export class Data {
                         self.backend.shared_with_me_trie.addMilestones(keys[i] + '/' + insides[j], '/');
                         self.backend.shared_with_me_trie.add(keys[i] + '/' + insides[j], self.backend.profile.shared_with_me[keys[i]][insides[j]]);
                     }
+                    //If heavy is on, check if storable data
+                    if(resolve) {
+                        if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
+                            self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
+                                self.newData(vault.storable[2], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
+                                    self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[keys[i]][insides[j]],
+                                        self.backend.arr2str(self.backend.decryptRSA(vault.storable[0])));
+                                    self.listData(false);
+                                }, function(e) {});
+                            }, function(e) {});
+                        }
+                    }
                 }
                 self.backend.data_loaded = true;
                 resolve();

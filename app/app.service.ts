@@ -743,6 +743,18 @@ export class Backend {
     }
 
     /**
+     * Revokes an access granted to a vault.
+     * @function revokeVaultFromGrantee
+     * @public
+     * @param {String} vault_id Vault id.
+     * @param {String} rem Remove Challenge.
+     * @return {Promise} JSON response from backend.
+     */
+    revokeVaultFromGrantee(vault_id: string, rem: string): Promise {
+        return this.backend(true, 'DELETE', {}, 'vault/' + vault_id + '/' + rem, true, true);
+    }
+
+    /**
      * Retrieves a data shared.
      * @function getVault
      * @public
