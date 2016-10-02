@@ -23,12 +23,10 @@ window.moment = require('../js/moment.js');
 require('../js/moment.locales/moment.locales.js');
 require('../js/bootstrap-datetimepicker.min.js');
 
-import '../css/bootstrap.min.css';
+import '../css/bootstrap.css';
 import '../css/bootstrap-datetimepicker.min.css';
 import '../css/one-page-wonder.css';
-
-import '../fonts/glyphicons-halflings-regular.eot';
-import '../fonts/glyphicons-halflings-regular.svg';
-import '../fonts/glyphicons-halflings-regular.ttf';
-import '../fonts/glyphicons-halflings-regular.woff';
-import '../fonts/glyphicons-halflings-regular.woff2';
+import '../css/components-rounded.css';
+import '../css/layout.css';
+import '../css/login.css';
+import '../css/whigi.css';
