@@ -340,7 +340,7 @@ export class Backend {
             if(e.status == 412 && num < 4) {
                 self.backend(whigi, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
             } else {
-                if(e.status == 403 && token) { 
+                if(e.status == 407 && token) { 
                     self.router.navigate(['/end']);
                 }
                 reject(e);
@@ -730,7 +730,7 @@ export class Backend {
             real_name: real_name,
             version: version
         };
-        if(storable !== false) {
+        if(typeof storable !== undefined && storable) {
             post['storable'] = true;
         }
         return this.backend(true, 'POST', post, 'vault/new', true, true, true);
@@ -752,11 +752,10 @@ export class Backend {
      * @function revokeVaultFromGrantee
      * @public
      * @param {String} vault_id Vault id.
-     * @param {String} rem Remove Challenge.
      * @return {Promise} JSON response from backend.
      */
-    revokeVaultFromGrantee(vault_id: string, rem: string): Promise {
-        return this.backend(true, 'DELETE', {}, 'vault/' + vault_id + '/' + rem, true, true);
+    revokeVaultFromGrantee(vault_id: string): Promise {
+        return this.backend(true, 'DELETE', {}, 'vault/forother/' + vault_id, true, true);
     }
 
     /**

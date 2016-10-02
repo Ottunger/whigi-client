@@ -175,13 +175,11 @@ export class Data {
                             if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
                                 var k = keys[i], kk = insides[j];
                                 self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
-                                    self.newData(vault.storable[2], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
-                                        try {
-                                            self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kk],
-                                                self.backend.arr2str(self.backend.decryptRSA(vault.storable[0])));
-                                        } catch(e) {}
+                                    self.newData(vault.storable[0], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
+                                        self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kk]).then(function() {
+                                            self.listData(false);
+                                        }, function(e) {});
                                         delete self.backend.profile.shared_with_me[k][kk];
-                                        self.listData(false);
                                     }, function(e) {});
                                 }, function(e) {});
                             }
