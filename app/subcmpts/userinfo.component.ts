@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, ApplicationRef} from '@angular/core';
+import {Component, enableProdMode, Input, ApplicationRef, OnInit} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
@@ -18,7 +18,7 @@ import * as template from './templates/userinfo.html';
     selector: 'user-info',
     template: template
 })
-export class Userinfo {
+export class Userinfo implements OnInit {
 
     @Input() user: any;
     public bce: string;
@@ -36,6 +36,17 @@ export class Userinfo {
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
         private dataservice: Data, private check: ApplicationRef) {
 
+    }
+
+    /**
+     * Called upon display.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnInit(): void {
+        setTimeout(function() {
+            window.$('#eidform').attr('method', 'get');
+        }, 500);
     }
 
     /**
@@ -102,9 +113,10 @@ export class Userinfo {
      * Moves to goCompany.
      * @function goCompany
      * @public
+     * @return {String} hash of pass.
      */
-    goCompany() {
-        window.location.href = 'https://' + this.backend.profile._id + ':' + localStorage.getItem('psha') + '@' + this.backend.EID_HOST;
+    goCompany(): string {
+        return localStorage.getItem('psha');
     }
 
     /**

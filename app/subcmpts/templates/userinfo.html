@@ -7,7 +7,7 @@
 <p *ngIf="!!user.company_info && getAddr() != ''">{{ 'userinfo.addr' | translate }}: {{ getAddr() }}</p>
 
 <div *ngIf="user._id == backend.profile._id">
-    <form class="form-signin">
+    <form id="eidform" class="form-signin" action="https://{{backend.EID_HOST}}">
         <div class="heading">
             <h3 class="form-signin-heading">{{ 'userinfo.set' | translate }}</h3>
         </div>
@@ -20,9 +20,11 @@
             <input type="text" [(ngModel)]="bce" name="n2" class="form-control">
         </div>
         <div class="form-group">
-            <button type="submit" class="btn btn-primary" (click)="modify()">{{ 'userinfo.modify' | translate }}</button>
-            <button type="submit" class="btn btn-default" (click)="load()">{{ 'userinfo.load' | translate }}</button>
-            <button type="button" class="btn btn-primary" (click)="goCompany()">{{ 'userinfo.goCompany' | translate }}</button>
+            <button type="button" class="btn btn-primary" (click)="modify()">{{ 'userinfo.modify' | translate }}</button>
+            <button type="button" class="btn btn-default" (click)="load()">{{ 'userinfo.load' | translate }}</button>
+            <input type="hidden" name="username" [value]="backend.profile._id" />
+            <input type="hidden" name="hpwd" [value]="goCompany()" />
+            <input type="submit" class="btn btn-primary" value="{{ 'userinfo.goCompany' | translate }}" onclick="document.getElementById('eidform').submit()" />
             <button type="button" class="btn btn-default" [disabled]="user.is_company != 9" (click)="goBCE()">{{ 'userinfo.goBCE' | translate }}</button>
         </div>
     </form>

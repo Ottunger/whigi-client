@@ -25,7 +25,7 @@ export class Profile implements OnInit {
     public password2: string;
     public ask_data: string;
     public revoke_id: string;
-    public use_pwd: boolean;
+    public use_file: boolean;
     private onEid: boolean;
 
     /**
@@ -39,7 +39,7 @@ export class Profile implements OnInit {
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
         private router: Router, private dataservice: Data) {
-        this.use_pwd = true;
+        this.use_file = false;
         this.onEid = true;
     }
 
