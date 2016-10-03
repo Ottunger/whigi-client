@@ -62,10 +62,10 @@ export class Profile implements OnInit {
             });
         }
         this.dataservice.listData(true).then(function() {
-            if(!!localStorage.getItem('return_url') && localStorage.getItem('return_url').length > 1) {
-                var ret = localStorage.getItem('return_url');
+            if(!!sessionStorage.getItem('return_url') && sessionStorage.getItem('return_url').length > 1) {
+                var ret = sessionStorage.getItem('return_url');
                 ret = JSON.parse(ret);
-                localStorage.removeItem('return_url');
+                sessionStorage.removeItem('return_url');
                 self.router.navigate(ret);
             }
         });

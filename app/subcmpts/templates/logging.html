@@ -1,128 +1,138 @@
-<!-- Full Width Image Header -->
-<header class="header-image">
-    <div class="headline">
-        <div class="container-fluid">
-            <h1>{{ 'login.whigi' | translate }}</h1>
-            <h2>{{ 'login.explain' | translate }}</h2>
-        </div>
-    </div>
-</header>
-
-<!-- Page Content -->
-<div class="container">
-
-    <hr class="featurette-divider">
-
-    <!-- First Featurette -->
-    <div class="featurette" id="about">
-        <img class="featurette-image img-circle img-responsive pull-right" src="../../../img/ball.jpg">
-        <h2 class="featurette-heading">{{ 'login.title' | translate }}
-            <span class="text-muted">{{ 'login.titleMuted' | translate }}</span>
-        </h2>
-        <div class="col-sm-4">
-            <form class="form-signin">
-                <div class="form-group">
-                    {{ 'login.username' | translate }}<br />
-                    <input type="text" [(ngModel)]="username" name="n0" class="form-control" required>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" name="n90" [(ngModel)]="use_pwd" checked> {{ 'login.use_pwd' | translate }}</label>
-                </div>
-                <div class="form-group">
-                    {{ 'login.password' | translate }}<br />
-                    <input type="password" [(ngModel)]="password" name="n1" class="form-control" [disabled]="!use_pwd" required>
-                </div>
-                <div class="form-group">
-                    {{ 'login.password_file' | translate }}<br />
-                    <input type="file" (change)="fileLoad($event)" name="n50" class="form-control" [disabled]="use_pwd" required>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="n2" [(ngModel)]="persistent"> {{ 'login.remember' | translate }}</label>
-                    </div>
-                    <button type="submit" class="btn btn-primary" (click)="enter()">{{ 'login.goOn' | translate }}</button>
-                </div>
-            </form>
-        </div>
+<div class=" login">
+    <div class="logo">
+            <img src="../../../img/private/logo-big.png" width="100px" alt="" />  
     </div>
 
-    <hr class="featurette-divider">
+    <!-- BEGIN LOGIN -->
+    <div class="content">
 
-    <!-- Second Featurette -->
-    <div class="featurette" id="services">
-        <img class="featurette-image img-circle img-responsive pull-right" src="../../../img/ball.jpg">
-        <h2 class="featurette-heading">{{ 'login.forgot' | translate }}</h2>
-        <div class="col-sm-4">
-            <form class="form-signin">
-                <div class="form-group">
-                    {{ 'login.id' | translate }}<br />
-                    <input type="text" [(ngModel)]="username" name="n10" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <button type="submit" class="btn btn-primary" (click)="forgot()">{{ 'login.sendForgot' | translate }}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <!-- Third Featurette -->
-    <div class="featurette" id="contact">
-        <img class="featurette-image img-circle img-responsive pull-right" src="../../../img/ball.jpg">
-        <h2 class="featurette-heading">{{ 'login.register' | translate }}</h2>
-        <div class="col-sm-4">
-            <form class="form-signin">
-                <div class="form-group">
-                    {{ 'login.usernameRec' | translate }}<br />
-                    <input type="text" [(ngModel)]="username" name="n3" class="form-control" required>
-                </div>
-                <div class="checkbox">
-                    <label><input type="checkbox" name="n90" [(ngModel)]="use_pwd" checked> {{ 'login.use_pwd' | translate }}</label>
-                </div>
-                <div class="form-group">
-                    {{ 'login.password' | translate }}<br />
-                    <input type="password" [(ngModel)]="password" name="n4" class="form-control" [disabled]="!use_pwd" required>
-                </div>
-                <div class="form-group">
-                    {{ 'login.password' | translate }}<br />
-                    <input type="password" [(ngModel)]="password2" name="n5" class="form-control" [disabled]="!use_pwd" required>
-                </div>
-                <div class="form-group">
-                    {{ 'login.password_file' | translate }}<br />
-                    <input type="file" (change)="fileLoad($event)" name="n50" class="form-control" [disabled]="use_pwd" required>
-                </div>
-                <div class="form-group">
-                    {{ 'login.email' | translate }}<br />
-                    <input type="text" [(ngModel)]="email" name="n6" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="n9" [(ngModel)]="recuperable" checked> {{ 'login.recuperable' | translate }}</label>
-                    </div>
-                    <div class="checkbox">
-                        <label><input type="checkbox" name="n10" [(ngModel)]="safe"> {{ 'login.safe' | translate }}</label>
-                    </div>
-                    <input type="text" [(ngModel)]="recup_id" name="n11" class="form-control" [readonly]="!recuperable || !safe">
-                </div>
-                <div class="form-group">
-                    <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div>
-                    <button type="submit" class="btn btn-primary" (click)="signUp()">{{ 'login.send' | translate }}</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <hr class="featurette-divider">
-
-    <!-- Footer -->
-    <footer>
-        <div class="row">
-            <div class="col-lg-12">
-                <p>{{ 'login.mention' | translate }}</p>
+        <!-- BEGIN LOGIN FORM -->
+        <form class="login-form">
+            <h3 class="form-title">{{ 'login.title' | translate }}</h3>
+            <div class="alert alert-danger display-hide">
+                <button class="close" data-close="alert"></button>
+                <span>{{ 'login.alert' | translate }}</span>
             </div>
-        </div>
-    </footer>
-
+            <div class="form-group">
+                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.username' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Username" name="username" /> </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.pass' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
+            </div>
+            <div class="form-group">
+                <label class="rememberme mt-checkbox mt-checkbox-outline">
+                    <input type="checkbox" name="remember" [(ngModel)]="use_file" checked="checked" /> {{ 'login.use_file' | translate }}
+                    <span></span>
+                </label>
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
+            </div>
+            <div class="form-actions">
+                <label class="rememberme mt-checkbox mt-checkbox-outline">
+                    <input type="checkbox" name="remember" [(ngModel)]="persistent" /> {{ 'login.remember' | translate }}
+                    <span></span>
+                </label>
+                <button type="submit" class="btn green pull-right" (click)="enter()"> {{ 'goOn' | translate }} </button>
+            </div>
+            <div class="forget-password">
+                <h4>{{ 'login.forgot' | translate }}</h4>
+                <p> {{ 'login.forgot1' | translate }}
+                    <a href="javascript:;" id="forget-password">{{ 'here' | translate }}</a>{{ 'login.forgot2' | translate }} </p>
+            </div>
+            <div class="create-account">
+                <p> {{ 'login.register' | translate }}
+                    <a href="javascript:;" id="register-btn"> {{ 'login.create' | translate }} </a>
+                </p>
+            </div>
+        </form>
+        <!-- END LOGIN FORM -->
+        <!-- BEGIN FORGOT PASSWORD FORM -->
+        <form class="forget-form">
+            <h3>{{ 'login.forgot' | translate }}</h3>
+            <p> {{ 'login.forgot3' | translate }} </p>
+            <div class="form-group">
+                <div class="input-icon">
+                    <i class="fa fa-envelope"></i>
+                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Email" name="email" /> </div>
+            </div>
+            <div class="form-actions">
+                <button type="button" id="back-btn" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
+                <button type="submit" class="btn green pull-right" (click)="forgot()"> {{ 'goOn' | translate }} </button>
+            </div>
+        </form> 
+        <!-- END FORGOT PASSWORD FORM -->
+        <!-- BEGIN REGISTRATION FORM -->
+        <form class="register-form">
+            <h3>{{ 'login.signUp' | translate }}</h3>
+            <p> {{ 'login.sign' | translate }} </p>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.username' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.username' | translate }}" name="username" /> </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password2' | translate }}</label>
+                <div class="controls">
+                    <div class="input-icon">
+                        <i class="fa fa-check"></i>
+                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="rememberme mt-checkbox mt-checkbox-outline">
+                    <input type="checkbox" name="remember" [(ngModel)]="use_file" checked /> {{ 'login.use_file' | translate }}
+                    <span></span>
+                </label>
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.email' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-user"></i>
+                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="email" autocomplete="off" placeholder="{{ 'login.email' | translate }}" name="email" /> </div>
+            </div>
+            <div class="form-group">
+                <label class="rememberme mt-checkbox mt-checkbox-outline">
+                    <input type="checkbox" name="remember" [(ngModel)]="recuperable" /> {{ 'login.recuperable' | translate }}
+                    <span></span>
+                </label>
+                <label class="rememberme mt-checkbox mt-checkbox-outline">
+                    <input type="checkbox" name="remember" [(ngModel)]="safe" /> {{ 'login.safe' | translate }}
+                    <span></span>
+                </label>
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.recupId' | translate }}</label>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                    <input class="form-control placeholder-no-fix" type="file" [(ngModel)]="recup_id" autocomplete="off" placeholder="{{ 'login.recupId' | translate }}" name="recup_id" [readonly]="!recuperable || !safe" /> </div>
+            </div>
+            <div class="form-group">
+                <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div>
+            </div>
+            <div class="form-actions">
+                <button id="register-back-btn" type="button" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
+                <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="signUp()"> {{ 'login.signUp' | translate }} </button>
+            </div>
+        </form>
+        <!-- END REGISTRATION FORM -->
+    </div>
+    <!-- END LOGIN -->
 </div>
-<!-- /.container -->

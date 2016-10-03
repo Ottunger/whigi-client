@@ -28,7 +28,8 @@ export class Logging implements OnInit {
     public persistent: boolean;
     public recuperable: boolean;
     public safe: boolean;
-    public use_pwd: boolean;
+    public use_file: boolean;
+    private onEnd: boolean;
 
     /**
      * Creates the component.
@@ -42,9 +43,10 @@ export class Logging implements OnInit {
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService, private dataservice: Data) {
         this.persistent = false;
-        this.recuperable = true;
+        this.recuperable = false;
         this.safe = false;
-        this.use_pwd = true;
+        this.use_file = false;
+        this.onEnd = true;
     }
 
     /**
@@ -55,6 +57,16 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
+        if(this.onEnd && /end/.test(window.location.href)) {
+            //Session has expired
+            this.onEnd = false;
+            localStorage.removeItem('token');
+            localStorage.removeItem('key_decryption');
+            localStorage.removeItem('psha');
+            window.setTimeout(function() {
+                self.notif.alert(self.translate.instant('error'), self.translate.instant('sessionExpired'));
+            }, 1500);
+        }
         if('token' in localStorage) {
             this.backend.getProfile().then(function(profile) {
                 //Router.go...
@@ -63,11 +75,35 @@ export class Logging implements OnInit {
                     localStorage.setItem('key_decryption', window.sha256(self.password + profile.salt));
                     localStorage.setItem('psha', window.sha256(self.password));
                 }
-                self.router.navigate(['/profile']);
+                if(!!sessionStorage.getItem('return_url') && sessionStorage.getItem('return_url').length > 1) {
+                    var ret = sessionStorage.getItem('return_url');
+                    ret = JSON.parse(ret);
+                    sessionStorage.removeItem('return_url');
+                    self.router.navigate(ret);
+                } else {
+                    sessionStorage.removeItem('return_url');
+                    self.router.navigate(['/profile']);
+                }
             }, function(e) {
                 localStorage.removeItem('token');
             });
         }
+        window.$('#forget-password').click(function() {
+            window.$('.login-form').hide();
+            window.$('.forget-form').show();
+        });
+        window.$('#back-btn').click(function() {
+            window.$('.login-form').show();
+            window.$('.forget-form').hide();
+        });
+        window.$('#register-btn').click(function() {
+            window.$('.login-form').hide();
+            window.$('.register-form').show();
+        });
+        window.$('#register-back-btn').click(function() {
+            window.$('.login-form').show();
+            window.$('.register-form').hide();
+        });
     }
 
     /**

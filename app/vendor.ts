@@ -25,7 +25,6 @@ require('../js/bootstrap-datetimepicker.min.js');
 
 import '../css/bootstrap.css';
 import '../css/bootstrap-datetimepicker.min.css';
-import '../css/one-page-wonder.css';
 import '../css/components-rounded.css';
 import '../css/layout.css';
 import '../css/login.css';

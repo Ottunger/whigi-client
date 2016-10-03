@@ -340,7 +340,7 @@ export class Backend {
             if(e.status == 412 && num < 4) {
                 self.backend(whigi, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
             } else {
-                if(e.status == 407 && token) { 
+                if(e.status == 418 && token) {
                     self.router.navigate(['/end']);
                 }
                 reject(e);

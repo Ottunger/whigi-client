@@ -6,30 +6,58 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode} from '@angular/core';
+import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 enableProdMode();
 
 @Component({
     selector: 'my-app',
+    styles: [`
+        html, body {
+            height: 100%;
+            background-color: #a0b4c9;
+        }
+        .MenuContainer {
+            height: 40px;
+            bottom:0;
+        }
+        ul#navigation {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 40px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            border: 1px solid #ccc;
+            border-width: 1px 0;    
+            text-align: center;
+            font-size: 22px;
+            font-family: 'Cham-WebFont', Arial, sans-serif;
+        }
+        ul#navigation li {
+            display: inline;
+            margin-right: .75em;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        ul#navigation li.last {
+            margin-right: 0;
+        }
+    `],
+    encapsulation: ViewEncapsulation.None,
     template: `
-        <div class="row bottom-border">
-            <div class="col-sm-offset-1 col-sm-10">
-                <router-outlet></router-outlet>
-            </div>
+        <div class="container-fluid">
+            <router-outlet></router-outlet>
         </div>
-        <br />
-        <br />
-        <div class="row bottom-border">
-            <div class="col-sm-offset-1 col-sm-10">
-                <div class="btn-toolbar" role="toolbar" aria-label="">
-                    <div class="btn-group" role="group" aria-label="">
-                        <button type="button" class="btn btn-small" (click)="setLang('en')">English</button>
-                        <button type="button" class="btn btn-small" (click)="setLang('fr')">Français</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <br /><br />
+        <div class="MenuContainer">
+            <ul id="navigation">
+                <li><button type="button" class="btn btn-small" (click)="setLang('en')">English</button></li>
+                <li class="last"><button type="button" class="btn btn-small" (click)="setLang('fr')">Français</button></li>
+            </ul>
+        </div> 
         <simple-notifications [options]="options"></simple-notifications>
     `
 })

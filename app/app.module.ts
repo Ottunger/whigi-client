@@ -32,7 +32,6 @@ import {Account} from './subcmpts/account.component';
 import {Remote} from './subcmpts/remote.component';
 import {Generics} from './subcmpts/generics.component';
 import {Clearview} from './subcmpts/clearview.component';
-import {Logginglight} from './subcmpts/logginglight.component';
 import {User} from './subcmpts/user.component';
 import {Merge} from './subcmpts/merge.component';
 import {Loginas} from './subcmpts/loginas.component';
@@ -63,7 +62,6 @@ import {Notfound} from './subcmpts/notfound.component';
         Remote,
         Generics,
         Clearview,
-        Logginglight,
         User,
         Merge,
         Loginas,
