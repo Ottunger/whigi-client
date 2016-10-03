@@ -26,7 +26,7 @@
                     <i class="fa fa-lock"></i>
                     <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label class="rememberme mt-checkbox mt-checkbox-outline">
                     <input type="checkbox" name="remember" [(ngModel)]="use_file" checked="checked" /> {{ 'login.use_file' | translate }}
                     <span></span>
@@ -75,10 +75,10 @@
             <h3>{{ 'login.signUp' | translate }}</h3>
             <p> {{ 'login.sign' | translate }} </p>
             <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.username' | translate }}</label>
+                <label class="control-label visible-ie8 visible-ie9">{{ 'login.usernameRec' | translate }}</label>
                 <div class="input-icon">
                     <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.username' | translate }}" name="username" /> </div>
+                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.usernameRec' | translate }}" name="username" /> </div>
             </div>
             <div class="form-group">
                 <label class="control-label visible-ie8 visible-ie9">{{ 'login.password' | translate }}</label>
@@ -94,7 +94,7 @@
                         <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
                 </div>
             </div>
-            <div class="form-group">
+            <div class="form-group" style="display: none;">
                 <label class="rememberme mt-checkbox mt-checkbox-outline">
                     <input type="checkbox" name="remember" [(ngModel)]="use_file" checked /> {{ 'login.use_file' | translate }}
                     <span></span>
@@ -122,10 +122,12 @@
                 <label class="control-label visible-ie8 visible-ie9">{{ 'login.recupId' | translate }}</label>
                 <div class="input-icon">
                     <i class="fa fa-lock"></i>
-                    <input class="form-control placeholder-no-fix" type="file" [(ngModel)]="recup_id" autocomplete="off" placeholder="{{ 'login.recupId' | translate }}" name="recup_id" [readonly]="!recuperable || !safe" /> </div>
+                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="recup_id" autocomplete="off" placeholder="{{ 'login.recupId' | translate }}" name="recup_id" [readonly]="!recuperable || !safe" /> </div>
             </div>
             <div class="form-group">
-                <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div>
+                <div class="input-icon">
+                    <i class="fa fa-lock"></i>
+                        <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div> </div>
             </div>
             <div class="form-actions">
                 <button id="register-back-btn" type="button" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>

@@ -50,7 +50,6 @@
    "login.noMatch": "Mot de passes différents, trop courts / Mauvais format d'email",
    "login.recuperable": "Créer un compte dont le mot de passe peut être récupéré",
    "login.safe": "Utiliser un ami pour la récupération. Meilleure protection",
-   "login.recMail": "Le système ne peut trouver l'utilisateur identifié par cet ID",
    "login.use_file": "Utiliser un fichier comme moyen d'authentification",
    "login.password_file": "Fichier dont le contenu sert à authentifier (un petit suffit!)",
    "login.usernameRec": "Nouvel utilisateur, ne peut contenir \"whigi\"",
@@ -195,6 +194,7 @@
    "generics.postcode": "Code postal",
    "generics.city": "Ville",
    "generics.country": "Pays",
+   "generics.tel": "Numéro de téléphone",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",

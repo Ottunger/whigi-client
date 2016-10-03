@@ -50,7 +50,6 @@
    "login.noMatch": "Passwords no do not match, are too short, or email in wrong format",
    "login.recuperable": "Create an account whose password can be recovered later",
    "login.safe": "Refer to a friend for password recovery. This is the safest method",
-   "login.recMail": "The system cannot find the user identified by this mail",
    "login.use_file": "Use a file as auth mechanism.",
    "login.password_file": "File whose contents will be used as password (use a small file!)",
    "login.usernameRec": "New username, cannot contain \"whigi\"",
@@ -195,6 +194,7 @@
    "generics.postcode": "Postcode",
    "generics.city": "City",
    "generics.country": "Country",
+   "generics.tel": "Phone number",
 
    "/": "Root folder",
    "profile/": "Profile folder",

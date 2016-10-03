@@ -57,6 +57,15 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
+        if(!window.$('#grecaptcha').html() || window.$('#grecaptcha').html().length == 0) {
+            try {
+                window.grecaptcha.render('grecaptcha', {
+                    'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
+                });
+            } catch(e) {
+                console.log(e);
+            }
+        }
         if(this.onEnd && /end/.test(window.location.href)) {
             //Session has expired
             this.onEnd = false;
