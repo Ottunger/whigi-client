@@ -7,7 +7,7 @@
 'use strict';
 declare var window: any
 import {Component, enableProdMode, OnInit, ApplicationRef} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
@@ -38,12 +38,34 @@ export class Generics implements OnInit {
      * @param notif Notification service.
      * @param dataservice Data service.
      * @param check Check service.
+     * @param routed Current route.
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
-        private dataservice: Data, private check: ApplicationRef) {
+        private dataservice: Data, private check: ApplicationRef, private routed: ActivatedRoute) {
         this.filter = 'generics.any';
         this.new_name = '';
         this.new_datas = {};
+    }
+
+    /**
+     * Called upon display.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnInit(): void {
+        var self = this;
+        this.sub = this.routed.params.subscribe(function(params) {
+            self.filter = !!params['filter']? params['filter'] : 'generics.any';
+        });
+    }
+
+    /**
+     * Called upon destroy.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
     }
 
     /**

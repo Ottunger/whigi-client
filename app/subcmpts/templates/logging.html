@@ -1,141 +1,143 @@
-<div class=" login">
-    <div class="logo">
-            <img src="../../../img/private/logo-big.png" width="100px" alt="" />
-            <p>{{ 'mention' | translate }}</p>
-    </div>
+<div class="container-fluid">
+    <div class=" login">
+        <div class="logo">
+                <img src="../../../img/private/logo-big.png" width="100px" alt="" />
+                <p>{{ 'mention' | translate }}</p>
+        </div>
 
-    <!-- BEGIN LOGIN -->
-    <div class="content">
+        <!-- BEGIN LOGIN -->
+        <div class="content">
 
-        <!-- BEGIN LOGIN FORM -->
-        <form class="login-form">
-            <h3 class="form-title">{{ 'login.title' | translate }}</h3>
-            <div class="alert alert-danger display-hide">
-                <button class="close" data-close="alert"></button>
-                <span>{{ 'login.alert' | translate }}</span>
-            </div>
-            <div class="form-group">
-                <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.username' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Username" name="username" /> </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.pass' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
-            </div>
-            <div class="form-group" style="display: none;">
-                <label class="rememberme mt-checkbox mt-checkbox-outline">
-                    <input type="checkbox" name="remember" [(ngModel)]="use_file" checked="checked" /> {{ 'login.use_file' | translate }}
-                    <span></span>
-                </label>
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
-            </div>
-            <div class="form-actions">
-                <label class="rememberme mt-checkbox mt-checkbox-outline">
-                    <input type="checkbox" name="remember" [(ngModel)]="persistent" /> {{ 'login.remember' | translate }}
-                    <span></span>
-                </label>
-                <button type="submit" class="btn green pull-right" (click)="enter()"> {{ 'goOn' | translate }} </button>
-            </div>
-            <div class="forget-password">
-                <h4>{{ 'login.forgot' | translate }}</h4>
-                <p> {{ 'login.forgot1' | translate }}
-                    <a href="javascript:;" id="forget-password">{{ 'here' | translate }}</a>{{ 'login.forgot2' | translate }} </p>
-            </div>
-            <div class="create-account">
-                <p> {{ 'login.register' | translate }}
-                    <a href="javascript:;" id="register-btn"> {{ 'login.create' | translate }} </a>
-                </p>
-            </div>
-        </form>
-        <!-- END LOGIN FORM -->
-        <!-- BEGIN FORGOT PASSWORD FORM -->
-        <form class="forget-form">
-            <h3>{{ 'login.forgot' | translate }}</h3>
-            <p> {{ 'login.forgot3' | translate }} </p>
-            <div class="form-group">
-                <div class="input-icon">
-                    <i class="fa fa-envelope"></i>
-                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Email" name="email" /> </div>
-            </div>
-            <div class="form-actions">
-                <button type="button" id="back-btn" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
-                <button type="submit" class="btn green pull-right" (click)="forgot()"> {{ 'goOn' | translate }} </button>
-            </div>
-        </form> 
-        <!-- END FORGOT PASSWORD FORM -->
-        <!-- BEGIN REGISTRATION FORM -->
-        <form class="register-form">
-            <h3>{{ 'login.signUp' | translate }}</h3>
-            <p> {{ 'login.sign' | translate }} </p>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.usernameRec' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.usernameRec' | translate }}" name="username" /> </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password2' | translate }}</label>
-                <div class="controls">
-                    <div class="input-icon">
-                        <i class="fa fa-check"></i>
-                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
+            <!-- BEGIN LOGIN FORM -->
+            <form class="login-form">
+                <h3 class="form-title">{{ 'login.title' | translate }}</h3>
+                <div class="alert alert-danger display-hide">
+                    <button class="close" data-close="alert"></button>
+                    <span>{{ 'login.alert' | translate }}</span>
                 </div>
-            </div>
-            <div class="form-group" style="display: none;">
-                <label class="rememberme mt-checkbox mt-checkbox-outline">
-                    <input type="checkbox" name="remember" [(ngModel)]="use_file" checked /> {{ 'login.use_file' | translate }}
-                    <span></span>
-                </label>
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.email' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-user"></i>
-                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="email" autocomplete="off" placeholder="{{ 'login.email' | translate }}" name="email" /> </div>
-            </div>
-            <div class="form-group">
-                <label class="rememberme mt-checkbox mt-checkbox-outline">
-                    <input type="checkbox" name="remember" [(ngModel)]="recuperable" /> {{ 'login.recuperable' | translate }}
-                    <span></span>
-                </label>
-                <label class="rememberme mt-checkbox mt-checkbox-outline">
-                    <input type="checkbox" name="remember" [(ngModel)]="safe" /> {{ 'login.safe' | translate }}
-                    <span></span>
-                </label>
-                <label class="control-label visible-ie8 visible-ie9">{{ 'login.recupId' | translate }}</label>
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                    <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="recup_id" autocomplete="off" placeholder="{{ 'login.recupId' | translate }}" name="recup_id" [readonly]="!recuperable || !safe" /> </div>
-            </div>
-            <div class="form-group">
-                <div class="input-icon">
-                    <i class="fa fa-lock"></i>
-                        <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div> </div>
-            </div>
-            <div class="form-actions">
-                <button id="register-back-btn" type="button" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
-                <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="signUp()"> {{ 'login.signUp' | translate }} </button>
-            </div>
-        </form>
-        <!-- END REGISTRATION FORM -->
+                <div class="form-group">
+                    <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.username' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Username" name="username" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.pass' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" [(ngModel)]="use_file" checked="checked" /> {{ 'login.use_file' | translate }}
+                        <span></span>
+                    </label>
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
+                </div>
+                <div class="form-actions">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" [(ngModel)]="persistent" /> {{ 'login.remember' | translate }}
+                        <span></span>
+                    </label>
+                    <button type="submit" class="btn green pull-right" (click)="enter()"> {{ 'goOn' | translate }} </button>
+                </div>
+                <div class="forget-password">
+                    <h4>{{ 'login.forgot' | translate }}</h4>
+                    <p> {{ 'login.forgot1' | translate }}
+                        <a href="javascript:;" id="forget-password">{{ 'here' | translate }}</a>{{ 'login.forgot2' | translate }} </p>
+                </div>
+                <div class="create-account">
+                    <p> {{ 'login.register' | translate }}
+                        <a href="javascript:;" id="register-btn"> {{ 'login.create' | translate }} </a>
+                    </p>
+                </div>
+            </form>
+            <!-- END LOGIN FORM -->
+            <!-- BEGIN FORGOT PASSWORD FORM -->
+            <form class="forget-form">
+                <h3>{{ 'login.forgot' | translate }}</h3>
+                <p> {{ 'login.forgot3' | translate }} </p>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa fa-envelope"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Email" name="email" /> </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" id="back-btn" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
+                    <button type="submit" class="btn green pull-right" (click)="forgot()"> {{ 'goOn' | translate }} </button>
+                </div>
+            </form> 
+            <!-- END FORGOT PASSWORD FORM -->
+            <!-- BEGIN REGISTRATION FORM -->
+            <form class="register-form">
+                <h3>{{ 'login.signUp' | translate }}</h3>
+                <p> {{ 'login.sign' | translate }} </p>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.usernameRec' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.usernameRec' | translate }}" name="username" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password2' | translate }}</label>
+                    <div class="controls">
+                        <div class="input-icon">
+                            <i class="fa fa-check"></i>
+                            <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
+                    </div>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" [(ngModel)]="use_file" checked /> {{ 'login.use_file' | translate }}
+                        <span></span>
+                    </label>
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.email' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="email" autocomplete="off" placeholder="{{ 'login.email' | translate }}" name="email" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" [(ngModel)]="recuperable" /> {{ 'login.recuperable' | translate }}
+                        <span></span>
+                    </label>
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" [(ngModel)]="safe" /> {{ 'login.safe' | translate }}
+                        <span></span>
+                    </label>
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.recupId' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="recup_id" autocomplete="off" placeholder="{{ 'login.recupId' | translate }}" name="recup_id" [readonly]="!recuperable || !safe" /> </div>
+                </div>
+                <div class="form-group">
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                            <div id="grecaptcha" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div> </div>
+                </div>
+                <div class="form-actions">
+                    <button id="register-back-btn" type="button" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
+                    <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="signUp()"> {{ 'login.signUp' | translate }} </button>
+                </div>
+            </form>
+            <!-- END REGISTRATION FORM -->
+        </div>
+        <!-- END LOGIN -->
     </div>
-    <!-- END LOGIN -->
 </div>

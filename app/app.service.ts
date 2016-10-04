@@ -63,14 +63,14 @@ export class Backend {
         this.data_loaded = false;
         this.rsa_key = [];
         self.generics_trie = new Trie();
-        this.backend(true, 'GET', {}, 'generics.json', false, false).then(function(response) {
+        this.backend(true, false, 'GET', {}, 'generics.json', false, false).then(function(response) {
             self.generics = response;
             var keys = Object.getOwnPropertyNames(response);
             for(var i = 0; i < keys.length; i++) {
                 self.generics_trie.add(keys[i], undefined);
             }
         });
-        this.backend(true, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
+        this.backend(true, false, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
             self.generics_paths = response;
         });
     }
@@ -289,6 +289,17 @@ export class Backend {
     forceReload() {
         delete this.master_key;
         this.rsa_key = [];
+        this.data_loaded = false;
+    }
+
+    /**
+     * Router link for self page.
+     * @function userLink
+     * @public
+     * @return {String[]} Link.
+     */
+    userLink(): string[] {
+        return ['/user', window.encodeURIComponent(this.profile._id)];
     }
 
     /**

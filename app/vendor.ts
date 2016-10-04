@@ -24,11 +24,12 @@ require('../js/moment.locales/moment.locales.js');
 require('../js/bootstrap-datetimepicker.min.js');
 require('../js/bootstrap.min.js');
 require('../js/jquery.blockUI.js');
-require('../js/jquery.slimscroll.min.js');
 
 import '../css/bootstrap.css';
 import '../css/bootstrap-datetimepicker.min.css';
 import '../css/components-rounded.css';
+import '../css/darkblue.min.css';
+import '../css/simple-line-icons.min.css';
 import '../css/layout.css';
 import '../css/login.css';
 import '../css/whigi.css';

@@ -56,10 +56,10 @@
    "login.full": "Welcome page",
 
    "profile.logout": "Log out",
-   "profile.logoutAll": "Remove all authorizations and log out",
+   "profile.logoutAll": "Log out all",
    "profile.noLogout": "Cannot log out safely",
    "profile.mine": "See my data",
-   "profile.shared": "See what is shared with me",
+   "profile.shared": "My vaults",
    "profile.noRevoke": "Cannot revoke access",
    "profile.change": "Change password",
    "profile.current": "Current password",
@@ -78,6 +78,8 @@
    "profile.warnChange": "Password changed, but recovery options not",
    "profile.generics": "Generic data fields",
    "profile.eidRead": "Data imported from eID",
+   "profile.home": "Home page",
+   "profile.datas": "All data",
 
    "filesystem.data_name": "Data name",
    "filesystem.data": "Data",

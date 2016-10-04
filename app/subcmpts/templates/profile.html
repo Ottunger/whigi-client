@@ -1,81 +1,459 @@
-<h2>{{ backend.profile._id }}</h2>
-<button type="button" class="btn btn-primary" (click)="logout(false)">{{ 'profile.logout' | translate }}</button>
-<button type="button" class="btn btn-danger" (click)="logout(true)">{{ 'profile.logoutAll' | translate }}</button>
-<br /><br />
-
-<button type="button" class="btn btn-primary" (click)="router.navigate(['/filesystem', 'data'])">{{ 'profile.mine' | translate }}</button>
-<button type="button" class="btn btn-primary" (click)="router.navigate(['/filesystem', 'vault'])">{{ 'profile.shared' | translate }}</button>
-<button type="button" class="btn btn-primary" (click)="router.navigate(['/generics'])">{{ 'profile.generics' | translate }}</button>
-<br /><br />
-
-<form class="form-signin">
-    <div class="heading">
-        <h3 class="form-signin-heading">{{ 'profile.change' | translate }}</h3>
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <!-- BEGIN HEADER -->
+        <div class="page-header navbar navbar-fixed-top">
+            <!-- BEGIN HEADER INNER -->
+            <div class="page-header-inner ">
+                <!-- BEGIN LOGO -->
+                <div class="page-logo" style="cursor: pointer;" (click)="router.navigate(['/profile'])">
+                    <img src="../../../img/private/logo-top.png" alt="logo" class="logo-default">
+                </div>
+                <!-- END LOGO -->
+                <!-- BEGIN TOP NAVIGATION MENU -->
+                <div class="top-menu">
+                    <ul class="nav navbar-nav pull-right">
+                        <!-- BEGIN NOTIFICATION DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <li class="dropdown dropdown-extended dropdown-notification" id="header_notification_bar">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="icon-bell"></i>
+                                <span class="badge badge-default"> 7 </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="external">
+                                    <h3>
+                                        <span class="bold">12 pending</span> notifications</h3>
+                                    <a href="http://exemple.envict.com/metronic/theme/admin_1/page_user_profile_1.html">view all</a>
+                                </li>
+                                <li>
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 250px;"><ul class="dropdown-menu-list scroller" style="height: 250px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
+                                        <li>
+                                            <a href="javascript:;">
+                                                <span class="time">just now</span>
+                                                <span class="details">
+                                                    <span class="label label-sm label-icon label-success">
+                                                        <i class="fa fa-plus"></i>
+                                                    </span> New user registered. </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <span class="time">3 mins</span>
+                                                <span class="details">
+                                                    <span class="label label-sm label-icon label-danger">
+                                                        <i class="fa fa-bolt"></i>
+                                                    </span> Server #12 overloaded. </span>
+                                            </a>
+                                        </li>
+                                    </ul></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- END NOTIFICATION DROPDOWN -->
+                        <!-- BEGIN INBOX DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="icon-envelope-open"></i>
+                                <span class="badge badge-default"> 4 </span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="external">
+                                    <h3>You have
+                                        <span class="bold">7 New</span> Messages</h3>
+                                    <a href="http://exemple.envict.com/metronic/theme/admin_1/app_inbox.html">view all</a>
+                                </li>
+                                <li>
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 275px;"><ul class="dropdown-menu-list scroller" style="height: 275px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
+                                        <li>
+                                            <a href="http://exemple.envict.com/metronic/theme/admin_1/form_layouts.html#">
+                                                <span class="photo">
+                                                    <img src="../../../img/icon-color.png" class="img-circle" alt=""> </span>
+                                                <span class="subject">
+                                                    <span class="from"> Lisa Wong </span>
+                                                    <span class="time">Just Now </span>
+                                                </span>
+                                                <span class="message"> Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="http://exemple.envict.com/metronic/theme/admin_1/form_layouts.html#">
+                                                <span class="photo">
+                                                    <img src="../../../img/icon-color.png" class="img-circle" alt=""> </span>
+                                                <span class="subject">
+                                                    <span class="from"> Richard Doe </span>
+                                                    <span class="time">16 mins </span>
+                                                </span>
+                                                <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                            </a>
+                                        </li>
+                                    </ul></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- END INBOX DROPDOWN -->
+                        <!-- BEGIN TODO DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <i class="icon-calendar"></i>
+                                <span class="badge badge-default"> 3 </span>
+                            </a>
+                            <ul class="dropdown-menu extended tasks">
+                                <li class="external">
+                                    <h3>You have
+                                        <span class="bold">12 pending</span> tasks</h3>
+                                    <a href="http://exemple.envict.com/metronic/theme/admin_1/app_todo.html">view all</a>
+                                </li>
+                                <li>
+                                    <div class="slimScrollDiv" style="position: relative; overflow: hidden; width: auto; height: 275px;"><ul class="dropdown-menu-list scroller" style="height: 275px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
+                                        <li>
+                                            <a href="javascript:;">
+                                                <span class="task">
+                                                    <span class="desc">New release v1.2 </span>
+                                                    <span class="percent">30%</span>
+                                                </span>
+                                                <span class="progress">
+                                                    <span style="width: 40%;" class="progress-bar progress-bar-success" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="sr-only">40% Complete</span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a href="javascript:;">
+                                                <span class="task">
+                                                    <span class="desc">Application deployment</span>
+                                                    <span class="percent">65%</span>
+                                                </span>
+                                                <span class="progress">
+                                                    <span style="width: 65%;" class="progress-bar progress-bar-danger" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100">
+                                                        <span class="sr-only">65% Complete</span>
+                                                    </span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul></div>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- END TODO DROPDOWN -->
+                        <!-- BEGIN USER LOGIN DROPDOWN -->
+                        <!-- DOC: Apply "dropdown-dark" class after below "dropdown-extended" to change the dropdown styte -->
+                        <li class="dropdown dropdown-user">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                                <img alt="" class="img-circle" src="../../../img/private/logo.png">
+                                <span class="username username-hide-on-mobile"> {{ backend.profile._id }} </span>
+                                <i class="fa fa-angle-down"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-default">
+                                <li (click)="router.navigate(backend.userLink())">
+                                    <a href="javascript:;">
+                                        <i class="icon-notebook"></i> {{ backend.profile._id | translate }} </a>
+                                </li>
+                                <li (click)="router.navigate(['/generics'])">
+                                    <a href="javascript:;">
+                                        <i class="icon-notebook"></i> {{ 'profile.generics' | translate }} </a>
+                                </li>
+                                <li (click)="router.navigate(['/filesystem', 'data'])">
+                                    <a href="javascript:;">
+                                        <i class="icon-share-alt"></i> {{ 'profile.mine' | translate }}
+                                        <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ backend.data_trie.count() }}</span></a>
+                                </li>
+                                <li (click)="router.navigate(['/filesystem', 'vault'])">
+                                    <a href="javascript:;">
+                                        <i class="icon-share"></i> {{ 'profile.shared' | translate }}
+                                        <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ backend.shared_with_me_trie.count() }}</span></a>
+                                </li>
+                                <li class="divider"></li>
+                                <li (click)="logout(false)">
+                                    <a href="javascript:;">
+                                        <i class="icon-logout"></i> {{ 'profile.logout' | translate }} </a>
+                                </li>
+                                <li (click)="logout(true)">
+                                    <a href="javascript:;">
+                                        <i class="icon-key"></i> {{ 'profile.logoutAll' | translate }} </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- END USER LOGIN DROPDOWN -->
+                    </ul>
+                </div>
+                <!-- END TOP NAVIGATION MENU -->
+            </div>
+            <!-- END HEADER INNER -->
+        </div>
+        <!-- END HEADER -->
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <!-- BEGIN SIDEBAR -->
+            <div class="page-sidebar-wrapper">
+                <!-- BEGIN SIDEBAR -->
+                <div class="page-sidebar navbar-collapse collapse">
+                    <!-- BEGIN SIDEBAR MENU -->
+                    <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+                        <li class="nav-item start active">
+                            <a href="Home.html" class="nav-link ">
+                                <i class="icon-home"></i>
+                                <span class="title">{{ 'profile.home' | translate }}</span>
+                            </a>
+                        </li>
+                        <li class="heading">
+                            <h3 class="uppercase">{{ 'profile.generics' | translate }}</h3>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', 'generics.profile'])">
+                                <i class="icon-user"></i>
+                                <span class="title">{{ 'generics.profile' | translate }}</span>
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', 'generics.corporate'])">
+                                <i class="icon-diamond"></i>
+                                <span class="title">{{ 'generics.corporate' | translate }}</span>
+                            </a>
+                        </li>
+                        <li class="heading">
+                            <h3 class="uppercase">{{ 'profile.datas' | translate }}</h3>
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'data'])">
+                                <i class="icon-share-alt"></i>
+                                <span class="title">{{ 'profile.mine' | translate }}</span>
+                            </a>                                
+                        </li>
+                        <li class="nav-item">
+                            <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'vault'])">
+                                <i class="icon-share"></i>
+                                <span class="title">{{ 'profile.shared' | translate }}</span>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- END SIDEBAR MENU -->
+                    <!-- END SIDEBAR MENU -->
+                </div>
+                <!-- END SIDEBAR -->
+            </div>
+            <!-- END SIDEBAR -->
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE HEADER-->
+                    <!-- BEGIN PAGE BAR -->
+                    <div class="page-bar">
+                        <ul class="page-breadcrumb">
+                            <li>
+                                <a href="javascript:;" (click)="router.navigate(['/profile'])">{{ 'profile.home' | translate }}</a>
+                                <i class="fa fa-circle"></i>
+                            </li>
+                        </ul>
+                        <div class="page-toolbar">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn green btn-sm btn-outline dropdown-toggle" data-toggle="dropdown"> {{ 'action' | translate }}
+                                    <i class="fa fa-angle-down"></i>
+                                </button>
+                                <ul class="dropdown-menu pull-right" role="menu">
+                                    <li>
+                                        <a href="javascript:;" (click)="router.navigate(backend.userLink())">
+                                            <i class="icon-bell"></i> {{ backend.profile._id }}</a>
+                                    </li>
+                                    <li class="divider"> </li>
+                                    <li>
+                                        <a href="https://whigi2-giveaway.envict.com">
+                                            <i class="icon-paper-plane"></i> Whigi Giveaway</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- END PAGE BAR -->
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ 'profile.home' | translate }}</h1>
+                    <!-- END PAGE TITLE-->
+                    <!-- END PAGE HEADER-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'profile.change' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" (click)="collapse('apsable')"> </a>
+                                                <!-- <a href="javascript:;" class="remove"> </a> -->
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable">
+                                            <!-- BEGIN FORM-->
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-body">
+                                                    <h3 class="form-section">{{ 'profile.change' | translate }}</h3>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-4">{{ 'profile.current' | translate }}:</label>
+                                                                <div class="col-md-8">
+                                                                    <input type="password" class="form-control input-circle" [(ngModel)]="current_pwd" name="password" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--/span-->
+                                                    </div>
+                                                    <!--/row-->
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-4">{{ 'profile.new' | translate }}:</label>
+                                                                <div class="col-md-8">
+                                                                    <input type="password" class="form-control input-circle" [(ngModel)]="password" name="new_pass" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--/span-->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-4">{{ 'profile.new' | translate }}:</label>
+                                                                <div class="col-md-8">
+                                                                    <input type="password" class="form-control input-circle" [(ngModel)]="password2" name="new_pass2" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--/span-->
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="row">
+                                                                <div class="col-md-offset-3 col-md-9">
+                                                                    <button type="submit" class="btn green" (click)="update()">
+                                                                        <i class="fa fa-pencil"></i> {{ 'profile.change' | translate }}</button>
+                                                                    <!-- <button type="button" class="btn default">Cancel</button> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6"> </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <merge-account></merge-account>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'profile.revoke' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" (click)="collapse('apsable2')"> </a>
+                                                <!-- <a href="javascript:;" class="remove"> </a> -->
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable2">
+                                            <!-- BEGIN FORM-->
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-body">
+                                                    <h3 class="form-section">{{ 'profile.revoke' | translate }}</h3>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-4">{{ 'profile.revokeID' | translate }}:</label>
+                                                                <div class="col-md-8">
+                                                                    <input type="password" class="form-control input-circle" [(ngModel)]="revoke_id" name="revoke_id" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--/span-->
+                                                    </div>
+                                                    <!--/row-->
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <div class="row">
+                                                                <div class="col-md-offset-3 col-md-9">
+                                                                    <button type="submit" class="btn green" (click)="revokeAll()">
+                                                                        <i class="fa fa-pencil"></i> {{ 'profile.revoke' | translate }}</button>
+                                                                    <!-- <button type="button" class="btn default">Cancel</button> -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-6"> </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'profile.oauth' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" (click)="collapse('apsable3')"> </a>
+                                                <!-- <a href="javascript:;" class="remove"> </a> -->
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable3">
+                                            <!-- BEGIN FORM-->
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ 'oauth.for_id' | translate }}</th>
+                                                            <th>{{ 'oauth.prefix' | translate }}</th>
+                                                            <th>{{ 'action' | translate }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let d of backend.profile.oauth">
+                                                            <td>{{ d.for_id }}</td>
+                                                            <td>{{ d.prefix }}</td>
+                                                            <td><button type="button" class="btn btn-alarm" (click)="remove(d.id)">{{ 'remove' | translate }}</button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
     </div>
-    <div class="form-group">
-        {{ 'profile.current' | translate }}<br />
-        <input type="password" [(ngModel)]="current_pwd" name="n0" class="form-control" required>
-    </div>
-    <div class="checkbox">
-        <label><input type="checkbox" name="n90" [(ngModel)]="use_file"> {{ 'login.use_file' | translate }}</label>
-    </div>
-    <div class="form-group">
-        {{ 'profile.new' | translate }}<br />
-        <input type="password" [(ngModel)]="password" name="n4" class="form-control" [disabled]="use_file" required>
-    </div>
-    <div class="form-group">
-        {{ 'profile.new' | translate }}<br />
-        <input type="password" [(ngModel)]="password2" name="n5" class="form-control" [disabled]="use_file" required>
-    </div>
-    <div class="form-group">
-        {{ 'login.password_file' | translate }}<br />
-        <input type="file" (change)="fileLoad($event)" name="n50" class="form-control" [disabled]="!use_file" required>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-primary" (click)="update()">{{ 'profile.change' | translate }}</button>
-    </div>
-</form>
-<br /><br />
-
-<merge-account></merge-account>
-<br /><br />
-
-<form class="form-signin">
-    <div class="heading">
-        <h3 class="form-signin-heading">{{ 'profile.revoke' | translate }}</h3>
-    </div>
-    <div class="form-group">
-        {{ 'profile.revokeID' | translate }}<br />
-        <input type="text" [(ngModel)]="revoke_id" name="n100" class="form-control" required>
-    </div>
-    <div class="form-group">
-        <button type="submit" class="btn btn-warning" (click)="revokeAll()">{{ 'profile.revoke' | translate }}</button>
-    </div>
-</form>
-<br /><br />
-
-<div class="heading">
-    <h3 class="form-signin-heading">{{ 'profile.oauth' | translate }}</h3>
 </div>
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>{{ 'oauth.for_id' | translate }}</th>
-                <th>{{ 'oauth.prefix' | translate }}</th>
-                <th>{{ 'action' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let d of backend.profile.oauth">
-                <td>{{ d.for_id }}</td>
-                <td>{{ d.prefix }}</td>
-                <td><button type="button" class="btn btn-alarm" (click)="remove(d.id)">{{ 'remove' | translate }}</button></td>
-            </tr>
-        </tbody>
-    </table>
-</div>
-<br /><br />
-
-<user-info [user]="backend.profile"></user-info>
-<br />

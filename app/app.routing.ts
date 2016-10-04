@@ -44,6 +44,7 @@ const appRoutes: Routes = [
     {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch/:trigger', component: Account, canActivate: [Profileguard]},
     {path: 'remote/:id_to/:challenge/:return_url', component: Remote, canActivate: [Profileguard]},
     {path: 'generics', component: Generics, canActivate: [Fullguard], canDeactivate: [Fullguard]},
+    {path: 'generics/:filter', component: Generics, canActivate: [Fullguard], canDeactivate: [Fullguard]},
     {path: '**', component: Notfound}
 ];
 export const appRoutingProviders: any[] = [

@@ -18,14 +18,14 @@ enableProdMode();
             background-color: #a0b4c9;
         }
         .MenuContainer {
-            height: 40px;
+            height: 45px;
             bottom:0;
         }
         ul#navigation {
             position: fixed;
             bottom: 0;
             width: 100%;
-            height: 40px;
+            height: 45px;
             list-style: none;
             margin: 0;
             padding: 0;
@@ -48,10 +48,8 @@ enableProdMode();
     `],
     encapsulation: ViewEncapsulation.None,
     template: `
-        <div class="container-fluid">
-            <router-outlet></router-outlet>
-        </div>
-        <br /><br />
+        <router-outlet></router-outlet>
+        <br />
         <div class="MenuContainer">
             <ul id="navigation">
                 <li><button type="button" class="btn btn-small" (click)="setLang('en')">English</button></li>

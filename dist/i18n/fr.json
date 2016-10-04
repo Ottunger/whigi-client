@@ -56,10 +56,10 @@
    "login.full": "Page d'accueil",
 
    "profile.logout": "Déconnecter",
-   "profile.logoutAll": "Enlever toutes les authorisations et se déconnecter",
+   "profile.logoutAll": "Tout déconnecter",
    "profile.noLogout": "Impossible de quitter avec précautions",
    "profile.mine": "Voir mes données",
-   "profile.shared": "Voir ce qui est partagé avec moi",
+   "profile.shared": "Mes partagés",
    "profile.noRevoke": "Impossible de supprimer l'accès",
    "profile.change": "Changer votre mot de passe",
    "profile.current": "Mot de passe actuel",
@@ -78,6 +78,8 @@
    "profile.warnChange": "Mot de passe changé, mais récupération devenue impossible",
    "profile.generics": "Données génériques",
    "profile.eidRead": "Profil importé depuis l'eID",
+   "profile.home": "Accueil",
+   "profile.datas": "Tout",
 
    "filesystem.data_name": "Nom de donnée",
    "filesystem.data": "Valeur",
