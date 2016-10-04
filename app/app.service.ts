@@ -312,6 +312,7 @@ export class Backend {
      * @function backend
      * @private
      * @param {Boolean} whigi True to come from Whigi base. Otherwise, use Whigi-restore.
+     * @param {Boolean} block Whether to block UI while requesting.
      * @param {String} method Method to use.
      * @param {Object} data JSON body.
      * @param {String} url URL suffix.
@@ -323,16 +324,32 @@ export class Backend {
      * @param {Number} num Number of retries.
      * @return {Promise} The result. On error, a description can be found in e.msg.
      */
-    private backend(whigi: boolean, method: string, data: any, url: string, auth: boolean, token: boolean, puzzle?: boolean, ok?: Function, nok?: Function, num?: number): Promise {
+    private backend(whigi: boolean, block: boolean, method: string, data: any, url: string, auth: boolean, token: boolean, puzzle?: boolean,
+        ok?: Function, nok?: Function, num?: number): Promise {
         var call, puzzle = puzzle || false, self = this, dest;
         var headers: Headers = new Headers();
         num = num || 0;
+        window.$.blockUI({
+            message: '<img src="img/loading-spinner-blue.gif" />',
+            baseZ: 1e3,
+            css: {
+                border: '0',
+                padding: '0',
+                backgroundColor: 'none'
+            },
+            overlayCSS: {
+                backgroundColor: '#222',
+                opacity: .1,
+                cursor: 'wait'
+            }
+        });
 
         function accept(resolve, response) {
             var res = response.json();
             if('puzzle' in res) {
                 localStorage.setItem('puzzle', res.puzzle);
             }
+            window.$.unblockUI();
             resolve(res);
         }
         function retry(e, resolve, reject) {
@@ -340,6 +357,7 @@ export class Backend {
             if(e.status == 412 && num < 4) {
                 self.backend(whigi, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
             } else {
+                window.$.unblockUI();
                 if(e.status == 418 && token) {
                     self.router.navigate(['/end']);
                 }
@@ -448,7 +466,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     selectValues(known: string): Promise {
-        return this.backend(true, 'GET', {}, 'selects/' + known, false, false);
+        return this.backend(true, false, 'GET', {}, 'selects/' + known, false, false);
     }
 
     /**
@@ -461,7 +479,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     transitionSchema(name: string, as: number, to: number): Promise {
-        return this.backend(true, 'GET', {}, 'schemas/' + encodeURIComponent(name) + '/' + as + '/' + to, false, false);
+        return this.backend(true, false, 'GET', {}, 'schemas/' + encodeURIComponent(name) + '/' + as + '/' + to, false, false);
     }
 
     /**
@@ -472,7 +490,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     peekUser(known: string): Promise {
-        return this.backend(true, 'GET', {}, 'peek/' + window.encodeURIComponent(known), false, false);
+        return this.backend(true, false, 'GET', {}, 'peek/' + window.encodeURIComponent(known), false, false);
     }
 
     /**
@@ -483,7 +501,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getUser(known: string): Promise {
-        return this.backend(true, 'GET', {}, 'user/' + window.encodeURIComponent(known), true, true);
+        return this.backend(true, false, 'GET', {}, 'user/' + window.encodeURIComponent(known), true, true);
     }
 
     /**
@@ -493,7 +511,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getProfile(): Promise {
-        return this.backend(true, 'GET', {}, 'profile', true, true);
+        return this.backend(true, false, 'GET', {}, 'profile', true, true);
     }
 
     /**
@@ -510,7 +528,7 @@ export class Backend {
             nk.push(new window.aesjs.ModeOfOperation.ctr(new_master, new window.aesjs.Counter(0))
                 .encrypt(window.aesjs.util.convertStringToBytes(this.rsa_key[i])));
         }
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             new_keys: nk
         }, 'close/' + window.encodeURIComponent(to), true, true, true);
     }
@@ -523,7 +541,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     goCompany(info: any): Promise {
-        return this.backend(true, 'POST', info, 'profile/info', true, true);
+        return this.backend(true, true, 'POST', info, 'profile/info', true, true);
     }
 
     /**
@@ -534,7 +552,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     goBCE(bce: string): Promise {
-        return this.backend(true, 'GET', {}, 'eid/bce/' + bce, true, true);
+        return this.backend(true, true, 'GET', {}, 'eid/bce/' + bce, true, true);
     }
 
     /**
@@ -544,7 +562,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     listData(): Promise {
-        return this.backend(true, 'GET', {}, 'profile/data', true, true);
+        return this.backend(true, false, 'GET', {}, 'profile/data', true, true);
     }
 
     /**
@@ -558,7 +576,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     postData(name: string, encr_data: number[], version: number, is_dated?: boolean): Promise {
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             name: name,
             encr_data: this.arr2str(encr_data),
             is_dated: (!!is_dated)? is_dated : false,
@@ -575,7 +593,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     updateProfile(new_password: string, password: string): Promise {
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             new_password: window.sha256(new_password),
             encr_master_key: this.encryptMasterAESAsNumber(new_password),
             sha_master: window.sha256(window.sha256(this.arr2str(this.master_key))),
@@ -593,7 +611,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     updateProfileForReset(new_password: string, encr_master_key: string): Promise {
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             new_password: window.sha256(new_password),
             encr_master_key: encr_master_key
         }, 'profile/update', true, true);
@@ -608,7 +626,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     createUser(username: string, password: string): Promise {
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             username: username,
             password: password
         }, 'user/create' + this.regCaptcha(), false, false);
@@ -624,7 +642,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     createToken(username: string, password: string, is_eternal: boolean): Promise {
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             username: username,
             password: window.sha256(password),
             is_eternal: is_eternal
@@ -639,7 +657,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeTokens(all: boolean): Promise {
-        return this.backend(true, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + localStorage.getItem('token'))), true, true);
+        return this.backend(true, false, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + localStorage.getItem('token'))), true, true);
     }
 
     /**
@@ -652,7 +670,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     createOAuth(for_id: string, prefix: string, token: string): Promise {
-        return this.backend(true, 'POST', {
+        return this.backend(true, true, 'POST', {
             for_id: for_id,
             prefix: prefix,
             token: token
@@ -667,7 +685,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeOAuth(id: string): Promise {
-        return this.backend(true, 'DELETE', {}, 'oauth' + id, true, true);
+        return this.backend(true, true, 'DELETE', {}, 'oauth' + id, true, true);
     }
 
     /**
@@ -678,7 +696,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getData(dataid: string): Promise {
-        return this.backend(true, 'GET', {}, 'data/' + dataid, true, true);
+        return this.backend(true, false, 'GET', {}, 'data/' + dataid, true, true);
     }
 
     /**
@@ -689,7 +707,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     triggerVaults(name: string): Promise {
-        return this.backend(true, 'GET', {}, 'data/trigger/' + window.encodeURIComponent(name), true, true);
+        return this.backend(true, false, 'GET', {}, 'data/trigger/' + window.encodeURIComponent(name), true, true);
     }
 
     /**
@@ -700,7 +718,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeData(name: string): Promise {
-        return this.backend(true, 'DELETE', {}, 'data/' + window.encodeURIComponent(name), true, true);
+        return this.backend(true, true, 'DELETE', {}, 'data/' + window.encodeURIComponent(name), true, true);
     }
 
     /**
@@ -733,7 +751,7 @@ export class Backend {
         if(typeof storable !== undefined && storable) {
             post['storable'] = true;
         }
-        return this.backend(true, 'POST', post, 'vault/new', true, true, true);
+        return this.backend(true, true, 'POST', post, 'vault/new', true, true, true);
     }
 
     /**
@@ -744,7 +762,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     revokeVault(vault_id: string): Promise {
-        return this.backend(true, 'DELETE', {}, 'vault/' + vault_id, true, true);
+        return this.backend(true, true, 'DELETE', {}, 'vault/' + vault_id, true, true);
     }
 
     /**
@@ -755,7 +773,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     revokeVaultFromGrantee(vault_id: string): Promise {
-        return this.backend(true, 'DELETE', {}, 'vault/forother/' + vault_id, true, true);
+        return this.backend(true, false, 'DELETE', {}, 'vault/forother/' + vault_id, true, true);
     }
 
     /**
@@ -766,7 +784,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getVault(vault_id: string): Promise {
-        return this.backend(true, 'GET', {}, 'vault/' + vault_id, true, true);
+        return this.backend(true, false, 'GET', {}, 'vault/' + vault_id, true, true);
     }
 
     /**
@@ -777,7 +795,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getAccessVault(vault_id: string): Promise {
-        return this.backend(true, 'GET', {}, 'vault/time/' + vault_id, true, true);
+        return this.backend(true, false, 'GET', {}, 'vault/time/' + vault_id, true, true);
     }
 
     /**
@@ -788,7 +806,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     requestRestore(id: string): Promise {
-        return this.backend(false, 'GET', {}, 'request/' + window.encodeURIComponent(id), false, false);
+        return this.backend(false, true, 'GET', {}, 'request/' + window.encodeURIComponent(id), false, false);
     }
 
     /**
@@ -800,7 +818,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     mixRestore(id: string, half: string): Promise {
-        return this.backend(false, 'GET', {}, 'mix/' + window.encodeURIComponent(id) + '/' + window.encodeURIComponent(half), false, false);
+        return this.backend(false, false, 'GET', {}, 'mix/' + window.encodeURIComponent(id) + '/' + window.encodeURIComponent(half), false, false);
     }
 
 }

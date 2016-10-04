@@ -195,6 +195,7 @@
    "generics.city": "Ville",
    "generics.country": "Pays",
    "generics.tel": "Numéro de téléphone",
+   "generics.corporate_type": "Forme juridique",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",

@@ -18,10 +18,13 @@ window.JSEncrypt = require('../js/jsencrypt.min.js');
 window.sha256 = require('../js/sha256.js').hash;
 window.download = require('../js/download.min.js');
 window.Clipboard = require('../js/clipboard.min.js');
-window.$ = window.jQuery = require('../js/jquery.slim.min.js');
+window.$ = window.jQuery = require('../js/jquery.min.js');
 window.moment = require('../js/moment.js');
 require('../js/moment.locales/moment.locales.js');
 require('../js/bootstrap-datetimepicker.min.js');
+require('../js/bootstrap.min.js');
+require('../js/jquery.blockUI.js');
+require('../js/jquery.slimscroll.min.js');
 
 import '../css/bootstrap.css';
 import '../css/bootstrap-datetimepicker.min.css';

@@ -195,6 +195,7 @@
    "generics.city": "City",
    "generics.country": "Country",
    "generics.tel": "Phone number",
+   "generics.corporate_type": "Organization type",
 
    "/": "Root folder",
    "profile/": "Profile folder",
