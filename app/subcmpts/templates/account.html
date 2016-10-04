@@ -28,7 +28,7 @@
                             <img *ngIf="backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
                                 src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
                             <i *ngIf="backend.generics[p][backend.generics[p].length - 1].icon != '' && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0"
-                                class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" style="width: 20px;"></i>
+                                class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" style="width: 20px; float:left;"></i>
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ sanitarize(p) }}"><div style="float:left;"><i class="fa fa-user"></i></div>
                                 {{ backend.generics[p][backend.generics[p].length - 1].descr_key | translate }}
                                 <div style="padding-left:50px;float:right;">
@@ -39,6 +39,7 @@
                     </div>
                     <div id="tgabble_{{ sanitarize(p) }}" class="panel-collapse collapse" >
                         <div class="panel-body" style="max-height:200px; overflow-y:auto;">
+                            <p>{{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}</p>
                             <!-- BEGIN ITEM SELECT -->
                             <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable">
                                 <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>

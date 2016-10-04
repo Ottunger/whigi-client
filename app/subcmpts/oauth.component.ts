@@ -60,8 +60,12 @@ export class Oauth implements OnInit, OnDestroy {
             if(!/^https/.test(self.return_url_ok)) {
                 window.location.href = self.mixin(self.return_url_deny, ['reason=https']);
             }
+            if(!(self.prefix in self.backend.generics_paths)) {
+                window.location.href = self.mixin(self.return_url_deny, ['reason=prefix']);
+            }
             self.backend.getUser(self.for_id).then(function(user) {
                 self.requester = user;
+                window.$('#pict-user').prepend('<img src="img/' + self.requester.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
                 self.check.tick();
             }, function(e) {
                 window.location.href = self.mixin(self.return_url_deny, ['reason=api']);

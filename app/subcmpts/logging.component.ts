@@ -57,9 +57,9 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
-        if(!window.$('#grecaptcha').html() || window.$('#grecaptcha').html().length == 0) {
+        if(!window.$('#ggccpt').html() || window.$('#ggccpt').html().length == 0) {
             try {
-                window.grecaptcha.render('grecaptcha', {
+                window.grecaptcha.render('ggccpt', {
                     'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
                 });
             } catch(e) {

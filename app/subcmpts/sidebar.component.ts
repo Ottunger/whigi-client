@@ -7,6 +7,7 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, Input, OnInit} from '@angular/core';
+import {Router} from '@angular/router';
 enableProdMode();
 import * as template from './templates/sidebar.html';
 
@@ -22,8 +23,9 @@ export class Sidebar implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
+     * @param router Routing service.
      */
-    constructor() {
+    constructor(private router: Router) {
 
     }
 

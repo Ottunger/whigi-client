@@ -366,7 +366,7 @@ export class Backend {
         function retry(e, resolve, reject) {
             self.recordPuzzle(e);
             if(e.status == 412 && num < 4) {
-                self.backend(whigi, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
+                self.backend(whigi, block, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
             } else {
                 window.$.unblockUI();
                 if(e.status == 418 && token) {

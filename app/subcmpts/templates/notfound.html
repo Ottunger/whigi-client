@@ -1,1 +1,18 @@
-<h2>{{ 'error.notfound' | translate }}</h2>
+<div class="container-fluid">
+    <div class="login">
+        <div class="logo">
+                <img src="../../../img/private/logo-big.png" width="100px" alt="" />
+                <p>{{ 'mention' | translate }}</p>
+        </div>
+        <div class="page-content">
+            <h1 class="page-title">{{ 'error.notfound' | translate }}</h1>
+            <!-- BEGIN DATA -->
+            <div class="panel-group accordion" id="tgabble">
+                <div class="clearfix" style="padding-top:10px;text-align:right">
+                    <button type="button" class="btn green-meadow" (click)="router.navigate(['/profile'])">{{ 'back' | translate }}</button>
+                </div>
+            </div>
+            <!-- END DATA -->
+        </div>
+    </div>
+</div>
