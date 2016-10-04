@@ -1,0 +1,47 @@
+<div class="page-sidebar-wrapper">
+    <!-- BEGIN SIDEBAR -->
+    <div class="page-sidebar navbar-collapse collapse">
+        <!-- BEGIN SIDEBAR MENU -->
+        <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
+            <li class="nav-item" id="linkbars0">
+                <a href="Home.html" class="nav-link ">
+                    <i class="icon-home"></i>
+                    <span class="title">{{ 'profile.home' | translate }}</span>
+                </a>
+            </li>
+            <li class="heading">
+                <h3 class="uppercase">{{ 'profile.generics' | translate }}</h3>
+            </li>
+            <li class="nav-item" id="linkbars1">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', 'generics.profile'])">
+                    <i class="icon-user"></i>
+                    <span class="title">{{ 'generics.profile' | translate }}</span>
+                </a>
+            </li>
+            <li class="nav-item" id="linkbars2">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', 'generics.corporate'])">
+                    <i class="icon-diamond"></i>
+                    <span class="title">{{ 'generics.corporate' | translate }}</span>
+                </a>
+            </li>
+            <li class="heading">
+                <h3 class="uppercase">{{ 'profile.datas' | translate }}</h3>
+            </li>
+            <li class="nav-item" id="linkbars3">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'data'])">
+                    <i class="icon-share-alt"></i>
+                    <span class="title">{{ 'profile.mine' | translate }}</span>
+                </a>                                
+            </li>
+            <li class="nav-item" id="linkbars4">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'vault'])">
+                    <i class="icon-share"></i>
+                    <span class="title">{{ 'profile.shared' | translate }}</span>
+                </a>
+            </li>
+        </ul>
+        <!-- END SIDEBAR MENU -->
+        <!-- END SIDEBAR MENU -->
+    </div>
+    <!-- END SIDEBAR -->
+</div>

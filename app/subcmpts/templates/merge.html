@@ -1,20 +1,61 @@
-<form class="form-signin">
-    <div class="heading">
-        <h3 class="form-signin-heading">{{ 'merge.title' | translate }}</h3>
-        <p>{{ 'merge.explain' | translate }}</p>
-    </div>
-    <div class="form-group">
-        {{ 'merge.login' | translate }}<br />
-        <input type="text" [(ngModel)]="login" name="y1" class="form-control">
-    </div>
-    <div class="form-group">
-        {{ 'merge.pass' | translate }}<br />
-        <input type="password" [(ngModel)]="password" name="y0" class="form-control">
-    </div>
-    <div class="form-group">
-        <div class="checkbox">
-            <label><input type="checkbox" [(ngModel)]="erase" name="y2"> {{ 'merge.erase' | translate }}</label>
+<div class="tab-content">
+    <div class="tab-pane active">
+        <div class="portlet box blue-madison">
+            <div class="portlet-title">
+                <div class="caption">
+                    <i class="fa fa-user"></i>{{ 'merge.title' | translate }}</div>
+                <div class="tools"></div>
+            </div>
+            <div class="portlet-body form">
+                <!-- BEGIN FORM-->
+                <form class="form-horizontal" role="form">
+                    <div class="form-body">
+                        <h3 class="form-section">{{ 'merge.title' | translate }}</h3>
+                        <div class="row">
+                            <p>{{ 'merge.explain' | translate }}</p>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">{{ 'merge.login' | translate }}:</label>
+                                    <div class="col-md-8">
+                                        <input type="text" class="form-control input-circle" [(ngModel)]="login" name="login" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="control-label col-md-4">{{ 'merge.pass' | translate }}:</label>
+                                    <div class="col-md-8">
+                                        <input type="password" class="form-control input-circle" [(ngModel)]="password" name="password" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!--/span-->
+                        </div>
+                        <!--/row-->
+                    </div>
+                    <div class="form-actions">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-offset-3 col-md-3">
+                                        <button type="submit" class="btn green" (click)="merge()">
+                                            <i class="fa fa-pencil"></i> {{ 'merge.merge' | translate }}</button>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="rememberme mt-checkbox mt-checkbox-outline">
+                                            <input type="checkbox" name="erase" [(ngModel)]="erase" /> {{ 'merge.erase' | translate }}
+                                            <span></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6"> </div>
+                        </div>
+                    </div>
+                </form>
+                <!-- END FORM-->
+            </div>
         </div>
-        <button type="submit" class="btn btn-danger" (click)="merge()">{{ 'merge.merge' | translate }}</button>
     </div>
-</form>
+</div>

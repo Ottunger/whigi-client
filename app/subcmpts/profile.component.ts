@@ -72,26 +72,6 @@ export class Profile implements OnInit {
     }
 
     /**
-     * Log out.
-     * @function logout
-     * @public
-     * @param {Boolean} all To log out all tokens.
-     */
-    logout(all: boolean) {
-        var self = this;
-        this.backend.removeTokens(all).then(function() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('key_decryption');
-            localStorage.removeItem('psha');
-            self.backend.forceReload();
-            delete self.backend.profile;
-            self.router.navigate(['/']);
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
-        });
-    }
-
-    /**
      * Remove a granted OAuth token.
      * @function remove
      * @public

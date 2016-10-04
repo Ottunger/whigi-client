@@ -370,6 +370,7 @@ export class Backend {
             } else {
                 window.$.unblockUI();
                 if(e.status == 418 && token) {
+                    self.forceReload();
                     self.router.navigate(['/end']);
                 }
                 reject(e);

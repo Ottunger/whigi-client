@@ -55,6 +55,9 @@
    "login.usernameRec": "New username, cannot contain \"whigi\"",
    "login.full": "Welcome page",
 
+   "header.running": "running operations",
+   "header.operation": "Current operation",
+
    "profile.logout": "Log out",
    "profile.logoutAll": "Log out all",
    "profile.noLogout": "Cannot log out safely",

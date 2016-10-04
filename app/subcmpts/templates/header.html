@@ -1,0 +1,141 @@
+<div class="page-header navbar navbar-fixed-top">
+    <!-- BEGIN HEADER INNER -->
+    <div class="page-header-inner ">
+        <!-- BEGIN LOGO -->
+        <div class="page-logo" style="cursor: pointer;" (click)="router.navigate(['/profile'])">
+            <img src="../../../img/private/logo-top.png" alt="logo" class="logo-default">
+        </div>
+        <!-- END LOGO -->
+        <!-- BEGIN TOP NAVIGATION MENU -->
+        <div class="top-menu">
+            <ul class="nav navbar-nav pull-right">
+                <!-- BEGIN INBOX DROPDOWN -->
+                <!--
+                <li class="dropdown dropdown-extended dropdown-inbox" id="header_inbox_bar">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <i class="icon-envelope-open"></i>
+                        <span class="badge badge-default"> 4 </span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="external">
+                            <h3>You have
+                                <span class="bold">7 New</span> Messages</h3>
+                            <a href="http://exemple.envict.com/metronic/theme/admin_1/app_inbox.html">view all</a>
+                        </li>
+                        <li>
+                            <ul class="dropdown-menu-list scroller" style="height: 275px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
+                                <li>
+                                    <a href="http://exemple.envict.com/metronic/theme/admin_1/form_layouts.html#">
+                                        <span class="photo">
+                                            <img src="../../../img/icon-color.png" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Lisa Wong </span>
+                                            <span class="time">Just Now </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="http://exemple.envict.com/metronic/theme/admin_1/form_layouts.html#">
+                                        <span class="photo">
+                                            <img src="../../../img/icon-color.png" class="img-circle" alt=""> </span>
+                                        <span class="subject">
+                                            <span class="from"> Richard Doe </span>
+                                            <span class="time">16 mins </span>
+                                        </span>
+                                        <span class="message"> Vivamus sed congue nibh auctor nibh congue nibh. auctor nibh auctor nibh... </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                -->
+                <!-- END INBOX DROPDOWN -->
+                <!-- BEGIN GWP DROPDOWN -->
+                <li class="dropdown dropdown-extended dropdown-tasks" id="header_out_bar">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <i class="icon-paper-plane"></i>
+                    </a>
+                    <ul class="dropdown-menu extended tasks">
+                        <li class="external">
+                            <h3><a href="https://whigi2-giveaway.envict.com" target="_blank" title="Whigi Giveaway">Whigi Giveaway</a></h3>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END GWP DROPDOWN -->
+                <!-- BEGIN CRYPT DROPDOWN -->
+                <li class="dropdown dropdown-extended dropdown-tasks" id="header_task_bar">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <i class="icon-disc"></i>
+                        <span class="badge badge-default" *ngIf="running > 0"> {{ running }} </span>
+                    </a>
+                    <ul class="dropdown-menu extended tasks">
+                        <li class="external">
+                            <h3><span class="bold">{{ running }}</span> {{ 'header.running' | translate }}</h3>
+                            <a href="javascript:;" (click)="router.navigate(['/profile', 'data'])">{{ 'profile.mine' | translate }}</a>
+                        </li>
+                        <li *ngIf="running > 0">
+                            <ul class="dropdown-menu-list scroller" style="height: 100px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
+                                <li>
+                                    <a href="javascript:;">
+                                        <span class="task">
+                                            <span class="desc">{{ 'header.operation' | translate }} </span>
+                                            <span class="percent">{{ current }}%</span>
+                                        </span>
+                                        <span class="progress">
+                                            <span style="width: {{ current }}%;" class="progress-bar progress-bar-success" [attr.aria-valuenow]="current" aria-valuemin="0" aria-valuemax="100">
+                                                <span class="sr-only">{{ current }}%</span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END CRYPT DROPDOWN -->
+                <!-- BEGIN USER LOGIN DROPDOWN -->
+                <li class="dropdown dropdown-user">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
+                        <img alt="" class="img-circle" src="../../../img/private/logo.png">
+                        <span class="username username-hide-on-mobile"> {{ backend.profile._id }} </span>
+                        <i class="fa fa-angle-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-default">
+                        <li (click)="router.navigate(backend.userLink())">
+                            <a href="javascript:;">
+                                <i class="icon-user"></i> {{ backend.profile._id | translate }} </a>
+                        </li>
+                        <li (click)="router.navigate(['/generics'])">
+                            <a href="javascript:;">
+                                <i class="icon-notebook"></i> {{ 'profile.generics' | translate }} </a>
+                        </li>
+                        <li (click)="router.navigate(['/filesystem', 'data'])">
+                            <a href="javascript:;">
+                                <i class="icon-share-alt"></i> {{ 'profile.mine' | translate }}
+                                <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ backend.data_trie.count() }}</span></a>
+                        </li>
+                        <li (click)="router.navigate(['/filesystem', 'vault'])">
+                            <a href="javascript:;">
+                                <i class="icon-share"></i> {{ 'profile.shared' | translate }}
+                                <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ backend.shared_with_me_trie.count() }}</span></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li (click)="logout(false)">
+                            <a href="javascript:;">
+                                <i class="icon-logout"></i> {{ 'profile.logout' | translate }} </a>
+                        </li>
+                        <li (click)="logout(true)">
+                            <a href="javascript:;">
+                                <i class="icon-key"></i> {{ 'profile.logoutAll' | translate }} </a>
+                        </li>
+                    </ul>
+                </li>
+                <!-- END USER LOGIN DROPDOWN -->
+            </ul>
+        </div>
+        <!-- END TOP NAVIGATION MENU -->
+    </div>
+    <!-- END HEADER INNER -->
+</div>

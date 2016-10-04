@@ -55,6 +55,9 @@
    "login.usernameRec": "Nouvel utilisateur, ne peut contenir \"whigi\"",
    "login.full": "Page d'accueil",
 
+   "header.running": "opérations en cours",
+   "header.operation": "Opération courrante",
+
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Tout déconnecter",
    "profile.noLogout": "Impossible de quitter avec précautions",
