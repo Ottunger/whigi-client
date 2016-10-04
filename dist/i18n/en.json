@@ -135,14 +135,11 @@
    "oauth.ok": "Give access",
    "oauth.nok": "Deny access",
 
-   "account.question": "Request for access creation",
+   "account.question": "Requests for access creation",
    "account.explain": "By accepting the request, you do the same as creating manually a vault of the listed data below towards the given ID. The remote user WILL NOT receive your keys.",
-   "account.id_to": "ID requesting your data / an account: ",
-   "account.prefix": "Data that is part of the requested ones: ",
    "account.ok": "Give access (can be quite long!)",
    "account.nok": "Deny access",
    "account.err": "Something went wrong somewhere, but we'll prove as much as we can",
-   "account.notShared": "This data was requested but will not be shared: not a valid ask",
    "account.shared": "This data will be shared",
    "account.until": "The data will be available to the 3rd party until: ",
    "account.forever": "The data will ALWAYS be available to 3rd party, but you can revoke this.",
@@ -150,6 +147,7 @@
    "account.nameField": "Instance name",
    "account.dataField": "Associated data",
    "account.new": "New instance",
+   "account.user": "Whigi User",
 
    "userinfo.title": "Information about the user",
    "userinfo.trustLevel": "Trust level of whigi about this user (0-9): ",

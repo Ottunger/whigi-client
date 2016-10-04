@@ -21,7 +21,6 @@ import * as template from './templates/account.html';
 })
 export class Account implements OnInit, OnDestroy {
 
-    public ready: boolean;
     public id_to: string;
     public data_list: string[];
     public return_url_ok: string;
@@ -66,7 +65,6 @@ export class Account implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.ready = false;
             self.id_to = window.decodeURIComponent(params['id_to']);
             self.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
             self.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
@@ -92,7 +90,6 @@ export class Account implements OnInit, OnDestroy {
             //List data
             self.dataservice.listData(false).then(function() {
                 var all = true, more = [];
-                self.ready = true;
                 self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
                 //If we are asked for folders, go see what's underneath
                 for(var i = 0; i < self.data_list.length; i++) {
@@ -143,6 +140,7 @@ export class Account implements OnInit, OnDestroy {
             });
             self.backend.getUser(self.id_to).then(function(user) {
                 self.requester = user;
+                window.$('#pict-user').prepend('<img src="img/' + self.requester.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
                 self.check.tick();
             }, function(e) {
                 self.deny();
@@ -390,6 +388,42 @@ export class Account implements OnInit, OnDestroy {
             } catch(e) {}
         }
         window.location.href = this.return_url_deny;
+    }
+
+    /**
+     * Link to requester profile.
+     * @function reqLink
+     * @public
+     * @return {String[]} Link.
+     */
+    reqLink(): string[] {
+        return ['/user', window.encodeURIComponent(this.requester._id)];
+    }
+
+    /**
+     * Check form completion.
+     * @function allFilled
+     * @public
+     * @return {Boolean} Filled.
+     */
+    allFilled(): boolean {
+        var obj = window.$('.grant-required');
+        for(var i = 0; i < obj.length; i++) {
+            if(!window.$(obj[i]).val() || window.$(obj[i]).val() == '')
+                return false;
+        }
+        return true;
+    }
+
+    /**
+     * Sanitarizes name.
+     * @function sanitarize
+     * @public
+     * @param {String} s String.
+     * @return {String} Safe.
+     */
+    sanitarize(s: string): string {
+        return s.replace(/\//g, '_');
     }
 
 }

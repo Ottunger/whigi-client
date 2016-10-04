@@ -135,14 +135,11 @@
    "oauth.ok": "Donner accès",
    "oauth.nok": "Refuser l'accès",
 
-   "account.question": "Demande de création d'accès",
+   "account.question": "Demande une création d'accès",
    "account.explain": "En acceptant la requête, vous créez automatiquement une valise sécurisée pour chacune des données suivantes vers l'ID donné, de la même façon que vous le feriez manuellement. L'utilisateur distant n'AURA PAS accès à vos clés.",
-   "account.id_to": "ID d'où la demande émane: ",
-   "account.prefix": "Donnée parmi celles demandées: ",
    "account.ok": "Donner l'accès (peut sembler long!)",
    "account.nok": "Refuser l'accès",
    "account.err": "Erreur quelque part, mais nous envoyons autant que possible",
-   "account.notShared": "Cette donnée est demandée mais ne sera pas partagée, demande invalide",
    "account.shared": "Cette donnée sera partagée",
    "account.until": "Les données seront disponibles pour l'app jusqu'à: ",
    "account.forever": "Les données seront TOUJOURS disponibles pour l'app, mais vous pourrez retirer l'accès.",
@@ -150,6 +147,7 @@
    "account.nameField": "Nom d'instance",
    "account.dataField": "Données associées",
    "account.new": "Nouvelle instance",
+   "account.user": "Utilisateur Whigi",
 
    "userinfo.title": "Informations à propos de l'utilisateur",
    "userinfo.trustLevel": "Niveau de confiance accordé par Whigi (0-9): ",
