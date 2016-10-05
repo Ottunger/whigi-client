@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnInit} from '@angular/core';
+import {Component, enableProdMode, Input, OnInit, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 enableProdMode();
 import * as template from './templates/sidebar.html';
@@ -17,7 +17,7 @@ import * as template from './templates/sidebar.html';
 })
 export class Sidebar implements OnInit {
 
-    @Input() lighted: number;
+    @Input() lighted: EventEmitter<number> | number;
 
     /**
      * Creates the component.
@@ -35,7 +35,15 @@ export class Sidebar implements OnInit {
      * @public
      */
     ngOnInit(): void {
-        window.$('#linkbars' + this.lighted).addClass('start active');
+        if(typeof this.lighted === 'number') {
+            window.$('.linkbars').removeClass('start active');
+            window.$('#linkbars' + this.lighted).addClass('start active');
+        } else if(typeof this.lighted !== 'undefined') {
+            this.lighted.asObservable().subscribe(function(vals) {
+                window.$('.linkbars').removeClass('start active');
+                window.$('#linkbars' + vals).addClass('start active');
+            });
+        }
     }
 
 }

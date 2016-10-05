@@ -1,25 +1,42 @@
-<div style="box-shadow: 0 0 10px 10px black; padding: 10px;">
-    <form class="form-signin">
-        <div class="heading">
-            <h3 class="form-signin-heading">{{ 'reset.reset' | translate }}</h3>
+<div class="container-fluid">
+    <div class="login">
+        <div class="logo">
+                <img src="../../../img/private/logo-big.png" width="100px" alt="" />
+                <p>{{ 'mention' | translate }}</p>
         </div>
-        <div class="checkbox">
-            <label><input type="checkbox" name="n90" [(ngModel)]="use_pwd" checked> {{ 'login.use_pwd' | translate }}</label>
+        <div class="content">
+            <!-- BEGIN RESET FORM -->
+            <form class="register-form">
+                <h3>{{ 'reset.reset' | translate }}</h3>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'reset.password' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'reset.password' | translate }}</label>
+                    <div class="controls">
+                        <div class="input-icon">
+                            <i class="fa fa-check"></i>
+                            <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
+                    </div>
+                </div>
+                <div class="form-group" style="display: none;">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="remember" [(ngModel)]="use_file" /> {{ 'login.use_file' | translate }}
+                        <span></span>
+                    </label>
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-lock"></i>
+                        <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
+                </div>
+                <div class="form-actions">
+                    <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="enter()"> {{ 'reset.send' | translate }} </button>
+                </div>
+            </form>
+            <!-- END RESET FORM -->
         </div>
-        <div class="form-group">
-            {{ 'reset.password' | translate }}<br />
-            <input type="password" [(ngModel)]="password" name="n4" class="form-control" [disabled]="!use_pwd" required>
-        </div>
-        <div class="form-group">
-            {{ 'reset.password' | translate }}<br />
-            <input type="password" [(ngModel)]="password2" name="n5" class="form-control" [disabled]="!use_pwd" required>
-        </div>
-        <div class="form-group">
-            {{ 'login.password_file' | translate }}<br />
-            <input type="file" (change)="fileLoad($event)" name="n50" class="form-control" [disabled]="use_pwd" required>
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary" (click)="enter()">{{ 'reset.send' | translate }}</button>
-        </div>
-    </form>
+    </div>
 </div>

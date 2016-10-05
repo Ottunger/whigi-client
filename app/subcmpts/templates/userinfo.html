@@ -1,31 +1,90 @@
-<h2>{{ 'userinfo.title' | translate }}</h2>
-<h3>{{ 'userinfo.trustLevel' | translate }}{{ user.is_company }}</h3>
-<h3>{{ 'userinfo.public' | translate }}</h3>
-<p *ngIf="!!user.company_info && !!user.company_info.name">{{ 'userinfo.name' | translate }}{{ user.company_info.name }}</p>
-<p *ngIf="!!user.company_info && !!user.company_info.bce">{{ 'userinfo.bce' | translate }}{{ user.company_info.bce }}</p>
-<p *ngIf="!!user.company_info && !!user.company_info.rrn">{{ 'generics.rrn' | translate }}: {{ user.company_info.rrn }}</p>
-<p *ngIf="!!user.company_info && getAddr() != ''">{{ 'userinfo.addr' | translate }}: {{ getAddr() }}</p>
-
-<div *ngIf="user._id == backend.profile._id">
-    <form id="eidform" class="form-signin" action="https://{{backend.EID_HOST}}">
-        <div class="heading">
-            <h3 class="form-signin-heading">{{ 'userinfo.set' | translate }}</h3>
+<div class="portlet-body form">
+    <!-- BEGIN FORM-->
+    <form class="form-horizontal" role="form" id="eidform" action="https://{{backend.EID_HOST}}">
+        <div class="form-body" id="pict-user">
+            <h3 class="form-section">{{ user._id }}  <small>{{ 'account.user' | translate }}</small></h3>
+            <h4 class="form-section">{{ 'userinfo.public' | translate }}</h4>
+            <div class="row">
+                <div class="col-md-12" *ngIf="!!user.company_info && !!user.company_info.name">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control input-circle" [ngModel]="user.company_info.name" name="name" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="!!user.company_info && !!user.company_info.bce">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control input-circle" [ngModel]="user.company_info.bce" name="bce" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="!!user.company_info && !!user.company_info.rrn">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'generics.rrn' | translate }}: </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control input-circle" [ngModel]="user.company_info.rrn" name="rrn" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12" *ngIf="!!user.company_info && getAddr() != ''">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.addr' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control input-circle" [ngModel]="getAddr()" name="addr" readonly="readonly" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/row-->
+            <h4 *ngIf="user._id == backend.profile._id">{{ 'userinfo.set' | translate }}</h4>
+            <div class="row" *ngIf="user._id == backend.profile._id">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control input-circle" [(ngModel)]="backend.profile.company_info.name" name="name" />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control input-circle" [ngModel]="bce" name="bce" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--/row-->
         </div>
-        <div class="form-group">
-            {{ 'userinfo.name' | translate }}<br />
-            <input type="text" [(ngModel)]="backend.profile.company_info.name" name="n1" class="form-control">
-        </div>
-        <div class="form-group">
-            {{ 'userinfo.bce' | translate }}<br />
-            <input type="text" [(ngModel)]="bce" name="n2" class="form-control">
-        </div>
-        <div class="form-group">
-            <button type="button" class="btn btn-primary" (click)="modify()">{{ 'userinfo.modify' | translate }}</button>
-            <button type="button" class="btn btn-default" (click)="load()">{{ 'userinfo.load' | translate }}</button>
-            <input type="hidden" name="username" [value]="backend.profile._id" />
-            <input type="hidden" name="hpwd" [value]="goCompany()" />
-            <input type="submit" class="btn btn-primary" value="{{ 'userinfo.goCompany' | translate }}" onclick="document.getElementById('eidform').submit()" />
-            <button type="button" class="btn btn-default" [disabled]="user.is_company != 9" (click)="goBCE()">{{ 'userinfo.goBCE' | translate }}</button>
+        <div class="form-actions" *ngIf="user._id == backend.profile._id">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn green" (click)="modify()">
+                                <i class="fa fa-pencil"></i> {{ 'userinfo.modify' | translate }}</button>
+                            <button type="button" class="btn default" (click)="load()">
+                                <i class="fa fa-pencil"></i> {{ 'userinfo.load' | translate }}</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6"> 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" name="username" [value]="backend.profile._id" />
+                            <input type="hidden" name="hpwd" [value]="goCompany()" />
+                            <button type="button" class="btn green" (click)="goBCE()" [disabled]="user.is_company != 9">
+                                <i class="fa fa-pencil"></i> {{ 'userinfo.goBCE' | translate }}</button>
+                            <input type="submit" class="btn default" value="{{ 'userinfo.goCompany' | translate }}" onclick="document.getElementById('eidform').submit()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </form>
+    <!-- END FORM-->
 </div>

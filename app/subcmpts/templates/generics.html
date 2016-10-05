@@ -1,96 +1,119 @@
-<h2>{{ 'generics.title' | translate }}</h2>
-<button type="button" class="btn btn-primary" (click)="router.navigate(['/profile'])">{{ 'back' | translate }}</button>
-<br />
-
-<select class="form-control" [(ngModel)]="filter">
-    <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
-</select>
-<br />
-
-<div class="table-responsive" *ngFor="let g of generics()">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th></th>
-                <th>{{ 'generics.descr' | translate }}</th>
-                <th>{{ 'filesystem.data_name' | translate }}</th>
-                <th>{{ 'filesystem.data' | translate }}</th>
-                <th>{{ 'action' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
-            <tr>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != ''"><img src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" /></td>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon == ''"><img src="../../../dist/favicon.png" /></td>
-                <td>{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</td>
-                <td>{{ g }}</td>
-
-                <td *ngIf="!!backend.profile.data[g]">
-                    <i>{{ 'filesystem.mix' | translate }}</i>
-                </td>
-                <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'text'">
-                    <input type="text" [(ngModel)]="new_data" name="s1" class="form-control">
-                </td>
-                <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                    <div class="form-group" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                        {{ k.descr_key | translate }}<br />
-                        <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [current]="0" [running]="0"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="lighted"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ 'generics.title' | translate }}</h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <select class="form-control input-circle" [(ngModel)]="filter" (change)="regUpdate()">
+                                <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
+                            </select><br />
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content" *ngFor="let g of generics()">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
+                                                src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" />
+                                            <div class="caption">
+                                                <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
+                                                    class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
+                                                {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                                            </div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsable' + dataservice.sanit(g))"> </a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable{{ dataservice.sanit(g) }}">
+                                            <!-- BEGIN FORM-->
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <h3 class="form-section">{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</h3>
+                                                            <p class="form-section">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                                                            <p *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable" class="form-section">{{ g }}</p>
+                                                            <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable" class="form-section">{{ g }}/<input type="text" [(ngModel)]="new_name" name="new_name" class="form-control input-circle"></p>
+                                                        </div>
+                                                        <!-- BEGIN INPUT -->
+                                                        <div class="col-md-6">
+                                                            <div *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
+                                                                {{ 'filesystem.data' | translate }}<br/>
+                                                            </div>
+                                                            <input *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'text'"
+                                                                type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" />
+                                                            <input *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
+                                                                type="file" class="form-control input-circle" (change)="fileLoad($event)" name="new_data" />
+                                                            <div class="form-group" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                                                <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                                                    {{ k.descr_key | translate }}<br />
+                                                                    <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- END INPUT -->
+                                                    </div>
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-offset-3 col-md-6">
+                                                                    <!-- BEGIN LINKS -->
+                                                                    <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                                                        <button *ngIf="!!backend.profile.data[g]" type="button" class="btn default"
+                                                                            (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
+                                                                        <button *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'file'"
+                                                                            type="button" class="btn green" (click)="register(g, false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                                        <button *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
+                                                                            type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                                    </div>
+                                                                    <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                                                        <button type="button" class="btn default" *ngFor="let d of dataNames(g)"
+                                                                            (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }} ({{ d }})</button>
+                                                                        <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!new_name || new_name == ''"
+                                                                            type="button" class="btn green" (click)="register(g, false, new_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                                        <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!new_name || new_name == ''"
+                                                                            type="button" class="btn green" (click)="register(g, true, new_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                                    </div>
+                                                                    <!-- END LINKS -->
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                        </div>
                     </div>
-                </td>
-                <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
-                    <input type="file" (change)="fileLoad($event)" name="n50" class="form-control">
-                </td>
-
-                <td *ngIf="!!backend.profile.data[g]">
-                    <button type="button" class="btn btn-default" (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
-                </td>
-                <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'file'">
-                    <button type="button" class="btn btn-default" (click)="register(g, false)">{{ 'filesystem.record' | translate }}</button>
-                </td>
-                <td *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
-                    <button type="button" class="btn btn-default" (click)="register(g, true)" [disabled]="new_data_file==''">{{ 'filesystem.record' | translate }}</button>
-                </td>
-            </tr>
-        </tbody>
-        <tbody *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
-            <tr *ngFor="let d of dataNames(g)">
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != ''"><img src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" /></td>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon == ''"><img src="../../../dist/favicon.png" /></td>
-                <td>{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</td>
-                <td>{{ g }}/{{ d }}</td>
-
-                <td><i>{{ 'filesystem.mix' | translate }}</i></td>
-
-                <td><button type="button" class="btn btn-default" (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }}</button></td>
-            </tr>
-            <tr>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != ''"><img src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" /></td>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].icon == ''"><img src="../../../dist/favicon.png" /></td>
-                <td>{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</td>
-                <td>{{ g }}/<input type="text" [(ngModel)]="new_name" name="s1" class="form-control"></td>
-
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text'">
-                    <input type="text" [(ngModel)]="new_data" name="s1" class="form-control">
-                </td>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                    <div class="form-group" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                        {{ k.descr_key | translate }}<br />
-                        <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
-                    </div>
-                </td>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
-                    <input type="file" (change)="fileLoad($event)" name="n50" class="form-control">
-                </td>
-
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'">
-                    <button type="button" class="btn btn-default" (click)="register(g, false, new_name)"
-                        [disabled]="!!backend.generics[g][backend.generics[g].length - 1].instantiable && new_name == ''">{{ 'filesystem.record' | translate }}</button>
-                </td>
-                <td *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
-                    <button type="button" class="btn btn-default" (click)="register(g, true, new_name)"
-                        [disabled]="new_data_file=='' || (!!backend.generics[g][backend.generics[g].length - 1].instantiable && new_name == '')">{{ 'filesystem.record' | translate }}</button>
-                </td>
-            </tr>
-        </tbody>
-    </table>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+    </div>
 </div>

@@ -167,24 +167,5 @@ export class Profile implements OnInit {
         }
         r.readAsText(file);
     }
-
-    /**
-     * Moves to top.
-     * @function top
-     * @public
-     */
-    top() {
-        window.scrollTo(0, 0);
-    }
-
-    /**
-     * Collapses a div.
-     * @function collapse
-     * @public
-     * @param {String} id Div to toggle.
-     */
-    collapse(id: string) {
-        window.$('#' + id).toggle();
-    }
     
 }

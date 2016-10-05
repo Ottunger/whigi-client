@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, ApplicationRef} from '@angular/core';
+import {Component, enableProdMode, OnInit, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -26,6 +26,7 @@ export class Generics implements OnInit {
     public new_datas: {[id: string]: string};
     public new_data_file: string;
     public filter: string;
+    private lighted: EventEmitter<number>;
     private sub: Subscription;
 
     /**
@@ -43,6 +44,7 @@ export class Generics implements OnInit {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
         private dataservice: Data, private check: ApplicationRef, private routed: ActivatedRoute) {
         this.filter = 'generics.any';
+        this.lighted = new EventEmitter<number>();
         this.new_name = '';
         this.new_datas = {};
     }
@@ -56,6 +58,7 @@ export class Generics implements OnInit {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
             self.filter = !!params['filter']? params['filter'] : 'generics.any';
+            self.regUpdate();
         });
     }
 
@@ -171,6 +174,37 @@ export class Generics implements OnInit {
                 self.new_data_file = r.result;
         }
         r.readAsDataURL(file);
+    }
+
+    /**
+     * Return which item to light up.
+     * @function getLight
+     * @public
+     * @return {Number} Item.
+     */
+    getLight(): number {
+        var ret = -1;
+        switch(this.filter) {
+            case 'generics.profile':
+                ret = 1;
+                break;
+            case 'generics.corporate':
+                ret = 2;
+                break;
+        }
+        return ret;
+    }
+
+    /**
+     * Register an update of lighter.
+     * @function regUpdate
+     * @public
+     */
+    regUpdate() {
+        var self = this;
+        setImmediate(function() {
+            self.lighted.emit(self.getLight())
+        });
     }
     
 }

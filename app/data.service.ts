@@ -403,4 +403,34 @@ export class Data {
         });
     }
 
+    /**
+     * Moves to top.
+     * @function top
+     * @public
+     */
+    top() {
+        window.scrollTo(0, 0);
+    }
+
+    /**
+     * Collapses a div.
+     * @function collapse
+     * @public
+     * @param {String} id Div to toggle.
+     */
+    collapse(id: string) {
+        window.$('#' + id).toggle();
+    }
+
+    /**
+     * Sanitarizes name.
+     * @function sanit
+     * @public
+     * @param {String} s String.
+     * @return {String} Safe.
+     */
+    sanit(s: string): string {
+        return s.replace(/\//g, '_');
+    }
+
 }

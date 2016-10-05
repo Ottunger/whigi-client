@@ -61,8 +61,8 @@
                 <p> {{ 'login.forgot3' | translate }} </p>
                 <div class="form-group">
                     <div class="input-icon">
-                        <i class="fa fa-envelope"></i>
-                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Email" name="email" /> </div>
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="ID" name="ID" /> </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" id="back-btn" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
@@ -125,9 +125,7 @@
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="recup_id" autocomplete="off" placeholder="{{ 'login.recupId' | translate }}" name="recup_id" [readonly]="!recuperable || !safe" /> </div>
                 </div>
                 <div class="form-group">
-                    <div class="input-icon">
-                        <i class="fa fa-lock"></i>
-                            <div id="ggccpt" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div> </div>
+                    <div id="ggccpt" class="g-recaptcha" data-sitekey="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></div>
                 </div>
                 <div class="form-actions">
                     <button id="register-back-btn" type="button" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>

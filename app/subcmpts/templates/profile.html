@@ -24,7 +24,7 @@
                                             <div class="caption">
                                                 <i class="fa fa-user"></i>{{ 'profile.change' | translate }}</div>
                                             <div class="tools">
-                                                <a href="javascript:;" class="collapse" (click)="collapse('apsable')"> </a>
+                                                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsable')"> </a>
                                                 <!-- <a href="javascript:;" class="remove"> </a> -->
                                             </div>
                                         </div>
@@ -98,7 +98,7 @@
                                             <div class="caption">
                                                 <i class="fa fa-user"></i>{{ 'profile.revoke' | translate }}</div>
                                             <div class="tools">
-                                                <a href="javascript:;" class="collapse" (click)="collapse('apsable2')"> </a>
+                                                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsable2')"> </a>
                                                 <!-- <a href="javascript:;" class="remove"> </a> -->
                                             </div>
                                         </div>
@@ -149,7 +149,7 @@
                                             <div class="caption">
                                                 <i class="fa fa-user"></i>{{ 'profile.oauth' | translate }}</div>
                                             <div class="tools">
-                                                <a href="javascript:;" class="collapse" (click)="collapse('apsable3')"> </a>
+                                                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsable3')"> </a>
                                                 <!-- <a href="javascript:;" class="remove"> </a> -->
                                             </div>
                                         </div>
@@ -189,7 +189,7 @@
         <!-- END CONTAINER -->
         <!-- BEGIN FOOTER -->
         <div class="page-footer">
-            <div class="scroll-to-top" style="display: block;" (click)="top()">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
                 <i class="icon-arrow-up"></i>
             </div>
         </div>

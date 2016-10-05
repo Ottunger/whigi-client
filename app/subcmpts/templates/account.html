@@ -25,19 +25,21 @@
                 <div *ngFor="let p of data_list" class="panel panel-default">
                     <div *ngIf="!!backend.generics[p]" class="panel-heading">
                         <h4 class="panel-title" style="text-align: right;">
-                            <img *ngIf="backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
-                                src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
-                            <i *ngIf="backend.generics[p][backend.generics[p].length - 1].icon != '' && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0"
-                                class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" style="width: 20px; float:left;"></i>
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ sanitarize(p) }}"><div style="float:left;"><i class="fa fa-user"></i></div>
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p) }}">
+                                <div style="float:left;">
+                                    <img *ngIf="backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
+                                        src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
+                                    <i *ngIf="backend.generics[p][backend.generics[p].length - 1].icon != '' && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0"
+                                        class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}"></i>
+                                </div>
                                 {{ backend.generics[p][backend.generics[p].length - 1].descr_key | translate }}
                                 <div style="padding-left:50px;float:right;">
-                                    <i class="fa fa-chevron-up"></i>
+                                    <i class="fa fa-chevron-down"></i>
                                 </div>
                             </a>
                         </h4>
                     </div>
-                    <div id="tgabble_{{ sanitarize(p) }}" class="panel-collapse collapse" >
+                    <div id="tgabble_{{ dataservice.sanit(p) }}" class="panel-collapse collapse" >
                         <div class="panel-body" style="max-height:200px; overflow-y:auto;">
                             <p>{{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}</p>
                             <!-- BEGIN ITEM SELECT -->

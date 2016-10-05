@@ -33,3 +33,4 @@ import '../css/simple-line-icons.min.css';
 import '../css/layout.css';
 import '../css/login.css';
 import '../css/whigi.css';
+import '../css/font-awesome.min.css';

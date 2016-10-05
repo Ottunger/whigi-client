@@ -23,7 +23,7 @@ export class Reset implements OnInit, OnDestroy {
 
     public password: string;
     public password2: string;
-    public use_pwd: boolean;
+    public use_file: boolean;
     private id: string;
     private pwd: string;
     private sub: Subscription;
@@ -39,7 +39,7 @@ export class Reset implements OnInit, OnDestroy {
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
-        this.use_pwd = true;
+        this.use_file = false;
     }
 
     /**

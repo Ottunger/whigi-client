@@ -44,8 +44,10 @@ export class Userinfo implements OnInit {
      * @public
      */
     ngOnInit(): void {
+        var self = this;
         setTimeout(function() {
             window.$('#eidform').attr('method', 'get');
+            window.$('#pict-user').prepend('<img src="img/' + self.user.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
         }, 500);
     }
 

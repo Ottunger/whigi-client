@@ -415,15 +415,4 @@ export class Account implements OnInit, OnDestroy {
         return true;
     }
 
-    /**
-     * Sanitarizes name.
-     * @function sanitarize
-     * @public
-     * @param {String} s String.
-     * @return {String} Safe.
-     */
-    sanitarize(s: string): string {
-        return s.replace(/\//g, '_');
-    }
-
 }

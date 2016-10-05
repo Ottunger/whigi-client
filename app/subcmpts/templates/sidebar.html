@@ -3,7 +3,8 @@
     <div class="page-sidebar navbar-collapse collapse">
         <!-- BEGIN SIDEBAR MENU -->
         <ul class="page-sidebar-menu  page-header-fixed " data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
-            <li class="nav-item" id="linkbars0">
+            <li class="nav-item linkbars" id="linkbars-1" style="display: none;"></li>
+            <li class="nav-item linkbars" id="linkbars0">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/profile'])">
                     <i class="icon-home"></i>
                     <span class="title">{{ 'profile.home' | translate }}</span>
@@ -12,13 +13,13 @@
             <li class="heading">
                 <h3 class="uppercase">{{ 'profile.generics' | translate }}</h3>
             </li>
-            <li class="nav-item" id="linkbars1">
+            <li class="nav-item linkbars" id="linkbars1">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', 'generics.profile'])">
                     <i class="icon-user"></i>
                     <span class="title">{{ 'generics.profile' | translate }}</span>
                 </a>
             </li>
-            <li class="nav-item" id="linkbars2">
+            <li class="nav-item linkbars" id="linkbars2">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', 'generics.corporate'])">
                     <i class="icon-diamond"></i>
                     <span class="title">{{ 'generics.corporate' | translate }}</span>
@@ -27,13 +28,13 @@
             <li class="heading">
                 <h3 class="uppercase">{{ 'profile.datas' | translate }}</h3>
             </li>
-            <li class="nav-item" id="linkbars3">
+            <li class="nav-item linkbars" id="linkbars3">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'data'])">
                     <i class="icon-share-alt"></i>
                     <span class="title">{{ 'profile.mine' | translate }}</span>
                 </a>                                
             </li>
-            <li class="nav-item" id="linkbars4">
+            <li class="nav-item linkbars" id="linkbars4">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'vault'])">
                     <i class="icon-share"></i>
                     <span class="title">{{ 'profile.shared' | translate }}</span>

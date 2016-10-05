@@ -1,5 +1,23 @@
-<h2>{{ 'userinfo.title' | translate }}</h2>
-<button type="button" class="btn btn-primary" (click)="back()">{{ 'back' | translate }}</button>
-<br />
-
-<user-info [user]="user"></user-info>
+<div class="container-fluid">
+    <div class="login">
+        <div class="logo">
+                <img src="../../../img/private/logo-big.png" width="100px" alt="" />
+                <p>{{ 'mention' | translate }}</p>
+        </div>
+        <!-- BEGIN USER -->
+        <div class="page-content">
+            <h1 class="page-title">{{ 'userinfo.title' | translate }}</h1>
+            <!-- BEGIN DATA -->
+            <div class="panel-group accordion">
+                <div class="panel panel-default">
+                    <user-info [user]="user"></user-info>
+                </div>
+                <div class="clearfix" style="padding-top:10px;text-align:right">
+                    <button type="button" class="btn green-meadow" (click)="back()">{{ 'back' | translate }}</button>
+                </div>
+            </div>
+            <!-- END DATA -->
+        </div>
+        <!-- END USER -->
+    </div>
+</div>
