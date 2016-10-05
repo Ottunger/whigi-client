@@ -256,7 +256,8 @@ export class Backend {
     encryptRSA(data: number[], key: string): string {
         var enc = new window.JSEncrypt.JSEncrypt();
         enc.setPublicKey(key);
-        return enc.encrypt(this.arr2str(data));
+        var dt = this.arr2str(data);
+        return enc.encrypt(window.sha256(dt) + dt);
     }
 
     /**
@@ -275,7 +276,10 @@ export class Backend {
             try {
                 dec.setPrivateKey(this.rsa_key[i]);
                 var r = dec.decrypt(data);
-                return this.str2arr(r);
+                var h = r.substring(0, 64), next = r.substring(64);
+                if(window.sha256(next) == h) {
+                    return this.str2arr(next);
+                }
             } catch(e) {}
         }
         return undefined;
