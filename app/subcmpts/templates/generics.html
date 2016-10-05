@@ -24,9 +24,9 @@
                                 <div class="tab-pane active">
                                     <div class="portlet box blue-madison">
                                         <div class="portlet-title">
-                                            <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
-                                                src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" />
                                             <div class="caption">
+                                                <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
+                                                    src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
                                                 <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
                                                     class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
                                                 {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
@@ -42,9 +42,9 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <h3 class="form-section">{{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}</h3>
-                                                            <p class="form-section">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
-                                                            <p *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable" class="form-section">{{ g }}</p>
-                                                            <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable" class="form-section">{{ g }}/<input type="text" [(ngModel)]="new_name" name="new_name" class="form-control input-circle"></p>
+                                                            <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                                                            <p *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">{{ g }}</p>
+                                                            <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ g }}/<input type="text" [(ngModel)]="new_name" name="new_name" class="form-control input-circle"></p>
                                                         </div>
                                                         <!-- BEGIN INPUT -->
                                                         <div class="col-md-6">

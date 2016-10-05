@@ -1,108 +1,210 @@
-<h2>{{ dataservice.sanitarize(data_name) }}</h2>
-<button type="button" class="btn btn-primary" (click)="back(false)">{{ 'back' | translate }}</button>
-<button *ngIf="is_generic" type="button" class="btn btn-primary" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
-<br />
-<clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true" [is_folder]="is_generic && backend.generics[gen_name][version].mode == 'json_keys'"
-    (notify)="mod($event, false)" [gen_name]="gen_name" [is_generic]="is_generic" [version]="version"></clear-view>
-<br /><br />
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [current]="0" [running]="0"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="3"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ dataservice.sanitarize(data_name) }}
+                        <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
+                        <button *ngIf="is_generic" type="button" class="btn green" style="float: right;" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
+                    </h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN BLOCK -->
+                            <clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true"
+                                [is_folder]="is_generic && backend.generics[gen_name][version].mode == 'json_keys'"
+                                (notify)="mod($event, false)" [gen_name]="gen_name" [is_generic]="is_generic" [version]="version"></clear-view>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption"><i class="fa fa-suitcase"></i>{{ 'modify' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsable__more')"> </a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable__more">
+                                            <!-- BEGIN FORM-->
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-body">
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <p *ngIf="!is_dated">{{ 'dataview.notDated' | translate }}</p>
+                                                            <div *ngIf="!!is_dated && is_dated" class='input-group date' id='pick4'>
+                                                                <input type='text' class="form-control"/>
+                                                                <span class="input-group-addon">
+                                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <!-- BEGIN INPUT -->
+                                                        <div class="col-md-6">
+                                                            <div *ngIf="!is_generic">
+                                                                <div>{{ 'filesystem.data' | translate }}<br/></div>
+                                                                <input type="text" [(ngModel)]="new_data" name="new_data" [disabled]="new_data_file!=''" class="form-control input-circle" />
+                                                                <input type="file" (change)="fileLoad($event)" class="form-control input-circle" />
+                                                            </div>
+                                                            <div *ngIf="is_generic">
+                                                                <div *ngIf="backend.generics[gen_name][version].mode != 'json_keys'">
+                                                                    {{ 'filesystem.data' | translate }}<br/>
+                                                                </div>
+                                                                <input *ngIf="backend.generics[gen_name][version].mode == 'text'"
+                                                                    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" />
+                                                                <input *ngIf="backend.generics[gen_name][version].mode == 'file'"
+                                                                    type="file" class="form-control input-circle" (change)="fileLoad($event)" name="new_data" />
+                                                                <div class="form-group" *ngIf="backend.generics[gen_name][version].mode == 'json_keys'">
+                                                                    <div *ngFor="let k of backend.generics[gen_name][version].json_keys">
+                                                                        {{ k.descr_key | translate }}<br />
+                                                                        <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!-- END INPUT -->
+                                                    </div>
+                                                    <!--/row-->
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="row">
+                                                                <div class="col-md-3">
+                                                                    <button type="submit" class="btn green" [disabled]="!decr_data" (click)="modify()">
+                                                                        <i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                                </div>
+                                                                <div class="col-md-3">
+                                                                    <button type="submit" class="btn green" (click)="revokeAll()">
+                                                                        <i class="fa fa-exclamation"></i> {{ 'dataview.revokeAll' | translate }}</button>
+                                                                </div>
+                                                                <div class="col-md-offset-3 col-md-3">
+                                                                    <button type="submit" class="btn green" [disabled]="shared() || !!backend.generics[data_name]" (click)="remove()">
+                                                                        <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'dataview.grants' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsable__more2')"> </a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable__more2">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ 'dataview.shared_to' | translate }}</th>
+                                                            <th>{{ 'dataview.lastAccess' | translate }}</th>
+                                                            <th>{{ 'dataview.until' | translate }}</th>
+                                                            <th>{{ 'dataview.trigger' | translate }}</th>
+                                                            <th>{{ 'dataview.storable' | translate }}</th>
+                                                            <th *ngIf="is_generic && data_name != gen_name">{{ 'dataview.redirect' | translate }}</th>
+                                                            <th>{{ 'action' | translate }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let d of sharedIds()">
+                                                            <td><a (click)="user(d)">{{ d }}</a></td>
+                                                            <td *ngIf="!!timings[d] && timings[d].seen">
+                                                                <div class='input-group date' id='pick-id{{ d }}'>
+                                                                    <input type='text' class="form-control" readonly="readonly"/>
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td *ngIf="!!timings[d] && !timings[d].seen">{{ 'dataview.neverSeen' | translate }}</td>
+                                                            <td *ngIf="!timings[d]"></td>
+                                                            <td *ngIf="!!timings[d] && timings[d].ends">
+                                                                <div class='input-group date' id='pick-id2{{ d }}'>
+                                                                    <input type='text' class="form-control" readonly="readonly"/>
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td *ngIf="!!timings[d] && !timings[d].ends">{{ 'dataview.forever' | translate }}</td>
+                                                            <td *ngIf="!timings[d]"></td>
+                                                            <td *ngIf="!!timings[d]">{{ timings[d].trigger }}</td>
+                                                            <td *ngIf="!timings[d]"></td>
 
-<p *ngIf="!is_dated">{{ 'modify' | translate }}</p>
-<p *ngIf="!!is_dated && is_dated">{{ 'add' | translate }}</p>
-<div *ngIf="!!is_dated && is_dated" class='input-group date' id='pick4'>
-    <input type='text' class="form-control"/>
-    <span class="input-group-addon">
-        <span class="glyphicon glyphicon-calendar"></span>
-    </span>
-</div>
-
-<div *ngIf="!is_generic">
-    <input type="text" [(ngModel)]="new_data" [disabled]="new_data_file!=''" class="form-control">
-    <input type="file" (change)="fileLoad($event)" class="form-control">
-</div>
-<div *ngIf="is_generic">
-    <input type="text" *ngIf="backend.generics[gen_name][version].mode == 'text'" [(ngModel)]="new_data" name="s1" class="form-control">
-    <div *ngIf="backend.generics[gen_name][version].mode == 'json_keys'">
-        <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-            {{ k.descr_key | translate }}<br />
-            <input type="text" [(ngModel)]="new_datas[k.descr_key]" name="s1" class="form-control">
+                                                            <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>
+                                                            <td *ngIf="is_generic && data_name != gen_name">
+                                                                <select class="form-control input-circle" [(ngModel)]="filter">
+                                                                    <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
+                                                                </select>
+                                                            </td>
+                                                            <td>
+                                                                <button type="button" class="btn default" (click)="change(d)" [disabled]="filter==''">
+                                                                    <i class="fa fa-share-square"></i> {{ 'redirect' | translate }}</button>
+                                                                <button type="button" class="btn green" (click)="revoke(d)">
+                                                                    <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td><input type="text" [(ngModel)]="new_id" name="y0" class="form-control input-circle"></td>
+                                                            <td></td>
+                                                            <td>
+                                                                <div class='input-group date' id='pick5'>
+                                                                    <input type='text' class="form-control"/>
+                                                                    <span class="input-group-addon">
+                                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                                    </span>
+                                                                </div>
+                                                            </td>
+                                                            <td><input type="text" [(ngModel)]="new_trigger" name="y1" class="form-control input-circle"></td>
+                                                            <td><input type="checkbox" [(ngModel)]="is_storable" /></td>
+                                                            <td *ngIf="is_generic && data_name != gen_name"></td>
+                                                            <td><button type="button" class="btn green" (click)="register()" [disabled]="!decr_data">
+                                                                <i class="fa fa-edit"></i> {{ 'record' | translate }}</button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
         </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
     </div>
-    <input type="file" *ngIf="backend.generics[gen_name][version].mode == 'file'" (change)="fileLoad($event)" name="n50" class="form-control">
-</div>
-
-
-<button type="button" class="btn btn-primary" (click)="modify()" [disabled]="!decr_data">{{ 'filesystem.record' | translate }}</button>
-<button type="button" class="btn btn-warning" (click)="revokeAll()">{{ 'dataview.revokeAll' | translate }}</button>
-<button type="button" class="btn btn-danger" (click)="remove()"
-        [disabled]="shared() || !!backend.generics[data_name]">{{ 'remove' | translate }}</button>
-<br /><br />
-
-<div class="table-responsive">
-    <table class="table table-hover">
-        <thead>
-            <tr>
-                <th>{{ 'dataview.shared_to' | translate }}</th>
-                <th>{{ 'dataview.lastAccess' | translate }}</th>
-                <th>{{ 'dataview.until' | translate }}</th>
-                <th>{{ 'dataview.trigger' | translate }}</th>
-                <th>{{ 'dataview.storable' | translate }}</th>
-                <th *ngIf="is_generic && data_name != gen_name">{{ 'dataview.redirect' | translate }}</th>
-                <th>{{ 'action' | translate }}</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr *ngFor="let d of sharedIds()">
-                <td><a (click)="user(d)">{{ d }}</a></td>
-                <td *ngIf="!!timings[d] && timings[d].seen">
-                    <div class='input-group date' id='pick-id{{ d }}'>
-                        <input type='text' class="form-control" readonly="readonly"/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </td>
-                <td *ngIf="!!timings[d] && !timings[d].seen">{{ 'dataview.neverSeen' | translate }}</td>
-                <td *ngIf="!timings[d]"></td>
-                <td *ngIf="!!timings[d] && timings[d].ends">
-                    <div class='input-group date' id='pick-id2{{ d }}'>
-                        <input type='text' class="form-control" readonly="readonly"/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </td>
-                <td *ngIf="!!timings[d] && !timings[d].ends">{{ 'dataview.forever' | translate }}</td>
-                <td *ngIf="!timings[d]"></td>
-                <td *ngIf="!!timings[d]">{{ timings[d].trigger }}</td>
-                <td *ngIf="!timings[d]"></td>
-
-                <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>
-                <td *ngIf="is_generic && data_name != gen_name">
-                    <select class="form-control" [(ngModel)]="filter">
-                        <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
-                    </select>
-                </td>
-                <td>
-                    <button type="button" class="btn btn-primary" (click)="change(d)" [disabled]="filter==''">{{ 'redirect' | translate }}</button>
-                    <button type="button" class="btn btn-default" (click)="revoke(d)">{{ 'remove' | translate }}</button>
-                </td>
-            </tr>
-            <tr>
-                <td><input type="text" [(ngModel)]="new_id" name="y0" class="form-control"></td>
-                <td></td>
-                <td>
-                    <div class='input-group date' id='pick5'>
-                        <input type='text' class="form-control"/>
-                        <span class="input-group-addon">
-                            <span class="glyphicon glyphicon-calendar"></span>
-                        </span>
-                    </div>
-                </td>
-                <td><input type="text" [(ngModel)]="new_trigger" name="y1" class="form-control"></td>
-                <td><input type="checkbox" [(ngModel)]="is_storable" /></td>
-                <td *ngIf="is_generic && data_name != gen_name"></td>
-                <td><button type="button" class="btn btn-default" (click)="register()" [disabled]="!decr_data">{{ 'record' | translate }}</button></td>
-            </tr>
-        </tbody>
-    </table>
 </div>

@@ -1,6 +1,42 @@
-<h2>{{ dataservice.sanitarize(sharer_id + '/' + vault.data_name) }}</h2>
-<button type="button" class="btn btn-primary" (click)="back()">{{ 'back' | translate }}</button>
-<br />
-
-<clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="vault.data_name" [change]="false" [is_generic]="is_generic" [version]="version"
-    [is_folder]="is_generic && !!backend.generics[vault.data_name] && backend.generics[vault.data_name][version].mode == 'json_keys'" [gen_name]="vault.data_name"></clear-view>
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [current]="0" [running]="0"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="4"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ dataservice.sanitarize(sharer_id + '/' + vault.data_name) }}
+                        <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
+                    </h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN BLOCK -->
+                            <clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="vault.data_name" [change]="false" [is_generic]="is_generic" [version]="version"
+                                [is_folder]="is_generic && !!backend.generics[vault.data_name] && backend.generics[vault.data_name][version].mode == 'json_keys'"
+                                [gen_name]="vault.data_name"></clear-view>
+                            <!-- END BLOCK -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+    </div>
+</div>

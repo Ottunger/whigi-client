@@ -44,9 +44,9 @@ export class Generics implements OnInit {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
         private dataservice: Data, private check: ApplicationRef, private routed: ActivatedRoute) {
         this.filter = 'generics.any';
-        this.lighted = new EventEmitter<number>();
         this.new_name = '';
         this.new_datas = {};
+        this.lighted = new EventEmitter<number>();
     }
 
     /**
@@ -183,16 +183,13 @@ export class Generics implements OnInit {
      * @return {Number} Item.
      */
     getLight(): number {
-        var ret = -1;
         switch(this.filter) {
             case 'generics.profile':
-                ret = 1;
-                break;
+                return 1;
             case 'generics.corporate':
-                ret = 2;
-                break;
+                return 2;
         }
-        return ret;
+        return -1;
     }
 
     /**

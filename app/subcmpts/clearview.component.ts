@@ -99,4 +99,16 @@ export class Clearview {
         window.download(data, spl[spl.length - 1]);
     }
 
+    /**
+     * Get possible name.
+     * @function getName
+     * @public
+     * @return {String} Traduction.
+     */
+    getName(): string {
+        if(this.gen_name in this.backend.generics)
+            return this.translate.instant(this.backend.generics[this.gen_name][this.version].descr_key);
+        return '';
+    }
+
 }

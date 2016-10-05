@@ -58,6 +58,8 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
     canDeactivate(component: Filesystem, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         if((!component.data_name || component.data_name.length == 0) &&
             (!component.data_value || component.data_value.length == 0)) {
+            //On route change, reset the route
+            component.folders = '';
             return true;
         }
         return component.dialog(this.translate.instant('confirmation'));

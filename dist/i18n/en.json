@@ -115,6 +115,8 @@
    "dataview.redirect": "Select another data source",
    "dataview.transferred": "Vault transferred",
    "dataview.storable": "Transerrable vault",
+   "dataview.notDated": "This data is not dated.",
+   "dataview.grants": "Associated grants",
 
    "vaultview.noData": "Cannot retrieve such vault. Maybe access was revoked...",
    "vaultview.expired": "This vault has expired...",

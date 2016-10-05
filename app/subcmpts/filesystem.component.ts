@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, ApplicationRef} from '@angular/core';
+import {Component, enableProdMode, OnInit, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -24,8 +24,9 @@ export class Filesystem implements OnInit {
     public data_name: string;
     public data_value: string;
     public data_value_file: string;
+    public folders: string;
     private mode: string;
-    private folders: string;
+    private lighted: EventEmitter<number>;
     private sub: Subscription;
 
     /**
@@ -44,6 +45,7 @@ export class Filesystem implements OnInit {
         private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef) {
         this.folders = '';
         this.data_value_file = '';
+        this.lighted = new EventEmitter<number>();
     }
 
     /**
@@ -63,6 +65,7 @@ export class Filesystem implements OnInit {
                 window.$('#pick2').datetimepicker();
                 window.$('#pick2').datetimepicker('date', window.moment());
             }, 100);
+            self.regUpdate();
         });
     }
 
@@ -198,8 +201,15 @@ export class Filesystem implements OnInit {
      * @return {Promise} OK or not.
      */
     dialog(msg: string): Promise {
+        var self = this;
         return new Promise<boolean>(function(resolve, reject) {
-            resolve(window.confirm(msg));
+            if(window.confirm(msg)) {
+                //On route change, reset the route
+                self.folders = '';
+                resolve(true);
+            } else {
+                resolve(false);
+            }
         });
     }
 
@@ -225,14 +235,37 @@ export class Filesystem implements OnInit {
     /**
      * Allows to display a context of the folder.
      * @function hasKey
+     * @param {Boolean} long Return long description.
      * @return {String} A key to describe the folder or undefined.
      */
-    hasKey(): string {
+    hasKey(long: boolean): string {
         if(!this.folders) {
             this.folders = '';
         }
         var test = (this.mode == 'data')? this.folders : this.folders.replace(/^[^\/]*\//, '');
-        return (test in this.backend.generics_paths)? this.backend.generics_paths[test].descr_key : undefined;
+        return (test in this.backend.generics_paths)? (long? this.backend.generics_paths[test].long_descr_key : this.backend.generics_paths[test].descr_key) : undefined;
+    }
+
+    /**
+     * Return which item to light up.
+     * @function getLight
+     * @public
+     * @return {Number} Item.
+     */
+    getLight(): number {
+        return (this.mode == 'data'? 3 : 4);
+    }
+
+    /**
+     * Register an update of lighter.
+     * @function regUpdate
+     * @public
+     */
+    regUpdate() {
+        var self = this;
+        setImmediate(function() {
+            self.lighted.emit(self.getLight())
+        });
     }
     
 }
