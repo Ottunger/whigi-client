@@ -110,7 +110,7 @@ export class Filesystem implements OnInit {
      * @public
      */
     getUp() {
-        this.folders = this.folders.replace(/[^\/]+\/$/, '');
+        this.router.navigate(['/filesystem', this.mode, {folders: this.folders.replace(/[^\/]+\/$/, '')}]);
     }
 
     /**
@@ -120,7 +120,7 @@ export class Filesystem implements OnInit {
      * @param {String} name Folder name.
      */
     select(name: string) {
-        this.folders += name + '/';
+        this.router.navigate(['/filesystem', this.mode, {folders: this.folders + name + '/'}]);
     }
 
     /**

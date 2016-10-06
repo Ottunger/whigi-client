@@ -146,7 +146,7 @@ export class Logging implements OnInit {
                             self.dataservice.grantVault('whigi-restore', 'profile/recup_id', 'profile/recup_id', self.recup_id, 0, new Date(0)).then(function() {
                                 self.dataservice.grantVault(self.recup_id, 'keys/pwd/mine2', 'keys/pwd/mine2', self.password.slice(4), 0, new Date(0)).then(function() {
                                     self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                                    self.logout();
+                                    self.logout().then(function() {self.enter();});
                                 }, function(e) {
                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                     self.logout();
@@ -163,7 +163,7 @@ export class Logging implements OnInit {
                         self.dataservice.grantVault('whigi-restore', 'keys/pwd/mine1', 'keys/pwd/mine1', self.password.slice(0, 4), 0, new Date(0)).then(function() {
                             self.dataservice.grantVault('whigi-restore', 'keys/pwd/mine2', 'keys/pwd/mine2', self.password.slice(4), 0, new Date(0)).then(function() {
                                 self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                                self.logout();
+                                self.logout().then(function() {self.enter();});
                             }, function(e) {
                                 self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                 self.logout();
@@ -202,7 +202,7 @@ export class Logging implements OnInit {
                                         });
                                     } else {
                                         self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                                        self.logout();
+                                        self.logout().then(function() {self.enter();});
                                     }
                                 }, function(e) {
                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
@@ -266,17 +266,22 @@ export class Logging implements OnInit {
      * Logouts.
      * @function logout
      * @private
+     * @return {Promise} When done.
      */
-    logout() {
+    logout(): Promise {
         var self = this;
-        this.backend.removeTokens(false).then(function() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('key_decryption');
-            localStorage.removeItem('psha');
-            self.backend.forceReload();
-            delete self.backend.profile;
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
+        return new Promise(function(resolve, reject) {
+            self.backend.removeTokens(false).then(function() {
+                localStorage.removeItem('token');
+                localStorage.removeItem('key_decryption');
+                localStorage.removeItem('psha');
+                self.backend.forceReload();
+                delete self.backend.profile;
+                resolve();
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
+                resolve();
+            });
         });
     }
 
