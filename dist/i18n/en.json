@@ -183,8 +183,13 @@
    "_comment": "HERE START TRANSLATIONS FOR GENERICS",
 
    "generics.any": "Any module",
-   "generics.profile": "Module 'profile'",
-   "generics.corporate": "Module 'corporate'",
+   "generics.profile": "My profile",
+   "generics.corporate": "My corporate profile",
+
+   "generics.perso1": "Personal data",
+   "generics.perso2": "Addresses",
+   "generics.corp1": "Corporate identity",
+   "generics.corp2": "Corporate addresses",
 
    "generics.email": "Emails",
    "generics.last_name": "Last name",

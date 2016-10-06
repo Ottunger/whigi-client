@@ -1,0 +1,75 @@
+<div class="tab-pane active">
+    <div class="portlet box blue-madison">
+        <div class="portlet-title">
+            <div class="caption">
+                {{ group | translate }}
+            </div>
+            <div class="tools">
+                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsablegen' + dataservice.sanit(group))"> </a>
+            </div>
+        </div>
+        <div class="portlet-body form" id="apsablegen{{ dataservice.sanit(group) }}">
+            <!-- BEGIN FORM-->
+            <form class="form-horizontal" role="form">
+                <div class="form-body">
+                    <div class="row" *ngFor="let g of data_list">
+                        <div class="col-md-6">
+                            <!-- LEFT COL -->
+                            <h4>
+                                <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
+                                    src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
+                                <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
+                                    class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
+                                {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                            </h4>
+                            <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                            <p *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">{{ g }}</p>
+                            <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ g }}/<input type="text" [(ngModel)]="ass_name" name="new_name{{ dataservice.sanit(g) }}" class="form-control input-circle" /></p>
+                            <!-- LEFT COL -->
+                        </div>
+                        <div class="col-md-6">
+                            <!-- BEGIN SELECT -->
+                            <div class="row">
+                                <div>
+                                    {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}<br/>
+                                </div>
+                                <input *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'text'"
+                                    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" />
+                                <input *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
+                                    type="file" class="form-control input-circle" (change)="fileLoad($event)" name="new_data" />
+                                <div *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                    <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                        {{ k.descr_key | translate }}<br />
+                                        <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" />
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END SELECT -->
+                            <!-- BEGIN DISP -->
+                            <div class="row">
+                                <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable" style="padding-left: 10px;">
+                                    <button *ngIf="!!backend.profile.data[g]" type="button" class="btn default"
+                                        (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
+                                    <button *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'file'"
+                                        type="button" class="btn green" (click)="register(g, false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                    <button *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
+                                        type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                </div>
+                                <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable" style="padding-left: 10px;">
+                                    <button type="button" class="btn default" *ngFor="let d of dataNames(g)"
+                                        (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }} ({{ d }})</button>
+                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!new_name || new_name == ''"
+                                        type="button" class="btn green" (click)="register(g, false, new_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!new_name || new_name == ''"
+                                        type="button" class="btn green" (click)="register(g, true, new_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                </div>
+                            </div>
+                            <!-- END DISP -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <!-- END FORM-->
+        </div>
+    </div>
+</div>

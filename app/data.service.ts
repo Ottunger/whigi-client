@@ -430,7 +430,7 @@ export class Data {
      * @return {String} Safe.
      */
     sanit(s: string): string {
-        return s.replace(/\//g, '_');
+        return s.replace(/[\/\.]/g, '_');
     }
 
 }

@@ -33,20 +33,19 @@ export class Backend {
         mode: string,
         enum: string,
         validate: string,
-        module: string
+        module: string,
+        group: string,
         json_keys: {descr_key: string, long_descr_key: string, help_url: string, mode: string, enum: string}[]
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {
-        country: string,
         descr_key: string,
         long_descr_key: string,
-        help_url: string,
-        icon: string
+        help_url: string
     }};
-    public EID_HOST = '192.168.1.61/api/v1/eid';
-    public BASE_URL = 'https://192.168.1.61/api/v1/';
-    public RESTORE_URL = 'https://192.168.1.61/api/v1/';
+    public EID_HOST = 'localhost/api/v1/eid';
+    public BASE_URL = 'https://localhost/api/v1/';
+    public RESTORE_URL = 'https://localhost/api/v1/';
     private rsa_key: string[];
 
     /**

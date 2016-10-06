@@ -6,13 +6,12 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, ApplicationRef, EventEmitter} from '@angular/core';
+import {Component, enableProdMode, OnInit, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
-import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/generics.html';
 
@@ -21,13 +20,10 @@ import * as template from './templates/generics.html';
 })
 export class Generics implements OnInit {
 
-    public new_name: string;
-    public new_data: string;
-    public new_datas: {[id: string]: string};
-    public new_data_file: string;
     public filter: string;
     private lighted: EventEmitter<number>;
     private sub: Subscription;
+    private lists: {[id: string]: any};
 
     /**
      * Creates the component.
@@ -37,16 +33,13 @@ export class Generics implements OnInit {
      * @param backend App service.
      * @param router Routing service.
      * @param notif Notification service.
-     * @param dataservice Data service.
-     * @param check Check service.
      * @param routed Current route.
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
-        private dataservice: Data, private check: ApplicationRef, private routed: ActivatedRoute) {
+        private routed: ActivatedRoute) {
         this.filter = 'generics.any';
-        this.new_name = '';
-        this.new_datas = {};
         this.lighted = new EventEmitter<number>();
+        this.lists = {}
     }
 
     /**
@@ -72,63 +65,6 @@ export class Generics implements OnInit {
     }
 
     /**
-     * Register a new data.
-     * @function register
-     * @public
-     * @param {String} name Name of recorded file.
-     * @param {Boolean} as_file Load from file.
-     * @param {String} new_name Subfolder name for foldered data.
-     */
-    register(name: string, as_file: boolean, new_name?: string) {
-        var self = this, send;
-        new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
-        //Build and test
-        send = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, name, as_file);
-        if(!send) {
-            this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
-            return;
-        }
-        //Create it
-        this.dataservice.newData(name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
-            self.new_name = '';
-            self.new_data = '';
-            self.new_data_file = '';
-            self.new_datas = {};
-            self.check.tick();
-        }, function(err) {
-            if(err == 'server')
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-            else
-                self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
-        });
-    }
-
-    /**
-     * Keys of data names known.
-     * @function dataNames
-     * @public
-     * @param {String} folder to list.
-     * @return {Array} Known fields.
-     */
-    dataNames(folder: string): string[] {
-        return this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
-            return el.charAt(el.length - 1) != '/';
-        }).map(function(el: string): string {
-            return el.replace(/.+\//, '');
-        });
-    }
-
-    /**
-     * Navigate to details panel.
-     * @function select
-     * @public
-     * @param {String} name Name of data.
-     */
-    select(name: string) {
-        this.router.navigate(['/data', window.encodeURIComponent(name)]);
-    }
-
-    /**
      * Returns all available filters.
      * @function filters
      * @public
@@ -146,34 +82,29 @@ export class Generics implements OnInit {
      * Returns the keys of generics.
      * @function generics
      * @public
-     * @return {String[]} Keys.
+     * @return {String[][][]} Keys.
      */
-    generics(): string[] {
-        var self = this;
+    generics(): string[][][] {
+        var self = this, obj;
+        if(this.filter in this.lists)
+            return this.lists[this.filter];
         if(this.filter == 'generics.any')
-            return Object.getOwnPropertyNames(this.backend.generics);
-        return Object.getOwnPropertyNames(this.backend.generics).filter(function(el): boolean {
-            return self.backend.generics[el][self.backend.generics[el].length - 1].module == self.filter;
-        });
-    }
-
-    /**
-     * Loads a file as data.
-     * @function fileLoad
-     * @public
-     * @param {Event} e The change event.
-     */
-    fileLoad(e: any) {
-        var self = this;
-        var file: File = e.target.files[0]; 
-        var r: FileReader = new FileReader();
-        r.onloadend = function(e) {
-            if(/^data:;base64,/.test(r.result))
-                self.new_data_file = atob(r.result.split(',')[1]);
-            else
-                self.new_data_file = r.result;
+            obj = Object.getOwnPropertyNames(this.backend.generics);
+        else
+            obj = Object.getOwnPropertyNames(this.backend.generics).filter(function(el): boolean {
+                return self.backend.generics[el][self.backend.generics[el].length - 1].module == self.filter;
+            });
+        var ret = {};
+        for(var i = 0; i < obj.length; i++) {
+            ret[this.backend.generics[obj[i]][this.backend.generics[obj[i]].length - 1].group] = ret[this.backend.generics[obj[i]][this.backend.generics[obj[i]].length - 1].group] || [];
+            ret[this.backend.generics[obj[i]][this.backend.generics[obj[i]].length - 1].group].push(obj[i]);
         }
-        r.readAsDataURL(file);
+        var toRet = [], keys = Object.getOwnPropertyNames(ret);
+        for(var i = 0; i < keys.length; i++) {
+            toRet.push([ret[keys[i]], keys[i]]);
+        }
+        this.lists[this.filter] = toRet;
+        return toRet;
     }
 
     /**
@@ -202,6 +133,16 @@ export class Generics implements OnInit {
         setImmediate(function() {
             self.lighted.emit(self.getLight())
         });
+    }
+
+    /**
+     * Update number of encryptions.
+     * @function updateEnc
+     * @public
+     * @param {Number} num Number.
+     */
+    updateEnc(num: number) {
+
     }
     
 }

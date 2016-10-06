@@ -114,12 +114,12 @@
                         <li (click)="router.navigate(['/filesystem', 'data'])">
                             <a href="javascript:;">
                                 <i class="icon-share-alt"></i> {{ 'profile.mine' | translate }}
-                                <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ backend.data_trie.count() }}</span></a>
+                                <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ length(backend.data_trie) }}</span></a>
                         </li>
                         <li (click)="router.navigate(['/filesystem', 'vault'])">
                             <a href="javascript:;">
                                 <i class="icon-share"></i> {{ 'profile.shared' | translate }}
-                                <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ backend.shared_with_me_trie.count() }}</span></a>
+                                <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ length(backend.shared_with_me_trie) }}</span></a>
                         </li>
                         <li class="divider"></li>
                         <li (click)="logout(false)">

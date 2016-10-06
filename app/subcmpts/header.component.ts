@@ -10,6 +10,7 @@ import {Component, enableProdMode, Input} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
+import {Trie} from '../../utils/Trie';
 import {Backend} from '../app.service';
 enableProdMode();
 import * as template from './templates/header.html';
@@ -54,6 +55,19 @@ export class Header {
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
         });
+    }
+
+    /**
+     * Length of trie.
+     * @function length
+     * @public
+     * @param {Trie} cpt Trie.
+     * @return {Number} Length.
+     */
+    length(cpt: Trie): number {
+        if(!cpt)
+            return 0;
+        return cpt.suggestions('').filter(function(el) {return el.charAt(el.length - 1) != '/';}).length;
     }
 
 }
