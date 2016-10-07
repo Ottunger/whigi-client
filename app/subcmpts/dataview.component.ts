@@ -209,9 +209,12 @@ export class Dataview implements OnInit, OnDestroy {
             self.decr_data = replacement;
             if(back)
                 self.back(false);
-        }, function(err) {
+        }, function(err, e) {
             if(err == 'server')
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                if(e.status == 413)
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('tooLarge'));
+                else
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             else
                 self.notif.error(self.translate.instant('error'), self.translate.instant('profile.exists'));
         });

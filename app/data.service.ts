@@ -245,7 +245,7 @@ export class Data {
                     self.backend.data_trie.add(name, self.backend.profile.data[name]);
                     resolve();
                 }, function(e) {
-                    reject('server');
+                    reject('server', e);
                 });
             }));
         });
@@ -322,8 +322,8 @@ export class Data {
                 });
                 if(names.length == 0)
                     resolve();
-            }, function(err) {
-                reject(err);
+            }, function(err, e) {
+                reject(err, e);
             });
         });
     }

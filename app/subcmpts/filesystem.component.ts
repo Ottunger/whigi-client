@@ -98,9 +98,12 @@ export class Filesystem implements OnInit {
             self.data_value = '';
             self.data_value_file = '';
             self.check.tick();
-        }, function(err) {
+        }, function(err, e) {
             if(err == 'server') {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                if(e.status == 413)
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('tooLarge'));
+                else
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             } else {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
                 window.$('.inaming').addClass('has-error');

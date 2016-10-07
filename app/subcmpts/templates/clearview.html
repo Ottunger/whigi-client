@@ -18,7 +18,7 @@
                             <div *ngIf="is_folder">
                                 <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
                                     {{ k.descr_key | translate }}<br />
-                                    <input type="text" [ngModel]="recover(k.descr_key, decr_data)" name="decr" class="form-control input-circle" readonly>
+                                    <input type="text" value="{{ recover(k.descr_key, decr_data) }}" name="decr" class="form-control input-circle" readonly>
                                 </div>
                             </div>
 
@@ -38,7 +38,7 @@
                                 <div *ngIf="is_folder">
                                     <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
                                         {{ k.descr_key | translate }}<br />
-                                        <input type="text" [ngModel]="recover(k.descr_key, p.value)" name="decr" class="form-control input-circle" readonly>
+                                        <input type="text" value="{{ recover(k.descr_key, p.value) }}" name="decr" class="form-control input-circle" readonly>
                                     </div>
                                 </div>
 

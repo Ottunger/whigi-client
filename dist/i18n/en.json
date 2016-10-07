@@ -24,6 +24,7 @@
    "here": "here",
    "goOn": "Continue",
    "mention": "Copyright Envict SCRL 2016",
+   "tooLarge": "Data sent too large. Try using files of size less than 1MB",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",
@@ -98,7 +99,7 @@
    "filesystem.folder": "Folder",
    "filesystem.getUp": "Get up",
    "filesystem.newFolder": "Create folder",
-   "filesystem.record": "Record (< 6MB)",
+   "filesystem.record": "Record",
    "filesystem.dated": "Dated field",
    "filesystem.generics": "This data is a generic one, use the dedicated interface",
 

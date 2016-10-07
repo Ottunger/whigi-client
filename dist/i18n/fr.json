@@ -24,6 +24,7 @@
    "here": "ici",
    "goOn": "Continuer",
    "mention": "Copyright Envict SCRL 2016",
+   "tooLarge": "Donnée trop volumineuse. Utilisez des fichiers de moins de 1Mo",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
@@ -98,7 +99,7 @@
    "filesystem.folder": "Dossier",
    "filesystem.getUp": "Dossier parent",
    "filesystem.newFolder": "Créer un dossier",
-   "filesystem.record": "Enregistrer (< 6Mo)",
+   "filesystem.record": "Enregistrer",
    "filesystem.dated": "Champ daté",
    "filesystem.generics": "Cette donnée est générique, utilisez l'interface dédiée",
 
