@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Injectable, ApplicationRef} from '@angular/core';
+import {Injectable, ApplicationRef, EventEmitter} from '@angular/core';
 import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
@@ -14,6 +14,9 @@ import {Trie} from '../utils/Trie';
 
 @Injectable()
 export class Data {
+
+    private ee: EventEmitter<number>;
+    private how: EventEmitter<number>;
 
     /**
      * Creates the service.
@@ -25,7 +28,8 @@ export class Data {
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef) {
-
+        this.ee = new EventEmitter<number>();
+        this.how = new EventEmitter<number>();
     }
 
     /**
@@ -53,28 +57,39 @@ export class Data {
      */
     workerMgt(encrypt: boolean, callback: Function) {
         var self = this;
+        this.how.emit(1);
+        window.$('.page-content').block({
+            message: '<img src="img/loading-spinner-blue.gif" />',
+            baseZ: 1e3,
+            css: {
+                border: '0',
+                padding: '0',
+                backgroundColor: 'none'
+            },
+            overlayCSS: {
+                backgroundColor: '#222',
+                opacity: .1,
+                cursor: 'wait'
+            }
+        });
         return function(msg) {
             switch(msg.data[0]) {
                 case 1:
-                    self.notif.remove();
-                    self.notif.info(self.translate.instant(encrypt? 'encrypting' : 'decrypting'), msg.data[1] + ' %', {
-                        timeout: 300,
-                        showProgressBar: false
-                    });
+                    self.ee.emit(parseInt(msg.data[1]));
                     self.check.tick();
                     break;
                 case 2:
-                    self.notif.remove();
-                    self.notif.info(self.translate.instant(encrypt? 'encrypting' : 'decrypting'), '100 %', {
-                        timeout: 300,
-                        showProgressBar: false
-                    });
+                    window.$('.page-content').unblock();
+                    self.how.emit(0);
+                    self.check.tick();
                     callback(msg.data[1]);
                     break;
                 case 3:
-                    self.notif.remove();
+                    window.$('.page-content').unblock();
+                    self.how.emit(0);
                     self.notif.error(self.translate.instant(encrypt? 'encrypting' : 'decrypting'), self.translate.instant('corruption'));
                     console.log(JSON.parse(msg.data[1]));
+                    self.check.tick();
                     callback('[]');
                     break;
                 case 0:

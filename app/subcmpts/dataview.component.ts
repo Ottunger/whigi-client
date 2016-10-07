@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
+import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';

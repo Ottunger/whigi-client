@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input} from '@angular/core';
+import {Component, enableProdMode, Input, EventEmitter, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -19,10 +19,12 @@ import * as template from './templates/header.html';
     selector: 'header',
     template: template
 })
-export class Header {
+export class Header implements OnInit {
 
-    @Input() running: number;
-    @Input() current: number;
+    private running: number;
+    private current: number;
+    @Input() run: EventEmitter<number> | number;
+    @Input() cur: EventEmitter<number> | number;
 
     /**
      * Creates the component.
@@ -34,7 +36,32 @@ export class Header {
      * @param notif Event service.
      */
     constructor(private router: Router, private backend: Backend, private translate: TranslateService, private notif: NotificationsService) {
+        this.run = 0;
+        this.cur = 0;
+    }
 
+    /**
+     * Called upon display.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnInit(): void {
+        var self = this;
+        if(typeof this.run === 'number') {
+            this.running = this.run;
+        } else if(typeof this.run !== 'undefined') {
+            this.run.asObservable().subscribe(function(vals) {
+                self.running = vals;
+            });
+        }
+        if(typeof this.cur === 'number') {
+            this.current = this.cur;
+        } else if(typeof this.cur !== 'undefined') {
+            this.cur.asObservable().subscribe(function(vals) {
+                self.current = vals;
+                window.$('#showpg').css('width', vals + '%');
+            });
+        }
     }
 
     /**

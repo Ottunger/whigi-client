@@ -48,8 +48,7 @@ onmessage = function(msg) {
                 var parts = chunkify(num, 100, false);
                 for(var i = 0; i < parts.length; i++) {
                     ret = ret.concat(encrypter.encrypt(parts[i]));
-                    if(i % 20 == 0)
-                        postMessage([1, i]);
+                    postMessage([1, i]);
                 }
                 postMessage([2, ret]);
             }
@@ -65,8 +64,7 @@ onmessage = function(msg) {
                 var parts = chunkify(data, 100, false);
                 for(var i = 0; i < parts.length; i++) {
                     ret = ret.concat(encrypter.decrypt(parts[i]));
-                    if(i % 20 == 0)
-                        postMessage([1, i]);
+                    postMessage([1, i]);
                 }
                 postMessage([2, self.aesjs.util.convertBytesToString(ret)]);
             }

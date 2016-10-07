@@ -73,8 +73,9 @@ export class Logging implements OnInit {
             localStorage.removeItem('key_decryption');
             localStorage.removeItem('psha');
             window.setTimeout(function() {
+                self.notif.remove();
                 self.notif.alert(self.translate.instant('error'), self.translate.instant('sessionExpired'));
-            }, 1500);
+            }, 500);
         }
         if('token' in localStorage) {
             this.backend.getProfile().then(function(profile) {
