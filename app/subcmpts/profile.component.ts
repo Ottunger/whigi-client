@@ -100,31 +100,34 @@ export class Profile implements OnInit {
      */
     update() {
         var self = this;
-        if(this.password.length < 8) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
-            return;
-        }
-        if(this.password == this.password2 && this.password.length >= 8) {
-            this.backend.updateProfile(this.password, this.current_pwd).then(function() {
-                self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to).then(function() {
-                    self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to).then(function() {
-                        self.current_pwd = '';
-                        self.password = '';
-                        self.password2 = '';
-                        localStorage.setItem('key_decryption', window.sha256(self.password + self.backend.profile.salt));
-                        localStorage.setItem('psha', window.sha256(self.password));
-                        self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
+        window.$('.inewpass').removeClass('has-error');
+        if(this.password == this.password2) {
+            if(this.password.length >= 8) {
+                this.backend.updateProfile(this.password, this.current_pwd).then(function() {
+                    self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to).then(function() {
+                        self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to).then(function() {
+                            self.current_pwd = '';
+                            self.password = '';
+                            self.password2 = '';
+                            localStorage.setItem('key_decryption', window.sha256(self.password + self.backend.profile.salt));
+                            localStorage.setItem('psha', window.sha256(self.password));
+                            self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
+                        }, function(e) {
+                            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));
+                        });
                     }, function(e) {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
                 });
-            }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
-            });
+            } else {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+                window.$('.inewpass').addClass('has-error');
+            }
         } else {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+            window.$('.inewpass').addClass('has-error');
         }
     }
 
@@ -135,13 +138,14 @@ export class Profile implements OnInit {
      */
     changeUname() {
         var self = this;
-        this.new_name = !!this.new_name? this.new_name : '';
+        window.$('#inewname').removeClass('has-error');
         this.backend.changeUsername(this.new_name).then(function() {
             localStorage.removeItem('token');
             self.backend.forceReload();
             self.router.navigate(['/llight']);
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
+            window.$('#inewname').addClass('has-error');
         });
     }
 

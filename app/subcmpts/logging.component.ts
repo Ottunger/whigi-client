@@ -114,6 +114,11 @@ export class Logging implements OnInit {
             window.$('.login-form').show();
             window.$('.register-form').hide();
         });
+        if(!this.recuperable) {
+            setTimeout(function() {
+                window.$('#recupcheck').click();
+            }, 300);
+        }
     }
 
     /**
@@ -123,11 +128,13 @@ export class Logging implements OnInit {
      */
     enter() {
         var self = this;
+        window.$('.ilogging').removeClass('has-error');
         this.backend.createToken(this.username, this.password, this.persistent).then(function(ticket) {
             localStorage.setItem('token', ticket._id);
             self.ngOnInit(true);
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
+            window.$('.ilogging').addClass('has-error');
         });
     }
 
@@ -226,26 +233,36 @@ export class Logging implements OnInit {
             });
         }
 
-        if(this.password.length < 8 || /whigi/i.test(this.username)) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+        window.$('.iuname,.ipass,.imail,.irecupid').removeClass('has-error');
+        if(/whigi/i.test(this.username)) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+            window.$('.iuname').addClass('has-error');
+            return;
+        }
+        if(this.password.length < 8) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+            window.$('.ipass').addClass('has-error');
             return;
         }
         if(this.password == this.password2) {
             if(!/^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/i.test(this.email)) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.badEmail'));
+                 window.$('.imail').addClass('has-error');
                 return;
             }
             if(this.safe && this.recuperable) {
                 this.backend.peekUser(this.recup_id).then(function() {
                     complete();
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.noUser'));
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noUser'));
+                     window.$('.irecupid').addClass('has-error');
                 });
             } else {
                 complete();
             }
         } else {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+             window.$('.ipass').addClass('has-error');
         }
     }
 
@@ -256,10 +273,12 @@ export class Logging implements OnInit {
      */
     forgot() {
         var self = this;
+        window.$('.iforget').removeClass('has-error');
         this.backend.requestRestore(this.username).then(function() {
             self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noReset'));
+            window.$('.iforget').addClass('has-error');
         });
     }
 

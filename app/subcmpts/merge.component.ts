@@ -58,6 +58,7 @@ export class Merge {
         }
         this.backend.forceReload();
 
+        window.$('.imerging').removeClass('has-error');
         this.backend.createToken(this.login, this.password, false).then(function(ticket) {
             newToken = ticket._id;
             localStorage.setItem('token', newToken);
@@ -172,8 +173,20 @@ export class Merge {
                         }
                     }
                     next();
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                    self.reloadProfile(currentToken, currentKey);
+                    window.$('.imerging').addClass('has-error');
                 });
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                self.reloadProfile(currentToken, currentKey);
+                window.$('.imerging').addClass('has-error');
             });
+        }, function(e) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+            self.reloadProfile(currentToken, currentKey);
+            window.$('.imerging').addClass('has-error');
         });
     }
 

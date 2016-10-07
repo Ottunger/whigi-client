@@ -12,6 +12,7 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/generics.html';
 
@@ -36,7 +37,7 @@ export class Generics implements OnInit {
      * @param routed Current route.
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
-        private routed: ActivatedRoute) {
+        private routed: ActivatedRoute, private dataservice: Data) {
         this.filter = 'generics.any';
         this.lighted = new EventEmitter<number>();
         this.lists = {}

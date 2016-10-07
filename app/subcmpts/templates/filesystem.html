@@ -53,14 +53,14 @@
                                         </tr>
 
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></td>
+                                            <td><div class="inaming"><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></div></td>
                                             <td><input type="text" [(ngModel)]="data_value" name="s1" class="form-control input-circle"></td>
                                             <td>
                                                 <button type="button" class="btn green" (click)="register(false, false)"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
                                             </td>
                                         </tr>
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></td>
+                                            <td><div class="inaming"><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></div></td>
                                             <td><input type="file" (change)="fileLoad($event)" name="n50" class="form-control input-circle"></td>
                                             <td>
                                                 <button type="button" class="btn green" (click)="register(true, false)" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
@@ -68,7 +68,7 @@
                                         </tr>
 
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></td>
+                                            <td><div class="inaming"><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></div></td>
                                             <td><input type="text" [(ngModel)]="data_value" name="s1" class="form-control input-circle"></td>
                                             <td>
                                                 <div class='input-group date' id='pick1'>
@@ -81,7 +81,7 @@
                                             </td>
                                         </tr>
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></td>
+                                            <td><div class="inaming"><input type="text" [(ngModel)]="data_name" name="s0" class="form-control input-circle"></div></td>
                                             <td><input type="file" (change)="fileLoad($event)" name="n50" class="form-control input-circle"></td>
                                             <td>
                                                 <div class='input-group date' id='pick2'>

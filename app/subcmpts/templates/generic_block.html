@@ -12,7 +12,7 @@
             <!-- BEGIN FORM-->
             <form class="form-horizontal" role="form">
                 <div class="form-body">
-                    <div class="row" *ngFor="let g of data_list">
+                    <div class="row" *ngFor="let g of data_list" id="iname{{ dataservice.sanit(g) }}">
                         <div class="col-md-6">
                             <!-- LEFT COL -->
                             <h4>
@@ -29,7 +29,7 @@
                         </div>
                         <div class="col-md-6">
                             <!-- BEGIN SELECT -->
-                            <div class="row">
+                            <div class="row" id="igen{{ dataservice.sanit(g) }}">
                                 <div>
                                     {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}<br/>
                                 </div>
@@ -58,10 +58,10 @@
                                 <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable" style="padding-left: 10px;">
                                     <button type="button" class="btn default" *ngFor="let d of dataNames(g)"
                                         (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }} ({{ d }})</button>
-                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!new_name || new_name == ''"
-                                        type="button" class="btn green" (click)="register(g, false, new_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!new_name || new_name == ''"
-                                        type="button" class="btn green" (click)="register(g, true, new_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!ass_name || ass_name == ''"
+                                        type="button" class="btn green" (click)="register(g, false, ass_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!ass_name || ass_name == ''"
+                                        type="button" class="btn green" (click)="register(g, true, ass_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
                                 </div>
                             </div>
                             <!-- END DISP -->

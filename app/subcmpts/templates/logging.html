@@ -13,22 +13,22 @@
                     <button class="close" data-close="alert"></button>
                     <span>{{ 'login.alert' | translate }}</span>
                 </div>
-                <div class="form-group">
+                <div class="form-group ilogging">
                     <!--ie8, ie9 does not support html5 placeholder, so we just show field title for that-->
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.username' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="Username" name="username" /> </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ilogging">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.pass' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
                         <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="Password" name="password" /> </div>
                 </div>
-                <div class="form-group" style="display: none;">
+                <div class="form-group ilogging" style="display: none;">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
-                        <input type="checkbox" name="remember" [(ngModel)]="use_file" checked="checked" /> {{ 'login.use_file' | translate }}
+                        <input type="checkbox" name="remember" [(ngModel)]="use_file" /> {{ 'login.use_file' | translate }}
                         <span></span>
                     </label>
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
@@ -59,7 +59,7 @@
             <form class="forget-form">
                 <h3>{{ 'login.forgot' | translate }}</h3>
                 <p> {{ 'login.forgot3' | translate }} </p>
-                <div class="form-group">
+                <div class="form-group iforget">
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="ID" name="ID" /> </div>
@@ -74,19 +74,19 @@
             <form class="register-form">
                 <h3>{{ 'login.signUp' | translate }}</h3>
                 <p> {{ 'login.sign' | translate }} </p>
-                <div class="form-group">
+                <div class="form-group iuname">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.usernameRec' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.usernameRec' | translate }}" name="username" /> </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ipass">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.password' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
                         <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ipass">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.password2' | translate }}</label>
                     <div class="controls">
                         <div class="input-icon">
@@ -94,7 +94,7 @@
                             <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
                     </div>
                 </div>
-                <div class="form-group" style="display: none;">
+                <div class="form-group ipass" style="display: none;">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
                         <input type="checkbox" name="remember" [(ngModel)]="use_file" /> {{ 'login.use_file' | translate }}
                         <span></span>
@@ -104,19 +104,19 @@
                         <i class="fa fa-lock"></i>
                         <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group imail">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.email' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-user"></i>
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="email" autocomplete="off" placeholder="{{ 'login.email' | translate }}" name="email" /> </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group irecupid">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
-                        <input type="checkbox" name="remember" [(ngModel)]="recuperable" /> {{ 'login.recuperable' | translate }}
+                        <input type="checkbox" name="recuperable" [(ngModel)]="recuperable" id="recupcheck" /> {{ 'login.recuperable' | translate }}
                         <span></span>
                     </label>
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
-                        <input type="checkbox" name="remember" [(ngModel)]="safe" /> {{ 'login.safe' | translate }}
+                        <input type="checkbox" name="safe" [(ngModel)]="safe" /> {{ 'login.safe' | translate }}
                         <span></span>
                     </label>
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.recupId' | translate }}</label>

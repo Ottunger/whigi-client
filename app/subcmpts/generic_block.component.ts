@@ -59,23 +59,30 @@ export class GenericBlock {
         var self = this, send;
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
         //Build and test
+        window.$('#igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
         send = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, name, as_file);
         if(!send) {
             this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
+            window.$('#igen' + this.dataservice.sanit(name)).addClass('has-error');
+            this.new_data = '';
+            this.new_data_file = '';
+            this.new_datas = {};
             return;
         }
         //Create it
         this.dataservice.newData(name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
-            self.new_name = '';
+            self.ass_name = '';
             self.new_data = '';
             self.new_data_file = '';
             self.new_datas = {};
             self.check.tick();
         }, function(err) {
-            if(err == 'server')
+            if(err == 'server') {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-            else
+            } else {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
+                window.$('#iname' + self.dataservice.sanit(name)).addClass('has-error');
+            }
         });
     }
 

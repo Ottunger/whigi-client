@@ -58,7 +58,7 @@
                                 <select class="form-control input-circle" [(ngModel)]="filter[p]">
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select>
-                                <div *ngIf="filter[p] == '/new'">
+                                <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(g) }}">
                                     {{ 'account.nameField' | translate }}
                                     <input type="text" [(ngModel)]="new_name[p]" class="form-control input-circle grant-required">
                                     {{ 'account.dataField' | translate }}
