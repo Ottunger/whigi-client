@@ -458,7 +458,7 @@ export class Backend {
         do {
             complete = window.sha256(localStorage.getItem('puzzle') + i);
             i++;
-        } while(complete.charAt(0) != '0' || complete.charAt(1) != '0' || complete.charAt(2) != '0' || complete.charAt(3) != '0');
+        } while(complete.charAt(0) != '0' || complete.charAt(1) != '0' || complete.charAt(2) != '0');
         return '?puzzle=' + (i - 1);
     }
     
@@ -469,7 +469,11 @@ export class Backend {
      * @return {String} Captcha solution.
      */
     private regCaptcha(): string {
-        var v = window.grecaptcha.getResponse();
+        try {
+            var v = window.grecaptcha.getResponse();
+        } catch(e) {
+            v = 'null';
+        }
         return '?captcha=' + v;
     }
 

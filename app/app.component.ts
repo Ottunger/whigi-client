@@ -34,6 +34,7 @@ enableProdMode();
             text-align: center;
             font-size: 22px;
             font-family: 'Cham-WebFont', Arial, sans-serif;
+            background-color: #a0b4c9;
         }
         ul#navigation li {
             display: inline;
@@ -52,8 +53,8 @@ enableProdMode();
         <br />
         <div class="MenuContainer">
             <ul id="navigation">
-                <li><button type="button" class="btn btn-small" (click)="setLang('en')">English</button></li>
-                <li class="last"><button type="button" class="btn btn-small" (click)="setLang('fr')">Français</button></li>
+                <li><button type="button" class="btn btn-small" (click)="setLang('en')">EN</button></li>
+                <li class="last"><button type="button" class="btn btn-small" (click)="setLang('fr')">FR</button></li>
             </ul>
         </div> 
         <simple-notifications [options]="options"></simple-notifications>

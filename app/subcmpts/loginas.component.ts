@@ -42,6 +42,7 @@ export class Loginas implements OnInit {
                 self.backend.getProfile().then(function(profile) {
                     //Router.go...
                     self.backend.profile = profile;
+                    self.backend.profile._id = self.backend.profile._id.charAt(0).toUpperCase() + self.backend.profile._id.slice(1);
                     localStorage.setItem('key_decryption', window.sha256(pwd + profile.salt));
                     localStorage.setItem('psha', window.sha256(pwd));
 
