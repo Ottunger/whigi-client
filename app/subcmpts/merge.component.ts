@@ -50,12 +50,13 @@ export class Merge {
         var currentKey = localStorage.getItem('key_decryption'), newKey;
         this.backend.decryptMaster();
         var my_master = this.backend.master_key, my_id = this.backend.profile._id;
-        this.backend.forceReload();
 
-        if(this.backend.profile._id == this.login) {
+        if(this.backend.profile._id.toLowerCase() == this.login.toLowerCase()) {
             this.login = '';
             this.password = '';
+            return;
         }
+        this.backend.forceReload();
 
         this.backend.createToken(this.login, this.password, false).then(function(ticket) {
             newToken = ticket._id;
@@ -167,7 +168,7 @@ export class Merge {
                             }, function(e) {
                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                 self.reloadProfile(currentToken, currentKey);
-                            })
+                            });
                         }
                     }
                     next();

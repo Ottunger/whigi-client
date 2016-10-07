@@ -43,6 +43,15 @@
                                                             </div>
                                                         </div>
                                                         <!--/span-->
+                                                        <div class="col-md-6">
+                                                            <div class="form-group">
+                                                                <label class="control-label col-md-4">{{ 'profile.uname' | translate }}:</label>
+                                                                <div class="col-md-8">
+                                                                    <input type="text" class="form-control input-circle" [(ngModel)]="new_name" name="new_name" />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <!--/span-->
                                                     </div>
                                                     <!--/row-->
                                                     <div class="row">
@@ -73,7 +82,8 @@
                                                                 <div class="col-md-offset-3 col-md-9">
                                                                     <button type="submit" class="btn green" (click)="update()">
                                                                         <i class="fa fa-pencil"></i> {{ 'profile.change' | translate }}</button>
-                                                                    <!-- <button type="button" class="btn default">Cancel</button> -->
+                                                                    <button type="submit" class="btn green" (click)="changeUname()">
+                                                                        <i class="fa fa-pencil"></i> {{ 'profile.uname' | translate }}</button>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -419,7 +419,7 @@ export class Data {
      * @param {String} id Div to toggle.
      */
     collapse(id: string) {
-        window.$('#' + id).toggle();
+        window.$('#' + id).slideToggle(300);
     }
 
     /**

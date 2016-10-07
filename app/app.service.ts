@@ -291,6 +291,7 @@ export class Backend {
      */
     forceReload() {
         delete this.master_key;
+        delete this.profile;
         this.rsa_key = [];
         this.data_loaded = false;
     }
@@ -619,6 +620,19 @@ export class Backend {
             username: this.profile._id,
             password: window.sha256(password)
         }, 'profile/update', true, false);
+    }
+
+    /**
+     * Updates the password and preferences of the user.
+     * @function changeUsername
+     * @public
+     * @param {String} uname New username.
+     * @return {Promise} JSON response from backend.
+     */
+    changeUsername(uname: string): Promise {
+        return this.backend(true, true, 'POST', {
+            username: uname
+        }, 'profile/uname', true, true, true);
     }
 
     /**

@@ -83,6 +83,7 @@
    "profile.eidRead": "Profil importé depuis l'eID",
    "profile.home": "Accueil",
    "profile.datas": "Tout",
+   "profile.uname": "Changer nom de compte",
 
    "filesystem.data_name": "Nom de donnée",
    "filesystem.data": "Valeur",

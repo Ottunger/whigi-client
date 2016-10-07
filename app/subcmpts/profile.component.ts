@@ -20,6 +20,7 @@ import * as template from './templates/profile.html';
 })
 export class Profile implements OnInit {
 
+    public new_name: string;
     public current_pwd: string;
     public password: string;
     public password2: string;
@@ -125,6 +126,23 @@ export class Profile implements OnInit {
         } else {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
         }
+    }
+
+    /**
+     * Change username.
+     * @function changeUname
+     * @public
+     */
+    changeUname() {
+        var self = this;
+        this.new_name = !!this.new_name? this.new_name : '';
+        this.backend.changeUsername(this.new_name).then(function() {
+            localStorage.removeItem('token');
+            self.backend.forceReload();
+            self.router.navigate(['/llight']);
+        }, function(e) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
+        });
     }
 
     /**

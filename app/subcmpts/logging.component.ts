@@ -277,7 +277,6 @@ export class Logging implements OnInit {
                 localStorage.removeItem('key_decryption');
                 localStorage.removeItem('psha');
                 self.backend.forceReload();
-                delete self.backend.profile;
                 resolve();
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));

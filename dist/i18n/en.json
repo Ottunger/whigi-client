@@ -83,6 +83,7 @@
    "profile.eidRead": "Data imported from eID",
    "profile.home": "Home page",
    "profile.datas": "All data",
+   "profile.uname": "Change username",
 
    "filesystem.data_name": "Data name",
    "filesystem.data": "Data",
