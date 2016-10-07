@@ -43,9 +43,9 @@ export class Backend {
         long_descr_key: string,
         help_url: string
     }};
-    public EID_HOST = 'localhost/api/v1/eid';
-    public BASE_URL = 'https://localhost/api/v1/';
-    public RESTORE_URL = 'https://localhost/api/v1/';
+    public EID_HOST = '192.168.1.61/api/v1/eid';
+    public BASE_URL = 'https://192.168.1.61/api/v1/';
+    public RESTORE_URL = 'https://192.168.1.61/api/v1/';
     private rsa_key: string[];
 
     /**
