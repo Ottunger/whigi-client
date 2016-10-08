@@ -53,16 +53,19 @@ export class Data {
      * @public
      * @param {String} name Name of data.
      * @param {Boolean} folder If folder, not display end separator.
-     * @return {String} Displayable string.
+     * @return {String} HTML.
      */
-    sanitarize(name: string, folder?: boolean): string {
+    sanitarize(name: string, folder?: boolean) {
         var parts: string[] = name.split('/');
-        /*
-        parts.unshift('/');
+        parts.unshift('<button type="button" class="btn btn-lg btn-link bread-home"><i class="fa fa-home bread-home"></i></button>');
         var last = parts.pop();
-        return parts.join(' > ') + (folder? '' : (' >> ' + last));
-        */
-        parts.unshift();
+
+        var folders = '';
+        for(var i = 1; i < parts.length; i++) {
+            folders += parts[i] + '/';
+            parts[i] = '<button type="button" class="btn btn-lg btn-link bread-in" data-link="' + folders + '">' + parts[i] + '</button>'
+        }
+        return parts.join(' > ') + (folder? '' : (' >> <button type="button" class="btn btn-lg btn-link">' + last + '</button>'));
     }
 
     /**

@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, ApplicationRef, EventEmitter} from '@angular/core';
+import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter, Renderer} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -28,6 +28,7 @@ export class Filesystem implements OnInit {
     private mode: string;
     private lighted: EventEmitter<number>;
     private sub: Subscription;
+    private renderFunc: Function;
 
     /**
      * Creates the component.
@@ -40,9 +41,10 @@ export class Filesystem implements OnInit {
      * @param notif Notification service.
      * @param dataservice Data service.
      * @param check Check service.
+     * @param render Renderer.
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private routed: ActivatedRoute,
-        private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef) {
+        private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef, private render: Renderer) {
         this.folders = '';
         this.data_value_file = '';
         this.lighted = new EventEmitter<number>();
@@ -66,7 +68,29 @@ export class Filesystem implements OnInit {
                 window.$('#pick2').datetimepicker('date', window.moment());
             }, 100);
             self.regUpdate();
+
+            //Breadcrump
+            window.$('#breadcrump').ready(function() {
+                window.$('#breadcrump').html(self.dataservice.sanitarize(self.folders, true));
+            });
+            self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
+                if(window.$(event.target).hasClass('bread-home')) {
+                    self.router.navigate(['/filesystem', self.mode]);
+                } else if(window.$(event.target).hasClass('bread-in')) {
+                    self.router.navigate(['/filesystem', self.mode, {folders: window.$(event.target).attr('data-link')}]);
+                }
+            });
         });
+    }
+
+    /**
+     * Called upon destroy.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnDestroy(): void {
+        this.sub.unsubscribe();
+        this.renderFunc();
     }
 
     /**
@@ -160,6 +184,7 @@ export class Filesystem implements OnInit {
         } else if(this.mode == 'vault') {
             return this.backend.shared_with_me_trie.suggestions(this.folders, '/').sort();
         }
+        return [];
     }
 
     /**

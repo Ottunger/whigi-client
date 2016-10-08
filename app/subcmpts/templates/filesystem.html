@@ -12,7 +12,7 @@
                 <!-- BEGIN CONTENT BODY -->
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
-                    <h1 class="page-title"> {{ dataservice.sanitarize(folders, true) }}</h1>
+                    <h1 class="page-title"><span id="breadcrump"></span></h1>
                     <h3 *ngIf="!!hasKey(false)">{{ hasKey(false) | translate }}</h3>
                     <p *ngIf="!!hasKey(true)">{{ hasKey(true) | translate }}</p>
                     <!-- END PAGE TITLE-->

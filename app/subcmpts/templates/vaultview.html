@@ -12,7 +12,8 @@
                 <!-- BEGIN CONTENT BODY -->
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
-                    <h1 class="page-title"> {{ dataservice.sanitarize(sharer_id + '/' + vault.data_name) }}
+                    <h1 class="page-title">
+                        <span id="breadcrump"></span>
                         <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
                     </h1>
                     <!-- END PAGE TITLE-->

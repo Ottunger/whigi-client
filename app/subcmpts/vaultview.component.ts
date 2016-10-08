@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
+import {Component, enableProdMode, OnInit, OnDestroy, Renderer} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -29,6 +29,7 @@ export class Vaultview implements OnInit, OnDestroy {
     public version: number;
     private route_back: string;
     private sub: Subscription;
+    private renderFunc: Function;
 
     /**
      * Creates the component.
@@ -37,11 +38,12 @@ export class Vaultview implements OnInit, OnDestroy {
      * @param translate Translation service.
      * @param router Routing service.
      * @param backend API service.
+     * @param render Renderer service.
      * @param notif Notifications service.
      * @param routed Parameters service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private router: Router, private backend: Backend,
+    constructor(private translate: TranslateService, private router: Router, private backend: Backend, private render: Renderer,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
         this.vault = {data_name: ''};
         this.decr_data = '';
@@ -75,6 +77,18 @@ export class Vaultview implements OnInit, OnDestroy {
                 delete self.backend.profile.shared_with_me[self.sharer_id][params['data_name']];
                 self.back();
             });
+
+            //Breadcrump
+            window.$('#breadcrump').ready(function() {
+                window.$('#breadcrump').html(self.dataservice.sanitarize(self.sharer_id + '/' + self.vault.data_name));
+            });
+            self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
+                if(window.$(event.target).hasClass('bread-home')) {
+                    self.router.navigate(['/filesystem', 'vault']);
+                } else if(window.$(event.target).hasClass('bread-in')) {
+                    self.router.navigate(['/filesystem', 'vault', {folders: window.$(event.target).attr('data-link')}]);
+                }
+            });
         });
     }
 
@@ -85,6 +99,7 @@ export class Vaultview implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         this.sub.unsubscribe();
+        this.renderFunc();
     }
 
     /**
