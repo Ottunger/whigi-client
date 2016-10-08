@@ -58,7 +58,7 @@
    "login.full": "Welcome page",
    "login.usedWhigi": "You used a username containing \"Whigi\"",
    "login.tooShort": "Too short password",
-   "login.badEmail": "Cannot consider read email as an email",
+   "login.badEmail": "Invalid email address",
    "login.noUser": "Recovery user cannot be found",
    "login.badChars": "Bad characters used: only can use letters and digits",
 
@@ -180,6 +180,7 @@
    "generics.title": "Create here your generic data",
    "generics.regexp": "Your input does not match expected format",
    "generics.descr": "Description",
+   "generics.hasValue": "Appliable",
 
    "whoishare.dname": "Data real name",
    "whoishare.generic": "Data meaning",
@@ -195,7 +196,7 @@
    "generics.perso1": "Personal data",
    "generics.perso2": "Addresses",
    "generics.corp1": "Corporate identity",
-   "generics.corp2": "Corporate addresses",
+   "generics.corp2none": "Corporate addresses",
 
    "generics.email": "Emails",
    "generics.last_name": "Last name",
@@ -212,6 +213,7 @@
    "generics.tel": "Phone number",
    "generics.corporate_type": "Organization type",
    "generics.rrn": "National number",
+   "generics.corporate_open": "Open capital",
 
    "/": "Root folder",
    "profile/": "Profile folder",

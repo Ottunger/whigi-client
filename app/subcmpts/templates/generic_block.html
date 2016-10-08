@@ -12,60 +12,112 @@
             <!-- BEGIN FORM -->
             <form class="form-horizontal" role="form">
                 <div class="form-body">
-                    <div class="row" *ngFor="let g of data_list" id="iname{{ dataservice.sanit(g) }}">
-                        <div class="col-md-6">
-                            <!-- LEFT COL -->
-                            <h4>
-                                <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
-                                    src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
-                                <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
-                                    class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
-                                {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
-                            </h4>
-                            <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
-                            <p *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">{{ g }}</p>
-                            <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ g }}/<input type="text" [(ngModel)]="ass_name" name="new_name{{ dataservice.sanit(g) }}" class="form-control input-circle" /></p>
-                            <!-- LEFT COL -->
-                        </div>
-                        <div class="col-md-6">
-                            <!-- BEGIN SELECT -->
-                            <div class="row" id="igen{{ dataservice.sanit(g) }}">
-                                <div>
-                                    {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}<br/>
+                    <div *ngFor="let g of data_list; let l = last" id="iname{{ dataservice.sanit(g) }}">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="row">
+                                    <!-- EXPL -->
+                                    <h4>
+                                        <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
+                                            src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
+                                        <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
+                                            class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
+                                        {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                                    </h4>
+                                    <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                                    <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ 'account.nameField' | translate }}
+                                        <input type="text" [(ngModel)]="ass_name[g]" name="new_name{{ dataservice.sanit(g) }}" class="form-control input-circle" />
+                                    </p>
+                                    <!-- EXPL -->
                                 </div>
-                                <input *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'text'"
-                                    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" />
-                                <input *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
-                                    type="file" class="form-control input-circle" (change)="fileLoad($event)" name="new_data" />
-                                <div *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                    <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                        {{ k.descr_key | translate }}<br />
-                                        <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" />
+                                <!-- BEGIN SELECT -->
+                                <div class="row" id="igen{{ dataservice.sanit(g) }}">
+                                    <!-- description -->
+                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
+                                        {{ 'actual' | translate }}
+                                    </div>
+                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                        <div class="row" style="height: 5ex;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                            {{ k.descr_key | translate }}<br />
+                                        </div>
+                                    </div>
+                                    <!-- input -->
+                                    <div class="col-md-6" *ngIf="!backend.profile.data[g]">
+                                        <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text'"
+                                            type="text" class="form-control input-circle" [(ngModel)]="new_data[g]" name="new_data" />
+                                        <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
+                                            type="file" class="form-control input-circle" (change)="fileLoad($event, g)" name="new_data" />
+                                        <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                            <div class="row" style="height: 5ex;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                                <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[g][k.descr_key]" name="new_datas" />
+                                            </div>
+                                        </div>
+                                        <select class="form-control input-circle" [(ngModel)]="new_data[g]" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'">
+                                            <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f }}</option>
+                                        </select><br />
+                                        <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'checkbox'">
+                                            <input type="checkbox" name="new_data" [(ngModel)]="new_data[g]" /> {{ 'generics.hasValue' | translate }}
+                                            <span></span>
+                                        </label>
+                                        <div class='input-group date' id='pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
+                                            <input type='text' class="form-control" [(ngModel)]="new_data[g]" name="new_data" />
+                                            <span class="input-group-addon">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
+                                        </div>
+                                        <script type="text/javascript" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
+                                            $('pickgen{{ dataservice.sanit(g) }}').datetimepicker();
+                                        </script>
                                     </div>
                                 </div>
-                            </div>
-                            <!-- END SELECT -->
-                            <!-- BEGIN DISP -->
-                            <div class="row">
-                                <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable" style="padding-left: 10px;">
-                                    <button *ngIf="!!backend.profile.data[g]" type="button" class="btn default"
-                                        (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
-                                    <button *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'file'"
-                                        type="button" class="btn green" (click)="register(g, false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                    <button *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
-                                        type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                <!-- END SELECT -->
+                                <!-- BEGIN DISP -->
+                                <div class="row">
+                                    <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <div class="col-md-6">
+                                            <ul class="list-group" *ngIf="!!backend.profile.data[g]">
+                                                <li class="list-group-item">
+                                                    <button type="button" class="btn btn-link"
+                                                        (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="list-group" *ngIf="!backend.profile.data[g]">
+                                                <li class="list-group-item">
+                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'"
+                                                        type="button" class="btn green" (click)="register(g, false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
+                                                        type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <div class="col-md-6">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" *ngFor="let d of dataNames(g)">
+                                                    <button type="button" class="btn btn-link"
+                                                        (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }} ({{ d }})</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!ass_name[g] || ass_name[g] == ''"
+                                                        type="button" class="btn green" (click)="register(g, false, ass_name[g])"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!ass_name[g] || ass_name[g] == ''"
+                                                        type="button" class="btn green" (click)="register(g, true, ass_name[g])"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable" style="padding-left: 10px;">
-                                    <button type="button" class="btn default" *ngFor="let d of dataNames(g)"
-                                        (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }} ({{ d }})</button>
-                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!ass_name || ass_name == ''"
-                                        type="button" class="btn green" (click)="register(g, false, ass_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!ass_name || ass_name == ''"
-                                        type="button" class="btn green" (click)="register(g, true, ass_name)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                </div>
+                                <!-- END DISP -->
                             </div>
-                            <!-- END DISP -->
                         </div>
+                        <div style="margin-top:10px; margin-bottom:2px; height:1px; width:100%; border-top:2px solid gray;" *ngIf="!l"></div>
                     </div>
                 </div>
             </form>

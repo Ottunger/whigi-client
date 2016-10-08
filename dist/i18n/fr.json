@@ -58,7 +58,7 @@
    "login.full": "Page d'accueil",
    "login.usedWhigi": "Vous avez utilisé un compte avec \"Whigi\"",
    "login.tooShort": "Mot de passe trop court",
-   "login.badEmail": "Impossible d'intérpréter l'email comme un email",
+   "login.badEmail": "Email invalide",
    "login.noUser": "L'utilisateur de récupération n'existe pas",
    "login.badChars": "Mauvais carcatères utilisés: utilisez des lettres et chiffres",
 
@@ -180,6 +180,7 @@
    "generics.title": "Créez ici vos données génériques",
    "generics.regexp": "Votre entrée ne valide pas le format attendu",
    "generics.descr": "Description",
+   "generics.hasValue": "Appliquable",
 
    "whoishare.dname": "Nom du champ",
    "whoishare.generic": "Signification du champ",
@@ -195,7 +196,7 @@
    "generics.perso1": "Données personnelles",
    "generics.perso2": "Adresses",
    "generics.corp1": "Identité d'entreprise",
-   "generics.corp2": "Adresses d'entreprise",
+   "generics.corp2none": "Adresses d'entreprise",
 
    "generics.email": "Emails",
    "generics.last_name": "Nom de famille",
@@ -212,6 +213,7 @@
    "generics.tel": "Numéro de téléphone",
    "generics.corporate_type": "Forme juridique",
    "generics.rrn": "Numéro national",
+   "generics.corporate_open": "Capital ouvert",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",

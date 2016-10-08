@@ -15,6 +15,7 @@ import {Trie} from '../utils/Trie';
 @Injectable()
 export class Data {
 
+    private selects: {[id: string]: string[]};
     private ee: EventEmitter<number>;
     private how: EventEmitter<number>;
 
@@ -28,6 +29,7 @@ export class Data {
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef) {
+        this.selects = {};
         this.ee = new EventEmitter<number>();
         this.how = new EventEmitter<number>();
     }
@@ -55,9 +57,12 @@ export class Data {
      */
     sanitarize(name: string, folder?: boolean): string {
         var parts: string[] = name.split('/');
+        /*
         parts.unshift('/');
         var last = parts.pop();
         return parts.join(' > ') + (folder? '' : (' >> ' + last));
+        */
+        parts.unshift();
     }
 
     /**
@@ -477,6 +482,28 @@ export class Data {
      */
     isWhigi(str: string): boolean {
         return /whigi/i.test(str);
+    }
+
+    /**
+     * Retrieves the keys for a select.
+     * @function getSelect
+     * @public
+     * @param {String} e Enum name.
+     * @return {String[]} Values.
+     */
+    getSelect(e: string): string[] {
+        var self = this;
+        if(e in this.selects)
+            return this.selects[e];
+        else {
+            this.backend.selectValues(e).then(function(vals) {
+                if(!(e in self.selects)) {
+                    self.selects[e] = vals.values;
+                    self.check.tick();
+                }
+            });
+            return [];
+        }
     }
 
 }

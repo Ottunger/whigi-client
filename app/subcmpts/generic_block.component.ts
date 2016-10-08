@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, ApplicationRef, Input, Output, EventEmitter} from '@angular/core';
+import {Component, enableProdMode, ApplicationRef, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -19,12 +19,12 @@ import * as template from './templates/generic_block.html';
     selector: 'generic_block',
     template: template
 })
-export class GenericBlock {
+export class GenericBlock implements OnInit {
 
-    public ass_name: string;
-    public new_data: string;
-    public new_datas: {[id: string]: string};
-    public new_data_file: string;
+    public ass_name: {[id: string]: string};
+    public new_data: {[id: string]: string};
+    public new_datas: {[id: string]: {[id: string]: string}};
+    public new_data_file: {[id: string]: string};
     @Input() group: string;
     @Input() data_list: string[];
     @Output() compute: EventEmitter<number>;
@@ -42,9 +42,28 @@ export class GenericBlock {
      */
     constructor(private translate: TranslateService, private backend: Backend, private notif: NotificationsService,
         private dataservice: Data, private check: ApplicationRef, private router: Router) {
-        this.ass_name = '';
+        this.ass_name = {};
+        this.new_data = {};
         this.new_datas = {};
+        this.new_data_file = {};
         this.compute = new EventEmitter<number>();
+    }
+
+    /**
+     * Called upon display.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnInit() {
+        var self = this;
+        for(var i = 0; i < this.data_list.length; i++) {
+            this.new_datas[this.data_list[i]] = {};
+        }
+        if(this.group.indexOf('none', this.group.length - 4) != -1) {
+            window.$('#apsablegen' + this.dataservice.sanit(this.group)).ready(function() {
+                window.$('#apsablegen' + self.dataservice.sanit(self.group)).css('display', 'none');
+            });
+        }
     }
 
     /**
@@ -60,21 +79,18 @@ export class GenericBlock {
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
         //Build and test
         window.$('#igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
-        send = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, name, as_file);
+        send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
         if(!send) {
             this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
             window.$('#igen' + this.dataservice.sanit(name)).addClass('has-error');
-            this.new_data = '';
-            this.new_data_file = '';
-            this.new_datas = {};
             return;
         }
         //Create it
         this.dataservice.newData(name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
-            self.ass_name = '';
-            self.new_data = '';
-            self.new_data_file = '';
-            self.new_datas = {};
+            delete self.ass_name[name];
+            delete self.new_data[name];
+            self.new_datas[name] = {};
+            delete self.new_data_file[name];
             self.check.tick();
         }, function(err) {
             if(err == 'server') {
@@ -116,16 +132,17 @@ export class GenericBlock {
      * @function fileLoad
      * @public
      * @param {Event} e The change event.
+     * @param {String} name Name.
      */
-    fileLoad(e: any) {
+    fileLoad(e: any, name: string) {
         var self = this;
         var file: File = e.target.files[0]; 
         var r: FileReader = new FileReader();
         r.onloadend = function(e) {
             if(/^data:;base64,/.test(r.result))
-                self.new_data_file = atob(r.result.split(',')[1]);
+                self.new_data_file[name] = atob(r.result.split(',')[1]);
             else
-                self.new_data_file = r.result;
+                self.new_data_file[name] = r.result;
         }
         r.readAsDataURL(file);
     }

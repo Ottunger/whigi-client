@@ -70,6 +70,22 @@
                                         </div>
                                     </div>
                                     <input type="file" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'file'" (change)="fileLoad($event, p)" class="form-control input-circle grant-required">
+                                    <select class="form-control input-circle" [(ngModel)]="new_data[p]" name="new_data" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'select'">
+                                        <option *ngFor="let f of dataservice.getSelect(backend.generics[p][backend.generics[p].length - 1].enum)" [value]="f">{{ f }}</option>
+                                    </select><br />
+                                    <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'checkbox'">
+                                        <input type="checkbox" name="new_data[p]" [(ngModel)]="new_data" /> {{ 'generics.hasValue' | translate }}
+                                        <span></span>
+                                    </label>
+                                    <div class='input-group date' id='pickgen{{ dataservice.sanit(p) }}' *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'date'">
+                                        <input type='text' class="form-control" [(ngModel)]="new_data[p]" name="new_data" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                    <script type="text/javascript" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'date'">
+                                        $('pickgen{{ dataservice.sanit(p) }}').datetimepicker();
+                                    </script>
                                 </div>
                             </div>
                             <!-- END ITEM SELECT -->
