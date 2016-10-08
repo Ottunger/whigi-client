@@ -143,7 +143,7 @@ export class Profile implements OnInit {
             window.$('.inewname').addClass('has-error');
             return;
         }
-        if(/[^a-z0-9\-]/.test(this.new_name)) {
+        if(/[^a-zA-Z0-9\-]/.test(this.new_name)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
             window.$('.inewname').addClass('has-error');
             return;

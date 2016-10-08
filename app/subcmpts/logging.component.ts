@@ -239,7 +239,7 @@ export class Logging implements OnInit {
             window.$('.iuname').addClass('has-error');
             return;
         }
-        if(/[^a-z0-9\-]/.test(this.username)) {
+        if(/[^a-zA-Z0-9\-]/.test(this.username)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
             window.$('.iuname').addClass('has-error');
             return;

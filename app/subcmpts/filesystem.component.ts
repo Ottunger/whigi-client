@@ -74,10 +74,11 @@ export class Filesystem implements OnInit {
                 window.$('#breadcrump').html(self.dataservice.sanitarize(self.folders, true));
             });
             self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
+                var mode = /filesystem\/data/.test(window.location)? 'data' : 'vault';
                 if(window.$(event.target).hasClass('bread-home')) {
-                    self.router.navigate(['/filesystem', self.mode]);
+                    self.router.navigate(['/filesystem', mode]);
                 } else if(window.$(event.target).hasClass('bread-in')) {
-                    self.router.navigate(['/filesystem', self.mode, {folders: window.$(event.target).attr('data-link')}]);
+                    self.router.navigate(['/filesystem', mode, {folders: window.$(event.target).attr('data-link')}]);
                 }
             });
         });

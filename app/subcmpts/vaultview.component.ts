@@ -69,6 +69,18 @@ export class Vaultview implements OnInit, OnDestroy {
                     self.is_generic = true;
                     self.version = vault.version;
                 }
+
+                //Breadcrump
+                window.$('#breadcrump').ready(function() {
+                    window.$('#breadcrump').html(self.dataservice.sanitarize(self.sharer_id + '/' + self.vault.data_name));
+                });
+                self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
+                    if(window.$(event.target).hasClass('bread-home')) {
+                        self.router.navigate(['/filesystem', 'vault']);
+                    } else if(window.$(event.target).hasClass('bread-in')) {
+                        self.router.navigate(['/filesystem', 'vault', {folders: window.$(event.target).attr('data-link')}]);
+                    }
+                });
             }, function(e) {
                 if(e.status == 417)
                     self.notif.error(self.translate.instant('error'), self.translate.instant('vaultview.expired'));
@@ -76,18 +88,6 @@ export class Vaultview implements OnInit, OnDestroy {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('vaultview.noData'));
                 delete self.backend.profile.shared_with_me[self.sharer_id][params['data_name']];
                 self.back();
-            });
-
-            //Breadcrump
-            window.$('#breadcrump').ready(function() {
-                window.$('#breadcrump').html(self.dataservice.sanitarize(self.sharer_id + '/' + self.vault.data_name));
-            });
-            self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
-                if(window.$(event.target).hasClass('bread-home')) {
-                    self.router.navigate(['/filesystem', 'vault']);
-                } else if(window.$(event.target).hasClass('bread-in')) {
-                    self.router.navigate(['/filesystem', 'vault', {folders: window.$(event.target).attr('data-link')}]);
-                }
             });
         });
     }
@@ -99,7 +99,8 @@ export class Vaultview implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         this.sub.unsubscribe();
-        this.renderFunc();
+        if(!!this.renderFunc)
+            this.renderFunc();
     }
 
     /**
