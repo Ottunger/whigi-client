@@ -72,7 +72,7 @@ export class Reset implements OnInit, OnDestroy {
     enter() {
         var self = this;
         if(this.password.length < 8) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
             return;
         }
         if(this.password == this.password2) {
@@ -104,7 +104,7 @@ export class Reset implements OnInit, OnDestroy {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
             });
         } else {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
         }
     }
 

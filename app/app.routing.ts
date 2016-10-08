@@ -20,6 +20,7 @@ import {Remote} from './subcmpts/remote.component';
 import {Generics} from './subcmpts/generics.component';
 import {User} from './subcmpts/user.component';
 import {Loginas} from './subcmpts/loginas.component';
+import {WhoIShare} from './subcmpts/whoishare.component',
 import {Notfound} from './subcmpts/notfound.component';
 import {Profileguard, Fullguard} from './guards.service';
 
@@ -33,6 +34,7 @@ const appRoutes: Routes = [
     {path: 'user/:id', component: User, canActivate: [Profileguard]},
     {path: 'user/:id/:ret', component: User, canActivate: [Profileguard]},
     {path: 'filesystem/:mode', component: Filesystem, canActivate: [Fullguard], canDeactivate: [Profileguard]},
+    {path: 'whoishare', component: WhoIShare, canActivate: [Fullguard]},
     {path: 'data/:name', component: Dataview, canActivate: [Fullguard], canDeactivate: [Fullguard]},
     {path: 'vault/:username/:id', component: Vaultview, canActivate: [Fullguard]},
     {path: 'password-help/:id/:data_name', component: Resethelp, canActivate: [Profileguard]},

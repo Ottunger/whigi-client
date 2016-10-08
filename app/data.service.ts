@@ -162,6 +162,7 @@ export class Data {
 
             self.backend.data_trie = new Trie();
             self.backend.shared_with_me_trie = new Trie();
+            self.backend.my_shares = {};
             self.backend.listData().then(function(add) {
                 self.backend.profile.data = add.data;
                 self.backend.profile.shared_with_me = add.shared_with_me;
@@ -190,6 +191,12 @@ export class Data {
                                 }, function(e) {});
                             }, function(e) {});
                         }
+                    }
+                    //Go through shares
+                    var kk = Object.getOwnPropertyNames(add.data[keys[i]].shared_to);
+                    for(var j = 0; j < kk.length; j++) {
+                        self.backend.my_shares[kk[j]] = self.backend.my_shares[kk[j]] || [];
+                        self.backend.my_shares[kk[j]].push(keys[i]);
                     }
                 }
                 keys = Object.getOwnPropertyNames(add.shared_with_me);
@@ -458,7 +465,18 @@ export class Data {
      * @return {String} Safe.
      */
     sanit(s: string): string {
-        return s.replace(/[\/\.]/g, '_');
+        return s.replace(/[\/\.#]/g, '_');
+    }
+
+    /**
+     * Returns whether a name is Whigi related.
+     * @function isWhigi
+     * @public
+     * @param {String} str String.
+     * @return {Boolean} Response.
+     */
+    isWhigi(str: string): boolean {
+        return /whigi/i.test(str);
     }
 
 }

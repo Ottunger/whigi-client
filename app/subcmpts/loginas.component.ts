@@ -36,7 +36,7 @@ export class Loginas implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.routed.params.forEach(function(param) {
-            var user = decodeURIComponent(param['user']), pwd = atob(decodeURIComponent(param['pwd']));
+            var user = param['user'], pwd = atob(decodeURIComponent(param['pwd']));
             self.backend.createToken(user, pwd, false).then(function(ticket) {
                 localStorage.setItem('token', ticket._id);
                 self.backend.getProfile().then(function(profile) {

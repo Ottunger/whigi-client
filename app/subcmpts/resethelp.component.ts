@@ -48,7 +48,7 @@ export class Resethelp implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.id = window.decodeURIComponent(params['id']);
+            self.id = params['id'];
             self.data_name = window.decodeURIComponent(params['data_name']);
             self.dataservice.listData(false).then(function() {
                 self.dataservice.getVault(self.backend.profile.shared_with_me[self.id][self.data_name]).then(function(vault, got) {

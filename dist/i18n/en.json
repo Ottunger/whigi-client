@@ -25,6 +25,7 @@
    "goOn": "Continue",
    "mention": "Copyright Envict SCRL 2016",
    "tooLarge": "Data sent too large. Try using files of size less than 1MB",
+   "contact": "Contact us",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",
@@ -59,6 +60,7 @@
    "login.tooShort": "Too short password",
    "login.badEmail": "Cannot consider read email as an email",
    "login.noUser": "Recovery user cannot be found",
+   "login.badChars": "Bad characters used: only can use letters and digits",
 
    "header.running": "running operations",
    "header.operation": "Current operation",
@@ -75,11 +77,6 @@
    "profile.noMatch": "Passwords do not match",
    "profile.noChange": "Update refused by server",
    "profile.changed": "Profile updated",
-   "profile.ask": "Ask for a data",
-   "profile.askMail": "Remote user ID",
-   "profile.askData": "Remote user data path (separate folders with '/')",
-   "profile.sent": "Request sent",
-   "profile.noSent": "Request not sent, check ID?",
    "profile.revoke": "Revoke accesses to all granted vaults",
    "profile.revokeID": "ID to ban",
    "profile.oauth": "OAuth permissions",
@@ -89,6 +86,7 @@
    "profile.home": "Home page",
    "profile.datas": "All data",
    "profile.uname": "Change username",
+   "profile.whoishare": "Shared by me",
 
    "filesystem.data_name": "Data name",
    "filesystem.data": "Data",
@@ -131,7 +129,6 @@
    "reset.password": "New password (8characters min)",
    "reset.send": "I'm ready!",
    "reset.noReset": "Cannot reset password using this recovered password",
-   "reset.noMatch": "Passwords no dot match",
    "reset.received": "Cannot prepare for helping, try manually?",
 
    "savekey.rec": "Value imported correctly",
@@ -183,6 +180,9 @@
    "generics.title": "Create here your generic data",
    "generics.regexp": "Your input does not match expected format",
    "generics.descr": "Description",
+
+   "whoishare.dname": "Data real name",
+   "whoishare.generic": "Data meaning",
 
    "error.notfound": "Introuvable",
 

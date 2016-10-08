@@ -48,7 +48,7 @@ export class User implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.id = window.decodeURIComponent(params['id']);
+            self.id = params['id'];
             self.ret = !!params['ret']? JSON.parse(window.decodeURIComponent(params['ret'])) : ['/profile'];
             self.backend.getUser(self.id).then(function(user) {
                 self.user = user;

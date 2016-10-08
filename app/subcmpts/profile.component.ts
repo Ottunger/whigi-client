@@ -138,6 +138,16 @@ export class Profile implements OnInit {
     changeUname() {
         var self = this;
         window.$('#inewname').removeClass('has-error');
+        if(this.dataservice.isWhigi(this.new_name)) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+            window.$('.inewname').addClass('has-error');
+            return;
+        }
+        if(/[^a-z0-9\-]/.test(this.new_name)) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
+            window.$('.inewname').addClass('has-error');
+            return;
+        }
         this.backend.changeUsername(this.new_name).then(function() {
             localStorage.removeItem('token');
             self.backend.forceReload();

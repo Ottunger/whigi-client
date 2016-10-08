@@ -162,7 +162,7 @@
                                                             <td>
                                                                 <button type="button" class="btn default" (click)="change(d)" [disabled]="filter==''">
                                                                     <i class="fa fa-share-square"></i> {{ 'redirect' | translate }}</button>
-                                                                <button type="button" class="btn green" (click)="revoke(d)">
+                                                                <button type="button" class="btn green" (click)="revoke(d)" [disabled]="dataservice.isWhigi(d)">
                                                                     <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
                                                             </td>
                                                         </tr>

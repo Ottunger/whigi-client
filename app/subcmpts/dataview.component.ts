@@ -279,6 +279,8 @@ export class Dataview implements OnInit, OnDestroy {
         var self = this;
         this.backend.revokeVault(this.backend.profile.data[this.data_name].shared_to[shared_to_id]).then(function() {
             delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
+            var i = self.backend.my_shares[shared_to_id].indexOf(self.data_name);
+            delete self.backend.my_shares[shared_to_id][i];
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
         });

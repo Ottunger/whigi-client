@@ -234,8 +234,13 @@ export class Logging implements OnInit {
         }
 
         window.$('.iuname,.ipass,.imail,.irecupid').removeClass('has-error');
-        if(/whigi/i.test(this.username)) {
+        if(this.dataservice.isWhigi(this.username)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+            window.$('.iuname').addClass('has-error');
+            return;
+        }
+        if(/[^a-z0-9\-]/.test(this.username)) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
             window.$('.iuname').addClass('has-error');
             return;
         }

@@ -1,0 +1,75 @@
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [cur]="0" [run]="0"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="5"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ 'profile.whoishare' | translate }}</h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-pane active" *ngFor="let p of regables()">
+                                <div class="portlet box blue-madison">
+                                    <div class="portlet-title">
+                                        <div class="caption">
+                                            <a href="javascript:;" style="color: #fff;" (click)="router.navigate(['/user', p])">{{ dataservice.forDisplay(p) }}</a>
+                                        </div>
+                                        <div class="tools">
+                                            <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))"> </a>
+                                        </div>
+                                    </div>
+                                    <div class="portlet-body form" id="apsableshare{{ dataservice.sanit(p) }}">
+                                        <!-- BEGIN TABLE -->
+                                        <div class="table-responsive">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>{{ 'whoishare.dname' | translate }}</th>
+                                                        <th>{{ 'whoishare.generic' | translate }}</th>
+                                                        <th>{{ 'action' | translate }}</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let g of backend.my_shares[p]">
+                                                        <td>{{ g }}</td>
+                                                        <td>{{ genName(g) }}</td>
+                                                        <td>
+                                                            <button type="button" class="btn default" (click)="goTo(g)">{{ 'filesystem.goTo' | translate }}</button>
+                                                            <button type="button" class="btn green" [disabled]="dataservice.isWhigi(p)" (click)="revoke(g, p)">
+                                                                <i class="fa fa-exclamation"></i>  {{ 'remove' | translate }}</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <!-- END TABLE -->
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+    </div>
+</div>

@@ -25,6 +25,7 @@
    "goOn": "Continuer",
    "mention": "Copyright Envict SCRL 2016",
    "tooLarge": "Donnée trop volumineuse. Utilisez des fichiers de moins de 1Mo",
+   "contact": "Contactez-nous",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
@@ -59,6 +60,7 @@
    "login.tooShort": "Mot de passe trop court",
    "login.badEmail": "Impossible d'intérpréter l'email comme un email",
    "login.noUser": "L'utilisateur de récupération n'existe pas",
+   "login.badChars": "Mauvais carcatères utilisés: utilisez des lettres et chiffres",
 
    "header.running": "opérations en cours",
    "header.operation": "Opération courrante",
@@ -75,11 +77,6 @@
    "profile.noMatch": "Mots de passe ne correspondent pas",
    "profile.noChange": "Mise à jour refusée par le serveur",
    "profile.changed": "Mise à jour effectuée",
-   "profile.ask": "Demander une donnée",
-   "profile.askMail": "ID utilisateur",
-   "profile.askData": "Donnée utilisateur (séparez les dossiers par '/')",
-   "profile.sent": "Demande envoyée",
-   "profile.noSent": "Demande non envoyée. Vérifiez l'ID?",
    "profile.revoke": "Supprimer accès à toutes les valises",
    "profile.revokeID": "ID à bannir",
    "profile.oauth": "Permissions OAuth",
@@ -89,6 +86,7 @@
    "profile.home": "Accueil",
    "profile.datas": "Tout",
    "profile.uname": "Changer nom de compte",
+   "profile.whoishare": "Partagé par moi",
 
    "filesystem.data_name": "Nom de donnée",
    "filesystem.data": "Valeur",
@@ -130,8 +128,7 @@
    "reset.reset": "Changez votre mot de passe ici",
    "reset.password": "Nouveau mot de passe (8caractères min)",
    "reset.send": "Je suis prêt!",
-   "reset.noReset": "Cannot reset password using this recovered password",
-   "reset.noMatch": "Mots de passe différents",
+   "reset.noReset": "Impossible de récupérer le mot de passe par ce lien",
    "reset.noHelp": "Impossible de lire la donnée, essayez manuellement?",
 
    "savekey.rec": "Valeur bien importée",
@@ -183,6 +180,9 @@
    "generics.title": "Créez ici vos données génériques",
    "generics.regexp": "Votre entrée ne valide pas le format attendu",
    "generics.descr": "Description",
+
+   "whoishare.dname": "Nom du champ",
+   "whoishare.generic": "Signification du champ",
 
    "error.notfound": "Introuvable",
 

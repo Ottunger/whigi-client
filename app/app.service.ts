@@ -20,6 +20,7 @@ export class Backend {
     public profile: any;
     public data_trie: Trie;
     public shared_with_me_trie: Trie;
+    public my_shares: {[id: string]: string[]};
     public data_loaded: boolean;
     public master_key: number[];
     public generics: {[id: string]: [{
@@ -303,7 +304,7 @@ export class Backend {
      * @return {String[]} Link.
      */
     userLink(): string[] {
-        return ['/user', window.encodeURIComponent(this.profile._id)];
+        return ['/user', this.profile._id];
     }
 
     /**
@@ -510,7 +511,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     peekUser(known: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'peek/' + window.encodeURIComponent(known), false, false);
+        return this.backend(true, false, 'GET', {}, 'peek/' + known, false, false);
     }
 
     /**
@@ -521,7 +522,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getUser(known: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'user/' + window.encodeURIComponent(known), true, true);
+        return this.backend(true, false, 'GET', {}, 'user/' + known, true, true);
     }
 
     /**
@@ -550,7 +551,7 @@ export class Backend {
         }
         return this.backend(true, true, 'POST', {
             new_keys: nk
-        }, 'close/' + window.encodeURIComponent(to), true, true, true);
+        }, 'close/' + to, true, true, true);
     }
 
     /**
@@ -839,7 +840,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     requestRestore(id: string): Promise {
-        return this.backend(false, true, 'GET', {}, 'request/' + window.encodeURIComponent(id), false, false);
+        return this.backend(false, true, 'GET', {}, 'request/' + id, false, false);
     }
 
     /**
@@ -851,7 +852,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     mixRestore(id: string, half: string): Promise {
-        return this.backend(false, false, 'GET', {}, 'mix/' + window.encodeURIComponent(id) + '/' + window.encodeURIComponent(half), false, false);
+        return this.backend(false, false, 'GET', {}, 'mix/' + id + '/' + window.encodeURIComponent(half), false, false);
     }
 
 }

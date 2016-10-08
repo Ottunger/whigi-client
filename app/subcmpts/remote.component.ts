@@ -49,7 +49,7 @@ export class Remote implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.id_to = window.decodeURIComponent(params['id_to']);
+            self.id_to = params['id_to'];
             self.challenge = params['challenge'];
             self.return_url = window.decodeURIComponent(params['return_url']);
             if(!/^https/.test(self.return_url)) {
