@@ -99,13 +99,13 @@
                 <li class="dropdown dropdown-user">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
                         <img alt="" class="img-circle" src="../../../img/private/logo.png">
-                        <span class="username username-hide-on-mobile"> {{ backend.profile._id }} </span>
+                        <span class="username username-hide-on-mobile"> {{ dataservice.forDisplay(backend.profile._id) }} </span>
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li (click)="router.navigate(backend.userLink())">
                             <a href="javascript:;">
-                                <i class="icon-user"></i> {{ backend.profile._id | translate }} </a>
+                                <i class="icon-user"></i> {{ dataservice.forDisplay(backend.profile._id) | translate }} </a>
                         </li>
                         <li (click)="router.navigate(['/generics'])">
                             <a href="javascript:;">

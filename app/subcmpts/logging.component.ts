@@ -81,7 +81,6 @@ export class Logging implements OnInit {
             this.backend.getProfile().then(function(profile) {
                 //Router.go...
                 self.backend.profile = profile;
-                self.backend.profile._id = self.backend.profile._id.charAt(0).toUpperCase() + self.backend.profile._id.slice(1);
                 if(!!set) {
                     localStorage.setItem('key_decryption', window.sha256(self.password + profile.salt));
                     localStorage.setItem('psha', window.sha256(self.password));

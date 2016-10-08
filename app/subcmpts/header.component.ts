@@ -12,6 +12,7 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Trie} from '../../utils/Trie';
 import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/header.html';
 
@@ -35,7 +36,8 @@ export class Header implements OnInit {
      * @param translate I18N service.
      * @param notif Event service.
      */
-    constructor(private router: Router, private backend: Backend, private translate: TranslateService, private notif: NotificationsService) {
+    constructor(private router: Router, private backend: Backend, private translate: TranslateService, private notif: NotificationsService,
+        private dataservice: Data) {
         this.run = 0;
         this.cur = 0;
     }

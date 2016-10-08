@@ -2,7 +2,7 @@
     <!-- BEGIN FORM-->
     <form class="form-horizontal" role="form" id="eidform" action="https://{{backend.EID_HOST}}">
         <div class="form-body" id="pict-user">
-            <h3 class="form-section">{{ user._id }}  <small>{{ 'account.user' | translate }}</small></h3>
+            <h3 class="form-section">{{ dataservice.forDisplay(user._id) }}  <small>{{ 'account.user' | translate }}</small></h3>
             <h4 class="form-section">{{ 'userinfo.public' | translate }}</h4>
             <div class="row">
                 <div class="col-md-12" *ngIf="!!user.company_info && !!user.company_info.name">

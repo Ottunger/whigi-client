@@ -33,6 +33,19 @@ export class Data {
     }
 
     /**
+     * Prepares a name.
+     * @function forDisplay
+     * @public
+     * @param {String} str Name.
+     * @return {String} OKayed.
+     */
+    forDisplay(str: string): string {
+        if(!str)
+            return '';
+        return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+
+    /**
      * Return the structure directory of a data.
      * @function sanitarize
      * @public
@@ -230,7 +243,7 @@ export class Data {
 
         return new Promise(function(resolve, reject) {
             if(!ignore && self.backend.data_trie.has(name)) {
-                reject('exists');
+                reject(['exists']);
                 return;
             }
             self.backend.encryptAES(value, self.workerMgt(true, function(got) {
@@ -245,7 +258,7 @@ export class Data {
                     self.backend.data_trie.add(name, self.backend.profile.data[name]);
                     resolve();
                 }, function(e) {
-                    reject('server', e);
+                    reject(['server', e]);
                 });
             }));
         });
@@ -304,7 +317,7 @@ export class Data {
                 if(went)
                     ok();
                 else
-                    nok('vault');
+                    nok(['vault']);
             }
         }
         

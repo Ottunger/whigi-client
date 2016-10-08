@@ -173,7 +173,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let d of backend.profile.oauth">
-                                                            <td>{{ d.for_id }}</td>
+                                                            <td>{{ dataservice.forDisplay(d.for_id) }}</td>
                                                             <td>{{ d.prefix }}</td>
                                                             <td><button type="button" class="btn btn-alarm" (click)="remove(d.id)">{{ 'remove' | translate }}</button></td>
                                                         </tr>

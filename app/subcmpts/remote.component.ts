@@ -109,14 +109,14 @@ export class Remote implements OnInit, OnDestroy {
     private end(response: string, r64: string, user: string) {
         if(typeof Android !== undefined) {
             try {
-                Android.remote(r64 + ':' + user);
+                Android.remote(r64 + ':' + user.toLowerCase());
             } catch(e) {}
         } else if(typeof webkit !== undefined && !!webkit.messageHandlers) {
             try {
-                webkit.messageHandlers.remote.postMessage(r64 + ':' + user);
+                webkit.messageHandlers.remote.postMessage(r64 + ':' + user.toLowerCase());
             } catch(e) {}
         }
-        window.location.href = this.mixin(this.return_url, ['response=' + response, 'r64=' + r64, 'user=' + user]);
+        window.location.href = this.mixin(this.return_url, ['response=' + response, 'r64=' + r64, 'user=' + user.toLowerCase()]);
     }
 
 }

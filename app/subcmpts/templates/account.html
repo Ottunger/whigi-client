@@ -6,7 +6,7 @@
         </div>
         <!-- BEGIN GRANT -->
         <div class="page-content" id="pict-user">
-            <h1 class="page-title">{{ id_to }}  <a href="javascript:;" (click)="router.navigate(reqLink())"><small>{{ 'account.user' | translate }}</small></a></h1>
+            <h1 class="page-title">{{ dataservice.forDisplay(id_to) }}  <a href="javascript:;" (click)="router.navigate(reqLink())"><small>{{ 'account.user' | translate }}</small></a></h1>
             <p>{{ 'account.question' | translate }}</p>
             <p>{{ 'account.explain' | translate }}</p>
             <p *ngIf="with_account != 'false'">{{ 'account.withAccount' | translate }}</p>
@@ -43,7 +43,7 @@
                         <div class="panel-body" style="max-height:200px; overflow-y:auto;">
                             <p>{{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}</p>
                             <!-- BEGIN ITEM SELECT -->
-                            <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable">
+                            <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable" id="igen{{ dataservice.sanit(p) }}">
                                 <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
                                 <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'text'" type="text" [(ngModel)]="new_data[p]" class="form-control input-circle grant-required">
                                 <div *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'json_keys'">
@@ -58,7 +58,7 @@
                                 <select class="form-control input-circle" [(ngModel)]="filter[p]">
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select>
-                                <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(g) }}">
+                                <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
                                     {{ 'account.nameField' | translate }}
                                     <input type="text" [(ngModel)]="new_name[p]" class="form-control input-circle grant-required">
                                     {{ 'account.dataField' | translate }}

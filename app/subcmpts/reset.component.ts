@@ -80,7 +80,6 @@ export class Reset implements OnInit, OnDestroy {
                 localStorage.setItem('token', token._id);
                 self.backend.getProfile().then(function(user) {
                     self.backend.profile = user;
-                    self.backend.profile._id = self.backend.profile._id.charAt(0).toUpperCase() + self.backend.profile._id.slice(1);
                     localStorage.setItem('key_decryption', window.sha256(self.pwd + user.salt));
                     localStorage.setItem('psha', window.sha256(self.password));
                     self.dataservice.listData(false).then(function() {

@@ -6,7 +6,7 @@
         </div>
         <!-- BEGIN GRANT -->
         <div class="page-content" id="pict-user">
-            <h1 class="page-title">{{ id_to }}  <a href="javascript:;" (click)="router.navigate(reqLink())"><small>{{ 'account.user' | translate }}</small></a></h1>
+            <h1 class="page-title">{{ dataservice.forDisplay(id_to) }}  <a href="javascript:;" (click)="router.navigate(reqLink())"><small>{{ 'account.user' | translate }}</small></a></h1>
             <p>{{ 'oauth.question' | translate }}</p>
             <p>{{ 'oauth.explain' | translate }}</p>
             <!-- BEGIN DATA -->

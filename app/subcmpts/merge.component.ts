@@ -206,7 +206,6 @@ export class Merge {
         this.check.tick();
         this.backend.getProfile().then(function(profile) {
             self.backend.profile = profile;
-            self.backend.profile._id = self.backend.profile._id.charAt(0).toUpperCase() + self.backend.profile._id.slice(1);
             self.check.tick();
             self.dataservice.listData(true);
         }, function(e) {
