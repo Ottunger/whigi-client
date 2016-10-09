@@ -34,10 +34,6 @@ export class Tooltip {
 
     }
 
-    ngOnChanges(e) {
-        console.log(e);
-    }
-
     /**
      * Launch.
      * @function Launch

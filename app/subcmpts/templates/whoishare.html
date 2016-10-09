@@ -41,7 +41,10 @@
                                                 <tbody>
                                                     <tr *ngFor="let g of backend.my_shares[p]">
                                                         <td>{{ g }}</td>
-                                                        <td>{{ genName(g) }}</td>
+                                                        <td>
+                                                            <tooltip [uri]="genName(g, true)" [right]="false"></tooltip>
+                                                            {{ genName(g, false) }}
+                                                        </td>
                                                         <td>
                                                             <button type="button" class="btn default" (click)="goTo(g)">{{ 'filesystem.goTo' | translate }}</button>
                                                             <button type="button" class="btn green" [disabled]="dataservice.isWhigi(p)" (click)="revoke(g, p)">

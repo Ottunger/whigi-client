@@ -234,13 +234,13 @@ export class Data {
                         //If heavy is on, check if storable data
                         if(resolve) {
                             if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
-                                var k = keys[i], kk = insides[j];
+                                var k = keys[i], kkstr = insides[j];
                                 self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
                                     self.newData(vault.storable[0], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
-                                        self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kk]).then(function() {
+                                        self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kkstr]).then(function() {
                                             self.listData(false);
                                         }, function(e) {});
-                                        delete self.backend.profile.shared_with_me[k][kk];
+                                        delete self.backend.profile.shared_with_me[k][kkstr];
                                     }, function(e) {});
                                 }, function(e) {});
                             }
@@ -421,6 +421,9 @@ export class Data {
                     self.backend.createVault(name, real_name, user._id, got, aes_crypted_shared_pub, version,
                         (max_date.getTime() < (new Date).getTime())? 0 : max_date.getTime(), new_trigger, is_storable).then(function(res) {
                         self.backend.profile.data[real_name].shared_to[user._id] = res._id;
+                        self.backend.my_shares[id] = self.backend.my_shares[id] || [];
+                        if(self.backend.my_shares[id].indexOf(real_name) == -1)
+                            self.backend.my_shares[id].push(real_name);
                         resolve(user, res._id);
                     }, function(e) {
                         reject(e);

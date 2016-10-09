@@ -50,15 +50,16 @@ export class WhoIShare implements OnInit {
      * @function genName
      * @public
      * @param {String} gen Key.
+     * @param {Boolean} help True to get help url.
      * @return {String} Translation.
      */
-    genName(gen: string): string {
+    genName(gen: string, help: boolean): string {
         if(!!this.backend.generics[gen]) {
-            return this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
+            return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         } else if(!!this.backend.generics[gen.replace(/\/[^\/]*$/, '')] &&
             this.backend.generics[gen.replace(/\/[^\/]*$/, '')][this.backend.generics[gen.replace(/\/[^\/]*$/, '')].length - 1].instantiable) {
             gen = gen.replace(/\/[^\/]*$/, '');
-            return this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
+            return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         }
         return '';
     }
