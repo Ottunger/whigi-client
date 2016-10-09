@@ -110,13 +110,15 @@ export class Dataview implements OnInit, OnDestroy {
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });
-            setTimeout(function() {
+            window.$('#pick4').ready(function() {
                 window.$('#pick4').datetimepicker();
                 window.$('#pick4').datetimepicker('date', window.moment());
-            }, 300);
-            window.$('#pick5').datetimepicker();
-            window.$('#pick5').datetimepicker('date', window.moment());
-            window.$('#pick5').datetimepicker('options', {widgetPositioning: {vertical: 'bottom'}});
+            });
+            window.$('#pick5').ready(function() {
+                window.$('#pick5').datetimepicker();
+                window.$('#pick5').datetimepicker('date', window.moment());
+                window.$('#pick5').datetimepicker('options', {widgetPositioning: {vertical: 'bottom'}});
+            });
 
             //Breadcrump
             window.$('#breadcrump').ready(function() {

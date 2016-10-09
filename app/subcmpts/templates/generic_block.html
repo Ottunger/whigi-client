@@ -55,7 +55,7 @@
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g]">
                                                 <li class="list-group-item">
                                                     <button type="button" class="btn btn-link"
-                                                        (click)="select(g)">{{ 'filesystem.goTo' | translate }}</button>
+                                                        (click)="select(g)"><i class="fa fa-pencil"></i> {{ 'generics.goTo' | translate }}</button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -68,14 +68,20 @@
                                                         type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
                                                 </li>
                                             </ul>
+                                            <ul class="list-group" *ngIf="backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
+                                                && backend.generics[g][backend.profile.data[g].version].mode != 'json_keys'">
+                                                <li class="list-group-item">
+                                                    <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [ngModel]="preview(g)" />
+                                                </li>
+                                            </ul>
                                         </div>
                                     </div>
                                     <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item" *ngFor="let d of dataNames(g)">
+                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g)">
                                                     <button type="button" class="btn btn-link"
-                                                        (click)="select(g + '/' + d)">{{ 'filesystem.goTo' | translate }} ({{ d }})</button>
+                                                        (click)="select(g + '/' + d)"><i class="fa fa-pencil"></i> ({{ d }})</button>
                                                 </li>
                                             </ul>
                                         </div>

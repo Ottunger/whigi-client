@@ -74,41 +74,45 @@ export class Data {
      * @public
      * @param {Boolean} encrypt Encryption or not.
      * @param {Function} callback Callback to call with result.
+     * @param {Boolean} front If in foreground.
      * @return {Function} Worker onmessage implementation.
      */
-    workerMgt(encrypt: boolean, callback: Function) {
+    workerMgt(encrypt: boolean, callback: Function, front?: boolean) {
         var self = this;
+        front = front !== false;
         this.how.emit(1);
-        window.$('.page-content').block({
-            message: `
-                <div style="background-color: #2b3643;">
-                    <ul class="dropdown-menu-list scroller" style="height: 45px; overflow: hidden; width: auto; padding: 5px;">
-                        <li>
-                            <a href="javascript:;" style="cursor: default;">
-                                <span class="task">
-                                    <span class="desc" style="color: white;">` + this.translate.instant('header.operation') + `</span>
-                                    <span class="percent" style="color: white;" id="worktx">0%</span>
-                                </span><br />
-                                <span class="progress">
-                                    <span id="workpg" style="width: 0%;" class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="100"></span>
-                                </span>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                `,
-            baseZ: 1e3,
-            css: {
-                border: '0',
-                padding: '0',
-                backgroundColor: 'none'
-            },
-            overlayCSS: {
-                backgroundColor: '#222',
-                opacity: .1,
-                cursor: 'wait'
-            }
-        });
+        if(front === true) {
+            window.$('.page-content').block({
+                message: `
+                    <div style="background-color: #2b3643;">
+                        <ul class="dropdown-menu-list scroller" style="height: 45px; overflow: hidden; width: auto; padding: 5px;">
+                            <li>
+                                <a href="javascript:;" style="cursor: default;">
+                                    <span class="task">
+                                        <span class="desc" style="color: white;">` + this.translate.instant('header.operation') + `</span>
+                                        <span class="percent" style="color: white;" id="worktx">0%</span>
+                                    </span><br />
+                                    <span class="progress">
+                                        <span id="workpg" style="width: 0%;" class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="100"></span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    `,
+                baseZ: 1e3,
+                css: {
+                    border: '0',
+                    padding: '0',
+                    backgroundColor: 'none'
+                },
+                overlayCSS: {
+                    backgroundColor: '#222',
+                    opacity: .1,
+                    cursor: 'wait'
+                }
+            });
+        }
         return function(msg) {
             switch(msg.data[0]) {
                 case 1:
@@ -118,13 +122,15 @@ export class Data {
                     self.check.tick();
                     break;
                 case 2:
-                    window.$('.page-content').unblock();
+                    if(front === true)
+                        window.$('.page-content').unblock();
                     self.how.emit(0);
                     self.check.tick();
                     callback(msg.data[1]);
                     break;
                 case 3:
-                    window.$('.page-content').unblock();
+                    if(front === true)
+                        window.$('.page-content').unblock();
                     self.how.emit(0);
                     self.notif.error(self.translate.instant(encrypt? 'encrypting' : 'decrypting'), self.translate.instant('corruption'));
                     console.log(JSON.parse(msg.data[1]));

@@ -185,6 +185,7 @@
    "generics.regexp": "Your input does not match expected format",
    "generics.descr": "Description",
    "generics.hasValue": "Appliable",
+   "generics.goTo": "View / Edit",
 
    "whoishare.dname": "Data real name",
    "whoishare.generic": "Data meaning",

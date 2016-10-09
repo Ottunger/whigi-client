@@ -28,6 +28,8 @@ export class GenericBlock implements OnInit {
     @Input() group: string;
     @Input() data_list: string[];
     @Output() compute: EventEmitter<number>;
+    private previews: {[id: string]: string};
+    private asked: {[id: string]: boolean};
 
     /**
      * Creates the component.
@@ -46,6 +48,8 @@ export class GenericBlock implements OnInit {
         this.new_data = {};
         this.new_datas = {};
         this.new_data_file = {};
+        this.previews = {};
+        this.asked = {};
         this.compute = new EventEmitter<number>();
     }
 
@@ -146,6 +150,32 @@ export class GenericBlock implements OnInit {
      */
     select(name: string) {
         this.router.navigate(['/data', window.encodeURIComponent(name)]);
+    }
+
+    /**
+     * Preview a non instatiable held data.
+     * @function preview
+     * @public
+     * @param {String} name Data name.
+     * @return {String} Decrypted data.
+     */
+    preview(name: string): string {
+        var self = this;
+        if(name in this.previews)
+            return this.previews[name];
+        if(name in this.asked)
+            return '[]';
+        this.asked[name] = true;
+        this.backend.getData(this.backend.profile.data[name].id).then(function(data) {
+            self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {
+                self.previews[name] = got;
+                delete self.asked[name];
+                self.check.tick();
+            }, false));
+        }, function(e) {
+            self.previews[name] = '[]';
+            delete self.asked[name];
+        });
     }
 
 }

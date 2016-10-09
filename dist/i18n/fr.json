@@ -185,6 +185,7 @@
    "generics.regexp": "Votre entrée ne valide pas le format attendu",
    "generics.descr": "Description",
    "generics.hasValue": "Appliquable",
+   "generics.goTo": "Voir / Modifier",
 
    "whoishare.dname": "Nom du champ",
    "whoishare.generic": "Signification du champ",
