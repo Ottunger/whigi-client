@@ -101,7 +101,8 @@
                 <!-- BEGIN USER LOGIN DROPDOWN -->
                 <li class="dropdown dropdown-user">
                     <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown" data-hover="dropdown" data-close-others="true">
-                        <img alt="" class="img-circle" src="../../../img/private/logo.png">
+                        <img *ngIf="!!backend.profile.company_info && !!backend.profile.company_info.picture" alt="" class="img-circle" src="{{ backend.profile.company_info.picture }}">
+                        <img *ngIf="!backend.profile.company_info || !backend.profile.company_info.picture" alt="" class="img-circle" src="../../../img/private/logo.png">
                         <span class="username username-hide-on-mobile"> {{ dataservice.forDisplay(backend.profile._id) }} </span>
                         <i class="fa fa-angle-down"></i>
                     </a>

@@ -292,6 +292,8 @@ export class Dataview implements OnInit, OnDestroy {
      */
     revoke(shared_to_id: string) {
         var self = this;
+        if(this.data_name.indexOf('keys/pwd/') == 0 && !window.confirm(this.translate.instant('dataview.revokeKey')))
+            return;
         this.backend.revokeVault(this.backend.profile.data[this.data_name].shared_to[shared_to_id]).then(function() {
             delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
             var i = self.backend.my_shares[shared_to_id].indexOf(self.data_name);

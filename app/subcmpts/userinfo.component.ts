@@ -22,6 +22,7 @@ export class Userinfo implements OnInit {
 
     @Input() user: any;
     public bce: string;
+    private pict: string;
 
     /**
      * Creates the component.
@@ -45,10 +46,19 @@ export class Userinfo implements OnInit {
      */
     ngOnInit(): void {
         var self = this;
-        setTimeout(function() {
+        window.$('#eidform').ready(function() {
             window.$('#eidform').attr('method', 'get');
+        });
+        var test = setInterval(function() {
+            if(Object.getOwnPropertyNames(self.user).length == 0)
+                return;
+            clearInterval(test);
+            if(!!self.user.company_info && !!self.user.company_info.picture)
+                window.$('#pict-user').prepend('<img id="mypict" src="' + self.user.company_info.picture + '" height="32px" alt="" style="float: left;margin-right: 10px;" />');
+            else
+                window.$('#pict-user').prepend('<img id="mypict" src="assets/logo.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
             window.$('#pict-user').prepend('<img src="img/' + self.user.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
-        }, 500);
+        }, 30);
     }
 
     /**
@@ -61,6 +71,23 @@ export class Userinfo implements OnInit {
         this.backend.goCompany(self.backend.profile.company_info).then(function() {
             self.backend.profile.is_company = 1;
             self.notif.success(self.translate.instant('success'), self.translate.instant('userinfo.changed'));
+            self.check.tick();
+        }, function(e) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('userinfo.notChanged'));
+            self.check.tick();
+        });
+    }
+
+    /**
+     * Modify public data
+     * @function modifyPict
+     * @public
+     */
+    modifyPict() {
+        var self = this;
+        this.backend.goCompany({picture: this.pict}).then(function() {
+            self.backend.profile.company_info.picture = self.pict;
+            window.$('#mypict').attr('src', self.pict);
             self.check.tick();
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('userinfo.notChanged'));
@@ -109,6 +136,22 @@ export class Userinfo implements OnInit {
             return ret['generics.street'] + ' ' + ret['generics.num'] + ', ' + ret['generics.postcode'] + ' ' + ret['generics.city']; 
         }
         return '';
+    }
+
+    /**
+     * Loads a file as data.
+     * @function fileLoad
+     * @public
+     * @param {Event} e The change event.
+     */
+    fileLoad(e: any) {
+        var self = this;
+        var file: File = e.target.files[0]; 
+        var r: FileReader = new FileReader();
+        r.onloadend = function(e) {
+            self.pict = r.result;
+        }
+        r.readAsDataURL(file);
     }
 
     /**

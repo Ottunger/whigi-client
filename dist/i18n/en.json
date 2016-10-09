@@ -121,6 +121,7 @@
    "dataview.storable": "Transerrable vault",
    "dataview.notDated": "This data is not dated.",
    "dataview.grants": "Associated grants",
+   "dataview.revokeKey": "This share allows you to recover your password. Are you sure you want to delete it?",
 
    "vaultview.noData": "Cannot retrieve such vault. Maybe access was revoked...",
    "vaultview.expired": "This vault has expired...",
@@ -166,6 +167,7 @@
    "userinfo.addr": "Home address",
    "userinfo.bce": "BCE number: ",
    "userinfo.goBCE": "Load company name from BCE",
+   "userinfo.modifyPict": "Modify user picture",
 
    "merge.title": "Merge an account",
    "merge.login": "Username",
