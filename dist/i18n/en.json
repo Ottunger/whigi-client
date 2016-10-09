@@ -26,6 +26,8 @@
    "mention": "Copyright Envict SCRL 2016",
    "tooLarge": "Data sent too large. Try using files of size less than 1MB",
    "contact": "Contact us",
+   "help": "Help",
+   "help.noHelp": "Cannot load help information",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",

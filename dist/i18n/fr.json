@@ -26,6 +26,8 @@
    "mention": "Copyright Envict SCRL 2016",
    "tooLarge": "Donnée trop volumineuse. Utilisez des fichiers de moins de 1Mo",
    "contact": "Contactez-nous",
+   "help": "Aide",
+   "help.noHelp": "Impossible de charger l'aide",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",

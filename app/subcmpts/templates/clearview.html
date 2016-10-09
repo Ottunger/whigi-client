@@ -3,7 +3,9 @@
         <div class="portlet box blue-madison">
             <div class="portlet-title">
                 <div class="caption">
-                    <i class="fa fa-info-circle"></i>{{ getName() }}</div>
+                    <tooltip *ngIf="isGeneric()" [uri]="backend.generics[gen_name][backend.generics[gen_name].length - 1].help_url" [right]="false"></tooltip>
+                    {{ getName() }}
+                </div>
             </div>
             <div class="portlet-body form">
                 <!-- BEGIN FORM-->

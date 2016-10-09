@@ -13,8 +13,8 @@
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title"><span id="breadcrump"></span></h1>
-                    <h3 *ngIf="!!hasKey(false)">{{ hasKey(false) | translate }}</h3>
-                    <p *ngIf="!!hasKey(true)">{{ hasKey(true) | translate }}</p>
+                    <h3 *ngIf="!!hasKey('descr')">{{ hasKey('descr') | translate }}<tooltip [uri]="hasKey('url')" [right]="true"></tooltip></h3>
+                    <p *ngIf="!!hasKey('long')">{{ hasKey('long') | translate }}</p>
                     <!-- END PAGE TITLE-->
                     <div class="row">
                         <div class="col-md-12">

@@ -264,15 +264,24 @@ export class Filesystem implements OnInit {
     /**
      * Allows to display a context of the folder.
      * @function hasKey
-     * @param {Boolean} long Return long description.
+     * @param {String} mode Return long description.
      * @return {String} A key to describe the folder or undefined.
      */
-    hasKey(long: boolean): string {
+    hasKey(mode: string): string {
         if(!this.folders) {
             this.folders = '';
         }
         var test = (this.mode == 'data')? this.folders : this.folders.replace(/^[^\/]*\//, '');
-        return (test in this.backend.generics_paths)? (long? this.backend.generics_paths[test].long_descr_key : this.backend.generics_paths[test].descr_key) : undefined;
+        if(!(test in this.backend.generics_paths))
+            return undefined;
+        switch(mode) {
+            case 'descr':
+                return this.backend.generics_paths[test].descr_key;
+            case 'long':
+                return this.backend.generics_paths[test].long_descr_key;
+            case 'url':
+                return this.backend.generics_paths[test].help_url;
+        }
     }
 
     /**

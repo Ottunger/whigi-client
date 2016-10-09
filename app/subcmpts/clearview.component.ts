@@ -24,7 +24,6 @@ export class Clearview {
     @Input() is_dated: boolean;
     @Input() change: boolean;
     @Input() is_folder: boolean;
-    @Input() is_generic: boolean;
     @Input() version: number;
     @Input() gen_name: string;
     @Output() notify: EventEmitter<string>;
@@ -106,9 +105,19 @@ export class Clearview {
      * @return {String} Traduction.
      */
     getName(): string {
-        if(this.gen_name in this.backend.generics)
+        if(this.isGeneric())
             return this.translate.instant(this.backend.generics[this.gen_name][this.version].descr_key);
         return '';
+    }
+
+    /**
+     * Is generic.
+     * @function isGeneric
+     * @public
+     * @return {Boolean} Is generic.
+     */
+    isGeneric(): boolean {
+        return (this.gen_name in this.backend.generics);
     }
 
 }

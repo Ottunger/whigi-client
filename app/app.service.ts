@@ -36,7 +36,7 @@ export class Backend {
         validate: string,
         module: string,
         group: string,
-        json_keys: {descr_key: string, long_descr_key: string, help_url: string, mode: string, enum: string}[]
+        json_keys: {descr_key: string, mode: string, enum: string, required: boolean}[]
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {
@@ -501,6 +501,17 @@ export class Backend {
      */
     transitionSchema(name: string, as: number, to: number): Promise {
         return this.backend(true, false, 'GET', {}, 'schemas/' + encodeURIComponent(name) + '/' + as + '/' + to, false, false);
+    }
+
+    /**
+     * Get the tooltip help.
+     * @function tooltip
+     * @public
+     * @param {String} name Tooltip name.
+     * @return {Promise} JSON response from backend.
+     */
+    tooltip(name: string): Promise {
+        return this.backend(true, true, 'GET', {}, 'helps/' + name, false, false);
     }
 
     /**

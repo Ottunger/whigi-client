@@ -23,6 +23,7 @@
                                         <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
                                             class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
                                         {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                                        <tooltip [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
                                     </h4>
                                     <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
                                     <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ 'account.nameField' | translate }}*

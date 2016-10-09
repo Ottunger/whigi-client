@@ -32,8 +32,9 @@ export class Header implements OnInit {
      * @public
      * @param router Routing service.
      * @param backend App service.
-     * @param translate I18N service.
+     * @param translate Translation service.
      * @param notif Event service.
+     * @param dataservice Data service
      */
     constructor(private router: Router, private backend: Backend, private translate: TranslateService, private notif: NotificationsService,
         private dataservice: Data) {

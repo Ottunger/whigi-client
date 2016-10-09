@@ -40,6 +40,7 @@ import {Header} from './subcmpts/header.component';
 import {GenericBlock} from './subcmpts/generic_block.component';
 import {WhoIShare} from './subcmpts/whoishare.component';
 import {InputBlock} from './subcmpts/input_block.component';
+import {Tooltip} from './subcmpts/tooltip.component';
 import {Notfound} from './subcmpts/notfound.component';
 
 @NgModule({
@@ -75,6 +76,7 @@ import {Notfound} from './subcmpts/notfound.component';
         GenericBlock,
         WhoIShare,
         InputBlock,
+        Tooltip,
         Notfound
     ],
     providers: [

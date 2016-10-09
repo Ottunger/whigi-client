@@ -24,6 +24,7 @@ require('../js/moment.locales/moment.locales.js');
 require('../js/bootstrap-datetimepicker.min.js');
 require('../js/bootstrap.min.js');
 require('../js/jquery.blockUI.js');
+require('../js/jquery.modal.js');
 
 import '../css/bootstrap.css';
 import '../css/bootstrap-datetimepicker.min.css';
@@ -34,3 +35,4 @@ import '../css/layout.css';
 import '../css/login.css';
 import '../css/whigi.css';
 import '../css/font-awesome.min.css';
+import '../css/jquery.modal.css';
