@@ -87,7 +87,7 @@ export class Data {
                             <a href="javascript:;" style="cursor: default;">
                                 <span class="task">
                                     <span class="desc" style="color: white;">` + this.translate.instant('header.operation') + `</span>
-                                    <span class="percent" id="worktx">0%</span>
+                                    <span class="percent" style="color: white;" id="worktx">0%</span>
                                 </span><br />
                                 <span class="progress">
                                     <span id="workpg" style="width: 0%;" class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="100"></span>

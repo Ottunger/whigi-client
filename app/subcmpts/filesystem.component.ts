@@ -21,8 +21,6 @@ import * as template from './templates/filesystem.html';
 })
 export class Filesystem implements OnInit {
 
-    public data_name: string;
-    public data_value: string;
     public data_value_file: string;
     public folders: string;
     private mode: string;
@@ -46,7 +44,6 @@ export class Filesystem implements OnInit {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private routed: ActivatedRoute,
         private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef, private render: Renderer) {
         this.folders = '';
-        this.data_value_file = '';
         this.lighted = new EventEmitter<number>();
     }
 
@@ -98,13 +95,14 @@ export class Filesystem implements OnInit {
      * Register a new data.
      * @function register
      * @public
-     * @param {Boolean} as_file Load from file.
      * @param {Boolean} is_dated Dated or not.
+     * @param {String} new_name New name.
+     * @param {String} new_data New data.
      */
-    register(as_file: boolean, is_dated: boolean) {
+    register(is_dated: boolean, new_name: string, new_data: string) {
         var self = this, send;
         window.$('.inaming').removeClass('has-error');
-        if(this.completeName() in this.backend.generics || (this.folders.slice(0, -1) in this.backend.generics && 
+        if(!new_name || new_name =='' || this.completeName(new_name) in this.backend.generics || (this.folders.slice(0, -1) in this.backend.generics && 
             this.backend.generics[this.folders.slice(0, -1)][this.backend.generics[this.folders.slice(0, -1)].length - 1].instantiable)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.generics'));
             window.$('.inaming').addClass('has-error');
@@ -112,16 +110,13 @@ export class Filesystem implements OnInit {
         }
         if(is_dated) {
             send = JSON.stringify([{
-                value: as_file? this.data_value_file : this.data_value,
+                value: new_data,
                 from: window.$('#pick1').datetimepicker('date').toDate().getTime()
             }]);
         } else {
-            send = as_file? this.data_value_file : this.data_value;
+            send = new_data;
         }
-        this.dataservice.newData(this.completeName(), send, is_dated, 0).then(function() {
-            self.data_name = '';
-            self.data_value = '';
-            self.data_value_file = '';
+        this.dataservice.newData(this.completeName(new_name), send, is_dated, 0).then(function() {
             self.check.tick();
         }, function(err) {
             if(err[0] == 'server') {
@@ -220,10 +215,11 @@ export class Filesystem implements OnInit {
      * Returns a name based on directory structure.
      * @function completeName
      * @private
+     * @param {String} name Orginal name.
      * @return {String} Describing name.
      */
-    private completeName(): string {
-        return this.folders + this.data_name.replace('/', ':');
+    private completeName(name: string): string {
+        return this.folders + name.replace('/', ':');
     } 
 
     /**
