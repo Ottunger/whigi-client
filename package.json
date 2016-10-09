@@ -1,11 +1,11 @@
 {
-  "name": "whigi-standalone",
-  "version": "0.0.1",
+  "name": "whigi-client",
+  "version": "0.6.0",
   "description": "A front-end for Whigi and Whigi-restore",
-  "main": ".",
+  "main": "app/main.js",
   "repository": {
     "type": "git",
-    "url": "http://whigi2-dev.envict.com/whigi-team/whigi.git"
+    "url": "http://whigi2-dev.envict.com/whigi-team/whigi-client.git"
   },
   "author": "Whigi-team",
   "license": "SEE LICENSE IN LICENSE.txt",
@@ -18,7 +18,6 @@
     "@angular/platform-browser": "2.0.0-rc.6",
     "@angular/platform-browser-dynamic": "2.0.0-rc.6",
     "@angular/router": "3.0.0-rc.2",
-    "@angular/router-deprecated": "2.0.0-rc.2",
     "@angular/upgrade": "2.0.0-rc.6",
     "angular2-notifications": "0.3.3",
     "core-js": "2.4.1",

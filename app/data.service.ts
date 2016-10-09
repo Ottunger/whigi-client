@@ -80,7 +80,23 @@ export class Data {
         var self = this;
         this.how.emit(1);
         window.$('.page-content').block({
-            message: '<img src="img/loading-spinner-blue.gif" />',
+            message: `
+                <div style="background-color: #2b3643;">
+                    <ul class="dropdown-menu-list scroller" style="height: 45px; overflow: hidden; width: auto; padding: 5px;">
+                        <li>
+                            <a href="javascript:;" style="cursor: default;">
+                                <span class="task">
+                                    <span class="desc" style="color: white;">` + this.translate.instant('header.operation') + `</span>
+                                    <span class="percent" id="worktx">0%</span>
+                                </span><br />
+                                <span class="progress">
+                                    <span id="workpg" style="width: 0%;" class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="100"></span>
+                                </span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                `,
             baseZ: 1e3,
             css: {
                 border: '0',
@@ -97,6 +113,8 @@ export class Data {
             switch(msg.data[0]) {
                 case 1:
                     self.ee.emit(parseInt(msg.data[1]));
+                    window.$('#workpg').css('width', msg.data[1] + '%');
+                    window.$('#worktx').text(msg.data[1] + '%');
                     self.check.tick();
                     break;
                 case 2:
@@ -507,6 +525,19 @@ export class Data {
             });
             return [];
         }
+    }
+
+    /**
+     * Length of trie.
+     * @function length
+     * @public
+     * @param {Trie} cpt Trie.
+     * @return {Number} Length.
+     */
+    length(cpt: Trie): number {
+        if(!cpt)
+            return 0;
+        return cpt.suggestions('').filter(function(el) {return el.charAt(el.length - 1) != '/';}).length;
     }
 
 }

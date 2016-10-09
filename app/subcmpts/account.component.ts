@@ -73,7 +73,7 @@ export class Account implements OnInit, OnDestroy {
             self.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
             self.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
 
-            setTimeout(function() {
+            window.$('#pick3').ready(function() {
                 window.$('#pick3').datetimepicker();
                 window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));
             });
@@ -200,7 +200,10 @@ export class Account implements OnInit, OnDestroy {
                         this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
                         window.$('#igen' + this.dataservice.sanit(adata)).addClass('has-error');
                         this.new_data = {};
-                        this.new_datas = {};
+                        var keys = Object.getOwnPropertyNames(this.new_datas);
+                        for(var i = 0; i < keys.length; i++) {
+                            this.new_datas[keys[i]] = {};
+                        }
                         return;
                     }
                     //Build name and create
@@ -314,23 +317,24 @@ export class Account implements OnInit, OnDestroy {
     }
 
     /**
-     * Loads a file as data.
-     * @function fileLoad
+     * Register data from input_block.
+     * @function regData
      * @public
-     * @param {Event} e The change event.
-     * @param {String} name The data name associated.
+     * @param {String} group Attached group.
+     * @param {Object[]} Event.
      */
-    fileLoad(e: any, name: string) {
-        var self = this;
-        var file: File = e.target.files[0]; 
-        var r: FileReader = new FileReader();
-        r.onloadend = function(e) {
-            if(/^data:;base64,/.test(r.result))
-                self.new_data[name] = atob(r.result.split(',')[1]);
-            else
-                self.new_data[name] = r.result;
+    regData(group: string, event: any[]) {
+        switch(event[0]) {
+            case 1:
+                this.new_data[group] = event[1];
+                break;
+            case 2:
+                this.new_data[group] = event[1];
+                break;
+            case 3:
+                this.new_datas[group] = event[1];
+                break;
         }
-        r.readAsDataURL(file);
     }
 
     /**
@@ -417,7 +421,7 @@ export class Account implements OnInit, OnDestroy {
     allFilled(): boolean {
         var obj = window.$('.grant-required');
         for(var i = 0; i < obj.length; i++) {
-            if(!window.$(obj[i]).val() || window.$(obj[i]).val() == '')
+            if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '')
                 return false;
         }
         return true;

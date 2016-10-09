@@ -8,6 +8,8 @@
 declare var window : any
 import {Component, enableProdMode, Input, OnInit, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
+import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/sidebar.html';
 
@@ -24,8 +26,10 @@ export class Sidebar implements OnInit {
      * @function constructor
      * @public
      * @param router Routing service.
+     * @param backend App service.
+     * @param dataservice Data service.
      */
-    constructor(private router: Router) {
+    constructor(private router: Router, private backend: Backend, private dataservice: Data) {
 
     }
 

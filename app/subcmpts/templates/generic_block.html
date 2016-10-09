@@ -25,7 +25,7 @@
                                         {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
                                     </h4>
                                     <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
-                                    <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ 'account.nameField' | translate }}
+                                    <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ 'account.nameField' | translate }}*
                                         <input type="text" [(ngModel)]="ass_name[g]" name="new_name{{ dataservice.sanit(g) }}" class="form-control input-circle" />
                                     </p>
                                     <!-- EXPL -->
@@ -34,45 +34,21 @@
                                 <div class="row" id="igen{{ dataservice.sanit(g) }}">
                                     <!-- description -->
                                     <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
-                                        {{ 'actual' | translate }}
+                                        {{ 'actual' | translate }}<span>*</span>
                                     </div>
                                     <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                         <div class="row" style="height: 5ex;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                            {{ k.descr_key | translate }}<br />
+                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span><br />
                                         </div>
                                     </div>
                                     <!-- input -->
                                     <div class="col-md-6" *ngIf="!backend.profile.data[g]">
-                                        <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text'"
-                                            type="text" class="form-control input-circle" [(ngModel)]="new_data[g]" name="new_data" />
-                                        <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
-                                            type="file" class="form-control input-circle" (change)="fileLoad($event, g)" name="new_data" />
-                                        <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                            <div class="row" style="height: 5ex;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                                <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[g][k.descr_key]" name="new_datas" />
-                                            </div>
-                                        </div>
-                                        <select class="form-control input-circle" [(ngModel)]="new_data[g]" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'">
-                                            <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f }}</option>
-                                        </select><br />
-                                        <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'checkbox'">
-                                            <input type="checkbox" name="new_data" [(ngModel)]="new_data[g]" /> {{ 'generics.hasValue' | translate }}
-                                            <span></span>
-                                        </label>
-                                        <div class='input-group date' id='pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
-                                            <input type='text' class="form-control" [(ngModel)]="new_data[g]" name="new_data" />
-                                            <span class="input-group-addon">
-                                                <span class="glyphicon glyphicon-calendar"></span>
-                                            </span>
-                                        </div>
-                                        <script type="text/javascript" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
-                                            $('pickgen{{ dataservice.sanit(g) }}').datetimepicker();
-                                        </script>
+                                        <input_block [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                     </div>
                                 </div>
                                 <!-- END SELECT -->
                                 <!-- BEGIN DISP -->
-                                <div class="row">
+                                <div class="row" style="padding-top: 3px;">
                                     <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g]">

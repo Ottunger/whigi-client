@@ -1,6 +1,6 @@
 /**
  * Component displaying the generic block
- * @module generics.component
+ * @module generic_block.component
  * @author Mathonet Grégoire
  */
 
@@ -67,6 +67,27 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Register data from input_block.
+     * @function regData
+     * @public
+     * @param {String} group Attached group.
+     * @param {Object[]} Event.
+     */
+    regData(group: string, event: any[]) {
+        switch(event[0]) {
+            case 1:
+                this.new_data[group] = event[1];
+                break;
+            case 2:
+                this.new_data_file[group] = event[1];
+                break;
+            case 3:
+                this.new_datas[group] = event[1];
+                break;
+        }
+    }
+
+    /**
      * Register a new data.
      * @function register
      * @public
@@ -125,26 +146,6 @@ export class GenericBlock implements OnInit {
      */
     select(name: string) {
         this.router.navigate(['/data', window.encodeURIComponent(name)]);
-    }
-
-    /**
-     * Loads a file as data.
-     * @function fileLoad
-     * @public
-     * @param {Event} e The change event.
-     * @param {String} name Name.
-     */
-    fileLoad(e: any, name: string) {
-        var self = this;
-        var file: File = e.target.files[0]; 
-        var r: FileReader = new FileReader();
-        r.onloadend = function(e) {
-            if(/^data:;base64,/.test(r.result))
-                self.new_data_file[name] = atob(r.result.split(',')[1]);
-            else
-                self.new_data_file[name] = r.result;
-        }
-        r.readAsDataURL(file);
     }
 
 }

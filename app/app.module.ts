@@ -38,7 +38,8 @@ import {Loginas} from './subcmpts/loginas.component';
 import {Sidebar} from './subcmpts/sidebar.component';
 import {Header} from './subcmpts/header.component';
 import {GenericBlock} from './subcmpts/generic_block.component';
-import {WhoIShare} from './subcmpts/whoishare.component',
+import {WhoIShare} from './subcmpts/whoishare.component';
+import {InputBlock} from './subcmpts/input_block.component';
 import {Notfound} from './subcmpts/notfound.component';
 
 @NgModule({
@@ -73,6 +74,7 @@ import {Notfound} from './subcmpts/notfound.component';
         Header,
         GenericBlock,
         WhoIShare,
+        InputBlock,
         Notfound
     ],
     providers: [

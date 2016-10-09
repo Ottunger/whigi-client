@@ -45,47 +45,17 @@
                             <!-- BEGIN ITEM SELECT -->
                             <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable" id="igen{{ dataservice.sanit(p) }}">
                                 <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
-                                <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'text'" type="text" [(ngModel)]="new_data[p]" class="form-control input-circle grant-required">
-                                <div *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'json_keys'">
-                                    <div class="form-group" *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].json_keys">
-                                        {{ k.descr_key | translate }}<br />
-                                        <input type="text" [(ngModel)]="new_datas[p][k.descr_key]" class="form-control input-circle grant-required">
-                                    </div>
-                                </div>
-                                <input *ngIf="!backend.profile.data[p] && backend.generics[p][backend.generics[p].length - 1].mode == 'file'" type="file" (change)="fileLoad($event, p)" class="form-control input-circle grant-required">
+                                <input_block *ngIf="!backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                             </div>
                             <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
                                 <select class="form-control input-circle" [(ngModel)]="filter[p]">
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select>
                                 <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
-                                    {{ 'account.nameField' | translate }}
+                                    {{ 'account.nameField' | translate }}*
                                     <input type="text" [(ngModel)]="new_name[p]" class="form-control input-circle grant-required">
-                                    {{ 'account.dataField' | translate }}
-                                    <input type="text" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'text'" [(ngModel)]="new_data[p]" class="form-control input-circle grant-required">
-                                    <div *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'json_keys'">
-                                        <div class="form-group" *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].json_keys">
-                                            {{ k.descr_key | translate }}<br />
-                                            <input type="text" [(ngModel)]="new_datas[p][k.descr_key]" class="form-control input-circle grant-required">
-                                        </div>
-                                    </div>
-                                    <input type="file" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'file'" (change)="fileLoad($event, p)" class="form-control input-circle grant-required">
-                                    <select class="form-control input-circle" [(ngModel)]="new_data[p]" name="new_data" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'select'">
-                                        <option *ngFor="let f of dataservice.getSelect(backend.generics[p][backend.generics[p].length - 1].enum)" [value]="f">{{ f }}</option>
-                                    </select><br />
-                                    <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'checkbox'">
-                                        <input type="checkbox" name="new_data[p]" [(ngModel)]="new_data" /> {{ 'generics.hasValue' | translate }}
-                                        <span></span>
-                                    </label>
-                                    <div class='input-group date' id='pickgen{{ dataservice.sanit(p) }}' *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'date'">
-                                        <input type='text' class="form-control" [(ngModel)]="new_data[p]" name="new_data" />
-                                        <span class="input-group-addon">
-                                            <span class="glyphicon glyphicon-calendar"></span>
-                                        </span>
-                                    </div>
-                                    <script type="text/javascript" *ngIf="backend.generics[p][backend.generics[p].length - 1].mode == 'date'">
-                                        $('pickgen{{ dataservice.sanit(p) }}').datetimepicker();
-                                    </script>
+                                    {{ 'account.dataField' | translate }}*
+                                    <input_block [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                                 </div>
                             </div>
                             <!-- END ITEM SELECT -->

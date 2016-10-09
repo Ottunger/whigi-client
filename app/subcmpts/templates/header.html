@@ -79,7 +79,7 @@
                             <a href="javascript:;" (click)="router.navigate(['/filesystem', 'data'])">{{ 'profile.datas' | translate }}</a>
                         </li>
                         <li *ngIf="running > 0">
-                            <ul class="dropdown-menu-list scroller" style="height: 100px; overflow: hidden; width: auto;" data-handle-color="#637283" data-initialized="1">
+                            <ul class="dropdown-menu-list scroller" style="height: 100px; overflow: hidden; width: auto;">
                                 <li>
                                     <a href="javascript:;">
                                         <span class="task">
@@ -118,12 +118,12 @@
                         <li (click)="router.navigate(['/filesystem', 'data'])">
                             <a href="javascript:;">
                                 <i class="icon-share-alt"></i> {{ 'profile.mine' | translate }}
-                                <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ length(backend.data_trie) }}</span></a>
+                                <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ dataservice.length(backend.data_trie) }}</span></a>
                         </li>
                         <li (click)="router.navigate(['/filesystem', 'vault'])">
                             <a href="javascript:;">
                                 <i class="icon-share"></i> {{ 'profile.shared' | translate }}
-                                <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ length(backend.shared_with_me_trie) }}</span></a>
+                                <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ dataservice.length(backend.shared_with_me_trie) }}</span></a>
                         </li>
                         <li class="divider"></li>
                         <li (click)="logout(false)">

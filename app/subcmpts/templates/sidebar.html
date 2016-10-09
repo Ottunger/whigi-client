@@ -32,12 +32,14 @@
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'data'])">
                     <i class="icon-share-alt"></i>
                     <span class="title">{{ 'profile.mine' | translate }}</span>
+                    <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ dataservice.length(backend.data_trie) }}</span>
                 </a>                                
             </li>
             <li class="nav-item linkbars" id="linkbars4">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'vault'])">
                     <i class="icon-share-alt"></i>
                     <span class="title">{{ 'profile.shared' | translate }}</span>
+                    <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ dataservice.length(backend.shared_with_me_trie) }}</span>
                 </a>
             </li>
             <li class="nav-item linkbars" id="linkbars5">
