@@ -37,7 +37,7 @@
                                     <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
                                         {{ 'actual' | translate }}<span>*</span>
                                     </div>
-                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                    <div class="col-md-6 visible-md-block visible-lg-block" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                         <div class="row" style="height: 5ex;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
                                             {{ k.descr_key | translate }}<span *ngIf="k.required">*</span><br />
                                         </div>

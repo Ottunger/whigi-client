@@ -20,6 +20,7 @@ enableProdMode();
         .MenuContainer {
             height: 27px;
             bottom:0;
+            z-index: 997;
         }
         ul#navigation {
             position: fixed;
@@ -33,6 +34,7 @@ enableProdMode();
             border-width: 1px 0;    
             text-align: center;
             font-size: 16px;
+            z-index: 997;
             font-family: 'Cham-WebFont', Arial, sans-serif;
             background-color: #2b3643;
         }
@@ -42,6 +44,7 @@ enableProdMode();
             list-style: none;
             margin: 0;
             padding: 0;
+            z-index: 997;
         }
         ul#navigation li.last {
             margin-right: 0;

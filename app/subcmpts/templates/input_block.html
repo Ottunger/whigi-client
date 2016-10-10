@@ -7,7 +7,8 @@
 <!-- JSON KEYS -->
 <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
     <div class="json{{ dataservice.sanit(g) }}" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-        <span *ngIf="writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span><br /></span>
+        <div *ngIf="writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
+        <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
         <!-- SUBTYPES -->
         <!-- text -->
         <input type="text" *ngIf="k.mode == 'text'" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)"/>

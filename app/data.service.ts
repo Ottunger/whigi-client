@@ -98,8 +98,10 @@ export class Data {
             switch(msg.data[0]) {
                 case 1:
                     self.ee.emit(parseInt(msg.data[1]));
-                    window.$('#workpg').css('width', msg.data[1] + '%');
-                    window.$('#worktx').text(msg.data[1] + '%');
+                    if(front === true) {
+                        window.$('#workpg').css('width', msg.data[1] + '%');
+                        window.$('#worktx').text(msg.data[1] + '%');
+                    }
                     self.check.tick();
                     break;
                 case 2:
