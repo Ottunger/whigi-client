@@ -20,7 +20,7 @@ import {Remote} from './subcmpts/remote.component';
 import {Generics} from './subcmpts/generics.component';
 import {User} from './subcmpts/user.component';
 import {Loginas} from './subcmpts/loginas.component';
-import {WhoIShare} from './subcmpts/whoishare.component',
+import {WhoIShare} from './subcmpts/whoishare.component';
 import {Notfound} from './subcmpts/notfound.component';
 import {Profileguard, Fullguard} from './guards.service';
 

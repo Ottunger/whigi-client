@@ -158,7 +158,7 @@ export class Data {
         if(!res) {
             return undefined;
         }
-        return raw_data
+        return raw_data;
     }
 
     /**

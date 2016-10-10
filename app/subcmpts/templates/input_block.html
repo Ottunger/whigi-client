@@ -15,7 +15,7 @@
         <!-- file -->
         <input type="file" *ngIf="k.mode == 'file'" class="form-control input-circle" (change)="fileLoad($event, k.descr_key)" name="new_datas"/>
         <!-- select -->
-        <select class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" (change)="iChange(3)">
+        <select class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" (change)="regChange(3)">
             <option *ngFor="let f of dataservice.getSelect(k.enum)" [value]="f">{{ f }}</option>
         </select>
         <!-- checkbox -->
@@ -36,7 +36,7 @@
     </div>
 </div>
 <!-- SELECT -->
-<select class="form-control input-circle" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="iChange(1)">
+<select class="form-control input-circle" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="regChange(1)">
     <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f }}</option>
 </select>
 <!-- CHECKBOX -->

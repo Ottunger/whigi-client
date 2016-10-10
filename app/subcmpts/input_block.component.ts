@@ -102,4 +102,17 @@ export class InputBlock implements OnInit {
         this.out.emit([mode, val]);
     }
 
+    /**
+     * Register an iChange.
+     * @function regChange
+     * @public
+     * @param {Number} mode Mode changed.
+     */
+    regChange(mode: number) {
+        var self = this;
+        setImmediate(function() {
+            self.iChange(mode);
+        });
+    }
+
 }
