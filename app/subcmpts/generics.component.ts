@@ -135,15 +135,5 @@ export class Generics implements OnInit {
             self.lighted.emit(self.getLight())
         });
     }
-
-    /**
-     * Update number of encryptions.
-     * @function updateEnc
-     * @public
-     * @param {Number} num Number.
-     */
-    updateEnc(num: number) {
-
-    }
     
 }

@@ -21,14 +21,14 @@
                         <div class="col-md-6">
                             <!-- BEGIN BLOCK -->
                             <div class="tab-content" *ngFor="let g of generics(); let e = even">
-                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]" (change)="updateEnc($event)"></generic_block>
+                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]"></generic_block>
                             </div>
                             <!-- END BLOCK -->
                         </div>
                         <div class="col-md-6">
                             <!-- BEGIN BLOCK -->
                             <div class="tab-content" *ngFor="let g of generics(); let e = odd">
-                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]" (change)="updateEnc($event)"></generic_block>
+                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]"></generic_block>
                             </div>
                             <!-- END BLOCK -->
                         </div>

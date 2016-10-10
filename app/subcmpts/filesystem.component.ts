@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter, Renderer} from '@angular/core';
+import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -26,7 +26,6 @@ export class Filesystem implements OnInit {
     private mode: string;
     private lighted: EventEmitter<number>;
     private sub: Subscription;
-    private renderFunc: Function;
 
     /**
      * Creates the component.
@@ -42,7 +41,7 @@ export class Filesystem implements OnInit {
      * @param render Renderer.
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private routed: ActivatedRoute,
-        private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef, private render: Renderer) {
+        private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef) {
         this.folders = '';
         this.lighted = new EventEmitter<number>();
     }
@@ -58,26 +57,15 @@ export class Filesystem implements OnInit {
             if(!!params['folders'])
                 self.folders = params['folders'];
             self.mode = params['mode'];
-            setTimeout(function() {
+            window.$('#pick1').ready(function() {
                 window.$('#pick1').datetimepicker();
                 window.$('#pick1').datetimepicker('date', window.moment());
+            });
+            window.$('#pick2').ready(function() {
                 window.$('#pick2').datetimepicker();
                 window.$('#pick2').datetimepicker('date', window.moment());
-            }, 100);
+            });
             self.regUpdate();
-
-            //Breadcrump
-            window.$('#breadcrump').ready(function() {
-                window.$('#breadcrump').html(self.dataservice.sanitarize(self.folders, true));
-            });
-            self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
-                var mode = /filesystem\/data/.test(window.location)? 'data' : 'vault';
-                if(window.$(event.target).hasClass('bread-home')) {
-                    self.router.navigate(['/filesystem', mode]);
-                } else if(window.$(event.target).hasClass('bread-in')) {
-                    self.router.navigate(['/filesystem', mode, {folders: window.$(event.target).attr('data-link')}]);
-                }
-            });
         });
     }
 
@@ -88,7 +76,6 @@ export class Filesystem implements OnInit {
      */
     ngOnDestroy(): void {
         this.sub.unsubscribe();
-        this.renderFunc();
     }
 
     /**

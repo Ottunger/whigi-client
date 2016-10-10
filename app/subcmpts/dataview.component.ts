@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter, Renderer} from '@angular/core';
+import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -38,7 +38,6 @@ export class Dataview implements OnInit, OnDestroy {
     public filter: string;
     private to_filesystem: boolean;
     private sub: Subscription;
-    private renderFunc: Function;
 
     /**
      * Creates the component.
@@ -46,12 +45,11 @@ export class Dataview implements OnInit, OnDestroy {
      * @public
      * @param translate Translation service.
      * @param backend App service.
-     * @param router Routing service.
-     * @param render Renderer.
+     * @param router Routing service.=
      * @param notif Notifications service.
      * @param routed Parameters service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private render: Renderer,
+    constructor(private translate: TranslateService, private backend: Backend, private router: Router,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data, private check: ApplicationRef) {
         this.decr_data = '[]';
         this.new_data_file = '';
@@ -119,18 +117,6 @@ export class Dataview implements OnInit, OnDestroy {
                 window.$('#pick5').datetimepicker('date', window.moment());
                 window.$('#pick5').datetimepicker('options', {widgetPositioning: {vertical: 'bottom'}});
             });
-
-            //Breadcrump
-            window.$('#breadcrump').ready(function() {
-                window.$('#breadcrump').html(self.dataservice.sanitarize(self.data_name));
-            });
-            self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
-                if(window.$(event.target).hasClass('bread-home')) {
-                    self.router.navigate(['/filesystem', 'data']);
-                } else if(window.$(event.target).hasClass('bread-in')) {
-                    self.router.navigate(['/filesystem', 'data', {folders: window.$(event.target).attr('data-link')}]);
-                }
-            });
         });
     }
 
@@ -141,7 +127,6 @@ export class Dataview implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         this.sub.unsubscribe();
-        this.renderFunc();
     }
 
     /**
@@ -264,10 +249,14 @@ export class Dataview implements OnInit, OnDestroy {
         var ret = Object.getOwnPropertyNames(this.backend.profile.data[this.data_name].shared_to);
         ret.forEach(function(d) {
             if(!!self.timings[d]) {
-                window.$('#pick-id' + d).datetimepicker();
-                window.$('#pick-id' + d).datetimepicker('date', window.moment(self.timings[d].la.getTime()));
-                window.$('#pick-id2' + d).datetimepicker();
-                window.$('#pick-id2' + d).datetimepicker('date', window.moment(self.timings[d].ee.getTime()));
+                window.$('#pick-id' + d).ready(function() {
+                    window.$('#pick-id' + d).datetimepicker();
+                    window.$('#pick-id' + d).datetimepicker('date', window.moment(self.timings[d].la.getTime()));
+                });
+                window.$('#pick-id2' + d).ready(function() {
+                    window.$('#pick-id2' + d).datetimepicker();
+                    window.$('#pick-id2' + d).datetimepicker('date', window.moment(self.timings[d].ee.getTime()));
+                });
             }
         })
         return ret;

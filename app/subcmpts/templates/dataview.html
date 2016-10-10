@@ -13,7 +13,7 @@
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title">
-                        <span id="breadcrump"></span>
+                        <breadcrump [name]="data_name" [folder]="false"></breadcrump>
                         <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
                         <button *ngIf="is_generic" type="button" class="btn green" style="float: right;" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
                     </h1>

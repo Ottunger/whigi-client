@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, ApplicationRef, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, enableProdMode, ApplicationRef, Input, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -27,7 +27,6 @@ export class GenericBlock implements OnInit {
     public new_data_file: {[id: string]: string};
     @Input() group: string;
     @Input() data_list: string[];
-    @Output() compute: EventEmitter<number>;
     private previews: {[id: string]: string};
     private asked: {[id: string]: boolean};
 
@@ -50,7 +49,6 @@ export class GenericBlock implements OnInit {
         this.new_data_file = {};
         this.previews = {};
         this.asked = {};
-        this.compute = new EventEmitter<number>();
     }
 
     /**

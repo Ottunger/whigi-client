@@ -16,6 +16,7 @@ import {Trie} from '../utils/Trie';
 export class Data {
 
     private selects: {[id: string]: string[]};
+    private marked: {[id: string]: boolean};
     private ee: EventEmitter<number>;
     private how: EventEmitter<number>;
 
@@ -30,6 +31,7 @@ export class Data {
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef) {
         this.selects = {};
+        this.marked = {};
         this.ee = new EventEmitter<number>();
         this.how = new EventEmitter<number>();
     }
@@ -45,27 +47,6 @@ export class Data {
         if(!str)
             return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-
-    /**
-     * Return the structure directory of a data.
-     * @function sanitarize
-     * @public
-     * @param {String} name Name of data.
-     * @param {Boolean} folder If folder, not display end separator.
-     * @return {String} HTML.
-     */
-    sanitarize(name: string, folder?: boolean) {
-        var parts: string[] = name.split('/');
-        parts.unshift('<button type="button" class="btn btn-lg btn-link bread-home"><i class="fa fa-home bread-home"></i></button>');
-        var last = parts.pop();
-
-        var folders = '';
-        for(var i = 1; i < parts.length; i++) {
-            folders += parts[i] + '/';
-            parts[i] = '<button type="button" class="btn btn-lg btn-link bread-in" data-link="' + folders + '">' + parts[i] + '</button>'
-        }
-        return parts.join(' > ') + (folder? '' : (' >> <button type="button" class="btn btn-lg btn-link">' + last + '</button>'));
     }
 
     /**
@@ -525,15 +506,17 @@ export class Data {
         var self = this;
         if(e in this.selects)
             return this.selects[e];
-        else {
-            this.backend.selectValues(e).then(function(vals) {
-                if(!(e in self.selects)) {
-                    self.selects[e] = vals.values;
-                    self.check.tick();
-                }
-            });
+        if(e in this.marked)
             return [];
-        }
+        this.marked[e] = true;
+        this.backend.selectValues(e).then(function(vals) {
+            if(!(e in self.selects)) {
+                self.selects[e] = vals.values;
+                delete self.marked[e];
+                self.check.tick();
+            }
+        });
+        return [];
     }
 
     /**
