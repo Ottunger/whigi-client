@@ -66,6 +66,10 @@ export class Filesystem implements OnInit {
                 window.$('#pick2').datetimepicker('date', window.moment());
             });
             self.regUpdate();
+            //Breadcrump
+            window.$('#breadcrump').ready(function() {
+                self.dataservice.ev.emit([self.folders, true]);
+            });
         });
     }
 

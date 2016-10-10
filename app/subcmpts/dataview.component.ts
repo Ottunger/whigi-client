@@ -37,6 +37,7 @@ export class Dataview implements OnInit, OnDestroy {
     public gen_name: string;
     public filter: string;
     private to_filesystem: boolean;
+    private sharedVector: string[];
     private sub: Subscription;
 
     /**
@@ -116,6 +117,10 @@ export class Dataview implements OnInit, OnDestroy {
                 window.$('#pick5').datetimepicker();
                 window.$('#pick5').datetimepicker('date', window.moment());
                 window.$('#pick5').datetimepicker('options', {widgetPositioning: {vertical: 'bottom'}});
+            });
+            //Breadcrump
+            window.$('#breadcrump').ready(function() {
+                self.dataservice.ev.emit([self.data_name, false]);
             });
         });
     }
@@ -246,19 +251,25 @@ export class Dataview implements OnInit, OnDestroy {
         var self = this;
         if(!this.backend.profile.data[this.data_name])
             return [];
+        if(!!this.sharedVector)
+            return this.sharedVector;
         var ret = Object.getOwnPropertyNames(this.backend.profile.data[this.data_name].shared_to);
         ret.forEach(function(d) {
-            if(!!self.timings[d]) {
-                window.$('#pick-id' + d).ready(function() {
-                    window.$('#pick-id' + d).datetimepicker();
-                    window.$('#pick-id' + d).datetimepicker('date', window.moment(self.timings[d].la.getTime()));
-                });
-                window.$('#pick-id2' + d).ready(function() {
-                    window.$('#pick-id2' + d).datetimepicker();
-                    window.$('#pick-id2' + d).datetimepicker('date', window.moment(self.timings[d].ee.getTime()));
-                });
-            }
-        })
+            var test = setInterval(function() {
+                if(!!self.timings[d]) {
+                    clearInterval(test);
+                    window.$('#pick-id' + d).ready(function() {
+                            window.$('#pick-id' + d).datetimepicker();
+                            window.$('#pick-id' + d).datetimepicker('date', window.moment(self.timings[d].la.getTime()));
+                    });
+                    window.$('#pick-id2' + d).ready(function() {
+                        window.$('#pick-id2' + d).datetimepicker();
+                        window.$('#pick-id2' + d).datetimepicker('date', window.moment(self.timings[d].ee.getTime()));
+                    });
+                }
+            }, 30);
+        });
+        this.sharedVector = ret;
         return ret;
     }
 

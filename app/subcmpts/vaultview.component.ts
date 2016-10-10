@@ -67,6 +67,10 @@ export class Vaultview implements OnInit, OnDestroy {
                     self.is_generic = true;
                     self.version = vault.version;
                 }
+                //Breadcrump
+                window.$('#breadcrump').ready(function() {
+                    self.dataservice.ev.emit([self.sharer_id + '/' + self.vault.data_name, false]);
+                });
             }, function(e) {
                 if(e.status == 417)
                     self.notif.error(self.translate.instant('error'), self.translate.instant('vaultview.expired'));

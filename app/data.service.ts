@@ -15,6 +15,7 @@ import {Trie} from '../utils/Trie';
 @Injectable()
 export class Data {
 
+    public ev: EventEmitter<[string, boolean]>;
     private selects: {[id: string]: string[]};
     private marked: {[id: string]: boolean};
     private ee: EventEmitter<number>;
@@ -30,6 +31,7 @@ export class Data {
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef) {
+        this.ev = new EventEmitter<[string, boolean]>();
         this.selects = {};
         this.marked = {};
         this.ee = new EventEmitter<number>();

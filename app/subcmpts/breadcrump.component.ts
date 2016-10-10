@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnChanges, OnDestroy, Renderer} from '@angular/core';
+import {Component, enableProdMode, Input, OnInit, OnDestroy, Renderer, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 enableProdMode();
 import * as template from './templates/breadcrump.html';
@@ -15,10 +15,11 @@ import * as template from './templates/breadcrump.html';
     selector: 'breadcrump',
     template: template
 })
-export class Breadcrump implements OnChanges, OnDestroy {
+export class Breadcrump implements OnInit, OnDestroy {
 
-    @Input() name: string;
-    @Input() folder: boolean;
+    private name: string;
+    private folder: boolean;
+    @Input() ev: EventEmitter<[string, boolean]>;
     private renderFunc: Function;
 
     /**
@@ -34,21 +35,19 @@ export class Breadcrump implements OnChanges, OnDestroy {
 
     /**
      * Called upon display.
-     * @function ngOnChanges
+     * @function ngOnInit
      * @public
      */
-    ngOnChanges(e: {[id: string]: any}): void {
+    ngOnInit(): void {
         var self = this;
-        if('name' in e) {
-            self.name = e['name'].currentValue;
-        }
-        if('folder' in e) {
-            self.folder = e['folder'].currentValue;
-        }
-        window.$('#breadcrump').ready(function() {
-            window.$('#breadcrump').html(self.sanitarize(self.name, self.folder));
+        this.ev.asObservable().subscribe(function(vals) {
+            self.name = vals[0];
+            self.folder = vals[1];
+            window.$('#breadcrump').ready(function() {
+                window.$('#breadcrump').html(self.sanitarize());
+            });
         });
-        self.renderFunc = self.render.listenGlobal('body', 'click', function(event) {
+        this.renderFunc = this.render.listenGlobal('body', 'click', function(event) {
             var mode = /^\/(filesystem\/)?data/.test(window.location.pathname)? 'data' : 'vault';
             if(window.$(event.target).hasClass('bread-home')) {
                 self.router.navigate(['/filesystem', mode]);
@@ -64,20 +63,17 @@ export class Breadcrump implements OnChanges, OnDestroy {
      * @public
      */
     ngOnDestroy(): void {
-        if(!!this.renderFunc)
-            this.renderFunc();
+        this.renderFunc();
     }
 
     /**
      * Return the structure directory of a data.
      * @function sanitarize
      * @public
-     * @param {String} name Name of data.
-     * @param {Boolean} folder If folder, not display end separator.
      * @return {String} HTML.
      */
-    private sanitarize(name: string, folder: boolean) {
-        var parts: string[] = name.split('/');
+    private sanitarize() {
+        var parts: string[] = this.name.split('/');
         parts.unshift('<button type="button" class="btn btn-lg btn-link bread-home"><i class="fa fa-home bread-home"></i></button>');
         var last = parts.pop();
 
@@ -86,7 +82,7 @@ export class Breadcrump implements OnChanges, OnDestroy {
             folders += parts[i] + '/';
             parts[i] = '<button type="button" class="btn btn-lg btn-link bread-in" data-link="' + folders + '">' + parts[i] + '</button>'
         }
-        return parts.join(' > ') + (folder? '' : (' >> <button type="button" class="btn btn-lg btn-link">' + last + '</button>'));
+        return parts.join(' > ') + (this.folder? '' : (' >> <button type="button" class="btn btn-lg btn-link">' + last + '</button>'));
     }
 
 }
