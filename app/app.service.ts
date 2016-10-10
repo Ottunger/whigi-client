@@ -47,6 +47,8 @@ export class Backend {
     public EID_HOST = 'localhost/api/v1/eid';
     public BASE_URL = 'https://localhost/api/v1/';
     public RESTORE_URL = 'https://localhost/api/v1/';
+    public GWP_URL = 'https://whigi2-giveaway.envict.com';
+    public MAIL = 'mailto://whigi.com@gmail.com';
     private rsa_key: string[];
 
     /**

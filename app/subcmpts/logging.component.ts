@@ -57,15 +57,22 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
-        if(!window.$('#ggccpt').html() || window.$('#ggccpt').html().length == 0) {
-            try {
-                window.grecaptcha.render('ggccpt', {
-                    'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
-                });
-            } catch(e) {
-                console.log(e);
-            }
-        }
+        window.$('#ggccpt').ready(function() {
+            var test = setInterval(function() {
+                if(!!window.grecaptcha) {
+                    clearInterval(test);
+                    if(!window.$('#ggccpt').html() || window.$('#ggccpt').html().length == 0) {
+                        try {
+                            window.grecaptcha.render('ggccpt', {
+                                'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
+                            });
+                        } catch(e) {
+                            console.log(e);
+                        }
+                    }
+                }
+            }, 30);
+        });
         if(this.onEnd && /end/.test(window.location.href)) {
             //Session has expired
             this.onEnd = false;
@@ -115,9 +122,9 @@ export class Logging implements OnInit {
             window.$('.register-form').hide();
         });
         if(!this.recuperable) {
-            setTimeout(function() {
+            window.$('#recupcheck').ready(function() {
                 window.$('#recupcheck').click();
-            }, 300);
+            });
         }
     }
 
