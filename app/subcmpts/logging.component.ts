@@ -103,6 +103,15 @@ export class Logging implements OnInit {
                 }
             }, function(e) {
                 localStorage.removeItem('token');
+                //Fallback to a request
+                window.$('#ctn-log').ready(function() {
+                    window.$('#ctn-log').css('display', 'block');
+                });
+            });
+        } else {
+            //Fallback to a request
+            window.$('#ctn-log').ready(function() {
+                window.$('#ctn-log').css('display', 'block');
             });
         }
         window.$('#forget-password').click(function() {

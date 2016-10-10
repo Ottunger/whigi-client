@@ -48,9 +48,6 @@ export class Remote implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         var self = this;
-        window.$('body').ready(function() {
-            window.$('body').css('display', 'none');
-        });
         this.sub = this.routed.params.subscribe(function(params) {
             self.id_to = params['id_to'];
             self.challenge = params['challenge'];

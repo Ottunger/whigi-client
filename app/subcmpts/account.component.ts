@@ -65,11 +65,6 @@ export class Account implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            //If we will be OK, do not want to show DOM
-            window.$('body').ready(function() {
-                window.$('body').css('display', 'none');
-            });
-
             self.id_to = params['id_to'];
             self.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
             self.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
@@ -141,8 +136,8 @@ export class Account implements OnInit, OnDestroy {
                     self.ok();
                 }
                 //Fallback to a request
-                window.$('body').ready(function() {
-                    window.$('body').css('display', 'block');
+                window.$('#ctn-acc').ready(function() {
+                    window.$('#ctn-acc').css('display', 'block');
                 });
             }, function() {
                 self.deny();
