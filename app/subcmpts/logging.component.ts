@@ -296,7 +296,7 @@ export class Logging implements OnInit {
         var self = this;
         window.$('.iforget').removeClass('has-error');
         this.backend.requestRestore(this.username).then(function() {
-            self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+            self.notif.success(self.translate.instant('success'), self.translate.instant('login.resetSent'));
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noReset'));
             window.$('.iforget').addClass('has-error');

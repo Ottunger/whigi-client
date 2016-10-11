@@ -51,7 +51,7 @@ export class Reset implements OnInit, OnDestroy {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
             self.pwd = window.decodeURIComponent(params['pwd']);
-            self.id = params['id'];
+            self.id = params['id'].toLowerCase();
         });
     }
 

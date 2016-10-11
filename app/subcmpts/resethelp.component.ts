@@ -48,11 +48,11 @@ export class Resethelp implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.id = params['id'];
+            self.id = params['id'].toLowerCase();
             self.data_name = window.decodeURIComponent(params['data_name']);
             self.dataservice.listData(false).then(function() {
-                self.dataservice.getVault(self.backend.profile.shared_with_me[self.id][self.data_name]).then(function(vault, got) {
-                    self.backend.mixRestore(self.id, got).then(function() {
+                self.dataservice.getVault(self.backend.profile.shared_with_me[self.id][self.data_name]).then(function(vault) {
+                    self.backend.mixRestore(self.id, vault.decr_data).then(function() {
                         self.router.navigate(['/generics', 'generics.profile']);
                     }, function() {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noHelp'));
