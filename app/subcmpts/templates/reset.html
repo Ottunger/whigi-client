@@ -4,7 +4,7 @@
                 <img src="../../../img/private/logo-big.png" width="100px" alt="" />
                 <p>{{ 'mention' | translate }}</p>
         </div>
-        <div class="content">
+        <div class="page-content">
             <!-- BEGIN RESET FORM -->
             <form class="register-form">
                 <h3>{{ 'reset.reset' | translate }}</h3>
@@ -32,7 +32,7 @@
                         <i class="fa fa-lock"></i>
                         <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
                 </div>
-                <div class="form-actions">
+                <div class="row" style="padding-right: 13px;">
                     <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="enter()"> {{ 'reset.send' | translate }} </button>
                 </div>
             </form>

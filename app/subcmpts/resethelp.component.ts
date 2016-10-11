@@ -53,15 +53,18 @@ export class Resethelp implements OnInit, OnDestroy {
             self.dataservice.listData(false).then(function() {
                 self.dataservice.getVault(self.backend.profile.shared_with_me[self.id][self.data_name]).then(function(vault, got) {
                     self.backend.mixRestore(self.id, got).then(function() {
-                        self.router.navigate(['/profile']);
+                        self.router.navigate(['/generics', 'generics.profile']);
                     }, function() {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noHelp'));
+                        self.router.navigate(['/generics', 'generics.profile']);
                     });
                 }, function(e) {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noHelp'));
+                    self.router.navigate(['/generics', 'generics.profile']);
                 });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noHelp'));
+                self.router.navigate(['/generics', 'generics.profile']);
             });
         });
     }

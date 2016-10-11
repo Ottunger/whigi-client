@@ -50,7 +50,7 @@ export class Reset implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.pwd = params['pwd'];
+            self.pwd = window.decodeURIComponent(params['pwd']);
             self.id = params['id'];
         });
     }
@@ -71,8 +71,10 @@ export class Reset implements OnInit, OnDestroy {
      */
     enter() {
         var self = this;
+        window.$('.form-group').removeClass('has-error');
         if(this.password.length < 8) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+            window.$('.form-group').addClass('has-error');
             return;
         }
         if(this.password == this.password2) {
@@ -86,7 +88,7 @@ export class Reset implements OnInit, OnDestroy {
                         self.backend.updateProfile(self.password, self.pwd).then(function() {
                             self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to).then(function() {
                                 self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to).then(function() {
-                                    self.router.navigate(['/generics/generics.profile']);
+                                    self.router.navigate(['/generics', 'generics.profile']);
                                 }, function(e) {
                                     self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
                                 });
@@ -105,6 +107,7 @@ export class Reset implements OnInit, OnDestroy {
             });
         } else {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+            window.$('.form-group').addClass('has-error');
         }
     }
 

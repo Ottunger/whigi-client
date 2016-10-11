@@ -46,7 +46,7 @@ export class Backend {
     }};
     public EID_HOST = 'localhost/api/v1/eid';
     public BASE_URL = 'https://localhost/api/v1/';
-    public RESTORE_URL = 'https://localhost/api/v1/';
+    public RESTORE_URL = 'https://localhost:444/api/v1/';
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public MAIL = 'mailto://whigi.com@gmail.com';
     private rsa_key: string[];
@@ -502,7 +502,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     transitionSchema(name: string, as: number, to: number): Promise {
-        return this.backend(true, false, 'GET', {}, 'schemas/' + encodeURIComponent(name) + '/' + as + '/' + to, false, false);
+        return this.backend(true, false, 'GET', {}, 'schemas/' + name + '/' + as + '/' + to, false, false);
     }
 
     /**
