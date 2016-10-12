@@ -5,7 +5,7 @@
                 {{ group | translate }}
             </div>
             <div class="tools">
-                <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsablegen' + dataservice.sanit(group))"> </a>
+                <a href="javascript:;" class="expand" (click)="dataservice.collapse('apsablegen' + dataservice.sanit(group))"> </a>
             </div>
         </div>
         <div class="portlet-body form" id="apsablegen{{ dataservice.sanit(group) }}">
@@ -26,7 +26,7 @@
                                         <tooltip [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
                                     </h4>
                                     <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
-                                    <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ 'account.nameField' | translate }}*
+                                    <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ backend.generics[g][backend.generics[g].length - 1].new_key | translate }}
                                         <input type="text" [(ngModel)]="ass_name[g]" name="new_name{{ dataservice.sanit(g) }}" class="form-control input-circle" />
                                     </p>
                                     <!-- EXPL -->
@@ -34,12 +34,12 @@
                                 <!-- BEGIN SELECT -->
                                 <div class="row" id="igen{{ dataservice.sanit(g) }}">
                                     <!-- description -->
-                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
-                                        {{ 'actual' | translate }}<span>*</span>
+                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
+                                        {{ 'actual' | translate }}<span>*</span>:
                                     </div>
-                                    <div class="col-md-6 visible-md-block visible-lg-block" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                        <div class="row" style="height: 5ex;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span><br />
+                                    <div class="col-md-6 text-right visible-md-block visible-lg-block" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                        <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                         </div>
                                     </div>
                                     <!-- input -->

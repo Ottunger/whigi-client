@@ -66,7 +66,7 @@
                             <button type="button" class="btn green" (click)="modify()">
                                 <i class="fa fa-pencil"></i> {{ 'userinfo.modify' | translate }}</button>
                             <button type="button" class="btn default" (click)="load()">
-                                <i class="fa fa-pencil"></i> {{ 'userinfo.load' | translate }}</button>
+                                <i class="fa fa-reply"></i> {{ 'userinfo.load' | translate }}</button>
                         </div>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             <input type="hidden" name="username" [value]="backend.profile._id" />
                             <input type="hidden" name="hpwd" [value]="goCompany()" />
                             <button type="button" class="btn green" (click)="goBCE()" [disabled]="user.is_company != 9">
-                                <i class="fa fa-pencil"></i> {{ 'userinfo.goBCE' | translate }}</button>
+                                <i class="fa fa-reply"></i> {{ 'userinfo.goBCE' | translate }}</button>
                             <input type="submit" class="btn default" value="{{ 'userinfo.goCompany' | translate }}" onclick="document.getElementById('eidform').submit()" />
                         </div>
                     </div>
@@ -85,7 +85,7 @@
             <div class="row">
                 <div class="col-md-offset-4 col-md-8">
                     <button type="button" class="btn green" (click)="modifyPict()" [disabled]="!pict || pict == ''">
-                            <i class="fa fa-pencil"></i> {{ 'userinfo.modifyPict' | translate }}</button>
+                            <i class="fa fa-upload"></i> {{ 'userinfo.modifyPict' | translate }}</button>
                 </div>
             </div>
         </div>

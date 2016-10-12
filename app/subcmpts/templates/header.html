@@ -111,6 +111,10 @@
                             <a href="javascript:;">
                                 <i class="icon-user"></i> {{ dataservice.forDisplay(backend.profile._id) | translate }} </a>
                         </li>
+                        <li (click)="router.navigate(['/profile'])">
+                            <a href="javascript:;">
+                                <i class="icon-settings"></i> {{ 'profile.home' | translate }} </a>
+                        </li>
                         <li (click)="router.navigate(['/generics'])">
                             <a href="javascript:;">
                                 <i class="icon-notebook"></i> {{ 'profile.generics' | translate }} </a>

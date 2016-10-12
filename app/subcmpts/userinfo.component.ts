@@ -145,9 +145,33 @@ export class Userinfo implements OnInit {
         var file: File = e.target.files[0]; 
         var r: FileReader = new FileReader();
         r.onloadend = function(e) {
-            self.pict = r.result;
+            self.resizeBase64Img(r.result, 32, 32).then(function(res) {
+                self.pict = res;
+            });
         }
         r.readAsDataURL(file);
+    }
+
+    /**
+     * Resize picture in JS.
+     * @function resizeBase64Img
+     * @public
+     * @param {String} base64 Data.
+     * @param {Number} width New width.
+     * @param {Number} height New height.
+     */
+    resizeBase64Img(base64, width, height) {
+        var canvas = document.createElement('canvas');
+        canvas.width = width;
+        canvas.height = height;
+        var context = canvas.getContext('2d');
+        var deferred = window.$.Deferred();
+        window.$('<img src="' + base64 + '" />').on('load', function() {
+            context.scale(width/this.width, height/this.height);
+            context.drawImage(this, 0, 0); 
+            deferred.resolve(canvas.toDataURL());               
+        });
+        return deferred.promise();    
     }
 
     /**

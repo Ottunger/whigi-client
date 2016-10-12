@@ -36,7 +36,8 @@ export class Backend {
         validate: string,
         module: string,
         group: string,
-        json_keys: {descr_key: string, mode: string, enum: string, required: boolean}[]
+        json_keys: {descr_key: string, mode: string, enum: string, required: boolean}[],
+        new_key?: string
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {

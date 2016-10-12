@@ -24,7 +24,7 @@
                                             <a href="javascript:;" style="color: #fff;" (click)="router.navigate(['/user', p])">{{ dataservice.forDisplay(p) }}</a>
                                         </div>
                                         <div class="tools">
-                                            <a href="javascript:;" class="collapse" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))"> </a>
+                                            <a href="javascript:;" class="expand" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))"> </a>
                                         </div>
                                     </div>
                                     <div class="portlet-body form" id="apsableshare{{ dataservice.sanit(p) }}" style="display: none;">

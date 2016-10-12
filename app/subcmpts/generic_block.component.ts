@@ -64,6 +64,8 @@ export class GenericBlock implements OnInit {
         if(this.group.indexOf('none', this.group.length - 4) != -1) {
             window.$('#apsablegen' + this.dataservice.sanit(this.group)).ready(function() {
                 window.$('#apsablegen' + self.dataservice.sanit(self.group)).css('display', 'none');
+                window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('expand');
+                window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('collapse');
             });
         }
     }
