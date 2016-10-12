@@ -13,7 +13,7 @@
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title"><breadcrump [ev]="dataservice.ev"></breadcrump></h1>
-                    <h3 *ngIf="!!hasKey('descr')">{{ hasKey('descr') | translate }}<tooltip [uri]="hasKey('url')" [right]="true"></tooltip></h3>
+                    <h3 *ngIf="!!hasKey('descr')">{{ hasKey('descr') | translate }}<tooltip [mode]="'info'" [uri]="hasKey('url')" [right]="true"></tooltip></h3>
                     <p *ngIf="!!hasKey('long')">{{ hasKey('long') | translate }}</p>
                     <!-- END PAGE TITLE-->
                     <div class="row">

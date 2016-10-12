@@ -45,7 +45,7 @@
                                                     <tr *ngFor="let g of backend.my_shares[p]">
                                                         <td>{{ g }}</td>
                                                         <td>
-                                                            <tooltip [uri]="genName(g, true)" [right]="false"></tooltip>
+                                                            <tooltip [mode]="'info'" [uri]="genName(g, true)" [right]="false"></tooltip>
                                                             {{ genName(g, false) }}
                                                         </td>
                                                         <td>

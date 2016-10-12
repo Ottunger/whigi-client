@@ -29,6 +29,7 @@
    "help": "Aide",
    "help.noHelp": "Impossible de charger l'aide",
    "confidence": "Ceci est le niveau de confiance de Whigi pour cet utilisateur, de 0 (très mauvais) à 9 (excellent).",
+   "nothing": "Aucune information",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
@@ -85,7 +86,7 @@
    "profile.warnChange": "Mot de passe changé, mais récupération devenue impossible",
    "profile.generics": "Données génériques",
    "profile.eidRead": "Profil importé depuis l'eID",
-   "profile.home": "Profile",
+   "profile.home": "Profil utilisateur",
    "profile.datas": "Tout",
    "profile.uname": "Changer nom de compte",
    "profile.whoishare": "Partagé par moi",

@@ -23,7 +23,7 @@
                                         <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
                                             class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
                                         {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
-                                        <tooltip [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
+                                        <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
                                     </h4>
                                     <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
                                     <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ backend.generics[g][backend.generics[g].length - 1].new_key | translate }}
@@ -54,8 +54,9 @@
                                         <div class="col-md-6">
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g]">
                                                 <li class="list-group-item">
-                                                    <button type="button" class="btn btn-link"
-                                                        (click)="select(g)"><i class="fa fa-pencil"></i> {{ 'generics.goTo' | translate }}</button>
+                                                    <tooltip [mode]="'shares'" [uri]="g" [right]="true"></tooltip>
+                                                    <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g)">
+                                                        <i class="fa fa-pencil"></i> {{ 'generics.goTo' | translate }}</button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -80,8 +81,9 @@
                                         <div class="col-md-6">
                                             <ul class="list-group">
                                                 <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g)">
-                                                    <button type="button" class="btn btn-link"
-                                                        (click)="select(g + '/' + d)"><i class="fa fa-pencil"></i> ({{ d }})</button>
+                                                    <tooltip [mode]="'shares'" [uri]="g + '/' + d" [right]="true"></tooltip>
+                                                    <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
+                                                        <i class="fa fa-pencil"></i> ({{ d }})</button>
                                                 </li>
                                             </ul>
                                         </div>

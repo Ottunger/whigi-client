@@ -3,7 +3,7 @@
         <div class="portlet box blue-madison">
             <div class="portlet-title">
                 <div class="caption">
-                    <tooltip *ngIf="isGeneric()" [uri]="backend.generics[gen_name][backend.generics[gen_name].length - 1].help_url" [right]="false"></tooltip>
+                    <tooltip [mode]="'info'" *ngIf="isGeneric()" [uri]="backend.generics[gen_name][backend.generics[gen_name].length - 1].help_url" [right]="false"></tooltip>
                     {{ getName() }}
                 </div>
             </div>

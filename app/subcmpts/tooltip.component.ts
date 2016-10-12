@@ -20,7 +20,9 @@ import * as template from './templates/tooltip.html';
 export class Tooltip {
 
     @Input() uri: string;
+    @Input() mode: string;
     @Input() right: boolean;
+    private mapping: {[id: string]: string};
 
     /**
      * Creates the component.
@@ -31,7 +33,7 @@ export class Tooltip {
      * @param notif Event service.
      */
     constructor(private backend: Backend, private translate: TranslateService, private notif: NotificationsService) {
-
+        this.mapping = {};
     }
 
     /**
@@ -43,16 +45,48 @@ export class Tooltip {
         var self = this;
         if(!self.uri || self.uri == '')
             return;
-        self.backend.tooltip(self.uri).then(function(vals) {
+        if(this.mode == 'shares') {
+            //We are asked for showing who we share a data with
+            var shares = '', keys = Object.getOwnPropertyNames(this.backend.profile.data[this.uri].shared_to);
+            for(var i = 0; i < keys.length; i++) {
+                this.mapping[keys[i]] = this.backend.generateRandomString(12);
+                shares += '<li class="list-group-item"><img id="pict__' + this.mapping[keys[i]] + keys[i] + '" height="20px" alt="" style="float: left;margin-right: 10px;" />' + keys[i] + '</li>';
+            }
+            shares = (shares == '')? '<li class="list-group-item">' + this.translate.instant('nothing') + '</li>' : shares;
+            //Modal
             window.$(`
                 <div class="modal">
-                    <h3>` + self.translate.instant('help') + `</h3>
-                    <p>` + vals[self.translate.currentLang] + `</p>
+                    <h3>` + self.translate.instant('dataview.grants') + `</h3>
+                    <div class="row text-center"><ul class="list-group">` + shares + `</ul></div>
                 </div>
             `).appendTo('body').modal();
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('help.noHelp'));
-        });
+            //Pictures
+            keys.forEach(function(key) {
+                self.backend.getUser(key).then(function(user) {
+                    window.$('#pict__' + self.mapping[key] + key).ready(function() {
+                        if(!!user && !!user.company_info && !!user.company_info.picture)
+                            window.$('#pict__' + self.mapping[key] + key).attr('src', user.company_info.picture);
+                        else
+                            window.$('#pict__' + self.mapping[key] + key).attr('src', 'assets/logo.png');
+                    });
+                }, function(e) {
+                    window.$('#pict__' + self.mapping[key] + key).ready(function() {
+                        window.$('#pict__' + self.mapping[key] + key).attr('src', 'assets/logo.png');
+                    });
+                });
+            });
+        } else if(this.mode == 'info') {
+            this.backend.tooltip(this.uri).then(function(vals) {
+                window.$(`
+                    <div class="modal">
+                        <h3>` + self.translate.instant('help') + `</h3>
+                        <p>` + vals[self.translate.currentLang] + `</p>
+                    </div>
+                `).appendTo('body').modal();
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('help.noHelp'));
+            });
+        }
     }
 
 }

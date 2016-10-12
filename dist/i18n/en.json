@@ -29,6 +29,7 @@
    "help": "Help",
    "help.noHelp": "Cannot load help information",
    "confidence": "This is the confidence level that Whigi grants to this user, ranging from 0 (very poor) to 9 (excellent).",
+   "nothing": "Nothing to show",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",
@@ -85,7 +86,7 @@
    "profile.warnChange": "Password changed, but recovery options not",
    "profile.generics": "Generic data fields",
    "profile.eidRead": "Data imported from eID",
-   "profile.home": "Profile",
+   "profile.home": "User profile",
    "profile.datas": "All data",
    "profile.uname": "Change username",
    "profile.whoishare": "Shared by me",

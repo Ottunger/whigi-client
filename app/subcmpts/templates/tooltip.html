@@ -1,2 +1,4 @@
-<a href="javascript:;" *ngIf="right && !!uri && uri != ''" style="float: right;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
-<a href="javascript:;" *ngIf="!right && !!uri && uri != ''" style="float: left;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
+<a href="javascript:;" *ngIf="right && mode=='info' && !!uri && uri != ''" style="float: right;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
+<a href="javascript:;" *ngIf="!right && mode=='info' && !!uri && uri != ''" style="float: left;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
+
+<a href="javascript:;" *ngIf="mode=='shares' && !!uri && uri != ''" style="position: absolute; z-index: 990;" (click)="launch()"><i class="fa fa-commenting"></i></a>
