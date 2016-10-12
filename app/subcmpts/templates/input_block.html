@@ -1,5 +1,7 @@
 <!-- TEXT -->
-<input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text'"
+<input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !!backend.generics[g][backend.generics[g].length - 1].placeholder"
+    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)" [placeholder]="backend.generics[g][backend.generics[g].length - 1].placeholder"/>
+<input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !backend.generics[g][backend.generics[g].length - 1].placeholder"
     type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
 <!-- FILE -->
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
@@ -11,7 +13,8 @@
         <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
         <!-- SUBTYPES -->
         <!-- text -->
-        <input type="text" *ngIf="k.mode == 'text'" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)"/>
+        <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)" [placeholder]="k.placeholder"/>
+        <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)"/>
         <!-- file -->
         <input type="file" *ngIf="k.mode == 'file'" class="form-control input-circle" (change)="fileLoad($event, k.descr_key)" name="new_datas"/>
         <!-- select -->

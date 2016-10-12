@@ -13,7 +13,7 @@
             <form class="form-horizontal" role="form">
                 <div class="form-body">
                     <div *ngFor="let g of data_list; let l = last" id="iname{{ dataservice.sanit(g) }}">
-                        <div class="row">
+                        <div class="row input-holder" [attr.data-g]="g">
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- EXPL -->
@@ -61,18 +61,10 @@
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
-                                            <ul class="list-group" *ngIf="!backend.profile.data[g]">
-                                                <li class="list-group-item">
-                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'"
-                                                        type="button" class="btn green" (click)="register(g, false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
-                                                        type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                                </li>
-                                            </ul>
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
                                                 && backend.generics[g][backend.profile.data[g].version].mode != 'json_keys'">
                                                 <li class="list-group-item">
-                                                    <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [ngModel]="preview(g)" />
+                                                    <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [value]="preview(g)" />
                                                 </li>
                                             </ul>
                                         </div>
@@ -80,7 +72,7 @@
                                     <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g)">
+                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, true)">
                                                     <tooltip [mode]="'shares'" [uri]="g + '/' + d" [right]="true"></tooltip>
                                                     <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
                                                         <i class="fa fa-pencil"></i> ({{ d }})</button>
@@ -89,11 +81,10 @@
                                         </div>
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item">
-                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode != 'file'" [disabled]="!ass_name[g] || ass_name[g] == ''"
-                                                        type="button" class="btn green" (click)="register(g, false, ass_name[g])"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                                    <button *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'" [disabled]="!ass_name[g] || ass_name[g] == ''"
-                                                        type="button" class="btn green" (click)="register(g, true, ass_name[g])"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, false)">
+                                                    <tooltip [mode]="'shares'" [uri]="g + '/' + d" [right]="true"></tooltip>
+                                                    <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
+                                                        <i class="fa fa-pencil"></i> ({{ d }})</button>
                                                 </li>
                                             </ul>
                                         </div>
@@ -102,7 +93,14 @@
                                 <!-- END DISP -->
                             </div>
                         </div>
-                        <div style="margin-top:10px; margin-bottom:2px; height:1px; width:100%; border-top:2px solid gray;" *ngIf="!l"></div>
+                        <div style="margin-top:7px; margin-bottom:2px; height:1px; width:100%; border-top:1px solid #2b3643;" *ngIf="!l"></div>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn green" (click)="registerAll()"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                        </div>
                     </div>
                 </div>
             </form>

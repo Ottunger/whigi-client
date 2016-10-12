@@ -92,6 +92,33 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Registers all entered inputs.
+     * @function registerAll
+     * @public
+     */
+    registerAll() {
+        var self = this;
+        window.$('.input-holder').each(function(index, el) {
+            var g = window.$(this).attr('data-g');
+            if(self.backend.generics[g][self.backend.generics[g].length - 1].instantiable) {
+                if(!!self.ass_name[g] && self.ass_name[g] != '') {
+                    if(self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') {
+                        self.register(g, true, self.ass_name[g]);
+                    } else if((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) {
+                        self.register(g, false, self.ass_name[g]);
+                    }
+                }
+            } else {
+                if(self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') {
+                    self.register(g, true);
+                } else if((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) {
+                    self.register(g, false);
+                }
+            }
+        });
+    }
+
+    /**
      * Register a new data.
      * @function register
      * @public
@@ -112,10 +139,10 @@ export class GenericBlock implements OnInit {
         }
         //Create it
         this.dataservice.newData(name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
-            delete self.ass_name[name];
-            delete self.new_data[name];
+            self.ass_name[name] = '';
+            self.new_data[name] = '';
             self.new_datas[name] = {};
-            delete self.new_data_file[name];
+            self.new_data_file[name] = '';
             self.check.tick();
         }, function(err) {
             if(err == 'server') {
@@ -132,11 +159,17 @@ export class GenericBlock implements OnInit {
      * @function dataNames
      * @public
      * @param {String} folder to list.
+     * @param {Boolean} boolean Whether to return even or odd names.
      * @return {Array} Known fields.
      */
-    dataNames(folder: string): string[] {
+    dataNames(folder: string, even: boolean): string[] {
+        var i = 0;
         return this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
-            return el.charAt(el.length - 1) != '/';
+            if(i >= 6)
+                return false;
+            if(el.charAt(el.length - 1) != '/' && i++ % 2 == (even? 0 : 1))
+                return true;
+            return false;
         }).map(function(el: string): string {
             return el.replace(/.+\//, '');
         });
