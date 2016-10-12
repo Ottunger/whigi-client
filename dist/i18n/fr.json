@@ -28,6 +28,7 @@
    "contact": "Contactez-nous",
    "help": "Aide",
    "help.noHelp": "Impossible de charger l'aide",
+   "confidence": "Ceci est le niveau de confiance de Whigi pour cet utilisateur, de 0 (très mauvais) à 9 (excellent).",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",

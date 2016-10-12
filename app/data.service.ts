@@ -276,7 +276,8 @@ export class Data {
                         id: res._id,
                         length: 0,
                         is_dated: is_dated,
-                        shared_to: {}
+                        shared_to: {},
+                        version: version
                     }
                     self.backend.data_trie.addMilestones(name, '/');
                     self.backend.data_trie.add(name, self.backend.profile.data[name]);
@@ -534,6 +535,30 @@ export class Data {
         if(!cpt)
             return 0;
         return cpt.suggestions('').filter(function(el) {return el.charAt(el.length - 1) != '/';}).length;
+    }
+
+    /**
+     * Add pictures to DOM.
+     * @function picts
+     * @public
+     * @param {Object} user User.
+     * @param {String} dom DOM ID.
+     */
+    picts(user: any, dom: string) {
+        var self = this;
+        if(!!user.company_info && !!user.company_info.picture)
+            window.$('#' + dom).prepend('<img id="mypict" src="' + user.company_info.picture + '" height="32px" alt="" style="float: left;margin-right: 10px;" />');
+        else
+            window.$('#' + dom).prepend('<img id="mypict" src="assets/logo.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
+        window.$('#' + dom).prepend('<img id="confipict" src="img/' + user.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;cursor: pointer;" />');
+        window.$('#confipict').click(function() {
+            window.$(`
+                <div class="modal">
+                    <h3>` + self.translate.instant('help') + `</h3>
+                    <p>` + self.translate.instant('confidence') + `</p>
+                </div>
+            `).appendTo('body').modal();
+        });
     }
 
 }

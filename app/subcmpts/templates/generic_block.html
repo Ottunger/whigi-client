@@ -68,7 +68,7 @@
                                                         type="button" class="btn green" (click)="register(g, true)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
                                                 </li>
                                             </ul>
-                                            <ul class="list-group" *ngIf="backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
+                                            <ul class="list-group" *ngIf="!!backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
                                                 && backend.generics[g][backend.profile.data[g].version].mode != 'json_keys'">
                                                 <li class="list-group-item">
                                                     <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [ngModel]="preview(g)" />

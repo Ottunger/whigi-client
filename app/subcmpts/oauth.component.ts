@@ -12,6 +12,7 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/oauth.html';
 
@@ -38,9 +39,10 @@ export class Oauth implements OnInit, OnDestroy {
      * @param routed Activated route service.
      * @param backend Data service.
      * @param check Check service.
+     * @param dataservice Data service.
      */
     constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService,
-        private routed: ActivatedRoute, private backend: Backend, private check: ApplicationRef) {
+        private routed: ActivatedRoute, private backend: Backend, private check: ApplicationRef, private dataservice: Data) {
         this.requester = {};
     }
 
@@ -65,7 +67,7 @@ export class Oauth implements OnInit, OnDestroy {
             }
             self.backend.getUser(self.for_id).then(function(user) {
                 self.requester = user;
-                window.$('#pict-user').prepend('<img src="img/' + self.requester.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
+                self.dataservice.picts(user, 'pict-user');
                 self.check.tick();
             }, function(e) {
                 window.location.href = self.mixin(self.return_url_deny, ['reason=api']);

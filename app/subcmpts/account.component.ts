@@ -144,11 +144,7 @@ export class Account implements OnInit, OnDestroy {
             });
             self.backend.getUser(self.id_to).then(function(user) {
                 self.requester = user;
-                if(!!user.company_info && !!user.company_info.picture)
-                    window.$('#pict-user').prepend('<img id="mypict" src="' + user.company_info.picture + '" height="32px" alt="" style="float: left;margin-right: 10px;" />');
-                else
-                    window.$('#pict-user').prepend('<img id="mypict" src="assets/logo.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
-                window.$('#pict-user').prepend('<img src="img/' + self.requester.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
+                self.dataservice.picts(user, 'pict-user');
                 self.check.tick();
             }, function(e) {
                 self.deny();

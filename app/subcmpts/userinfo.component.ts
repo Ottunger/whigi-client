@@ -53,11 +53,7 @@ export class Userinfo implements OnInit {
             if(Object.getOwnPropertyNames(self.user).length == 0)
                 return;
             clearInterval(test);
-            if(!!self.user.company_info && !!self.user.company_info.picture)
-                window.$('#pict-user').prepend('<img id="mypict" src="' + self.user.company_info.picture + '" height="32px" alt="" style="float: left;margin-right: 10px;" />');
-            else
-                window.$('#pict-user').prepend('<img id="mypict" src="assets/logo.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
-            window.$('#pict-user').prepend('<img src="img/' + self.user.is_company + '.png" height="32px" alt="" style="float: left;margin-right: 10px;" />');
+            self.dataservice.picts(self.user, 'pict-user');
         }, 30);
     }
 
