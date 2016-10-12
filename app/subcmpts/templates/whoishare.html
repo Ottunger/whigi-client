@@ -21,10 +21,13 @@
                                 <div class="portlet box blue-madison">
                                     <div class="portlet-title">
                                         <div class="caption">
-                                            <a href="javascript:;" style="color: #fff;" (click)="router.navigate(['/user', p])">{{ dataservice.forDisplay(p) }}</a>
+                                            <a href="javascript:;" style="color: #fff;" (click)="router.navigate(['/user', p])">
+                                                <img id="pict__{{ p }}" height="20px" alt="" style="float: left;margin-right: 10px;cursor: pointer;" />
+                                                {{ dataservice.forDisplay(p) }}
+                                            </a>
                                         </div>
                                         <div class="tools">
-                                            <a href="javascript:;" class="expand" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))"> </a>
+                                            <a href="javascript:;" class="tl-link collapse" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))"> </a>
                                         </div>
                                     </div>
                                     <div class="portlet-body form" id="apsableshare{{ dataservice.sanit(p) }}" style="display: none;">

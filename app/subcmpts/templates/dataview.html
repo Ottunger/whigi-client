@@ -32,7 +32,7 @@
                                         <div class="portlet-title">
                                             <div class="caption"><i class="fa fa-suitcase"></i>{{ 'modify' | translate }}</div>
                                             <div class="tools">
-                                                <a href="javascript:;" class="expand" (click)="dataservice.collapse('apsable__more')"> </a>
+                                                <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable__more')"> </a>
                                             </div>
                                         </div>
                                         <div class="portlet-body form" id="apsable__more">
@@ -111,7 +111,7 @@
                                             <div class="caption">
                                                 <i class="fa fa-user"></i>{{ 'dataview.grants' | translate }}</div>
                                             <div class="tools">
-                                                <a href="javascript:;" class="expand" (click)="dataservice.collapse('apsable__more2')"> </a>
+                                                <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable__more2')"> </a>
                                             </div>
                                         </div>
                                         <div class="portlet-body form" id="apsable__more2">
@@ -130,7 +130,12 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let d of sharedIds()">
-                                                            <td><a (click)="user(d)">{{ d }}</a></td>
+                                                            <td>
+                                                                <a (click)="user(d)">
+                                                                    <img id="pict__{{ d }}" height="20px" alt="" style="float: left;margin-right: 10px;cursor: pointer;" />
+                                                                    {{ d }}
+                                                                </a>
+                                                            </td>
                                                             <td *ngIf="!!timings[d] && timings[d].seen">
                                                                 <div class='input-group date' id='pick-id{{ d }}'>
                                                                     <input type='text' class="form-control" readonly="readonly"/>

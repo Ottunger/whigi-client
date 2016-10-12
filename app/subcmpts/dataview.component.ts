@@ -266,6 +266,16 @@ export class Dataview implements OnInit, OnDestroy {
                         window.$('#pick-id2' + d).datetimepicker();
                         window.$('#pick-id2' + d).datetimepicker('date', window.moment(self.timings[d].ee.getTime()));
                     });
+                    window.$('#pict__' + d).ready(function() {
+                        self.backend.getUser(d).then(function(user) {
+                            if(!!user && !!user.company_info && !!user.company_info.picture)
+                                window.$('#pict__' + d).attr('src', user.company_info.picture);
+                            else
+                                window.$('#pict__' + d).attr('src', 'assets/logo.png');
+                        }, function(e) {
+                            window.$('#pict__' + d).attr('src', 'assets/logo.png');
+                        });
+                    });
                 }
             }, 30);
         });

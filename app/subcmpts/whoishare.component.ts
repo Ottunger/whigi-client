@@ -20,6 +20,8 @@ import * as template from './templates/whoishare.html';
 })
 export class WhoIShare implements OnInit {
 
+    private my_shares: string[];
+
     /**
      * Creates the component.
      * @function constructor
@@ -81,9 +83,26 @@ export class WhoIShare implements OnInit {
      * @return {String[]} Keys.
      */
     regables(): string[] {
+        var self = this;
         if(!this.backend.my_shares)
             return [];
-        return Object.getOwnPropertyNames(this.backend.my_shares);
+        if(this.my_shares)
+            return this.my_shares;
+        var ret = Object.getOwnPropertyNames(this.backend.my_shares);
+        ret.forEach(function(d: string) {
+            window.$('#pict__' + d).ready(function() {
+                self.backend.getUser(d).then(function(user) {
+                    if(!!user && !!user.company_info && !!user.company_info.picture)
+                        window.$('#pict__' + d).attr('src', user.company_info.picture);
+                    else
+                        window.$('#pict__' + d).attr('src', 'assets/logo.png');
+                }, function(e) {
+                    window.$('#pict__' + d).attr('src', 'assets/logo.png');
+                });
+            });
+        });
+        this.my_shares = ret;
+        return ret;
     }
 
     /**

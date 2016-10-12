@@ -64,7 +64,7 @@
    "login.noUser": "Recovery user cannot be found",
    "login.badChars": "Bad characters used: only can use letters and digits",
 
-   "header.running": "running operations",
+   "header.running": "Running operations",
    "header.operation": "Current operation",
 
    "profile.logout": "Log out",

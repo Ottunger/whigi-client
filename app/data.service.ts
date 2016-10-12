@@ -476,8 +476,8 @@ export class Data {
      */
     collapse(id: string) {
         window.$('#' + id).slideToggle(300);
-        window.$('#' + id).prev().find('a').toggleClass('expand');
-        window.$('#' + id).prev().find('a').toggleClass('collapse');
+        window.$('#' + id).prev().find('a.tl-link').toggleClass('expand');
+        window.$('#' + id).prev().find('a.tl-link').toggleClass('collapse');
     }
 
     /**

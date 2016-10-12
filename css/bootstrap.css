@@ -1531,8 +1531,8 @@ pre {
     clear: both; }
 
 .row {
-  margin-left: -15px;
-  margin-right: -15px; }
+  margin-left: -11px;
+  margin-right: -11px; }
   .row:before, .row:after {
     content: " ";
     display: table; }

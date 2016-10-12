@@ -64,7 +64,7 @@
    "login.noUser": "L'utilisateur de récupération n'existe pas",
    "login.badChars": "Mauvais carcatères utilisés: utilisez des lettres et chiffres",
 
-   "header.running": "opérations en cours",
+   "header.running": "Opérations en cours",
    "header.operation": "Opération courrante",
 
    "profile.logout": "Déconnecter",
