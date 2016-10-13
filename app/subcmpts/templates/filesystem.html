@@ -66,7 +66,7 @@
                                                 <input id="fs1" style="display: none;" type="file" (change)="fileLoad($event)" name="n50" class="form-control" />
                                             </td>
                                             <td>
-                                                <button type="button" class="btn green" (click)="register(false, nw_data_name_01, data_value_file); nw_data_name_01=''; data_value_file='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <button type="button" class="btn green" (click)="register(false, nw_data_name_01, data_value_file); nw_data_name_01='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
                                             </td>
                                         </tr>
 
@@ -96,7 +96,7 @@
                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                     </span>
                                                 </div>
-                                                <button type="button" class="btn green" (click)="register(true, nw_data_name_11, data_value_file); nw_data_name_11=''; data_value_file='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <button type="button" class="btn green" (click)="register(true, nw_data_name_11, data_value_file); nw_data_name_11='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
                                             </td>
                                         </tr>
                                     </tbody>
