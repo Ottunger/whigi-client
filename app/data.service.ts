@@ -499,7 +499,7 @@ export class Data {
      * @return {Boolean} Response.
      */
     isWhigi(str: string): boolean {
-        return /whigi/i.test(str);
+        return /(whigi)|(www)|(wissl)|(envict)|(mail)|(imap)|(pop)|(smtp)|(ssh)|(ftp)|(api)|(restore)|(giveaway)/i.test(str);
     }
 
     /**

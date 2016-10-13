@@ -56,6 +56,7 @@ enableProdMode();
         <br />
         <div class="MenuContainer">
             <ul id="navigation">
+                <span style="position: absolute; left: 5px; color: #888;">{{ 'mention' | translate }}</span>
                 <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
                 <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
             </ul>
