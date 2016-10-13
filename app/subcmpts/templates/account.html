@@ -49,12 +49,12 @@
                                 <input_block *ngIf="!backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                             </div>
                             <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
-                                <select class="form-control input-circle" [(ngModel)]="filter[p]">
+                                <select class="form-control" [(ngModel)]="filter[p]">
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select>
                                 <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
-                                    {{ backend.generics[g][backend.generics[g].length - 1].new_key | translate }}
-                                    <input type="text" [(ngModel)]="new_name[p]" class="form-control input-circle grant-required">
+                                    {{ 'account.new' | translate }}
+                                    <input type="text" [(ngModel)]="new_name[p]" class="form-control grant-required">
                                     {{ 'account.dataField' | translate }}*
                                     <input_block [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                                 </div>

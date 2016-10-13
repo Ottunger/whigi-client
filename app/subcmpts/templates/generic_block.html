@@ -26,20 +26,25 @@
                                         <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
                                     </h4>
                                     <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
-                                    <p *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">{{ backend.generics[g][backend.generics[g].length - 1].new_key | translate }}
-                                        <input type="text" [(ngModel)]="ass_name[g]" name="new_name{{ dataservice.sanit(g) }}" class="form-control input-circle" />
-                                    </p>
                                     <!-- EXPL -->
                                 </div>
                                 <!-- BEGIN SELECT -->
                                 <div class="row" id="igen{{ dataservice.sanit(g) }}">
                                     <!-- description -->
-                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
+                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         {{ 'actual' | translate }}<span>*</span>:
                                     </div>
-                                    <div class="col-md-6 text-right visible-md-block visible-lg-block" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                        <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <input type="text" [(ngModel)]="ass_name[g]" (keydown)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
+                                            name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g">
+                                        <datalist id="suggestions{{ g }}">
+                                            <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
+                                        </datalist>
+                                        <!-- labels -->
+                                        <div style="display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                            <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                                {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- input -->
@@ -48,7 +53,7 @@
                                     </div>
                                 </div>
                                 <!-- END SELECT -->
-                                <!-- BEGIN DISP -->
+                                <!-- BEGIN ACTIONS -->
                                 <div class="row" style="padding-top: 3px;">
                                     <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
@@ -64,7 +69,7 @@
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
                                                 && backend.generics[g][backend.profile.data[g].version].mode != 'json_keys'">
                                                 <li class="list-group-item">
-                                                    <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [value]="preview(g)" />
+                                                    <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g)" />
                                                 </li>
                                             </ul>
                                         </div>
@@ -84,10 +89,10 @@
                                                 <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
                                                     <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'
                                                         && backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'json_keys'">
-                                                        <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [value]="preview(g + '/' + d)" />
+                                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d)" />
                                                     </div>
                                                     <div class="row text-center" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
-                                                        && backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
+                                                        || backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
                                                         {{ 'nothing' | translate }}
                                                     </div>
                                                 </li>
@@ -95,7 +100,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <!-- END DISP -->
+                                <!-- END ACTIONS -->
                             </div>
                         </div>
                         <div style="margin-top:7px; margin-bottom:2px; height:1px; width:100%; border-top:1px solid #2b3643;" *ngIf="!l"></div>
@@ -103,8 +108,11 @@
                 </div>
                 <div class="form-actions">
                     <div class="row">
-                        <div class="col-md-12">
+                        <div class="col-md-4">
                             <button type="button" class="btn green" (click)="registerAll()"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button" class="btn default" (click)="cancel()">{{ 'cancel' | translate }}</button>
                         </div>
                     </div>
                 </div>

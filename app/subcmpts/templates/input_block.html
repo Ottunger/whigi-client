@@ -1,24 +1,25 @@
 <!-- TEXT -->
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !!backend.generics[g][backend.generics[g].length - 1].placeholder"
-    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)" [placeholder]="backend.generics[g][backend.generics[g].length - 1].placeholder"/>
+    type="text" class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)" [placeholder]="backend.generics[g][backend.generics[g].length - 1].placeholder"/>
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !backend.generics[g][backend.generics[g].length - 1].placeholder"
-    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
+    type="text" class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
 <!-- FILE -->
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
-    type="file" class="form-control input-circle" (change)="fileLoad($event)" name="new_data" />
+    type="file" class="form-control" (change)="fileLoad($event)" name="new_data" />
 <!-- JSON KEYS -->
 <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-    <div class="json{{ dataservice.sanit(g) }}" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+    <button *ngIf="!writeDesc" type="button" class="btn btn-link" (click)="collapse()">{{ 'generics.moreData' | translate }}</button>
+    <div class="json{{ dataservice.sanit(g) }}" style="display: none;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
         <div *ngIf="writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
         <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
         <!-- SUBTYPES -->
         <!-- text -->
-        <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)" [placeholder]="k.placeholder"/>
-        <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)"/>
+        <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)" [placeholder]="k.placeholder"/>
+        <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)"/>
         <!-- file -->
-        <input type="file" *ngIf="k.mode == 'file'" class="form-control input-circle" (change)="fileLoad($event, k.descr_key)" name="new_datas"/>
+        <input type="file" *ngIf="k.mode == 'file'" class="form-control" (change)="fileLoad($event, k.descr_key)" name="new_datas"/>
         <!-- select -->
-        <select class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" (change)="regChange(3)">
+        <select class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" (change)="regChange(3)">
             <option *ngFor="let f of dataservice.getSelect(k.enum)" [value]="f">{{ f }}</option>
         </select>
         <!-- checkbox -->
@@ -39,7 +40,7 @@
     </div>
 </div>
 <!-- SELECT -->
-<select class="form-control input-circle" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="regChange(1)">
+<select class="form-control" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="regChange(1)">
     <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f }}</option>
 </select>
 <!-- CHECKBOX -->

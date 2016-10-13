@@ -15,7 +15,7 @@
                     <h1 class="page-title"> {{ 'generics.title' | translate }}</h1>
                     <!-- END PAGE TITLE-->
                     <div class="row">
-                        <select class="form-control input-circle" [(ngModel)]="filter" (change)="regUpdate()">
+                        <select class="form-control" [(ngModel)]="filter" (change)="regUpdate()">
                             <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
                         </select><br />
                         <div class="col-md-6">

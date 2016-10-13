@@ -37,7 +37,7 @@ export class Backend {
         module: string,
         group: string,
         json_keys: {descr_key: string, mode: string, enum: string, required: boolean, placeholder?: string}[],
-        new_key?: string,
+        new_key?: string[],
         placeholder?: string
     }]};
     public generics_trie: Trie;

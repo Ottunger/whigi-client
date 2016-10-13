@@ -48,8 +48,21 @@ export class InputBlock implements OnInit {
             window.$('.json' + self.dataservice.sanit(self.g)).addClass(self.writeDesc? 'form-group' : 'row');
             if(!self.writeDesc) {
                 window.$('.json' + self.dataservice.sanit(self.g)).css('height', '5ex');
+            } else {
+                window.$('.json' + self.dataservice.sanit(self.g)).css('display', 'block');
             }
         });
+    }
+
+    /**
+     * Collapse/Expand.
+     * @function collapse
+     * @public
+     */
+    collapse() {
+        window.$('.json' + this.dataservice.sanit(this.g)).css('display', (window.$('.json' + this.dataservice.sanit(this.g)).css('display') == 'block'? 'none' : 'block'));
+        window.$('.keys' + this.dataservice.sanit(this.g)).css('display',
+            (window.$('.keys' + this.dataservice.sanit(this.g)).css('display') == 'block' || window.innerWidth <= 991? 'none' : 'block'));
     }
 
     /**

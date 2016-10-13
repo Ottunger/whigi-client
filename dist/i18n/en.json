@@ -30,6 +30,7 @@
    "help.noHelp": "Cannot load help information",
    "confidence": "This is the confidence level that Whigi grants to this user, ranging from 0 (very poor) to 9 (excellent).",
    "nothing": "Nothing to show",
+   "cancel": "Cancel",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",
@@ -186,6 +187,7 @@
    "generics.descr": "Description",
    "generics.hasValue": "Appliable",
    "generics.goTo": "View / Edit",
+   "generics.moreData": "See more...",
 
    "whoishare.dname": "Data real name",
    "whoishare.generic": "Data meaning",
@@ -220,13 +222,13 @@
    "generics.rrn": "National number",
    "generics.corporate_open": "Open capital",
 
-   "new.email": "New email?",
-   "new.tel": "New phone number?",
-   "new.address": "New address?",
-   "new.corporate_name": "New company?",
-   "new.country": "New country?",
-   "new.corporate_type": "New company type?",
-   "new.open": "Information 'open capital' related to a new company?",
+   "new.email": "Email",
+   "new.tel": "Telephone",
+   "new.address": "Address",
+   "new.corporate_name": "Company",
+   "new.country": "Company_country",
+   "new.corporate_type": "Company_type",
+   "new.open": "Company_capital",
 
    "/": "Root folder",
    "profile/": "Profile folder",

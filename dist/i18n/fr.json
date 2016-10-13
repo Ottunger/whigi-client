@@ -30,6 +30,7 @@
    "help.noHelp": "Impossible de charger l'aide",
    "confidence": "Ceci est le niveau de confiance de Whigi pour cet utilisateur, de 0 (très mauvais) à 9 (excellent).",
    "nothing": "Aucune information",
+   "cancel": "Annuler",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
@@ -186,6 +187,7 @@
    "generics.descr": "Description",
    "generics.hasValue": "Appliquable",
    "generics.goTo": "Voir / Modifier",
+   "generics.moreData": "En voir plus...",
 
    "whoishare.dname": "Nom du champ",
    "whoishare.generic": "Signification du champ",
@@ -220,13 +222,13 @@
    "generics.rrn": "Numéro national",
    "generics.corporate_open": "Capital ouvert",
 
-   "new.email": "Nouvel email?",
-   "new.tel": "Nouveau numéro de téléphone?",
-   "new.address": "Nouvelle adresse?",
-   "new.corporate_name": "Nouvelle entreprise?",
-   "new.country": "Nouveau pays?",
-   "new.corporate_type": "Nouvelle forme juridique?",
-   "new.open": "Information 'capital ouvert' pour une nouvelle entreprise?",
+   "new.email": "Email",
+   "new.tel": "Telephone",
+   "new.address": "Adresse",
+   "new.corporate_name": "Entreprise",
+   "new.country": "Entreprise_pays",
+   "new.corporate_type": "Entreprise_forme",
+   "new.open": "Entreprise_capital",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",

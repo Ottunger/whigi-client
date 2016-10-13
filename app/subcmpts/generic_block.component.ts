@@ -213,4 +213,39 @@ export class GenericBlock implements OnInit {
         });
     }
 
+    /**
+     * Do the collapse when entering input.
+     * @function doCollapse
+     * @param {String} g Profile.
+     * @param {Boolean} ok Whether to not do.
+     */
+    doCollapse(g: string, ok: boolean) {
+        var self = this;
+        if(!ok)
+            return;
+        setImmediate(function() {
+            if(!!self.ass_name[g] && self.ass_name[g] != '') {
+                window.$('.json' + self.dataservice.sanit(g)).css('display', 'block');
+                window.$('.keys' + self.dataservice.sanit(g)).css('display', (window.innerWidth > 991)? 'block' : 'none');
+            } else {
+                window.$('.json' + self.dataservice.sanit(g)).css('display', 'none');
+                window.$('.keys' + self.dataservice.sanit(g)).css('display', 'none');
+            }
+        });
+    }
+
+    /**
+     * Cancel.
+     * @fucntion cancel
+     * @public
+     */
+    cancel() {
+        this.ass_name = {};
+        this.new_data = {};
+        this.new_data_file = {};
+        for(var i = 0; i < this.data_list.length; i++) {
+            this.new_datas[this.data_list[i]] = {};
+        }
+    }
+
 }

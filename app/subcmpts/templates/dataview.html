@@ -53,21 +53,21 @@
                                                         <div class="col-md-6">
                                                             <div *ngIf="!is_generic">
                                                                 <div>{{ 'filesystem.data' | translate }}<br/></div>
-                                                                <input type="text" [(ngModel)]="new_data" name="new_data" [disabled]="new_data_file!=''" class="form-control input-circle" />
-                                                                <input type="file" (change)="fileLoad($event)" class="form-control input-circle" />
+                                                                <input type="text" [(ngModel)]="new_data" name="new_data" [disabled]="new_data_file!=''" class="form-control" />
+                                                                <input type="file" (change)="fileLoad($event)" class="form-control" />
                                                             </div>
                                                             <div *ngIf="is_generic">
                                                                 <div *ngIf="backend.generics[gen_name][version].mode != 'json_keys'">
                                                                     {{ 'filesystem.data' | translate }}<br/>
                                                                 </div>
                                                                 <input *ngIf="backend.generics[gen_name][version].mode == 'text'"
-                                                                    type="text" class="form-control input-circle" [(ngModel)]="new_data" name="new_data" />
+                                                                    type="text" class="form-control" [(ngModel)]="new_data" name="new_data" />
                                                                 <input *ngIf="backend.generics[gen_name][version].mode == 'file'"
-                                                                    type="file" class="form-control input-circle" (change)="fileLoad($event)" name="new_data" />
+                                                                    type="file" class="form-control" (change)="fileLoad($event)" name="new_data" />
                                                                 <div class="form-group" *ngIf="backend.generics[gen_name][version].mode == 'json_keys'">
                                                                     <div *ngFor="let k of backend.generics[gen_name][version].json_keys">
                                                                         {{ k.descr_key | translate }}<br />
-                                                                        <input type="text" class="form-control input-circle" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" />
+                                                                        <input type="text" class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" />
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -161,7 +161,7 @@
 
                                                             <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>
                                                             <td *ngIf="is_generic && data_name != gen_name">
-                                                                <select class="form-control input-circle" [(ngModel)]="filter">
+                                                                <select class="form-control" [(ngModel)]="filter">
                                                                     <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
                                                                 </select>
                                                             </td>
@@ -173,7 +173,7 @@
                                                             </td>
                                                         </tr>
                                                         <tr>
-                                                            <td><input type="text" [(ngModel)]="new_id" name="y0" class="form-control input-circle"></td>
+                                                            <td><input type="text" [(ngModel)]="new_id" name="y0" class="form-control"></td>
                                                             <td></td>
                                                             <td>
                                                                 <div class='input-group date' id='pick5'>
@@ -183,7 +183,7 @@
                                                                     </span>
                                                                 </div>
                                                             </td>
-                                                            <td><input type="text" [(ngModel)]="new_trigger" name="y1" class="form-control input-circle"></td>
+                                                            <td><input type="text" [(ngModel)]="new_trigger" name="y1" class="form-control"></td>
                                                             <td><input type="checkbox" [(ngModel)]="is_storable" /></td>
                                                             <td *ngIf="is_generic && data_name != gen_name"></td>
                                                             <td><button type="button" class="btn green" (click)="register()" [disabled]="!decr_data">
