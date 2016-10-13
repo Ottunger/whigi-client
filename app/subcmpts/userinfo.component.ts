@@ -145,9 +145,21 @@ export class Userinfo implements OnInit {
         var file: File = e.target.files[0]; 
         var r: FileReader = new FileReader();
         r.onloadend = function(e) {
-            self.resizeBase64Img(r.result, 32, 32).then(function(res) {
-                self.pict = res;
-            });
+            var i = new Image();
+            i.onload = function() {
+                if(i.width > i.height) {
+                    self.resizeBase64Img(r.result, (i.width / i.height) * 32, 32).then(function(res) {
+                        self.pict = res;
+                        window.$('.load-button').removeClass('default').addClass('green');
+                    });
+                } else {
+                    self.resizeBase64Img(r.result, 32, (i.height / i.width) * 32).then(function(res) {
+                        self.pict = res;
+                        window.$('.load-button').removeClass('default').addClass('green');
+                    });
+                }
+            };
+            i.src = r.result;
         }
         r.readAsDataURL(file);
     }

@@ -62,8 +62,9 @@
                                                                 </div>
                                                                 <input *ngIf="backend.generics[gen_name][version].mode == 'text'"
                                                                     type="text" class="form-control" [(ngModel)]="new_data" name="new_data" />
-                                                                <input *ngIf="backend.generics[gen_name][version].mode == 'file'"
-                                                                    type="file" class="form-control" (change)="fileLoad($event)" name="new_data" />
+                                                                <button type="button" class="btn default" (click)="dataservice.triggerLoad('fs2')" *ngIf="backend.generics[gen_name][version].mode == 'file'">
+                                                                    <i class="fa fa-cloud-upload"></i></button>
+                                                                <input id="fs2" style="display: none;" type="file" (change)="fileLoad($event)" name="n50" class="form-control load-button" />
                                                                 <div class="form-group" *ngIf="backend.generics[gen_name][version].mode == 'json_keys'">
                                                                     <div *ngFor="let k of backend.generics[gen_name][version].json_keys">
                                                                         {{ k.descr_key | translate }}<br />

@@ -4,8 +4,9 @@
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !backend.generics[g][backend.generics[g].length - 1].placeholder"
     type="text" class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
 <!-- FILE -->
-<input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"
-    type="file" class="form-control" (change)="fileLoad($event)" name="new_data" />
+<button id="fsb{{ dataservice.sanit(g) }}" type="button" class="btn default load-button" (click)="dataservice.triggerLoad(dataservice.sanit(g))" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'">
+    <i class="fa fa-cloud-upload"></i></button>
+<input id="fs{{ dataservice.sanit(g) }}" style="display: none;" type="file" class="form-control" (change)="fileLoad($event)" name="new_data" />
 <!-- JSON KEYS -->
 <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
     <button *ngIf="!writeDesc" type="button" class="btn btn-link" (click)="collapse()">{{ 'generics.moreData' | translate }}</button>
@@ -17,7 +18,9 @@
         <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)" [placeholder]="k.placeholder"/>
         <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_datas" (change)="iChange(3)"/>
         <!-- file -->
-        <input type="file" *ngIf="k.mode == 'file'" class="form-control" (change)="fileLoad($event, k.descr_key)" name="new_datas"/>
+        <button id="fsb{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" type="button" class="btn default" (click)="dataservice.triggerLoad(dataservice.sanit(g) + dataservice.sanit(k.descr_key))" *ngIf="k.mode == 'file'">
+            <i class="fa fa-cloud-upload"></i></button>
+        <input id="fs{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" style="display: none;" type="file" class="form-control" (change)="fileLoad($event, k.descr_key)" name="new_datas"/>
         <!-- select -->
         <select class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" (change)="regChange(3)">
             <option *ngFor="let f of dataservice.getSelect(k.enum)" [value]="f">{{ f }}</option>

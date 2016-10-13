@@ -248,6 +248,7 @@ export class Filesystem implements OnInit {
                 self.data_value_file = atob(r.result.split(',')[1]);
             else
                 self.data_value_file = r.result;
+            window.$('.load-button').removeClass('default').addClass('green');
         }
         r.readAsDataURL(file);
     }

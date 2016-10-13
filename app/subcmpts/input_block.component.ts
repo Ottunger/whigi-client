@@ -84,9 +84,11 @@ export class InputBlock implements OnInit {
                 res = r.result;
             if(!!key) {
                 self.new_datas[key] = res;
+                window.$('#fsb' + self.dataservice.sanit(self.g) + self.dataservice.sanit(key)).removeClass('default').addClass('green');
                 self.iChange(3);
             } else {
                 self.new_data_file = res;
+                window.$('#fsb' + self.dataservice.sanit(self.g)).removeClass('default').addClass('green');
                 self.iChange(2);
             }
         }

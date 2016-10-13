@@ -563,4 +563,14 @@ export class Data {
         });
     }
 
+    /**
+     * Triggers the load.
+     * @function triggerLoad
+     * @public
+     * @param {String} id The ID of the input.
+     */
+    triggerLoad(id: string) {
+        window.$('#' + id).trigger('click');
+    }
+
 }

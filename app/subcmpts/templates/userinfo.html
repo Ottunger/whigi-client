@@ -51,7 +51,9 @@
                     <div class="form-group">
                         <label class="control-label col-md-4">{{ 'userinfo.modifyPict' | translate }}</label>
                         <div class="col-md-8">
-                            <input type="file" class="form-control" (change)="fileLoad($event)" name="pict" />
+                            <button type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs2')">
+                                <i class="fa fa-cloud-upload"></i></button>
+                            <input id="fs2" style="display: none;" type="file" class="form-control" (change)="fileLoad($event)" name="pict" />
                         </div>
                     </div>
                 </div>

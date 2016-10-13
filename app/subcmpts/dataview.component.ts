@@ -410,6 +410,7 @@ export class Dataview implements OnInit, OnDestroy {
                 self.new_data_file = atob(r.result.split(',')[1]);
             else
                 self.new_data_file = r.result;
+            window.$('.load-button').removeClass('default').addClass('green');
         }
         r.readAsDataURL(file);
     }
