@@ -98,7 +98,7 @@ export class GenericBlock implements OnInit {
      */
     registerAll() {
         var self = this;
-        window.$('.input-holder').each(function(index, el) {
+        window.$('.input-holder-' + this.dataservice.sanit(this.group)).each(function(index, el) {
             var g = window.$(this).attr('data-g');
             if(self.backend.generics[g][self.backend.generics[g].length - 1].instantiable) {
                 if(!!self.ass_name[g] && self.ass_name[g] != '') {
@@ -199,7 +199,11 @@ export class GenericBlock implements OnInit {
         this.asked[name] = true;
         this.backend.getData(this.backend.profile.data[name].id).then(function(data) {
             self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {
-                self.previews[name] = got;
+                if(self.backend.profile.data[name].is_dated) {
+                    self.previews[name] = JSON.parse(got)[0].value;
+                } else {
+                    self.previews[name] = got;
+                }
                 delete self.asked[name];
                 self.check.tick();
             }, false));

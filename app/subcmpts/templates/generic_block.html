@@ -13,7 +13,7 @@
             <form class="form-horizontal" role="form">
                 <div class="form-body">
                     <div *ngFor="let g of data_list; let l = last" id="iname{{ dataservice.sanit(g) }}">
-                        <div class="row input-holder" [attr.data-g]="g">
+                        <div class="row input-holder-{{ dataservice.sanit(group) }}" [attr.data-g]="g">
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- EXPL -->
