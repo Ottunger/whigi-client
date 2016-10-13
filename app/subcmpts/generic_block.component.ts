@@ -159,15 +159,13 @@ export class GenericBlock implements OnInit {
      * @function dataNames
      * @public
      * @param {String} folder to list.
-     * @param {Boolean} boolean Whether to return even or odd names.
+     * @param {Number} nn Max values to return.
      * @return {Array} Known fields.
      */
-    dataNames(folder: string, even: boolean): string[] {
+    dataNames(folder: string, nn: number): string[] {
         var i = 0;
         return this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
-            if(i >= 6)
-                return false;
-            if(el.charAt(el.length - 1) != '/' && i++ % 2 == (even? 0 : 1))
+            if(el.charAt(el.length - 1) != '/' && i++ < nn)
                 return true;
             return false;
         }).map(function(el: string): string {

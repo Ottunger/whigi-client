@@ -72,7 +72,7 @@
                                     <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, true)">
+                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
                                                     <tooltip [mode]="'shares'" [uri]="g + '/' + d" [right]="true"></tooltip>
                                                     <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
                                                         <i class="fa fa-pencil"></i> ({{ d }})</button>
@@ -81,10 +81,15 @@
                                         </div>
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, false)">
-                                                    <tooltip [mode]="'shares'" [uri]="g + '/' + d" [right]="true"></tooltip>
-                                                    <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
-                                                        <i class="fa fa-pencil"></i> ({{ d }})</button>
+                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
+                                                    <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'
+                                                        && backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'json_keys'">
+                                                        <input type="text" readonly="readonly" class="form-control input-circle" name="preview" [value]="preview(g + '/' + d)" />
+                                                    </div>
+                                                    <div class="row text-center" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
+                                                        && backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
+                                                        {{ 'nothing' | translate }}
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </div>
