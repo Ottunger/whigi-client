@@ -199,5 +199,19 @@ export class Profile implements OnInit {
         }
         r.readAsText(file);
     }
+
+    /**
+     * Keys.
+     * @function regables
+     * @public
+     * @return {String[]} Keys.
+     */
+    regables(): string[] {
+        if(!this.backend.my_shares)
+            return [];
+        return Object.getOwnPropertyNames(this.backend.my_shares).filter(function(el) {
+            return !/whigi/i.test(el);
+        });
+    }
     
 }

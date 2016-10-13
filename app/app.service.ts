@@ -206,7 +206,7 @@ export class Backend {
         if(!this.master_key) {
             this.decryptMaster();
         }
-        return new window.aesjs.ModeOfOperation.ctr(this.toBytes(window.sha256(pwd + this.profile.salt)), new window.aesjs.Counter(0)).encrypt(this.master_key);
+        return Array.from(new window.aesjs.ModeOfOperation.ctr(this.toBytes(window.sha256(pwd + this.profile.salt)), new window.aesjs.Counter(0)).encrypt(this.master_key));
     }
 
     /**
