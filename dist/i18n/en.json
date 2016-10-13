@@ -156,6 +156,7 @@
    "account.withAccount": "The 3rd party also asks to create you an account at his side.",
    "account.dataField": "Associated data",
    "account.new": "New instance",
+   "account.newName": "New name",
    "account.user": "Whigi User",
 
    "userinfo.title": "Information about the user",

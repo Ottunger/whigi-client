@@ -40,8 +40,10 @@
                         </h4>
                     </div>
                     <div id="tgabble_{{ dataservice.sanit(p) }}" class="panel-collapse collapse" >
-                        <div class="panel-body" style="max-height:200px; overflow-y:auto;">
-                            <p>{{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}</p>
+                        <div class="panel-body" style="max-height:450px; overflow-y:auto;">
+                            <p *ngIf="backend.generics[p][backend.generics[p].length - 1].long_descr_key != ''">
+                                {{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}
+                            </p>
                             <!-- BEGIN ITEM SELECT -->
                             <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable" id="igen{{ dataservice.sanit(p) }}">
                                 <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
@@ -50,12 +52,13 @@
                             <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
                                 <select class="form-control" [(ngModel)]="filter[p]">
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
-                                </select>
+                                </select><br />
                                 <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
-                                    {{ 'account.new' | translate }}
+                                    {{ 'account.newName' | translate }}*
                                     <input type="text" [(ngModel)]="new_name[p]" class="form-control grant-required">
                                     {{ 'account.dataField' | translate }}*
                                     <input_block [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
+                                    <br />
                                 </div>
                             </div>
                             <!-- END ITEM SELECT -->

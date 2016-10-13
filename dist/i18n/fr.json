@@ -156,6 +156,7 @@
    "account.withAccount": "L'app demande également la création d'un compte lié à votre compte Whigi.",
    "account.dataField": "Données associées",
    "account.new": "Nouvelle instance",
+   "account.newName": "Nouveau nom",
    "account.user": "Utilisateur Whigi",
 
    "userinfo.title": "Informations à propos de l'utilisateur",
