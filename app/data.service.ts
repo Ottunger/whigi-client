@@ -64,40 +64,45 @@ export class Data {
         var self = this;
         front = front !== false;
         this.how.emit(1);
-        if(front === true) {
-            window.$('.page-content').block({
-                message: `
-                    <div style="background-color: #2b3643;">
-                        <ul class="dropdown-menu-list scroller" style="height: 45px; overflow: hidden; width: auto; padding: 5px;">
-                            <li>
-                                <a href="javascript:;" style="cursor: default;">
-                                    <span class="task">
-                                        <span class="desc" style="color: white;">` + this.translate.instant('header.operation') + `</span>
-                                        <span class="percent" style="color: white;" id="worktx">0%</span>
-                                    </span><br />
-                                    <span class="progress">
-                                        <span id="workpg" style="width: 0%;" class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="100"></span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    `,
-                baseZ: 1e3,
-                css: {
-                    border: '0',
-                    padding: '0',
-                    backgroundColor: 'none'
-                },
-                overlayCSS: {
-                    backgroundColor: '#222',
-                    opacity: .1,
-                    cursor: 'wait'
-                }
-            });
-        }
         return function(msg) {
             switch(msg.data[0]) {
+                case 4:
+                    //Told by worker short message
+                    if(msg.data[1] && front === true) {
+                        window.$('.page-content').block({
+                            message: `
+                                <div style="background-color: #2b3643;">
+                                    <ul class="dropdown-menu-list scroller" style="height: 45px; overflow: hidden; width: auto; padding: 5px;">
+                                        <li>
+                                            <a href="javascript:;" style="cursor: default;">
+                                                <span class="task">
+                                                    <span class="desc" style="color: white;">` + self.translate.instant('header.operation') + `</span>
+                                                    <span class="percent" style="color: white;" id="worktx">0%</span>
+                                                </span><br />
+                                                <span class="progress">
+                                                    <span id="workpg" style="width: 0%;" class="progress-bar progress-bar-success" aria-valuemin="0" aria-valuemax="100"></span>
+                                                </span>
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </div>
+                                `,
+                            baseZ: 1e3,
+                            css: {
+                                border: '0',
+                                padding: '0',
+                                backgroundColor: 'none'
+                            },
+                            overlayCSS: {
+                                backgroundColor: '#222',
+                                opacity: .1,
+                                cursor: 'wait'
+                            }
+                        });
+                    } else {
+                        front = false;
+                    }
+                    break;
                 case 1:
                     self.ee.emit(parseInt(msg.data[1]));
                     if(front === true) {

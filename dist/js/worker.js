@@ -30,6 +30,14 @@ function chunkify(a, n, balanced) {
     return out;
 }
 
+function echoLength(len) {
+    if(len > 1000) {
+        postMessage([4, true]);
+    } else {
+        postMessage([4, false]);
+    }
+}
+
 onmessage = function(msg) {
     try {
         var data = msg.data[0], key = msg.data[1], encrypt = msg.data[2];
@@ -38,6 +46,7 @@ onmessage = function(msg) {
         if(encrypt) {
             var num = self.aesjs.util.convertStringToBytes(data);
             var len = num.length, split, ret = [];
+            echoLength(len);
 
             if(len < 100) {
                 postMessage([0, 0]);
@@ -54,6 +63,7 @@ onmessage = function(msg) {
             }
         } else {
             var len = data.length, split, ret = [];
+            echoLength(len);
 
             if(len < 100) {
                 postMessage([0, 0]);

@@ -23,6 +23,7 @@ export class InputBlock implements OnInit {
     private new_datas: {[id: string]: string};
     @Input() g: string;
     @Input() writeDesc: boolean;
+    @Input() prefill: string;
     @Output() out: EventEmitter<any[]>;
 
     /**
@@ -44,6 +45,7 @@ export class InputBlock implements OnInit {
      */
     ngOnInit(): void {
         var self = this;
+        this.new_data = (!!this.prefill)? this.prefill : undefined;
         window.$('.json' + this.dataservice.sanit(this.g)).ready(function() {
             window.$('.json' + self.dataservice.sanit(self.g)).addClass(self.writeDesc? 'form-group' : 'row');
             if(!self.writeDesc) {

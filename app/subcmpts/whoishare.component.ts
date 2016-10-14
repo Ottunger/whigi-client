@@ -77,6 +77,21 @@ export class WhoIShare implements OnInit {
     }
 
     /**
+     * Show real name.
+     * @function realName
+     * @public
+     * @param {String} name Real name.
+     */
+    realName(name: string) {
+        window.$(`
+            <div class="modal">
+                <h3>` + this.translate.instant('help') + `</h3>
+                <p>` + name + `</p>
+            </div>
+        `).appendTo('body').modal();
+    }
+
+    /**
      * Keys.
      * @function regables
      * @public

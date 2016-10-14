@@ -36,18 +36,18 @@
                                             <table class="table table-hover">
                                                 <thead>
                                                     <tr>
-                                                        <th>{{ 'whoishare.dname' | translate }}</th>
                                                         <th>{{ 'whoishare.generic' | translate }}</th>
+                                                        <th>{{ 'whoishare.dname' | translate }}</th>
                                                         <th>{{ 'action' | translate }}</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr *ngFor="let g of backend.my_shares[p]">
-                                                        <td>{{ g }}</td>
                                                         <td>
                                                             <tooltip [mode]="'info'" [uri]="genName(g, true)" [right]="false"></tooltip>
                                                             {{ genName(g, false) }}
                                                         </td>
+                                                        <td><a href="javascript:;" (click)="realName(g)"><i class="fa fa-info-circle"></i></a></td>
                                                         <td>
                                                             <button type="button" class="btn default" (click)="goTo(g)">{{ 'filesystem.goTo' | translate }}</button>
                                                             <button type="button" class="btn green" [disabled]="dataservice.isWhigi(p)" (click)="revoke(g, p)">

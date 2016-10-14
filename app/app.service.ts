@@ -800,7 +800,7 @@ export class Backend {
         if(typeof storable !== undefined && storable) {
             post['storable'] = true;
         }
-        return this.backend(true, true, 'POST', post, 'vault/new', true, true, true);
+        return this.backend(true, post.data_crypted_aes.length > 1000, 'POST', post, 'vault/new', true, true, true);
     }
 
     /**

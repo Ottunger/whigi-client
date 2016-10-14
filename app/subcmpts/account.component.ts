@@ -34,6 +34,7 @@ export class Account implements OnInit, OnDestroy {
     public forever: boolean;
     public trigger: string;
     public with_account: string;
+    public strangeEmail: string;
     private sub: Subscription;
 
     /**
@@ -55,6 +56,7 @@ export class Account implements OnInit, OnDestroy {
         this.new_datas = {};
         this.new_name = {};
         this.filter = {};
+        this.strangeEmail = '';
     }
 
     /**
@@ -72,6 +74,7 @@ export class Account implements OnInit, OnDestroy {
             self.trigger = (!!params['trigger'])? window.decodeURIComponent(params['trigger']) : '';
             self.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
             self.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
+            self.strangeEmail = (!!params['email'])? window.decodeURIComponent(params['email']) : '';
 
             window.$('#pick3').ready(function() {
                 window.$('#pick3').datetimepicker();
@@ -144,7 +147,8 @@ export class Account implements OnInit, OnDestroy {
             });
             self.backend.getUser(self.id_to).then(function(user) {
                 self.requester = user;
-                self.dataservice.picts(user, 'pict-user');
+                if(self.strangeEmail == '')
+                    self.dataservice.picts(user, 'pict-user');
                 self.check.tick();
             }, function(e) {
                 self.deny();

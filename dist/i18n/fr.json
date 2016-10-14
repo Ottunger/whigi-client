@@ -49,7 +49,7 @@
    "login.forgot2": " pour changer votre mot de passe.",
    "login.forgot3": "Entrez votre nom de compte ici pour récupérer votre mot de passe.",
    "login.signUp": "S'enregistrer",
-   "login.sign": "Entrez les détails de votre compte ici:",
+   "login.sign": "Entrez les détails du nouveau compte ici:",
    "login.recupId": "Nom du compte de l'ami qui pourra aider à la récupération:",
    "login.noLogin": "Impossible de se logger. Vérifiez vos données",
    "login.noSignup": "Le serveur a refusé la commande. Essayez un autre nom d'utilisateur?",
@@ -147,7 +147,7 @@
 
    "account.question": "Demande une création d'accès",
    "account.explain": "En acceptant la requête, vous créez automatiquement une valise sécurisée pour chacune des données suivantes vers l'ID donné, de la même façon que vous le feriez manuellement. L'utilisateur distant n'AURA PAS accès à vos clés.",
-   "account.ok": "Donner l'accès (peut sembler long!)",
+   "account.ok": "Donner l'accès",
    "account.nok": "Refuser l'accès",
    "account.err": "Erreur quelque part, mais nous envoyons autant que possible",
    "account.shared": "Cette donnée sera partagée",
@@ -190,8 +190,8 @@
    "generics.goTo": "Voir / Modifier",
    "generics.moreData": "En voir plus...",
 
-   "whoishare.dname": "Nom du champ",
-   "whoishare.generic": "Signification du champ",
+   "whoishare.dname": "ID",
+   "whoishare.generic": "Champ partagé",
 
    "error.notfound": "Introuvable",
 
