@@ -65,6 +65,7 @@
    "login.badEmail": "Email invalide",
    "login.noUser": "L'utilisateur de récupération n'existe pas",
    "login.badChars": "Mauvais carcatères utilisés: utilisez des lettres et chiffres",
+   "login.names": "Merci de spécifier vos nom et prénom",
 
    "header.running": "Opérations en cours",
    "header.operation": "Opération courrante",

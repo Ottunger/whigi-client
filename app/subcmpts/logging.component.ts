@@ -20,6 +20,8 @@ import * as template from './templates/logging.html';
 })
 export class Logging implements OnInit {
 
+    public fname: string;
+    public lname: string;
     public username: string;
     public password: string;
     public password2: string;
@@ -216,18 +218,43 @@ export class Logging implements OnInit {
                         localStorage.setItem('psha', window.sha256(self.password));
                         self.dataservice.listData(false).then(function() {
                             self.dataservice.newData('profile/email/restore', self.email, false, 0, true).then(function(email) {
-                                self.dataservice.newData('profile/recup_id', self.recup_id, false, 0, true).then(function(email) {
-                                    if(self.recuperable) {
-                                        self.dataservice.grantVault('whigi-restore', 'profile/email/restore', 'profile/email/restore', self.email, 0, new Date(0)).then(function() {
-                                            safe();
-                                        }, function() {
+                                self.dataservice.newData('profile/recup_id', self.recup_id, false, 0, true).then(function(recup) {
+                                    self.dataservice.newData('profile/first_name', self.fname, false, 0, true).then(function(fname) {
+                                        self.dataservice.newData('profile/last_name', self.lname, false, 0, true).then(function(lname) {
+                                            self.dataservice.grantVault('whigi-wissl', 'profile/email/restore', 'profile/email/restore', self.email, 0, new Date(0)).then(function() {
+                                                self.dataservice.grantVault('whigi-wissl', 'profile/first_name', 'profile/first_name', self.fname, 0, new Date(0)).then(function() {
+                                                    self.dataservice.grantVault('whigi-wissl', 'profile/last_name', 'profile/last_name', self.lname, 0, new Date(0)).then(function() {
+                                                        if(self.recuperable) {
+                                                            self.dataservice.grantVault('whigi-restore', 'profile/email/restore', 'profile/email/restore', self.email, 0, new Date(0)).then(function() {
+                                                                safe();
+                                                            }, function() {
+                                                                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                                self.logout();
+                                                            });
+                                                        } else {
+                                                            self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                                                            self.logout().then(function() {self.enter();});
+                                                        }
+                                                    }, function(e) {
+                                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                        self.logout();
+                                                    });
+                                                }, function(e) {
+                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                    self.logout();
+                                                });
+                                            }, function(e) {
+                                                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                self.logout();
+                                            });
+                                        }, function(e) {
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                             self.logout();
                                         });
-                                    } else {
-                                        self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                                        self.logout().then(function() {self.enter();});
-                                    }
+                                    }, function(e) {
+                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                        self.logout();
+                                    });
                                 }, function(e) {
                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                     self.logout();
@@ -249,7 +276,17 @@ export class Logging implements OnInit {
             });
         }
 
-        window.$('.iuname,.ipass,.imail,.irecupid').removeClass('has-error');
+        window.$('.iuname,.ipass,.imail,.irecupid,.ifname,.ilname').removeClass('has-error');
+        if(!this.fname || this.fname == '') {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.names'));
+            window.$('.ifname').addClass('has-error');
+            return;
+        }
+        if(!this.lname || this.lname == '') {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.names'));
+            window.$('.ilname').addClass('has-error');
+            return;
+        }
         if(this.dataservice.isWhigi(this.username)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
             window.$('.iuname').addClass('has-error');

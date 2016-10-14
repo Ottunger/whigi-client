@@ -65,6 +65,7 @@
    "login.badEmail": "Invalid email address",
    "login.noUser": "Recovery user cannot be found",
    "login.badChars": "Bad characters used: only can use letters and digits",
+   "login.names": "Please fill first and last names",
 
    "header.running": "Running operations",
    "header.operation": "Current operation",
