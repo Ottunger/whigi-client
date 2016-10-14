@@ -50,7 +50,7 @@ export class Reset implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            var encPwd = window.decodeURIComponent(params['pwd']);
+            var encPwd = window.atob(window.decodeURIComponent(params['pwd']));
             self.id = params['id'].toLowerCase();
             self.backend.getRestore(params['key']).then(function(res) {
                 self.backend.decryptAES(self.backend.str2arr(encPwd), self.dataservice.workerMgt(false, function(got) {
