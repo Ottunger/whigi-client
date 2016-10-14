@@ -135,6 +135,7 @@
    "reset.send": "I'm ready!",
    "reset.noReset": "Cannot reset password using this recovered password",
    "reset.received": "Cannot prepare for helping, try manually?",
+   "reset.noLink": "Link expired, try asking for a new one",
 
    "savekey.rec": "Value imported correctly",
 

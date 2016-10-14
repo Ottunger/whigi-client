@@ -848,6 +848,17 @@ export class Backend {
     }
 
     /**
+     * Asks for a AES key.
+     * @function getRestore
+     * @public
+     * @param {String} k Key.
+     * @return {Promise} JSON response from backend.
+     */
+    getRestore(k: string): Promise {
+        return this.backend(false, false, 'GET', {}, 'get/' + k, false, false);
+    }
+
+    /**
      * Asks for a reset link.
      * @function requestRestore
      * @public

@@ -50,8 +50,15 @@ export class Reset implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.pwd = window.decodeURIComponent(params['pwd']);
+            var encPwd = window.decodeURIComponent(params['pwd']);
             self.id = params['id'].toLowerCase();
+            self.backend.getRestore(params['key']).then(function(res) {
+                self.backend.decryptAES(self.backend.str2arr(encPwd), self.dataservice.workerMgt(false, function(got) {
+                    self.pwd = got;
+                }, false), self.backend.str2arr(res.aes));
+            }, function(e) {
+                self.router.navigate(['/endPwd']);
+            });
         });
     }
 
@@ -62,6 +69,15 @@ export class Reset implements OnInit, OnDestroy {
      */
     ngOnDestroy(): void {
         this.sub.unsubscribe();
+    }
+
+    /**
+     * Toggles whether to see password.
+     * @function toggleShow
+     * @public
+     */
+    toggleShow() {
+        window.$('#cpwd').attr('type', (window.$('#cpwd').attr('type') == 'password')? 'text' : 'password');
     }
 
     /**

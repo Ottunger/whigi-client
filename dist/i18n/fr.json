@@ -53,7 +53,7 @@
    "login.recupId": "Nom du compte de l'ami qui pourra aider à la récupération:",
    "login.noLogin": "Impossible de se logger. Vérifiez vos données",
    "login.noSignup": "Le serveur a refusé la commande. Essayez un autre nom d'utilisateur?",
-   "login.noReset": "Impossible de ocntacter le serveur de récupération",
+   "login.noReset": "Impossible de contacter le serveur de récupération",
    "login.noMatch": "Mot de passes différents",
    "login.recuperable": "Créer un compte dont le mot de passe peut être récupéré",
    "login.safe": "Utiliser un ami pour la récupération. Meilleure protection",
@@ -135,6 +135,7 @@
    "reset.send": "Je suis prêt!",
    "reset.noReset": "Impossible de récupérer le mot de passe par ce lien",
    "reset.noHelp": "Impossible de lire la donnée, essayez manuellement?",
+   "reset.noLink": "Le lien a expiré, essayez d'en demander un nouveau",
 
    "savekey.rec": "Valeur bien importée",
 

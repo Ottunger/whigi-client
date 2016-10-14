@@ -81,7 +81,7 @@ export class Logging implements OnInit {
             localStorage.removeItem('psha');
             window.setTimeout(function() {
                 self.notif.remove();
-                self.notif.alert(self.translate.instant('error'), self.translate.instant('sessionExpired'));
+                self.notif.alert(self.translate.instant('error'), self.translate.instant(/endPwd/.test(window.location.href)? 'reset.noLink' : 'sessionExpired'));
             }, 500);
         }
         if('token' in localStorage) {
