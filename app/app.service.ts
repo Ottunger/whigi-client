@@ -67,6 +67,8 @@ export class Backend {
         this.data_loaded = false;
         this.rsa_key = [];
         self.generics_trie = new Trie();
+        //Clear for IE
+        document.execCommand('ClearAuthenticationCache', 'false');
         this.backend(true, false, 'GET', {}, 'generics.json', false, false).then(function(response) {
             self.generics = response;
             var keys = Object.getOwnPropertyNames(response);

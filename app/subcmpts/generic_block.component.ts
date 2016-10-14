@@ -145,7 +145,7 @@ export class GenericBlock implements OnInit {
             self.new_data_file[name] = '';
             self.check.tick();
         }, function(err) {
-            if(err == 'server') {
+            if(err[0] == 'server') {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             } else {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
