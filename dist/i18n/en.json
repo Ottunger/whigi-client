@@ -31,6 +31,7 @@
    "confidence": "This is the confidence level that Whigi grants to this user, ranging from 0 (very poor) to 9 (excellent).",
    "nothing": "Nothing to show",
    "cancel": "Cancel",
+   "reload": "The Google service cannot be reached, let us retry after refreshing the page",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",

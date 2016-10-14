@@ -1,0 +1,7 @@
+@font-face {
+  font-family: 'lato-regular';
+  font-style: normal;
+  font-weight: 300;
+  src: url('../fonts/Lato-Regular.ttf') format('truetype');
+  unicode-range: U+0021-0119, U+0152-0153, U+02D9-02DC, U+20AC, U+2122;
+}

@@ -31,6 +31,7 @@
    "confidence": "Ceci est le niveau de confiance de Whigi pour cet utilisateur, de 0 (très mauvais) à 9 (excellent).",
    "nothing": "Aucune information",
    "cancel": "Annuler",
+   "reload": "Le service Google ne peut être joint, essayons après avoir rechargé la page",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",

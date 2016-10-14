@@ -10,7 +10,7 @@ import '@angular/router';
 import 'rxjs';
 
 // Other vendors for example jQuery, Lodash or Bootstrap
-// You can import js, ts, css, sass, ...
+// You can import js, css, sass, ...
 import 'angular2-notifications';
 
 window.aesjs = require('../js/aesjs.min.js');
@@ -25,6 +25,9 @@ require('../js/bootstrap-datetimepicker.min.js');
 require('../js/bootstrap.min.js');
 require('../js/jquery.blockUI.js');
 require('../js/jquery.modal.js');
+
+require('../fonts/Lato-Regular.ttf');
+import '../css/fonts.css';
 
 import '../css/bootstrap.css';
 import '../css/bootstrap-datetimepicker.min.css';

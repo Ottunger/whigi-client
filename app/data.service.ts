@@ -28,6 +28,7 @@ export class Data {
      * @param http HTTP service.
      * @param router Routing service.
      * @param backend Backend service.
+     * @param check Check service.
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef) {

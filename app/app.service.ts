@@ -477,7 +477,13 @@ export class Backend {
      * @return {String} Captcha solution.
      */
     private regCaptcha(): string {
-        return '?captcha=' + window.cptAnswer;
+        try {
+            var v = window.grecaptcha.getResponse();
+        } catch(e) {
+            alert(this.translate.instant('reload'));
+            window.location.reload();
+        }
+        return '?captcha=' + v;
     }
 
     /**

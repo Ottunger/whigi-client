@@ -19,6 +19,7 @@ import {Account} from './subcmpts/account.component';
 import {Remote} from './subcmpts/remote.component';
 import {Generics} from './subcmpts/generics.component';
 import {User} from './subcmpts/user.component';
+import {Merge} from './subcmpts/merge.component';
 import {Loginas} from './subcmpts/loginas.component';
 import {WhoIShare} from './subcmpts/whoishare.component';
 import {Notfound} from './subcmpts/notfound.component';
@@ -49,6 +50,7 @@ const appRoutes: Routes = [
     {path: 'remote/:id_to/:challenge/:return_url', component: Remote, canActivate: [Profileguard]},
     {path: 'generics', component: Generics, canActivate: [Fullguard], canDeactivate: [Fullguard]},
     {path: 'generics/:filter', component: Generics, canActivate: [Fullguard], canDeactivate: [Fullguard]},
+    {path: 'merge/:mergeu/:mergep', component: Merge, canActivate: [Profileguard]},
     {path: '**', component: Notfound}
 ];
 export const appRoutingProviders: any[] = [
