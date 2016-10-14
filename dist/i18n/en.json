@@ -66,6 +66,7 @@
    "login.noUser": "Recovery user cannot be found",
    "login.badChars": "Bad characters used: only can use letters and digits",
    "login.names": "Please fill first and last names",
+   "login.noUserMatch": "Usernames do not match",
 
    "header.running": "Running operations",
    "header.operation": "Current operation",
@@ -76,7 +77,7 @@
    "profile.mine": "Browse my data",
    "profile.shared": "Shared with me",
    "profile.noRevoke": "Cannot revoke access",
-   "profile.change": "Change password",
+   "profile.change": "Change your account credentials",
    "profile.current": "Current password",
    "profile.new": "New password (8characters min)",
    "profile.noMatch": "Passwords do not match",

@@ -32,58 +32,63 @@
                                             <!-- BEGIN FORM-->
                                             <form class="form-horizontal" role="form">
                                                 <div class="form-body">
-                                                    <h3 class="form-section">{{ 'profile.change' | translate }}</h3>
+                                                    <h4 class="form-section">{{ 'profile.change' | translate }}</h4>
                                                     <div class="row">
-                                                        <div class="col-md-6">
+                                                        <div class="col-md-4">
                                                             <div class="form-group">
-                                                                <label class="control-label col-md-4">{{ 'profile.current' | translate }}:</label>
+                                                                <label class="control-label">{{ 'profile.current' | translate }}:</label>
                                                                 <div class="col-md-8">
                                                                     <input type="password" class="form-control" [(ngModel)]="current_pwd" name="password" />
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!--/span-->
-                                                        <div class="col-md-6">
-                                                            <div class="form-group" id="inewname">
-                                                                <label class="control-label col-md-4">{{ 'profile.uname' | translate }}:</label>
-                                                                <div class="col-md-8">
-                                                                    <input type="text" class="form-control" [(ngModel)]="new_name" name="new_name" />
+                                                        <div class="col-md-4">
+                                                            <div class="row">
+                                                                <div class="form-group" id="inewname">
+                                                                    <label class="control-label">{{ 'profile.uname' | translate }}:</label>
+                                                                    <div class="col-md-8">
+                                                                        <input type="text" class="form-control" [(ngModel)]="new_name" name="new_name" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group" id="inewname">
+                                                                    <label class="control-label">{{ 'profile.uname' | translate }}:</label>
+                                                                    <div class="col-md-8">
+                                                                        <input type="text" class="form-control" [(ngModel)]="new_name2" name="new_name2" />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!--/span-->
-                                                    </div>
-                                                    <!--/row-->
-                                                    <div class="row">
-                                                        <div class="col-md-6">
-                                                            <div class="form-group inewpass">
-                                                                <label class="control-label col-md-4">{{ 'profile.new' | translate }}:</label>
-                                                                <div class="col-md-8">
-                                                                    <input type="password" class="form-control" [(ngModel)]="password" name="new_pass" />
+                                                        <div class="col-md-4">
+                                                            <div class="row">
+                                                                <div class="form-group inewpass">
+                                                                    <label class="control-label">{{ 'profile.new' | translate }}:</label>
+                                                                    <div class="col-md-8">
+                                                                        <input type="password" class="form-control" [(ngModel)]="password" name="new_pass" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <div class="form-group inewpass">
+                                                                    <label class="control-label">{{ 'profile.new' | translate }}:</label>
+                                                                    <div class="col-md-8">
+                                                                        <input type="password" class="form-control" [(ngModel)]="password2" name="new_pass2" />
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <!--/span-->
-                                                        <div class="col-md-6">
-                                                            <div class="form-group inewpass">
-                                                                <label class="control-label col-md-4">{{ 'profile.new' | translate }}:</label>
-                                                                <div class="col-md-8">
-                                                                    <input type="password" class="form-control" [(ngModel)]="password2" name="new_pass2" />
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <!--/span-->
                                                     </div>
                                                 </div>
                                                 <div class="form-actions">
                                                     <div class="row">
-                                                        <div class="col-md-6">
-                                                            <button type="submit" class="btn green" (click)="update()">
-                                                                <i class="fa fa-pencil"></i> {{ 'profile.change' | translate }}</button>
-                                                        </div>
-                                                        <div class="col-md-6">
-                                                            <button type="submit" class="btn green" (click)="changeUname()" [disabled]="!new_name || new_name == ''">
+                                                        <div class="col-md-offset-3 col-md-4">
+                                                            <button type="submit" class="btn green" (click)="changeUname()" [disabled]="!new_name || new_name == '' || !new_name2 || new_name2 == '' || !current_pwd || current_pwd == ''">
                                                                 <i class="fa fa-pencil"></i> {{ 'profile.uname' | translate }}</button>
+                                                        </div>
+                                                        <div class="col-md-4">
+                                                            <button type="submit" class="btn green" (click)="update()" [disabled]="!password || password == '' || !password2 || password2 == '' || !current_pwd || current_pwd == ''">
+                                                                <i class="fa fa-pencil"></i> {{ 'profile.change' | translate }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -113,7 +118,7 @@
                                             <!-- BEGIN FORM-->
                                             <form class="form-horizontal" role="form">
                                                 <div class="form-body">
-                                                    <h3 class="form-section">{{ 'profile.revoke' | translate }}</h3>
+                                                    <h4 class="form-section">{{ 'profile.revoke' | translate }}</h4>
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <div class="form-group">

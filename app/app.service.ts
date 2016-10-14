@@ -625,7 +625,7 @@ export class Backend {
      * @function updateProfile
      * @public
      * @param {String} new_password New password.
-     * @param {String} password Hash of current password for auth.
+     * @param {String} password Current password for auth.
      * @return {Promise} JSON response from backend.
      */
     updateProfile(new_password: string, password: string): Promise {
@@ -643,12 +643,15 @@ export class Backend {
      * @function changeUsername
      * @public
      * @param {String} uname New username.
+     * @param {String} password Current password for auth.
      * @return {Promise} JSON response from backend.
      */
-    changeUsername(uname: string): Promise {
+    changeUsername(uname: string, password: string): Promise {
         return this.backend(true, true, 'POST', {
-            username: uname
-        }, 'profile/uname', true, true, true);
+            new_username: uname,
+            username: this.profile._id,
+            password: window.sha256(password)
+        }, 'profile/uname', true, false, true);
     }
 
     /**

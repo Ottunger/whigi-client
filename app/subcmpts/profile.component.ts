@@ -21,6 +21,7 @@ import * as template from './templates/profile.html';
 export class Profile implements OnInit {
 
     public new_name: string;
+    public new_name2: string;
     public current_pwd: string;
     public password: string;
     public password2: string;
@@ -138,6 +139,11 @@ export class Profile implements OnInit {
     changeUname() {
         var self = this;
         window.$('#inewname').removeClass('has-error');
+        if(this.new_name != this.new_name2) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noUserMatch'));
+            window.$('.inewname').addClass('has-error');
+            return;
+        }
         if(this.dataservice.isWhigi(this.new_name)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
             window.$('.inewname').addClass('has-error');
@@ -148,10 +154,18 @@ export class Profile implements OnInit {
             window.$('.inewname').addClass('has-error');
             return;
         }
-        this.backend.changeUsername(this.new_name).then(function() {
-            localStorage.removeItem('token');
-            self.backend.forceReload();
-            self.router.navigate(['/llight']);
+        this.backend.changeUsername(this.new_name, this.current_pwd).then(function() {
+            self.backend.profile._id = self.new_name;
+            self.backend.createToken(self.new_name, self.current_pwd, false).then(function(ticket) {
+                localStorage.setItem('token', ticket._id);
+            }, function(e) {
+                localStorage.removeItem('token');
+                self.backend.forceReload();
+                self.router.navigate(['/llight']);
+            });
+            self.current_pwd = '';
+            self.new_name = '';
+            self.new_name2 = '';
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
             window.$('#inewname').addClass('has-error');
