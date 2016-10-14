@@ -66,7 +66,8 @@ export class Logging implements OnInit {
                     if(!window.$('#ggccpt').html() || window.$('#ggccpt').html().length == 0) {
                         try {
                             window.grecaptcha.render('ggccpt', {
-                                'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
+                                'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
+                                'callback': 'cptValidated'
                             });
                         } catch(e) {
                             console.log(e);

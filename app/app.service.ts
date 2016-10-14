@@ -477,12 +477,7 @@ export class Backend {
      * @return {String} Captcha solution.
      */
     private regCaptcha(): string {
-        try {
-            var v = window.grecaptcha.getResponse();
-        } catch(e) {
-            v = 'null';
-        }
-        return '?captcha=' + v;
+        return '?captcha=' + window.cptAnswer;
     }
 
     /**

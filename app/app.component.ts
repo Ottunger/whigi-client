@@ -98,6 +98,11 @@ export class Application {
             var browserLang = translate.getBrowserLang();
             translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
         }
+
+        //Captcha
+        window.cptValidated = function(res) {
+            window.cptAnswer = res;
+        };
     }
 
     /**
