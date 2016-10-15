@@ -197,16 +197,14 @@ export class GenericBlock implements OnInit {
         if(name in this.asked)
             return '[]';
         this.asked[name] = true;
-        this.backend.getData(this.backend.profile.data[name].id).then(function(data) {
-            self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {
-                if(self.backend.profile.data[name].is_dated) {
-                    self.previews[name] = JSON.parse(got)[0].value;
-                } else {
-                    self.previews[name] = got;
-                }
-                delete self.asked[name];
-                self.check.tick();
-            }, false));
+        this.dataservice.getData(this.backend.profile.data[name].id, false).then(function(data) {
+            if(self.backend.profile.data[name].is_dated) {
+                self.previews[name] = JSON.parse(data.decr_data)[0].value;
+            } else {
+                self.previews[name] = data.decr_data;
+            }
+            delete self.asked[name];
+            self.check.tick();
         }, function(e) {
             self.previews[name] = '[]';
             delete self.asked[name];
@@ -236,7 +234,7 @@ export class GenericBlock implements OnInit {
 
     /**
      * Cancel.
-     * @fucntion cancel
+     * @function cancel
      * @public
      */
     cancel() {

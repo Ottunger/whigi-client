@@ -99,19 +99,14 @@ export class Userinfo implements OnInit {
     load() {
         var self = this;
         if(!!this.backend.profile.data['profile/last_name'] && !!this.backend.profile.data['profile/first_name']) {
-            this.backend.getData(this.backend.profile.data['profile/last_name'].id).then(function(data) {
-                var encr_data = self.backend.str2arr(data.encr_data);
-                self.backend.decryptAES(encr_data, self.dataservice.workerMgt(false, function(lname) {
-                    self.backend.getData(self.backend.profile.data['profile/last_name'].id).then(function(data) {
-                        var encr_data = self.backend.str2arr(data.encr_data);
-                        self.backend.decryptAES(encr_data, self.dataservice.workerMgt(false, function(fname) {
-                            self.backend.profile.company_info.name = fname + ' ' + lname;
-                            self.modify();
-                        }));
-                    }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
-                    });
-                }));
+            this.dataservice.getData(this.backend.profile.data['profile/last_name'].id).then(function(data) {
+                var lname = data.decr_data;
+                self.dataservice.getData(self.backend.profile.data['profile/last_name'].id).then(function(data) {
+                    self.backend.profile.company_info.name = data.decr_data + ' ' + lname;
+                    self.modify();
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
+                });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });

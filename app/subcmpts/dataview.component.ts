@@ -91,21 +91,22 @@ export class Dataview implements OnInit, OnDestroy {
                 });
             });
 
-            self.backend.getData(self.backend.profile.data[self.data_name].id).then(function(data) {
-                self.version = data.version;
-                self.data = data;
-                if(!!self.backend.generics[self.data_name]) {
-                    self.is_generic = true;
-                    self.gen_name = self.data_name;
-                } else if(!!self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')] && self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')][self.version].instantiable) {
-                    self.is_generic = true;
-                    self.gen_name = self.data_name.replace(/\/[^\/]*$/, '');
-                }
-                self.data.encr_data = self.backend.str2arr(self.data.encr_data);
-                self.backend.decryptAES(self.data.encr_data, self.dataservice.workerMgt(false, function(got) {
-                    self.decr_data = got;
-                    self.check.tick();
-                }));
+            self.dataservice.getData(self.backend.profile.data[self.data_name].id, true, function(data) {
+                return new Promise(function(resolve) {
+                    self.version = data.version;
+                    self.data = data;
+                    if(!!self.backend.generics[self.data_name]) {
+                        self.is_generic = true;
+                        self.gen_name = self.data_name;
+                    } else if(!!self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')] && self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')][self.version].instantiable) {
+                        self.is_generic = true;
+                        self.gen_name = self.data_name.replace(/\/[^\/]*$/, '');
+                    }
+                    resolve();
+                });
+            }).then(function(data) {
+                self.decr_data = data.decr_data;
+                self.check.tick();
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });

@@ -57,13 +57,11 @@ export class Remote implements OnInit, OnDestroy {
             }
             self.dataservice.listData(false).then(function() {
                 if(!!self.backend.profile.data['keys/auth/' + self.id_to]) {
-                    self.backend.getData(self.backend.profile.data['keys/auth/' + self.id_to].id).then(function(data) {
-                        self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {
-                            self.backend.encryptAES(self.challenge, self.dataservice.workerMgt(true, function(got) {
-                                var send = got.map(function(el) { return el + ''; }).join('-');
-                                self.end(send, window.btoa(self.backend.arr2str(got)), self.backend.profile._id);
-                            }), self.backend.toBytes(got));
-                        }));
+                    self.dataservice.getData(self.backend.profile.data['keys/auth/' + self.id_to].id).then(function(data) {
+                        self.backend.encryptAES(self.challenge, self.dataservice.workerMgt(true, function(got) {
+                            var send = got.map(function(el) { return el + ''; }).join('-');
+                            self.end(send, window.btoa(self.backend.arr2str(got)), self.backend.profile._id);
+                        }), self.backend.toBytes(data.decr_data));
                     }, function(e) {
                         self.end('null', 'null', self.backend.profile._id);
                     });

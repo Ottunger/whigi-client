@@ -619,7 +619,9 @@ export class Backend {
             name: name,
             encr_data: this.arr2str(encr_data),
             is_dated: (!!is_dated)? is_dated : false,
-            version: version
+            version: version,
+            encr_aes: '',
+            is_bound: false
         }, 'profile/data/new', true, true, true);
     }
 

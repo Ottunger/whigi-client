@@ -291,20 +291,18 @@ export class Account implements OnInit, OnDestroy {
                             });
                             break;
                         case 'get-and-grant':
-                            self.backend.getData(self.backend.profile.data[work.real_name].id).then(function(data) {
-                                self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.dataservice.workerMgt(false, function(got) {
-                                    array.push({
-                                        mode: 'grant',
-                                        data: got,
-                                        to: work.to,
-                                        name: work.name,
-                                        real_name: work.real_name,
-                                        until: work.until,
-                                        trigger: work.trigger,
-                                        version: data.version
-                                    });
-                                    next();
-                                }));
+                            self.dataservice.getData(self.backend.profile.data[work.real_name].id).then(function(data) {
+                                array.push({
+                                    mode: 'grant',
+                                    data: data.decr_data,
+                                    to: work.to,
+                                    name: work.name,
+                                    real_name: work.real_name,
+                                    until: work.until,
+                                    trigger: work.trigger,
+                                    version: data.version
+                                });
+                                next();
                             }, function(e) {
                                 reject(e);
                             });

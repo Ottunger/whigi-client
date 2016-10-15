@@ -466,6 +466,48 @@ export class Data {
     }
 
     /**
+     * Get a datafragment, and parse it.
+     * @function getData
+     * @public
+     * @param {String} id Datafragment ID.
+     * @param {Boolean} front Frontend display.
+     * @param {Function} inter An intermediate callback that returns a promise to run before decryption. Will receive data and may be undefined.
+     * @return {Promise} The datafragment, completed with decrypted data.
+     */
+    getData(id: string, front?: boolean, inter?: Function): Promise {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            self.backend.getData(id).then(function(data) {
+                function complete(key: number[]) {
+                    self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.workerMgt(false, function(got) {
+                        data.decr_data = got;
+                        resolve(data);
+                    }, front), key);
+                }
+                function prepared(key: number[]) {
+                    if(!!inter && typeof inter === 'Function') {
+                        inter(data).then(function() {
+                            complete(key);
+                        });
+                    } else {
+                        complete(key);
+                    }
+                }
+                //First decryption phase if any
+                if(data._id.indexOf('datafragment') == 0) {
+                    self.backend.decryptAES(self.backend.str2arr(data.encr_aes), self.workerMgt(false, function(got) {
+                        prepared(window.aesjs.util.convertStringToBytes(got));
+                    }, front));
+                } else {
+                    prepared(self.backend.master_key);
+                }
+            }, function(e) {
+                reject(e);
+            });
+        });
+    }
+
+    /**
      * Moves to top.
      * @function top
      * @public

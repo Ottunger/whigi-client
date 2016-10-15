@@ -130,16 +130,13 @@ export class Merge {
                                 index++;
                                 switch(work.mode) {
                                     case 'get':
-                                        self.backend.getData(add.data[work.name].id).then(function(data) {
-                                            var encr = self.backend.str2arr(data.encr_data);
-                                            self.backend.decryptAES(encr, self.dataservice.workerMgt(false, function(got) {
-                                                work.mode = 'getVault',
-                                                work.version = data.version;
-                                                work.decr_data = got;
-                                                work.is_folder = (!!self.backend.generics[work.name.replace(/\/[^\/]*$/, '')] && self.backend.generics[work.name.replace(/\/[^\/]*$/, '')][data.version].is_folder);
-                                                array.push(work);
-                                                next();
-                                            }));
+                                        self.dataservice.getData(add.data[work.name].id).then(function(data) {
+                                            work.mode = 'getVault',
+                                            work.version = data.version;
+                                            work.decr_data = data.decr_data;
+                                            work.is_folder = (!!self.backend.generics[work.name.replace(/\/[^\/]*$/, '')] && self.backend.generics[work.name.replace(/\/[^\/]*$/, '')][data.version].instantiable);
+                                            array.push(work);
+                                            next();
                                         }, function(e) {
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                             self.reloadProfile(currentToken, currentKey, resolve);
