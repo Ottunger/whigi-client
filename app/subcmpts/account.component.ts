@@ -377,6 +377,12 @@ export class Account implements OnInit, OnDestroy {
                 webkit.messageHandlers.ok.postMessage();
             } catch(e) {}
         }
+        if(this.strangeEmail != '') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('key_decryption');
+            this.backend.forceReload();
+            delete this.backend.profile;
+        }
         if(this.with_account == 'flow') {
             var arr = this.return_url_ok.split('/');
             arr.shift();
@@ -402,6 +408,12 @@ export class Account implements OnInit, OnDestroy {
             try {
                 webkit.messageHandlers.deny.postMessage();
             } catch(e) {}
+        }
+        if(this.strangeEmail != '') {
+            localStorage.removeItem('token');
+            localStorage.removeItem('key_decryption');
+            this.backend.forceReload();
+            delete this.backend.profile;
         }
         window.location.href = this.return_url_deny;
     }
