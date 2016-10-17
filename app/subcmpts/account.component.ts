@@ -21,6 +21,7 @@ import * as template from './templates/account.html';
 })
 export class Account implements OnInit, OnDestroy {
 
+    public sec_key: string;
     public id_to: string;
     public data_list: string[];
     public return_url_ok: string;
@@ -75,6 +76,7 @@ export class Account implements OnInit, OnDestroy {
             self.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
             self.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
             self.strangeEmail = (!!params['email'])? window.decodeURIComponent(params['email']) : '';
+            self.sec_key = (!!params['sec_key'])? window.decodeURIComponent(params['sec_key']) : '';
 
             window.$('#pick3').ready(function() {
                 window.$('#pick3').datetimepicker();
@@ -175,7 +177,7 @@ export class Account implements OnInit, OnDestroy {
         var self = this, saves: any[] = [];
         if(ok) {
             if(this.with_account != 'false') {
-                var key = this.backend.generateRandomString(64);
+                var key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
                 saves.push({
                     mode: 'new',
                     data: key,
