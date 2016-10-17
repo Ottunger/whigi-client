@@ -11,7 +11,7 @@
                     <label class="control-label visible-ie8 visible-ie9">{{ 'reset.password' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
+                        <input class="form-control placeholder-no-fix" type="password" (input)="dataservice.showStr('pwdrst', password)" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
                 </div>
                 <div class="form-group">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'reset.password' | translate }}</label>
@@ -20,6 +20,11 @@
                             <i class="fa fa-check"></i>
                             <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
                     </div>
+                </div>
+                <div class="form-group" *ngIf="!use_file">
+                    <span class="progress" style="display: block; margin-bottom: 0px;">
+                        <span id="pwdrst" style="width: 0%;" class="progress-bar" aria-valuemin="0" aria-valuemax="100"></span>
+                    </span>
                 </div>
                 <div class="form-group" style="display: none;">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">

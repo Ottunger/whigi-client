@@ -35,10 +35,21 @@
                                                     <h4 class="form-section">{{ 'profile.change' | translate }}</h4>
                                                     <div class="row">
                                                         <div class="col-md-4">
-                                                            <div class="form-group">
-                                                                <label class="control-label">{{ 'profile.current' | translate }}:</label><br />
-                                                                <div class="col-md-8">
-                                                                    <input type="password" class="form-control" [(ngModel)]="current_pwd" name="password" />
+                                                            <div class="row" style="padding-left: 10px;">
+                                                                <div class="form-group">
+                                                                    <label class="control-label">{{ 'profile.current' | translate }}:</label><br />
+                                                                    <div class="col-md-8">
+                                                                        <input type="password" class="form-control" [(ngModel)]="current_pwd" name="password" />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-8">
+                                                                <div class="row">
+                                                                    <div class="form-group" *ngIf="!use_file">
+                                                                        <span class="progress" style="display: block; margin-bottom: 0px;">
+                                                                            <span id="pwdchg" style="width: 0%;" class="progress-bar" aria-valuemin="0" aria-valuemax="100"></span>
+                                                                        </span>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -65,7 +76,7 @@
                                                                 <div class="form-group inewpass">
                                                                     <label class="control-label">{{ 'profile.new' | translate }}:</label><br />
                                                                     <div class="col-md-8">
-                                                                        <input type="password" class="form-control" [(ngModel)]="password" name="new_pass" />
+                                                                        <input type="password" class="form-control" (input)="dataservice.showStr('pwdstr', pwdchg)" [(ngModel)]="password" name="new_pass" />
                                                                     </div>
                                                                 </div>
                                                             </div>
