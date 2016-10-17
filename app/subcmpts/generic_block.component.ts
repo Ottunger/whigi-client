@@ -138,7 +138,7 @@ export class GenericBlock implements OnInit {
             return;
         }
         //Create it
-        this.dataservice.newData(name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
+        this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
             self.new_data[name] = '';
             self.new_datas[name] = {};

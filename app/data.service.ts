@@ -205,12 +205,10 @@ export class Data {
                         if(gen_name && add.data[keys[i]].version < self.backend.generics[gen_name].length - 1) {
                             var name = keys[i];
                             self.backend.transitionSchema(gen_name, add.data[keys[i]].version, self.backend.generics[gen_name].length - 1).then(function(js) {
-                                self.backend.getData(add.data[name].id).then(function(data) {
-                                    self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.workerMgt(false, function(got) {
-                                        got = window.eval.call(window, '(function(got) {' + js.js + '})')(got);
-                                        self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
-                                            add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable);
-                                    }));
+                                self.getData(add.data[name].id).then(function(data) {
+                                    var got = window.eval.call(window, '(function(got) {' + js.js + '})')(data.decr_data);
+                                    self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
+                                        add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable, data.decr_aes);
                                 }, function(e) {});
                             }, function(e) {});
                         }
@@ -233,7 +231,7 @@ export class Data {
                             if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
                                 var k = keys[i], kkstr = insides[j];
                                 self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
-                                    self.newData(vault.storable[0], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
+                                    self.newData(true, vault.storable[0], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
                                         self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kkstr]).then(function() {
                                             self.listData(false);
                                         }, function(e) {});
@@ -260,15 +258,17 @@ export class Data {
      * Register a new data.
      * @function newData
      * @public
+     * @param {Boolean} is_bound Whether data is bound.
      * @param {String} name Complete name, directory prefixed.
      * @param {String} value Value.
      * @param {Boolean} is_dated Dated field.
      * @param {Number} version Data version.
      * @param {Boolean} ignore Ignore existing data, wiping it.
+     * @param {Number[]} naes Allows specifying which key to use.
      * @return {Promise} Whether it went OK.
      */
-    newData(name: string, value: string, is_dated: boolean, version: number, ignore?: boolean): Promise {
-        var self = this;
+    newData(is_bound: boolean, name: string, value: string, is_dated: boolean, version: number, ignore?: boolean, naes?: number[]): Promise {
+        var self = this, enc_key: number[];
         ignore = ignore || false;
 
         return new Promise(function(resolve, reject) {
@@ -276,8 +276,16 @@ export class Data {
                 reject(['exists']);
                 return;
             }
+            if(!self.backend.master_key)
+                self.backend.decryptMaster();
+
+            naes = is_bound? (naes || self.backend.newAES()) : self.backend.master_key;
             self.backend.encryptAES(value, self.workerMgt(true, function(got) {
-                self.backend.postData(name, got, version, is_dated).then(function(res) {
+                if(is_bound)
+                    enc_key = new window.aesjs.ModeOfOperation.ctr(self.backend.master_key, new window.aesjs.Counter(0)).encrypt(naes);
+                else
+                    enc_key = [];
+                self.backend.postData(name, got, version, is_dated, is_bound, enc_key).then(function(res) {
                     self.backend.profile.data[name] = {
                         id: res._id,
                         length: 0,
@@ -287,11 +295,11 @@ export class Data {
                     }
                     self.backend.data_trie.addMilestones(name, '/');
                     self.backend.data_trie.add(name, self.backend.profile.data[name]);
-                    resolve();
+                    resolve(naes);
                 }, function(e) {
                     reject(['server', e]);
                 });
-            }));
+            }), naes);
         });
     }
 
@@ -325,22 +333,13 @@ export class Data {
      * @param {Number} version Data version.
      * @param {Object} users_mapping A dictionary that must contain user id => expire_epoch.
      * @param {Boolean} is_folder Whether to dump vault name into folder.
+     * @param {Number[]} enc_key Used encryption key for bound data.
      * @return {Promise} Whether it went OK.
      */
-    modifyData(name: string, value: string, is_dated: boolean, version: number, users_mapping: {[id: string]: Date}, is_folder?: boolean): Promise {
-        var i = 0, names = keys(), max = names.length, went = true;
+    modifyData(name: string, value: string, is_dated: boolean, version: number, users_mapping: {[id: string]: {date: Date, trigger: string}}, is_folder: boolean, enc_key: number[]): Promise {
+        var i = 0, names = Object.getOwnPropertyNames(users_mapping), max = names.length, went = true;
         var self = this;
-        is_folder = !!is_folder? is_folder : false;
 
-        function keys(): string[] {
-            var keys = [];
-            for (var key in users_mapping) {
-                if (users_mapping.hasOwnProperty(key)) {
-                    keys.push(key);
-                }
-            }
-            return keys;
-        }
         function check(ok, nok) {
             i++;
             if(i >= max) {
@@ -351,21 +350,23 @@ export class Data {
                     nok(['vault']);
             }
         }
-        
         self.backend.triggerVaults(name);
+        var is_bound = !!self.backend.profile.data[name]? self.backend.profile.data[name].id.indexOf('datafragment') == 0 : true;
         return new Promise(function(resolve, reject) {
-            self.newData(name, value, is_dated, version, true).then(function() {
-                names.forEach(function(id) {
-                    var time = !!users_mapping[id].getTime? users_mapping[id] : new Date(0);
-                    self.grantVault(id, is_folder? name.replace(/\/[^\/]*$/, '') : name, name, value, version, time).then(function(user, newid) {
-                        check(resolve, reject);
-                    }, function() {
-                        went = false;
-                        check(resolve, reject);
+            self.newData(is_bound, name, value, is_dated, version, true, enc_key).then(function() {
+                if(names.length > 0 && !is_bound) {
+                    names.forEach(function(id) {
+                        var time: Date = (!!users_mapping[id].date && !!users_mapping[id].date.getTime)? users_mapping[id].date : new Date(0);
+                        self.grantVault(id, is_folder? name.replace(/\/[^\/]*$/, '') : name, name, value, version, time, users_mapping[id].trigger, false, undefined).then(function(user, newid) {
+                            check(resolve, reject);
+                        }, function() {
+                            went = false;
+                            check(resolve, reject);
+                        });
                     });
-                });
-                if(names.length == 0)
+                } else {
                     resolve();
+                }
             }, function(err, e) {
                 reject(err, e);
             });
@@ -401,21 +402,30 @@ export class Data {
      * @param {String} id User id.
      * @param {String} name Data name.
      * @param {String} real_name Real data name.
-     * @param {String} decr_data Decrypted data.
+     * @param {String} decr_data Decrypted data or key for bound vaults.
      * @param {Number} version Vault version.
      * @param {Date} max_date Valid until.
      * @param {String} new_trigger URL to trigger.
      * @param {Boolean} is_storable Create a storable vault.
+     * @param {Number[]} enc_key Key for bound vaults.
      * @return {Promise} Whether went OK with remote profile and newly created vault.
      */
-    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger?: string, is_storable?: boolean): Promise {
+    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string, is_storable: boolean, enc_key: number[]): Promise {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getUser(id).then(function(user) {
-                var aesKey: number[] = self.backend.newAES();
+                //Sanity check
+                if(!(real_name in self.backend.profile.data)) {
+                    reject('sanity');
+                    return;
+                }
+                var is_bound = self.backend.profile.data[real_name].id.indexOf('datafragment') == 0;
+
+                //Keys
+                var aesKey: number[] = is_bound? enc_key : self.backend.newAES();
                 var aes_crypted_shared_pub: string = self.backend.encryptRSA(aesKey, user.rsa_pub_key);
 
-                self.backend.encryptAES(decr_data, self.workerMgt(true, function(got) {
+                function complete(got: number[]) {
                     self.backend.createVault(name, real_name, user._id, got, aes_crypted_shared_pub, version,
                         (max_date.getTime() < (new Date).getTime())? 0 : max_date.getTime(), new_trigger, is_storable).then(function(res) {
                         self.backend.profile.data[real_name].shared_to[user._id] = res._id;
@@ -426,7 +436,14 @@ export class Data {
                     }, function(e) {
                         reject(e);
                     });
-                }), aesKey);
+                }
+                if(!is_bound) {
+                    self.backend.encryptAES(decr_data, self.workerMgt(true, function(got) {
+                        complete(got);
+                    }), aesKey);
+                } else {
+                    complete(self.backend.str2arr(self.backend.profile.data[real_name].id));
+                }
             }, function(e) {
                 reject(e);
             });
@@ -485,7 +502,7 @@ export class Data {
                     }, front), key);
                 }
                 function prepared(key: number[]) {
-                    if(!!inter && typeof inter === 'Function') {
+                    if(!!inter) {
                         inter(data).then(function() {
                             complete(key);
                         });
@@ -495,9 +512,10 @@ export class Data {
                 }
                 //First decryption phase if any
                 if(data._id.indexOf('datafragment') == 0) {
-                    self.backend.decryptAES(self.backend.str2arr(data.encr_aes), self.workerMgt(false, function(got) {
-                        prepared(window.aesjs.util.convertStringToBytes(got));
-                    }, front));
+                    if(!self.backend.master_key)
+                        self.backend.decryptMaster();
+                    data.decr_aes = new window.aesjs.ModeOfOperation.ctr(self.backend.master_key, new window.aesjs.Counter(0)).decrypt(self.backend.str2arr(data.encr_aes));
+                    prepared(data.decr_aes);
                 } else {
                     prepared(self.backend.master_key);
                 }

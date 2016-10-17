@@ -178,7 +178,7 @@
                                                             <th>{{ 'action' | translate }}</th>
                                                         </tr>
                                                     </thead>
-                                                    <tbody>
+                                                    <tbody *ngIf="!!backend.profile">
                                                         <tr *ngFor="let d of backend.profile.oauth">
                                                             <td>{{ dataservice.forDisplay(d.for_id) }}</td>
                                                             <td>{{ d.prefix }}</td>

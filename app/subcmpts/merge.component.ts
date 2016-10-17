@@ -85,7 +85,7 @@ export class Merge {
      * @return {Promise} When done.
      */
     merge(): Promise {
-        var self = this;
+        var self = this, fnew: boolean = true;
         var currentToken = localStorage.getItem('token'), newToken;
         var currentKey = localStorage.getItem('key_decryption'), newKey;
         this.backend.decryptMaster();
@@ -109,17 +109,17 @@ export class Merge {
                     newKey = window.sha256(self.password + profile.salt);
                     localStorage.setItem('key_decryption', newKey);
                     
-                    self.backend.listData().then(function(add) {
+                    self.dataservice.listData(false).then(function() {
                         var array: any[] = [], index = 0, mapping = {};
-                        var datakeys = Object.getOwnPropertyNames(add.data);
+                        var datakeys = Object.getOwnPropertyNames(self.backend.profile.data);
                         for(var i = 0; i < datakeys.length; i++) {
                             if(datakeys[i].indexOf('keys/pwd/') != 0) {
                                 array.push({
                                     mode: 'get',
                                     name: datakeys[i],
                                     index: 0,
-                                    is_dated: add.data[datakeys[i]].is_dated,
-                                    shared_to: add.data[datakeys[i]].shared_to,
+                                    is_dated: self.backend.profile.data[datakeys[i]].is_dated,
+                                    shared_to: self.backend.profile.data[datakeys[i]].shared_to,
                                 });
                             }
                         }
@@ -130,32 +130,38 @@ export class Merge {
                                 index++;
                                 switch(work.mode) {
                                     case 'get':
-                                        self.dataservice.getData(add.data[work.name].id).then(function(data) {
+                                        self.dataservice.getData(self.backend.profile.data[work.name].id).then(function(data) {
                                             work.mode = 'getVault',
                                             work.version = data.version;
                                             work.decr_data = data.decr_data;
+                                            work.decr_aes = data.decr_aes;
+                                            work.is_bound = data._id.indexOf('datafragment') == 0;
                                             work.is_folder = (!!self.backend.generics[work.name.replace(/\/[^\/]*$/, '')] && self.backend.generics[work.name.replace(/\/[^\/]*$/, '')][data.version].instantiable);
                                             array.push(work);
                                             next();
                                         }, function(e) {
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                            self.reloadProfile(currentToken, currentKey, resolve);
+                                            self.reloadProfile(currentToken, currentKey, resolve, resolve);
                                         });
                                         break;
                                     case 'getVault':
-                                        if(work.shared_to.length > work.index) {
-                                            var key = Object.getOwnPropertyNames(work.shared_to)[work.index];
+                                        var keys = Object.getOwnPropertyNames(work.shared_to);
+                                        if(keys.length > work.index) {
+                                            var key = keys[work.index];
                                             self.backend.getAccessVault(work.shared_to[key]).then(function(got) {
-                                                work.shared_to[index] = {
-                                                    ee: new Date(got.expire_epoch),
-                                                    trigger: got.trigger
-                                                };
-                                                work.index++;
-                                                array.push(work);
-                                                next();
+                                                function aget() {
+                                                    work.shared_to[key] = {
+                                                        ee: new Date(got.expire_epoch),
+                                                        trigger: got.trigger
+                                                    };
+                                                    work.index++;
+                                                    index--;
+                                                    next();
+                                                }
+                                                self.backend.revokeVault(work.shared_to[key]).then(aget, aget);
                                             }, function(e) {
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                                self.reloadProfile(currentToken, currentKey, resolve);
+                                                self.reloadProfile(currentToken, currentKey, resolve, resolve);
                                             });
                                         } else {
                                             work.mode = 'new';
@@ -164,33 +170,54 @@ export class Merge {
                                         }
                                         break;
                                     case 'new':
-                                        self.dataservice.newData(work.name, work.decr_data, work.is_dated, work.version, self.erase).then(function() {
-                                            work.mode = 'giveVault',
-                                            work.index = 0;
-                                            array.push(work);
-                                            next();
-                                        }, function(e) {
-                                            if(e[0] == 'exists') {
+                                        function nnew() {
+                                            self.dataservice.newData(work.is_bound, work.name, work.decr_data, work.is_dated, work.version, self.erase).then(function(naes: number[]) {
                                                 work.mode = 'giveVault',
                                                 work.index = 0;
-                                                array.push(work);
-                                                next();
-                                            } else {
-                                                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                                self.reloadProfile(currentToken, currentKey, resolve);
-                                            }
-                                        });
-                                        break;
-                                    case 'giveVault':
-                                        if(work.shared_to.length > work.index) {
-                                            var key = Object.getOwnPropertyNames(work.shared_to)[work.index];
-                                            self.dataservice.grantVault(key, work.is_folder? work.name.replace(/\/[^\/]*$/, '') : work.name, work.name, work.decr_data, work.version, work.shared_to[key].ee, work.shared_to[key].trigger).then(function() {
-                                                work.index++;
+                                                work.decr_aes = naes;
                                                 array.push(work);
                                                 next();
                                             }, function(e) {
+                                                if(e[0] == 'exists') {
+                                                    self.dataservice.getData(self.backend.profile.data[work.name].id, false).then(function(data) {
+                                                        work.mode = 'giveVault',
+                                                        work.index = 0;
+                                                        work.decr_data = data.decr_data;
+                                                        work.decr_aes = data.decr_aes;
+                                                        work.version = data.version;
+                                                        work.is_dated = data.is_dated;
+                                                        array.push(work);
+                                                        next();
+                                                    }, function(e) {
+                                                        self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                    });
+                                                } else {
+                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                }
+                                            });
+                                        }
+                                        if(fnew) {
+                                            fnew = false;
+                                            self.backend.closeTo(my_id, my_master).then(function() {
+                                                self.reloadProfile(currentToken, currentKey, nnew, resolve);
+                                            }, function(e) {
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                                self.reloadProfile(currentToken, currentKey, resolve);
+                                                self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                                            });
+                                        } else {
+                                            nnew();
+                                        }
+                                        break;
+                                    case 'giveVault':
+                                        var keys = Object.getOwnPropertyNames(work.shared_to);
+                                        if(keys.length > work.index) {
+                                            var key = keys[work.index];
+                                            self.dataservice.grantVault(key, work.is_folder? work.name.replace(/\/[^\/]*$/, '') : work.name, work.name, work.decr_data, work.version, work.shared_to[key].ee, work.shared_to[key].trigger, false, work.decr_aes).then(function() {
+                                                work.index++;
+                                                index--;
+                                                next();
+                                            }, function(e) {
+                                                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                             });
                                         } else {
                                             next();
@@ -200,31 +227,25 @@ export class Merge {
                                         break;
                                 }
                             } else {
-                                self.backend.closeTo(my_id, my_master).then(function() {
-                                    self.notif.success(self.translate.instant('success'), self.translate.instant('merge.merged'));
-                                    self.login = '';
-                                    self.password = '';
-                                    self.reloadProfile(currentToken, currentKey, resolve);
-                                }, function(e) {
-                                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                    self.reloadProfile(currentToken, currentKey, resolve);
-                                });
+                                self.notif.success(self.translate.instant('success'), self.translate.instant('merge.merged'));
+                                self.login = '';
+                                self.password = '';
                             }
                         }
                         next();
                     }, function(e) {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                        self.reloadProfile(currentToken, currentKey, resolve);
+                        self.reloadProfile(currentToken, currentKey, resolve, resolve);
                         window.$('.imerging').addClass('has-error');
                     });
                 }, function(e) {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                    self.reloadProfile(currentToken, currentKey, resolve);
+                    self.reloadProfile(currentToken, currentKey, resolve, resolve);
                     window.$('.imerging').addClass('has-error');
                 });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                self.reloadProfile(currentToken, currentKey, resolve);
+                self.reloadProfile(currentToken, currentKey, resolve, resolve);
                 window.$('.imerging').addClass('has-error');
             });
         });
@@ -237,22 +258,22 @@ export class Merge {
      * @param {String} ct Current token.
      * @param {String} ck Current key.
      * @param {Function} resolve Callback.
+     * @param {function} reject Callback.
      */
-    private reloadProfile(ct: string, ck: string, resolve: Function) {
+    private reloadProfile(ct: string, ck: string, resolve: Function, reject: Function) {
         var self = this;
         localStorage.setItem('token', ct);
         localStorage.setItem('key_decryption', ck);
         this.backend.forceReload();
 
-        this.check.tick();
         this.backend.getProfile().then(function(profile) {
             self.backend.profile = profile;
             self.check.tick();
-            self.dataservice.listData(true).then(resolve, resolve);
+            self.dataservice.listData(true).then(resolve, reject);
         }, function(e) {
             delete self.backend.profile;
             self.notif.success(self.translate.instant('success'), self.translate.instant('merge.relog'));
-            resolve();
+            reject(e);
         });
     }
 

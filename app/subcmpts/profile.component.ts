@@ -58,8 +58,8 @@ export class Profile implements OnInit {
             this.notif.success(this.translate.instant('success'), this.translate.instant('profile.eidRead'));
             this.backend.getProfile().then(function(profile) {
                 self.backend.profile = profile;
-                self.dataservice.newData('profile/address/eid', self.backend.profile.company_info.address, false, 0).then(function() {
-                    self.dataservice.newData('profile/rrn', self.backend.profile.company_info.rrn, false, 0);
+                self.dataservice.newData(true, 'profile/address/eid', self.backend.profile.company_info.address, false, 0).then(function() {
+                    self.dataservice.newData(true, 'profile/rrn', self.backend.profile.company_info.rrn, false, 0);
                 });
             });
         }
@@ -104,8 +104,8 @@ export class Profile implements OnInit {
         if(this.password == this.password2) {
             if(this.password.length >= 8) {
                 this.backend.updateProfile(this.password, this.current_pwd).then(function() {
-                    self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to).then(function() {
-                        self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to).then(function() {
+                    self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to, false, undefined).then(function() {
+                        self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to, false, undefined).then(function() {
                             self.current_pwd = '';
                             self.password = '';
                             self.password2 = '';

@@ -107,7 +107,7 @@ export class Filesystem implements OnInit {
         } else {
             send = new_data;
         }
-        this.dataservice.newData(this.completeName(new_name), send, is_dated, 0).then(function() {
+        this.dataservice.newData(true, this.completeName(new_name), send, is_dated, 0).then(function() {
             self.check.tick();
         }, function(err) {
             if(err[0] == 'server') {

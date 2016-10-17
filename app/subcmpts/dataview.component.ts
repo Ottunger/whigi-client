@@ -166,8 +166,8 @@ export class Dataview implements OnInit, OnDestroy {
      * @public
      */
     modify() {
-        var replacement, from = window.$('#pick4').datetimepicker('date').toDate(), done = false;
-        if(this.is_generic && !!this.backend.generics[this.gen_name][this.version].json_keys) {
+        var replacement, done = false;
+        if(this.is_generic && this.backend.generics[this.gen_name][this.version].mode == 'json_keys') {
             var ret = {};
             for(var i = 0; i < this.backend.generics[this.gen_name][this.version].json_keys.length; i++) {
                 ret[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key] = this.new_datas[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key];
@@ -175,6 +175,7 @@ export class Dataview implements OnInit, OnDestroy {
             this.new_data = JSON.stringify(ret);
         }
         if(this.is_dated) {
+            var from = window.$('#pick4').datetimepicker('date').toDate();
             replacement = JSON.parse(this.decr_data);
             for(var i = 0; i < replacement.length; i++) {
                 if(from > replacement[i].from) {
@@ -207,11 +208,11 @@ export class Dataview implements OnInit, OnDestroy {
      * @param {Boolean} back Should back.
      */
     mod(replacement: string, back: boolean) {
-        var self = this, names = this.sharedIds(), dict: {[id: string]: Date} = {}
+        var self = this, names = this.sharedIds(), dict: {[id: string]: {date: Date, trigger: string}} = {}
         for(var i = 0; i < names.length; i++) {
-            dict[names[i]] = this.timings[names[i]].ee;
+            dict[names[i]] = {date: this.timings[names[i]].ee, trigger: this.timings[names[i]].trigger};
         }
-        this.dataservice.modifyData(this.data_name, replacement, this.is_dated, this.version, dict, (this.is_generic && this.data_name != this.gen_name)).then(function() {
+        this.dataservice.modifyData(this.data_name, replacement, this.is_dated, this.version, dict, (this.is_generic && this.data_name != this.gen_name), this.data.decr_aes).then(function() {
             self.new_datas = {};
             self.new_data = '';
             self.decr_data = replacement;
@@ -313,6 +314,7 @@ export class Dataview implements OnInit, OnDestroy {
             delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
             var i = self.backend.my_shares[shared_to_id].indexOf(self.data_name);
             delete self.backend.my_shares[shared_to_id][i];
+            delete self.sharedVector;
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
         });
@@ -331,15 +333,14 @@ export class Dataview implements OnInit, OnDestroy {
                 //Remove actual vault
                 delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
                 //Get other data and create its vault
-                self.backend.getData(self.backend.profile.data[self.gen_name + '/' + self.filter].id).then(function(data) {
-                    self.backend.decryptAES(data.encr_data, self.dataservice.workerMgt(false, function(got) {
-                        self.dataservice.grantVault(shared_to_id, self.gen_name, self.gen_name + '/' + self.filter, got, self.version, new Date(timer.expire_epoch), timer.trigger).then(function() {
-                            self.backend.triggerVaults(self.gen_name + '/' + self.filter);
-                            self.notif.success(self.translate.instant('success'), self.translate.instant('dataview.transfered'));
-                        }, function(e) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
-                        });
-                    }));
+                self.dataservice.getData(self.backend.profile.data[self.gen_name + '/' + self.filter].id).then(function(data) {
+                    self.dataservice.grantVault(shared_to_id, self.gen_name, self.gen_name + '/' + self.filter, data.decr_data, self.version, new Date(timer.expire_epoch), timer.trigger, false, data.decr_aes).then(function() {
+                        self.backend.triggerVaults(self.gen_name + '/' + self.filter);
+                        self.notif.success(self.translate.instant('success'), self.translate.instant('dataview.transfered'));
+                        delete self.sharedVector;
+                    }, function(e) {
+                        self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
+                    });
                 }, function(e) {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
                 });
@@ -359,6 +360,7 @@ export class Dataview implements OnInit, OnDestroy {
         keys.forEach(function(val) {
             this.backend.revokeVault(this.backend.profile.data[this.data_name].shared_to[val]).then(function() {
                 delete self.backend.profile.data[self.data_name].shared_to[val];
+                delete self.sharedVector;
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
             });
@@ -373,11 +375,12 @@ export class Dataview implements OnInit, OnDestroy {
     register() {
         var self = this;
         var date: Date = window.$('#pick5').datetimepicker('date').toDate();
-        this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger, this.is_storable).then(function(user, id) {
+        this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger, this.is_storable, this.data.decr_aes).then(function(user, id) {
             self.timings[user._id] = {la: new Date(0), ee: date, seen: false,
                 ends: date.getTime() > (new Date).getTime(), trigger: self.new_trigger};
             self.new_id = '';
             self.is_storable = false;
+            delete self.sharedVector;
         }, function() {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
         });

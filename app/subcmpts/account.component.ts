@@ -277,14 +277,15 @@ export class Account implements OnInit, OnDestroy {
                     index++;
                     switch(work.mode) {
                         case 'new':
-                            self.dataservice.newData(work.name, work.data, work.is_dated, work.version, work.force).then(function() {
+                            self.dataservice.newData(true, work.name, work.data, work.is_dated, work.version, work.force).then(function(naes: number[]) {
+                                array[index].decr_aes = naes;
                                 next();
                             }, function(e) {
                                 reject(e);
                             });
                             break;
                         case 'grant':
-                            self.dataservice.grantVault(work.to, work.name, work.real_name, work.data, work.version, work.until, work.trigger).then(function() {
+                            self.dataservice.grantVault(work.to, work.name, work.real_name, work.data, work.version, work.until, work.trigger, false, work.decr_aes).then(function() {
                                 next();
                             }, function(e) {
                                 reject(e);
@@ -300,7 +301,8 @@ export class Account implements OnInit, OnDestroy {
                                     real_name: work.real_name,
                                     until: work.until,
                                     trigger: work.trigger,
-                                    version: data.version
+                                    version: data.version,
+                                    decr_aes: data.decr_aes
                                 });
                                 next();
                             }, function(e) {

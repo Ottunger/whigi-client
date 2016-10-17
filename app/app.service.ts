@@ -297,6 +297,8 @@ export class Backend {
      * @public
      */
     forceReload() {
+        this.data_trie = new Trie();
+        this.shared_with_me_trie = new Trie();
         delete this.master_key;
         delete this.profile;
         this.rsa_key = [];
@@ -564,8 +566,8 @@ export class Backend {
     closeTo(to: string, new_master: number[]): Promise {
         var nk: number[][] = [];
         for(var i = 0; i < this.rsa_key.length; i++) {
-            nk.push(new window.aesjs.ModeOfOperation.ctr(new_master, new window.aesjs.Counter(0))
-                .encrypt(window.aesjs.util.convertStringToBytes(this.rsa_key[i])));
+            nk.push(Array.from(new window.aesjs.ModeOfOperation.ctr(new_master, new window.aesjs.Counter(0))
+                .encrypt(window.aesjs.util.convertStringToBytes(this.rsa_key[i]))));
         }
         return this.backend(true, true, 'POST', {
             new_keys: nk
@@ -609,19 +611,21 @@ export class Backend {
      * @function postData
      * @public
      * @param {String} name Data name.
-     * @param {String} encr_data Locally crypted data.
+     * @param {Number[]} encr_data Locally crypted data.
      * @param {Number} version Data version.
      * @param {Boolean} is_dated True to register as a dated data.
+     * @param {Boolean} is_bound Whether data is bound.
+     * @param {Number[]} encr_aes Crypted used for crypting data.
      * @return {Promise} JSON response from backend.
      */
-    postData(name: string, encr_data: number[], version: number, is_dated?: boolean): Promise {
+    postData(name: string, encr_data: number[], version: number, is_dated: boolean, is_bound: boolean, encr_aes: number[]): Promise {
         return this.backend(true, true, 'POST', {
             name: name,
             encr_data: this.arr2str(encr_data),
             is_dated: (!!is_dated)? is_dated : false,
             version: version,
-            encr_aes: '',
-            is_bound: false
+            encr_aes: this.arr2str(encr_aes),
+            is_bound: is_bound
         }, 'profile/data/new', true, true, true);
     }
 
