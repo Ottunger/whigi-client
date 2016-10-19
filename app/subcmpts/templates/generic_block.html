@@ -58,18 +58,20 @@
                                     <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g]">
-                                                <li class="list-group-item">
-                                                    <tooltip [mode]="'shares'" [uri]="g" [right]="true"></tooltip>
+                                                <li class="list-group-item" style="border: none;">
                                                     <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g)">
-                                                        <i class="fa fa-pencil"></i> {{ 'generics.goTo' | translate }}</button>
+                                                        <i class="fa fa-pencil"></i></button>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
                                             <ul class="list-group" *ngIf="!!backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
                                                 && backend.generics[g][backend.profile.data[g].version].mode != 'json_keys'">
-                                                <li class="list-group-item">
-                                                    <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g)" />
+                                                <li class="list-group-item" style="border: none;">
+                                                    <div class="row">
+                                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g)" />
+                                                        <tooltip [mode]="'shares'" [uri]="g"></tooltip>
+                                                    </div>
                                                 </li>
                                             </ul>
                                         </div>
@@ -77,23 +79,25 @@
                                     <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
-                                                    <tooltip [mode]="'shares'" [uri]="g + '/' + d" [right]="true"></tooltip>
+                                                <li class="list-group-item" style="border: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
                                                     <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
-                                                        <i class="fa fa-pencil"></i> ({{ d }})</button>
+                                                        <i class="fa fa-pencil"></i> [{{ d }}]</button>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="col-md-6">
                                             <ul class="list-group">
-                                                <li class="list-group-item" style="text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
-                                                    <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'
-                                                        && backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'json_keys'">
-                                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d)" />
-                                                    </div>
-                                                    <div class="row text-center" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
-                                                        || backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
-                                                        {{ 'nothing' | translate }}
+                                                <li class="list-group-item" style="border: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
+                                                    <div class="row">
+                                                        <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'
+                                                            && backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'json_keys'">
+                                                            <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d)" />
+                                                        </div>
+                                                        <div class="text-center" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
+                                                            || backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
+                                                            {{ 'nothing' | translate }}
+                                                        </div>
+                                                        <tooltip [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
                                                     </div>
                                                 </li>
                                             </ul>

@@ -27,7 +27,7 @@
             <!-- BEGIN DATA -->
             <div class="panel-group accordion" id="tgabble">
                 <div *ngFor="let p of data_list" class="panel panel-default" [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable && !backend.profile.data[p]) ||
-                    (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 0)">
+                    (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)">
                     <div *ngIf="!!backend.generics[p]" class="panel-heading">
                         <h4 class="panel-title" style="text-align: right;">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p) }}">

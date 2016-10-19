@@ -669,13 +669,13 @@ export class Data {
             res += 20;
         if(o > 1)
             res += 20;
-        window.$('#pwdstr').css('width', res + '%');
+        window.$('#' + id).css('width', res + '%');
         if(res >= 80)
-            window.$('#pwdstr').removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-success');
+            window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-success');
         else if(res >= 40)
-            window.$('#pwdstr').removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-warning');
+            window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-warning');
         else
-            window.$('#pwdstr').removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-danger');
+            window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-danger');
     }
 
 }

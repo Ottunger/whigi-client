@@ -146,6 +146,27 @@ export class Dataview implements OnInit, OnDestroy {
     }
 
     /**
+     * Register data from input_block.
+     * @function regData
+     * @public
+     * @param {String} group Attached group.
+     * @param {Object[]} Event.
+     */
+    regData(event: any[]) {
+        switch(event[0]) {
+            case 1:
+                this.new_data = event[1];
+                break;
+            case 2:
+                this.new_data_file = event[1];
+                break;
+            case 3:
+                this.new_datas = event[1];
+                break;
+        }
+    }
+
+    /**
      * Returns other possible values.
      * @function filters
      * @public
@@ -417,6 +438,16 @@ export class Dataview implements OnInit, OnDestroy {
             window.$('.load-button').removeClass('default').addClass('green');
         }
         r.readAsDataURL(file);
+    }
+
+    /**
+     * Undo file loading.
+     * @function undoLoad
+     * @public
+     */
+    undoLoad() {
+        this.new_data_file = '';
+        window.$('.load-button').addClass('default').removeClass('green');
     }
 
     /**
