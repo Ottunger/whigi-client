@@ -28,7 +28,7 @@
             <div class="panel-group accordion" id="tgabble">
                 <div *ngFor="let p of data_list">
                     <div class="panel panel-default panel-clearable" *ngIf="!!backend.generics[p]" id="accord{{ dataservice.sanit(p) }}"
-                        [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable && !backend.profile.data[p]) ||
+                        [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable && !!backend.profile && !backend.profile.data[p]) ||
                         (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)">
                         <div class="panel-heading">
                             <h4 class="panel-title" style="text-align: right;">
@@ -54,8 +54,8 @@
                                 </p>
                                 <!-- BEGIN ITEM SELECT -->
                                 <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable" id="igen{{ dataservice.sanit(p) }}">
-                                    <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
-                                    <input_block *ngIf="!backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
+                                    <p *ngIf="!!backend.profile && !!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
+                                    <input_block *ngIf="!!backend.profile && !backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                                 </div>
                                 <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
                                     <select class="form-control" [(ngModel)]="filter[p]">

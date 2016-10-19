@@ -18,9 +18,9 @@ import * as template from './templates/input_block.html';
 })
 export class InputBlock implements OnInit {
 
-    private new_data: string | boolean;
+    private new_data: string;
     private new_data_file: string;
-    private new_datas: {[id: string]: string | boolean};
+    private new_datas: {[id: string]: string};
     @Input() g: string;
     @Input() writeDesc: boolean;
     @Input() prefill: string;
@@ -71,11 +71,11 @@ export class InputBlock implements OnInit {
     def() {
         this.new_datas = {};
         this.new_data_file = '';
-        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'select')? false : '';
+        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'select')? 'false' : '';
         if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
             for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
                 this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
-                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'select')? false : '';
+                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'select')? 'false' : '';
             }
         }
         this.iChange(1);

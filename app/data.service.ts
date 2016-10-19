@@ -145,6 +145,7 @@ export class Data {
      * @return {String} Built up data or undefined if cannot pass test.
      */
     recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
+        raw_data = raw_data.toString();
         //Build up the data, keys wrapping and date wrapping
         if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'json_keys') {
             var ret = {};

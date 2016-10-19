@@ -31,7 +31,6 @@ export class WhoIShare implements OnInit {
      * @param router Routing service.
      * @param notif Notification service.
      * @param dataservice Data service.
-     * @param check Check service.
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router,
         private notif: NotificationsService, private dataservice: Data) {
@@ -56,6 +55,8 @@ export class WhoIShare implements OnInit {
      * @return {String} Translation.
      */
     genName(gen: string, help: boolean): string {
+        if(!gen)
+            return '';
         if(!!this.backend.generics[gen]) {
             return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         } else if(!!this.backend.generics[gen.replace(/\/[^\/]*$/, '')] &&
@@ -132,9 +133,7 @@ export class WhoIShare implements OnInit {
         if(name.indexOf('keys/pwd/') == 0 && !window.confirm(this.translate.instant('dataview.revokeKey')))
             return;
         this.backend.revokeVault(this.backend.profile.data[name].shared_to[shared_to_id]).then(function() {
-            delete self.backend.profile.data[name].shared_to[shared_to_id];
-            var i = self.backend.my_shares[shared_to_id].indexOf(name);
-            delete self.backend.my_shares[shared_to_id][i];
+            self.dataservice.listData(false);
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
         });
