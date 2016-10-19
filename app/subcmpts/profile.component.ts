@@ -158,6 +158,7 @@ export class Profile implements OnInit {
             self.backend.profile._id = self.new_name;
             self.backend.createToken(self.new_name, self.current_pwd, false).then(function(ticket) {
                 localStorage.setItem('token', ticket._id);
+                self.notif.success(self.translate.instant('success'), self.translate.instant('profile.chUname'));
             }, function(e) {
                 localStorage.removeItem('token');
                 self.backend.forceReload();

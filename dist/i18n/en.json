@@ -94,6 +94,7 @@
    "profile.datas": "All data",
    "profile.uname": "Change username",
    "profile.whoishare": "Shared by me",
+   "profile.chUname": "Username correctly updated",
 
    "filesystem.data_name": "Data name",
    "filesystem.data": "Data",

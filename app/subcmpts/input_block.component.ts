@@ -18,9 +18,9 @@ import * as template from './templates/input_block.html';
 })
 export class InputBlock implements OnInit {
 
-    private new_data: string;
+    private new_data: string | boolean;
     private new_data_file: string;
-    private new_datas: {[id: string]: string};
+    private new_datas: {[id: string]: string | boolean};
     @Input() g: string;
     @Input() writeDesc: boolean;
     @Input() prefill: string;
@@ -35,7 +35,6 @@ export class InputBlock implements OnInit {
      * @param dataservice Data service.
      */
     constructor(private backend: Backend, private dataservice: Data) {
-        this.new_datas = {};
         this.out = new EventEmitter<any[]>();
     }
 
@@ -46,7 +45,8 @@ export class InputBlock implements OnInit {
      */
     ngOnInit(): void {
         var self = this;
-        this.new_data = (!!this.prefill)? this.prefill : undefined;
+        this.def();
+        this.new_data = (!!this.prefill)? this.prefill : this.new_data;
         window.$('.json' + this.dataservice.sanit(this.g)).ready(function() {
             window.$('.json' + self.dataservice.sanit(self.g)).addClass(self.writeDesc? 'form-group' : 'row');
             if(!self.writeDesc) {
@@ -57,15 +57,30 @@ export class InputBlock implements OnInit {
         });
         if(!!this.reset) {
             this.reset.subscribe(function() {
-                self.new_data = '';
-                self.new_data_file = '';
-                self.new_datas = {};
-                self.iChange(1);
-                self.iChange(2);
-                self.iChange(3);
+                self.def();
                 self.collapse();
             });
         }
+    }
+
+    /**
+     * Default values.
+     * @function def
+     * @public
+     */
+    def() {
+        this.new_datas = {};
+        this.new_data_file = '';
+        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'select')? false : '';
+        if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
+            for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
+                this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'select')? false : '';
+            }
+        }
+        this.iChange(1);
+        this.iChange(2);
+        this.iChange(3);
     }
 
     /**
