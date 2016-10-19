@@ -17,16 +17,31 @@
                             <div class="col-md-12">
                                 <div class="row">
                                     <!-- EXPL -->
-                                    <h4>
-                                        <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
-                                            src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
-                                        <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
-                                            class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
-                                        {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
-                                        <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
-                                    </h4>
-                                    <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                                    <div class="col-md-6">
+                                        <h4>
+                                            <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
+                                                src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
+                                            <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
+                                                class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
+                                            {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                                            <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
+                                        </h4>
+                                    </div>
+                                    <div class="col-md-5" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g)" />
+                                        <tooltip [mode]="'shares'" [right]="true" [uri]="g"></tooltip>
+                                    </div>
+                                    <div class="col-md-1" style="left: -20px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <button type="button" class="btn btn-link" (click)="select(g)">
+                                            <i class="fa fa-pencil"></i></button>
+                                    </div>
+                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                    </div>
                                     <!-- EXPL -->
+                                </div>
+                                <div class="row">
+                                    <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
                                 </div>
                                 <!-- BEGIN SELECT -->
                                 <div class="row" id="igen{{ dataservice.sanit(g) }}">
@@ -48,34 +63,13 @@
                                         </div>
                                     </div>
                                     <!-- input -->
-                                    <div class="col-md-6" *ngIf="!backend.profile.data[g]">
+                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                     </div>
                                 </div>
                                 <!-- END SELECT -->
                                 <!-- BEGIN ACTIONS -->
                                 <div class="row" style="padding-top: 3px;">
-                                    <div *ngIf="!backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <div class="col-md-6">
-                                            <ul class="list-group" *ngIf="!!backend.profile.data[g]">
-                                                <li class="list-group-item" style="border: none;">
-                                                    <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g)">
-                                                        <i class="fa fa-pencil"></i></button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <ul class="list-group" *ngIf="!!backend.profile.data[g] && backend.generics[g][backend.profile.data[g].version].mode != 'file'
-                                                && backend.generics[g][backend.profile.data[g].version].mode != 'json_keys'">
-                                                <li class="list-group-item" style="border: none;">
-                                                    <div class="row">
-                                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g)" />
-                                                        <tooltip [mode]="'shares'" [uri]="g"></tooltip>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                    </div>
                                     <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <div class="col-md-6">
                                             <ul class="list-group">
@@ -97,7 +91,7 @@
                                                             || backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
                                                             {{ 'nothing' | translate }}
                                                         </div>
-                                                        <tooltip [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
+                                                        <tooltip [right]="false" [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
                                                     </div>
                                                 </li>
                                             </ul>
