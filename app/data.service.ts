@@ -286,11 +286,12 @@ export class Data {
                 else
                     enc_key = [];
                 self.backend.postData(name, got, version, is_dated, is_bound, enc_key).then(function(res) {
+                    var shared_to = (name in self.backend.profile.data)? self.backend.profile.data[name].shared_to : {};
                     self.backend.profile.data[name] = {
                         id: res._id,
                         length: 0,
                         is_dated: is_dated,
-                        shared_to: {},
+                        shared_to: shared_to,
                         version: version
                     }
                     self.backend.data_trie.addMilestones(name, '/');
