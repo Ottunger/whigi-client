@@ -52,16 +52,18 @@ enableProdMode();
     `],
     encapsulation: ViewEncapsulation.None,
     template: `
-        <router-outlet></router-outlet>
-        <br />
-        <div class="MenuContainer">
-            <ul id="navigation">
-                <span style="position: absolute; left: 3px; top: 7px; color: #888; font-size: 12px;">{{ 'mention' | translate }}</span>
-                <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
-                <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
-            </ul>
-        </div> 
-        <simple-notifications [options]="options"></simple-notifications>
+        <div id="mainDiv" class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+            <router-outlet></router-outlet>
+            <br />
+            <div class="MenuContainer">
+                <ul id="navigation">
+                    <span style="position: absolute; left: 3px; top: 7px; color: #888; font-size: 12px;">{{ 'mention' | translate }}</span>
+                    <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
+                    <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
+                </ul>
+            </div> 
+            <simple-notifications [options]="options"></simple-notifications>
+        </div>
     `
 })
 export class Application {

@@ -1,11 +1,19 @@
 <div class="page-header navbar navbar-fixed-top">
     <!-- BEGIN HEADER INNER -->
-    <div class="page-header-inner ">
+    <div class="page-header-inner">
         <!-- BEGIN LOGO -->
-        <div class="page-logo" style="cursor: pointer;" (click)="router.navigate(['/profile'])">
-            <img src="../../../img/private/logo-top.png" alt="logo" class="logo-default">
+        <div class="page-logo" style="cursor: pointer;">
+            <img src="../../../img/private/logo-top.png" alt="logo" class="logo-default" (click)="router.navigate(['/profile'])">
+            <div class="menu-toggler sidebar-toggler" style="padding-top: 15px;" (click)="toggleMenu()">
+                <span></span>
+            </div>
         </div>
         <!-- END LOGO -->
+        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
+        <a href="javascript:;" class="menu-toggler responsive-toggler" (click)="toggleMenu()">
+            <span></span>
+        </a>
+        <!-- END RESPONSIVE MENU TOGGLER -->
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">

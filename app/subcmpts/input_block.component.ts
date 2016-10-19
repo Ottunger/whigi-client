@@ -55,15 +55,17 @@ export class InputBlock implements OnInit {
                 window.$('.json' + self.dataservice.sanit(self.g)).css('display', 'block');
             }
         });
-        this.reset.subscribe(function() {
-            self.new_data = '';
-            self.new_data_file = '';
-            self.new_datas = {};
-            self.iChange(1);
-            self.iChange(2);
-            self.iChange(3);
-            self.collapse();
-        });
+        if(!!this.reset) {
+            this.reset.subscribe(function() {
+                self.new_data = '';
+                self.new_data_file = '';
+                self.new_datas = {};
+                self.iChange(1);
+                self.iChange(2);
+                self.iChange(3);
+                self.collapse();
+            });
+        }
     }
 
     /**

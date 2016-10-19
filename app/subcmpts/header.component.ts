@@ -86,4 +86,14 @@ export class Header implements OnInit {
         });
     }
 
+    /**
+     * Toggle main menu.
+     * @function toggleMenu
+     * @public
+     */
+    toggleMenu() {
+        window.$('#mainDiv').toggleClass('page-sidebar-closed');
+        window.$('#mainSidebar').toggleClass('page-sidebar-menu-closed');
+    }
+
 }
