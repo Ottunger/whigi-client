@@ -158,10 +158,9 @@
    "account.until": "Les données seront disponibles pour l'app jusqu'à: ",
    "account.forever": "Les données seront TOUJOURS disponibles pour l'app, mais vous pourrez retirer l'accès.",
    "account.withAccount": "L'app demande également la création d'un compte lié à votre compte Whigi.",
-   "account.dataField": "Données associées",
    "account.new": "Nouvelle instance",
-   "account.newName": "Nouveau nom",
    "account.user": "Utilisateur Whigi",
+   "account.fill": "Merci de renseigner tous les champs avant de valider",
 
    "userinfo.title": "Informations à propos de l'utilisateur",
    "userinfo.public": "Informations publiques vérifiées: ",
@@ -228,6 +227,14 @@
    "generics.corporate_open": "Capital ouvert",
 
    "generics.badpostcode": "Votre code postal ne peut être valide",
+
+   "new.email": "Email",
+   "new.tel": "Telephone",
+   "new.address": "Adresse",
+   "new.corporate_name": "Entreprise",
+   "new.country": "Entreprise_pays",
+   "new.corporate_type": "Entreprise_forme",
+   "new.open": "Entreprise_capital",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",

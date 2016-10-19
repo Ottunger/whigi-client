@@ -102,15 +102,20 @@ export class Account implements OnInit, OnDestroy {
                         more = more.concat(self.backend.generics_trie.suggestions(self.data_list[i]));
                     }
                 }
-                i = 0;
-                while(i < self.data_list.length) {
-                    if(self.data_list[i].charAt(self.data_list[i].length - 1) == '/') {
-                        self.data_list.splice(i, 1);
-                    } else {
-                        i++;
+                self.data_list = self.data_list.concat(more).filter(function(el: string): boolean {
+                    return el.charAt(el.length - 1) != '/';
+                });
+                self.data_list = (function(arr) {
+                    var u = {}, a = [];
+                    for(var i = 0, l = arr.length; i < l; ++i){
+                        if(u.hasOwnProperty(arr[i])) {
+                            continue;
+                        }
+                        a.push(arr[i]);
+                        u[arr[i]] = 1;
                     }
-                }
-                self.data_list = self.data_list.concat(more);
+                    return a;
+                })(self.data_list);
 
                 //Check if already granted
                 for(var i = 0; i < self.data_list.length; i++) {
@@ -176,6 +181,10 @@ export class Account implements OnInit, OnDestroy {
     finish(ok: boolean) {
         var self = this, saves: any[] = [];
         if(ok) {
+            if(!this.allFilled()) {
+                this.notif.error(this.translate.instant('error'), this.translate.instant('account.fill'));
+                return;
+            }
             if(this.with_account != 'false') {
                 var key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
                 saves.push({
@@ -201,9 +210,9 @@ export class Account implements OnInit, OnDestroy {
                 if(adata in this.backend.generics && ((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new'))) {
                     //Build and test
                     window.$('#igen' + this.dataservice.sanit(adata)).removeClass('has-error');
-                    this.new_data[adata] = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
-                    if(this.new_data[adata].constructor === Array) {
-                        this.notif.error(this.translate.instant('error'), this.translate.instant(this.new_data[adata][1]));
+                    var send = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
+                    if(send.constructor === Array) {
+                        this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
                         window.$('#igen' + this.dataservice.sanit(adata)).addClass('has-error');
                         this.new_data = {};
                         var keys = Object.getOwnPropertyNames(this.new_datas);
@@ -219,7 +228,7 @@ export class Account implements OnInit, OnDestroy {
                     }
                     saves.push({
                         mode: 'new',
-                        data: this.new_data[adata],
+                        data: send,
                         name: name,
                         is_dated: this.backend.generics[adata][this.backend.generics[adata].length - 1].is_dated,
                         version: this.backend.generics[adata].length - 1,
@@ -227,7 +236,7 @@ export class Account implements OnInit, OnDestroy {
                     });
                     saves.push({
                         mode: 'grant',
-                        data: this.new_data[adata],
+                        data: send,
                         to: this.id_to,
                         name: adata,
                         real_name: name,
@@ -437,12 +446,15 @@ export class Account implements OnInit, OnDestroy {
      * @return {Boolean} Filled.
      */
     allFilled(): boolean {
-        var obj = window.$('.grant-required');
+        var obj = window.$('.grant-required'), ok = true;
+        window.$('.panel-clearable').removeClass('panel-danger');
         for(var i = 0; i < obj.length; i++) {
-            if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '')
-                return false;
+            if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '') {
+                var ok = false;
+                window.$(window.$(obj[i]).attr('data-forid')).addClass('panel-danger');
+            }
         }
-        return true;
+        return ok;
     }
 
 }

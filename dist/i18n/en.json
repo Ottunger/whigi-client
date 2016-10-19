@@ -158,10 +158,9 @@
    "account.until": "The data will be available to the 3rd party until: ",
    "account.forever": "The data will ALWAYS be available to 3rd party, but you can revoke this.",
    "account.withAccount": "The 3rd party also asks to create you an account at his side.",
-   "account.dataField": "Associated data",
    "account.new": "New instance",
-   "account.newName": "New name",
    "account.user": "Whigi User",
+   "account.fill": "Please fill all required data before submitting",
 
    "userinfo.title": "Information about the user",
    "userinfo.public": "Publicly advertised and checked information: ",
@@ -228,6 +227,14 @@
    "generics.corporate_open": "Open capital",
 
    "generics.badpostcode": "Your postal code does not match expected format",
+
+   "new.email": "Email",
+   "new.tel": "Telephone",
+   "new.address": "Address",
+   "new.corporate_name": "Company",
+   "new.country": "Company_country",
+   "new.corporate_type": "Company_type",
+   "new.open": "Company_capital",
 
    "/": "Root folder",
    "profile/": "Profile folder",

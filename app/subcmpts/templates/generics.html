@@ -15,9 +15,6 @@
                     <h1 class="page-title"> {{ 'generics.title' | translate }}</h1>
                     <!-- END PAGE TITLE-->
                     <div class="row">
-                        <select class="form-control visible-xs-block visible-sm-block" [(ngModel)]="filter" (change)="regUpdate()">
-                            <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
-                        </select><br />
                         <div class="col-md-6">
                             <!-- BEGIN BLOCK -->
                             <div class="tab-content" *ngFor="let g of generics(); let e = even">

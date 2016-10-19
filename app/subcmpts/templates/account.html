@@ -26,57 +26,61 @@
             <!-- END REFLECTED HEADER -->
             <!-- BEGIN DATA -->
             <div class="panel-group accordion" id="tgabble">
-                <div *ngFor="let p of data_list" class="panel panel-default" [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable && !backend.profile.data[p]) ||
-                    (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)">
-                    <div *ngIf="!!backend.generics[p]" class="panel-heading">
-                        <h4 class="panel-title" style="text-align: right;">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p) }}">
-                                <div style="float:left;">
-                                    <img *ngIf="backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
-                                        src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
-                                    <i *ngIf="backend.generics[p][backend.generics[p].length - 1].icon != '' && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0"
-                                        class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}"></i>
+                <div *ngFor="let p of data_list">
+                    <div class="panel panel-default panel-clearable" *ngIf="!!backend.generics[p]" id="accord{{ dataservice.sanit(p) }}"
+                        [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable && !backend.profile.data[p]) ||
+                        (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)">
+                        <div class="panel-heading">
+                            <h4 class="panel-title" style="text-align: right;">
+                                <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p) }}">
+                                    <div style="float:left;">
+                                        <img *ngIf="backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
+                                            src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
+                                        <i *ngIf="backend.generics[p][backend.generics[p].length - 1].icon != '' && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0"
+                                            class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}"></i>
+                                    </div>
+                                    {{ backend.generics[p][backend.generics[p].length - 1].descr_key | translate }}
+                                    <div style="padding-left:50px;float:right;">
+                                        <i class="fa fa-chevron-down"></i>
+                                    </div>
+                                    <tooltip [mode]="'info'" [uri]="backend.generics[p][backend.generics[p].length - 1].help_url" [right]="true"></tooltip>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="tgabble_{{ dataservice.sanit(p) }}" class="panel-collapse collapse" >
+                            <div class="panel-body" style="max-height:450px; overflow-y:auto; padding-top: 7px;">
+                                <p *ngIf="backend.generics[p][backend.generics[p].length - 1].long_descr_key != ''">
+                                    {{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}
+                                </p>
+                                <!-- BEGIN ITEM SELECT -->
+                                <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable" id="igen{{ dataservice.sanit(p) }}">
+                                    <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
+                                    <input_block *ngIf="!backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                                 </div>
-                                {{ backend.generics[p][backend.generics[p].length - 1].descr_key | translate }}
-                                <div style="padding-left:50px;float:right;">
-                                    <i class="fa fa-chevron-down"></i>
+                                <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
+                                    <select class="form-control" [(ngModel)]="filter[p]">
+                                        <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
+                                    </select><br />
+                                    <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
+                                        <input type="text" [(ngModel)]="new_name[p]" class="form-control grant-required" [attr.list]="'suggestions' + p" [attr.data-forid]="'#accord' + dataservice.sanit(p)">
+                                        <datalist id="suggestions{{ p }}">
+                                            <option *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].new_key" value="{{ k | translate }}">
+                                        </datalist>
+                                        <br />
+                                        <input_block *ngIf="strangeEmail=='' || p!='profile/email'" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
+                                        <input_block *ngIf="strangeEmail!='' && p=='profile/email'" [prefill]="strangeEmail" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
+                                    </div>
                                 </div>
-                                <tooltip [mode]="'info'" [uri]="backend.generics[p][backend.generics[p].length - 1].help_url" [right]="true"></tooltip>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="tgabble_{{ dataservice.sanit(p) }}" class="panel-collapse collapse" >
-                        <div class="panel-body" style="max-height:450px; overflow-y:auto;">
-                            <p *ngIf="backend.generics[p][backend.generics[p].length - 1].long_descr_key != ''">
-                                {{ backend.generics[p][backend.generics[p].length - 1].long_descr_key | translate }}
-                            </p>
-                            <!-- BEGIN ITEM SELECT -->
-                            <div *ngIf="!backend.generics[p][backend.generics[p].length - 1].instantiable" id="igen{{ dataservice.sanit(p) }}">
-                                <p *ngIf="!!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
-                                <input_block *ngIf="!backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
+                                <!-- END ITEM SELECT -->
                             </div>
-                            <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
-                                <select class="form-control" [(ngModel)]="filter[p]">
-                                    <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
-                                </select><br />
-                                <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
-                                    {{ 'account.newName' | translate }}*
-                                    <input type="text" [(ngModel)]="new_name[p]" class="form-control grant-required">
-                                    <br />
-                                    {{ 'account.dataField' | translate }}*
-                                    <input_block *ngIf="strangeEmail=='' || p!='profile/email'" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
-                                    <input_block *ngIf="strangeEmail!='' && p=='profile/email'" [prefill]="strangeEmail" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
-                                </div>
-                            </div>
-                            <!-- END ITEM SELECT -->
                         </div>
                     </div>
                 </div>
                 <div class="clearfix" style="padding-top:10px;text-align:right">
-                    <button *ngIf="strangeEmail==''" type="button" class="btn green-meadow" (click)="finish(true)" [disabled]="!allFilled()">{{ 'account.ok' | translate }}</button>
-                    <button *ngIf="strangeEmail==''" type="button" class="btn grey" (click)="finish(true)">{{ 'account.nok' | translate }}</button>
-                    <button *ngIf="strangeEmail!=''" type="button" class="btn green-meadow" (click)="finish(true)" [disabled]="!allFilled()">{{ 'login.signUp' | translate }}</button>
-                    <button *ngIf="strangeEmail!=''" type="button" class="btn grey" (click)="finish(true)">{{ 'back' | translate }}</button>
+                    <button *ngIf="strangeEmail==''" type="button" class="btn green-meadow" (click)="finish(true)">{{ 'account.ok' | translate }}</button>
+                    <button *ngIf="strangeEmail==''" type="button" class="btn grey" (click)="finish(false)">{{ 'account.nok' | translate }}</button>
+                    <button *ngIf="strangeEmail!=''" type="button" class="btn green-meadow" (click)="finish(true)">{{ 'login.signUp' | translate }}</button>
+                    <button *ngIf="strangeEmail!=''" type="button" class="btn grey" (click)="finish(false)">{{ 'back' | translate }}</button>
                 </div>
             </div>
             <!-- END DATA -->

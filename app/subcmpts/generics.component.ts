@@ -66,20 +66,6 @@ export class Generics implements OnInit {
     }
 
     /**
-     * Returns all available filters.
-     * @function filters
-     * @public
-     */
-    filters(): string[] {
-        var ret = ['generics.any'];
-        for(var data in this.backend.generics) {
-            if(ret.indexOf(this.backend.generics[data][this.backend.generics[data].length - 1].module) < 0)
-                ret.push(this.backend.generics[data][this.backend.generics[data].length - 1].module);
-        }
-        return ret;
-    }
-
-    /**
      * Returns the keys of generics.
      * @function generics
      * @public
