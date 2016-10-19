@@ -202,8 +202,8 @@ export class Account implements OnInit, OnDestroy {
                     //Build and test
                     window.$('#igen' + this.dataservice.sanit(adata)).removeClass('has-error');
                     this.new_data[adata] = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
-                    if(!this.new_data[adata]) {
-                        this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
+                    if(this.new_data[adata].constructor === Array) {
+                        this.notif.error(this.translate.instant('error'), this.translate.instant(this.new_data[adata][1]));
                         window.$('#igen' + this.dataservice.sanit(adata)).addClass('has-error');
                         this.new_data = {};
                         var keys = Object.getOwnPropertyNames(this.new_datas);

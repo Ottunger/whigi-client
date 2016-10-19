@@ -144,7 +144,7 @@ export class Data {
      * @param {Boolean} as_file Load as file.
      * @return {String} Built up data or undefined if cannot pass test.
      */
-    recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string {
+    recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
         //Build up the data, keys wrapping and date wrapping
         if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'json_keys') {
             var ret = {};
@@ -163,8 +163,8 @@ export class Data {
         }
         //Test if the data passes the associated test
         var res = window.eval.call(window, '(function(test) {' + this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].validate + '})')(raw_data);
-        if(!res) {
-            return undefined;
+        if(res !== true) {
+            return ['error', res];
         }
         return raw_data;
     }

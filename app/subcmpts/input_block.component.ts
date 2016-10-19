@@ -24,6 +24,7 @@ export class InputBlock implements OnInit {
     @Input() g: string;
     @Input() writeDesc: boolean;
     @Input() prefill: string;
+    @Input() reset: EventEmitter<any>;
     @Output() out: EventEmitter<any[]>;
 
     /**
@@ -53,6 +54,15 @@ export class InputBlock implements OnInit {
             } else {
                 window.$('.json' + self.dataservice.sanit(self.g)).css('display', 'block');
             }
+        });
+        this.reset.subscribe(function() {
+            self.new_data = '';
+            self.new_data_file = '';
+            self.new_datas = {};
+            self.iChange(1);
+            self.iChange(2);
+            self.iChange(3);
+            self.collapse();
         });
     }
 

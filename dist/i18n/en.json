@@ -227,13 +227,7 @@
    "generics.rrn": "National number",
    "generics.corporate_open": "Open capital",
 
-   "new.email": "Email",
-   "new.tel": "Telephone",
-   "new.address": "Address",
-   "new.corporate_name": "Company",
-   "new.country": "Company_country",
-   "new.corporate_type": "Company_type",
-   "new.open": "Company_capital",
+   "generics.badpostcode": "Your postal code does not match expected format",
 
    "/": "Root folder",
    "profile/": "Profile folder",

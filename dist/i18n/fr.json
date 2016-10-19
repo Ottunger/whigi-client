@@ -227,13 +227,7 @@
    "generics.rrn": "Numéro national",
    "generics.corporate_open": "Capital ouvert",
 
-   "new.email": "Email",
-   "new.tel": "Telephone",
-   "new.address": "Adresse",
-   "new.corporate_name": "Entreprise",
-   "new.country": "Entreprise_pays",
-   "new.corporate_type": "Entreprise_forme",
-   "new.open": "Entreprise_capital",
+   "generics.badpostcode": "Votre code postal ne peut être valide",
 
    "/": "Dossier principal",
    "profile/": "Dossier profil",

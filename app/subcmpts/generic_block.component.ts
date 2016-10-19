@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, ApplicationRef, Input, OnInit} from '@angular/core';
+import {Component, enableProdMode, ApplicationRef, Input, OnInit, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -29,6 +29,7 @@ export class GenericBlock implements OnInit {
     @Input() data_list: string[];
     private previews: {[id: string]: string};
     private asked: {[id: string]: boolean};
+    private resets: {[id: string]: EventEmitter<any>}
 
     /**
      * Creates the component.
@@ -49,6 +50,7 @@ export class GenericBlock implements OnInit {
         this.new_data_file = {};
         this.previews = {};
         this.asked = {};
+        this.resets = {};
     }
 
     /**
@@ -60,6 +62,7 @@ export class GenericBlock implements OnInit {
         var self = this;
         for(var i = 0; i < this.data_list.length; i++) {
             this.new_datas[this.data_list[i]] = {};
+            this.resets[this.data_list[i]] = new EventEmitter();
         }
         if(this.group.indexOf('none', this.group.length - 4) != -1) {
             window.$('#apsablegen' + this.dataservice.sanit(this.group)).ready(function() {
@@ -132,18 +135,15 @@ export class GenericBlock implements OnInit {
         //Build and test
         window.$('#igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
-        if(!send) {
-            this.notif.error(this.translate.instant('error'), this.translate.instant('generics.regexp'));
+        if(send.constructor === Array) {
+            this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
             window.$('#igen' + this.dataservice.sanit(name)).addClass('has-error');
             return;
         }
         //Create it
         this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
-            self.new_data[name] = '';
-            self.new_datas[name] = {};
-            self.new_data_file[name] = '';
-            self.check.tick();
+            self.resets[name].emit();
         }, function(err) {
             if(err[0] == 'server') {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));

@@ -49,7 +49,7 @@
                                     </div>
                                     <!-- input -->
                                     <div class="col-md-6" *ngIf="!backend.profile.data[g]">
-                                        <input_block [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                        <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                     </div>
                                 </div>
                                 <!-- END SELECT -->
@@ -93,7 +93,7 @@
                                                             && backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'json_keys'">
                                                             <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d)" />
                                                         </div>
-                                                        <div class="text-center" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
+                                                        <div class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
                                                             || backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
                                                             {{ 'nothing' | translate }}
                                                         </div>
