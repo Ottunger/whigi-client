@@ -10,7 +10,7 @@
         </div>
         <!-- END LOGO -->
         <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:;" class="menu-toggler responsive-toggler" (click)="toggleMenu()">
+        <a href="javascript:;" class="menu-toggler responsive-toggler" style="padding-top: 15px;" (click)="toggleMenu()">
             <span></span>
         </a>
         <!-- END RESPONSIVE MENU TOGGLER -->
@@ -126,16 +126,6 @@
                         <li (click)="router.navigate(['/generics'])">
                             <a href="javascript:;">
                                 <i class="icon-notebook"></i> {{ 'profile.generics' | translate }} </a>
-                        </li>
-                        <li (click)="router.navigate(['/filesystem', 'data'])">
-                            <a href="javascript:;">
-                                <i class="icon-share-alt"></i> {{ 'profile.mine' | translate }}
-                                <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ dataservice.length(backend.data_trie) }}</span></a>
-                        </li>
-                        <li (click)="router.navigate(['/filesystem', 'vault'])">
-                            <a href="javascript:;">
-                                <i class="icon-share-alt"></i> {{ 'profile.shared' | translate }}
-                                <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ dataservice.length(backend.shared_with_me_trie) }}</span></a>
                         </li>
                         <li (click)="router.navigate(['/whoishare'])">
                             <a href="javascript:;">

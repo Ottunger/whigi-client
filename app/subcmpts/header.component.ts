@@ -94,6 +94,7 @@ export class Header implements OnInit {
     toggleMenu() {
         window.$('#mainDiv').toggleClass('page-sidebar-closed');
         window.$('#mainSidebar').toggleClass('page-sidebar-menu-closed');
+        window.$('#divSidebar').toggleClass('in');
     }
 
 }
