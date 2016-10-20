@@ -45,10 +45,11 @@ export class Loginas implements OnInit {
                     localStorage.setItem('key_decryption', window.sha256(pwd + profile.salt));
                     localStorage.setItem('psha', window.sha256(pwd));
 
-                    var ret = window.decodeURIComponent(param['return']);
+                    var ret = param['return'];
                     if(ret.indexOf('http') > -1) {
                         window.location.href = ret;
                     } else {
+                        ret = window.decodeURIComponent(ret);
                         self.router.navigate(['/' + ret]);
                     }
                 }, function(e) {
