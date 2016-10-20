@@ -179,14 +179,13 @@ export class Account implements OnInit, OnDestroy {
      * @param {Boolean} ok True if create account.
      */
     finish(ok: boolean) {
-        var self = this, saves: any[] = [];
+        var self = this, saves: any[] = [], key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
         if(ok) {
             if(!this.allFilled()) {
                 this.notif.error(this.translate.instant('error'), this.translate.instant('account.fill'));
                 return;
             }
-            if(this.with_account != 'false') {
-                var key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
+            if(this.with_account != 'false' && (!self.backend.profile.data['keys/auth/' + this.id_to] || !self.backend.profile.data['keys/auth/' + this.id_to].shared_to[this.id_to])) {
                 saves.push({
                     mode: 'new',
                     data: key,
@@ -259,6 +258,7 @@ export class Account implements OnInit, OnDestroy {
                     });
                 }
             }
+            //End by calling process
             this.process(saves).then(function() {
                 self.ok();
             }, function(e) {
