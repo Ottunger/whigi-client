@@ -133,11 +133,11 @@ export class GenericBlock implements OnInit {
         var self = this, send;
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
         //Build and test
-        window.$('#igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
+        window.$('.igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
         if(send.constructor === Array) {
             this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-            window.$('#igen' + this.dataservice.sanit(name)).addClass('has-error');
+            window.$('.igen' + this.dataservice.sanit(name)).addClass('has-error');
             return;
         }
         //Create it
@@ -188,9 +188,10 @@ export class GenericBlock implements OnInit {
      * @function preview
      * @public
      * @param {String} name Data name.
+     * @param {Boolean} keyded Whether JSON keyded.
      * @return {String} Decrypted data.
      */
-    preview(name: string): string {
+    preview(name: string, keyded: boolean): string {
         var self = this;
         if(name in this.previews)
             return this.previews[name];
@@ -202,6 +203,15 @@ export class GenericBlock implements OnInit {
                 self.previews[name] = JSON.parse(data.decr_data)[0].value;
             } else {
                 self.previews[name] = data.decr_data;
+            }
+            if(keyded) {
+                var obj = JSON.parse(self.previews[name]);
+                var keys = Object.getOwnPropertyNames(obj);
+                self.previews[name] = '';
+                for(var i = 0; i < keys.length; i++) {
+                    self.previews[name] += obj[keys[i]] + ' ';
+                }
+                self.previews[name].trim();
             }
             delete self.asked[name];
             self.check.tick();
@@ -233,7 +243,63 @@ export class GenericBlock implements OnInit {
     }
 
     /**
-     * Cancel.
+     * Allows editing a name.
+     * @function tgName
+     * @public
+     * @param {String} folder Generic folder.
+     * @param {String} efix Previous name.
+     */
+    tgName(folder: string, efix: string) {
+        var self = this;
+        if(!window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
+            window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');
+            window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', false).val('');
+        } else {
+            if(!window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() || window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() == '') {
+                window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
+                window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
+                return;
+            }
+            if((folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()) in this.backend.profile.data)
+                return;
+            this.backend.rename(folder + '/' + efix, folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()).then(function() {
+                window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
+                window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
+                self.dataservice.listData(false);
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+            });
+        }
+    }
+
+    /**
+     * Removes a data.
+     * @function remove
+     * @public
+     * @param {String} fn Full name.
+     */
+    remove(fn: string) {
+        var self = this;
+        if(window.confirm(this.translate.instant('dataview.remove'))) {
+            this.dataservice.remove(fn).then(function() {}, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+            });
+        }
+    }
+
+    /**
+     * Returns whether a data has shares.
+     * @function hasShares
+     * @public
+     * @param {String} fn Full name.
+     * @return If OK.
+     */
+    hasShares(fn: string): boolean {
+        return Object.getOwnPropertyNames(this.backend.profile.data[fn].shared_to).length > 0;
+    }
+
+    /**
+     * Cancel addings.
      * @function cancel
      * @public
      */

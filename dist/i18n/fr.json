@@ -130,6 +130,7 @@
    "dataview.notDated": "Donnée non datée",
    "dataview.grants": "Valises associées",
    "dataview.revokeKey": "Ce partage vous permet de récupérer votre mot de passe. Etes-vous certain de vouloir le supprimer?",
+   "dataview.remove": "Etes-vous certain de vouloir supprimer cette donnée?",
 
    "vaultview.noData": "Impossible de lire le conteneur. Peut-être l'accès est-il supprimé...",
    "vaultview.expired": "Cette valise a expiré...",

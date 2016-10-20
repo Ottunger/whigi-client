@@ -130,6 +130,7 @@
    "dataview.notDated": "This data is not dated.",
    "dataview.grants": "Associated grants",
    "dataview.revokeKey": "This share allows you to recover your password. Are you sure you want to delete it?",
+   "dataview.remove": "Are you sure you want to remove this data?",
 
    "vaultview.noData": "Cannot retrieve such vault. Maybe access was revoked...",
    "vaultview.expired": "This vault has expired...",

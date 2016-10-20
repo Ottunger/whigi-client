@@ -762,6 +762,18 @@ export class Backend {
     }
 
     /**
+     * Renames a piece of data.
+     * @function rename
+     * @public
+     * @param {String} old Old name.
+     * @param {String} now New name.
+     * @return {Promise} JSON response from backend.
+     */
+    rename(old: string, now: string): Promise {
+        return this.backend(true, false, 'GET', {}, 'data/' + window.encodeURIComponent(old) + '/to/' + window.encodeURIComponent(now), true, true, true);
+    }
+
+    /**
      * Trigger vaults.
      * @function triggerVaults
      * @public

@@ -28,14 +28,14 @@
                                         </h4>
                                     </div>
                                     <div class="col-md-5" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g)" />
+                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys')" />
                                         <tooltip [mode]="'shares'" [right]="true" [uri]="g"></tooltip>
                                     </div>
                                     <div class="col-md-1" style="left: -20px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <button type="button" class="btn btn-link" (click)="select(g)">
                                             <i class="fa fa-pencil"></i></button>
                                     </div>
-                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                     </div>
                                     <!-- EXPL -->
@@ -44,7 +44,7 @@
                                     <p>{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
                                 </div>
                                 <!-- BEGIN SELECT -->
-                                <div class="row" id="igen{{ dataservice.sanit(g) }}">
+                                <div class="row igen{{ dataservice.sanit(g) }}">
                                     <!-- description -->
                                     <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         {{ 'actual' | translate }}<span>*</span>:
@@ -71,31 +71,38 @@
                                 <!-- BEGIN ACTIONS -->
                                 <div class="row" style="padding-top: 3px;">
                                     <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <div class="col-md-6">
-                                            <ul class="list-group">
-                                                <li class="list-group-item" style="border: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
-                                                    <button type="button" style="padding-left: 20px;" class="btn btn-link" (click)="select(g + '/' + d)">
-                                                        <i class="fa fa-pencil"></i> [{{ d }}]</button>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <ul class="list-group">
-                                                <li class="list-group-item" style="border: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
-                                                    <div class="row">
-                                                        <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'
-                                                            && backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'json_keys'">
-                                                            <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d)" />
-                                                        </div>
-                                                        <div class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'
-                                                            || backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
-                                                            {{ 'nothing' | translate }}
-                                                        </div>
-                                                        <tooltip [right]="false" [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
+                                        <ul class="list-group">
+                                            <li class="list-group-item" style="border: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
+                                                <div class="row">
+                                                    <div class="col-md-3">
+                                                        <input type="text" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
                                                     </div>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                                    <div class="col-md-1" style="left: -30px;">
+                                                        <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgName(g, d)">
+                                                            <i class="fa fa-pencil"></i></button>
+                                                    </div>
+                                                    <div class="col-md-1" style="left: -20px;">
+                                                        <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
+                                                            <i class="fa fa-remove"></i> </button>
+                                                    </div>
+                                                    <div class="col-md-6">
+                                                        <div class="row">
+                                                            <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
+                                                                <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys')" />
+                                                            </div>
+                                                            <div class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
+                                                                {{ 'nothing' | translate }}
+                                                            </div>
+                                                            <tooltip [right]="false" [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-1" style="left: -20px;">
+                                                        <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">
+                                                            <i class="fa fa-pencil"></i></button>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <!-- END ACTIONS -->

@@ -187,11 +187,16 @@ export class Dataview implements OnInit, OnDestroy {
      * @public
      */
     modify() {
-        var replacement, done = false;
+        var replacement, done = false, err;
+        if(this.is_generic && (err = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, this.gen_name, this.backend.generics[this.gen_name][this.version].mode == 'file')).constructor === Array) {
+            this.notif.error(this.translate.instant('error'), this.translate.instant(err[1]));
+            window.$('.igen' + this.dataservice.sanit(name)).addClass('has-error');
+            return;
+        }
         if(this.is_generic && this.backend.generics[this.gen_name][this.version].mode == 'json_keys') {
             var ret = {};
             for(var i = 0; i < this.backend.generics[this.gen_name][this.version].json_keys.length; i++) {
-                ret[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key] = this.new_datas[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key];
+                ret[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key] = this.new_datas[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key].trim();
             }
             this.new_data = JSON.stringify(ret);
         }
@@ -216,7 +221,7 @@ export class Dataview implements OnInit, OnDestroy {
             }
             replacement = JSON.stringify(replacement);
         } else {
-            replacement = (this.new_data_file != '')? this.new_data_file : this.new_data;
+            replacement = (this.new_data_file != '')? this.new_data_file : this.new_data.trim();
         }
         this.mod(replacement, true);
     }
@@ -257,11 +262,13 @@ export class Dataview implements OnInit, OnDestroy {
      */
     remove() {
         var self = this;
-        this.dataservice.remove(this.data_name).then(function() {
-            self.back(false);
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-        });
+        if(window.confirm(this.translate.instant('dataview.remove'))) {
+            this.dataservice.remove(this.data_name).then(function() {
+                self.back(false);
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+            });
+        }
     }
 
     /**
