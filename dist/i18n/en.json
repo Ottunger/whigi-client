@@ -51,7 +51,7 @@
    "login.forgot3": "Enter your username below to recover your password.",
    "login.signUp": "Sign Up",
    "login.sign": "Enter the new account details below:",
-   "login.recupId": "Username of friend to help recovery:",
+   "login.recupId": "Email / ID to contact",
    "login.noLogin": "Cannot log in. Verify your credentials",
    "login.noSignup": "Server refused creation. Try another username?",
    "login.noReset": "Cannot contact recovery server",

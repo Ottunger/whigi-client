@@ -51,7 +51,7 @@
    "login.forgot3": "Entrez votre nom de compte ici pour récupérer votre mot de passe.",
    "login.signUp": "S'enregistrer",
    "login.sign": "Entrez les détails du nouveau compte ici:",
-   "login.recupId": "Nom du compte de l'ami qui pourra aider à la récupération:",
+   "login.recupId": "Email / ID à contacter",
    "login.noLogin": "Impossible de se logger. Vérifiez vos données",
    "login.noSignup": "Le serveur a refusé la commande. Essayez un autre nom d'utilisateur?",
    "login.noReset": "Impossible de contacter le serveur de récupération",

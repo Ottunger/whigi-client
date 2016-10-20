@@ -685,13 +685,20 @@ export class Backend {
      * @public
      * @param {String} username Username.
      * @param {String} password Password.
+     * @param {Object[]} more More data to automatically create.
+     * @param {String} email Email to warn.
      * @return {Promise} JSON response from backend.
      */
-    createUser(username: string, password: string): Promise {
-        return this.backend(true, true, 'POST', {
+    createUser(username: string, password: string, more?: any[], email?: string): Promise {
+        var post = {
             username: username,
             password: password
-        }, 'user/create' + this.regCaptcha(), false, false);
+        };
+        if(!!more && !!email) {
+            post['more'] = more;
+            post['warn'] = email;
+        }
+        return this.backend(true, true, 'POST', post, 'user/create' + this.regCaptcha(), false, false);
     }
 
     /**

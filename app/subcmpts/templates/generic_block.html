@@ -77,13 +77,17 @@
                                                     <div class="col-md-3">
                                                         <input type="text" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
                                                     </div>
-                                                    <div class="col-md-1" style="left: -30px;">
-                                                        <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgName(g, d)">
-                                                            <i class="fa fa-pencil"></i></button>
-                                                    </div>
-                                                    <div class="col-md-1" style="left: -20px;">
-                                                        <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
-                                                            <i class="fa fa-remove"></i> </button>
+                                                    <div class="col-md-2" style="left: -20px;">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <button type="button" style="left: 2px;position: absolute;" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgName(g, d)">
+                                                                    <i class="fa fa-pencil"></i></button>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
+                                                                    <i class="fa fa-remove"></i> </button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                     <div class="col-md-6">
                                                         <div class="row">
