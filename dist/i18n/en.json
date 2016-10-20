@@ -82,7 +82,7 @@
    "profile.current": "Current password",
    "profile.new": "New password (8characters min)",
    "profile.noMatch": "Passwords do not match",
-   "profile.noChange": "Update refused by server",
+   "profile.noChange": "Wront current password",
    "profile.changed": "Profile updated",
    "profile.revoke": "Revoke accesses to all granted vaults",
    "profile.revokeID": "ID to ban",
@@ -95,6 +95,7 @@
    "profile.uname": "Change username",
    "profile.whoishare": "Shared by me",
    "profile.chUname": "Username correctly updated",
+   "profile.doChange": "Think about changing username and password to your needs",
 
    "filesystem.data_name": "Data name",
    "filesystem.data": "Data",

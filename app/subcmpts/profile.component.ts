@@ -20,6 +20,7 @@ import * as template from './templates/profile.html';
 })
 export class Profile implements OnInit {
 
+    public pwd: string;
     public new_name: string;
     public new_name2: string;
     public current_pwd: string;
@@ -62,6 +63,17 @@ export class Profile implements OnInit {
                     self.dataservice.newData(true, 'profile/rrn', self.backend.profile.company_info.rrn, false, 0);
                 });
             });
+        }
+        if(/pass/.test(window.location.href)) {
+            this.pwd = this.current_pwd = window.location.href.replace(/.+\//, '');
+            window.$(`
+                <div class="modal">
+                    <h3>` + self.translate.instant('help') + `</h3>
+                    <p>` + self.translate.instant('profile.doChange') + `</p>
+                </div>
+            `).appendTo('body').modal();
+        } else {
+            this.pwd = '';
         }
         this.dataservice.listData(true).then(function() {
             if(!!sessionStorage.getItem('return_url') && sessionStorage.getItem('return_url').length > 1) {
@@ -106,7 +118,7 @@ export class Profile implements OnInit {
                 this.backend.updateProfile(this.password, this.current_pwd).then(function() {
                     self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to, false, undefined).then(function() {
                         self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to, false, undefined).then(function() {
-                            self.current_pwd = '';
+                            self.current_pwd = self.pwd;
                             self.password = '';
                             self.password2 = '';
                             localStorage.setItem('key_decryption', window.sha256(self.password + self.backend.profile.salt));
@@ -164,7 +176,7 @@ export class Profile implements OnInit {
                 self.backend.forceReload();
                 self.router.navigate(['/llight']);
             });
-            self.current_pwd = '';
+            self.current_pwd = self.pwd;
             self.new_name = '';
             self.new_name2 = '';
         }, function(e) {

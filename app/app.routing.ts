@@ -32,6 +32,7 @@ const appRoutes: Routes = [
     {path: 'endPwd', component: Logging},
     {path: 'llight', component: Logging},
     {path: 'profile', component: Profile, canActivate: [Profileguard]},
+    {path: 'profile/pass/:pwd', component: Profile, canActivate: [Profileguard]},
     {path: 'profile/eidok', component: Profile, canActivate: [Profileguard]},
     {path: 'user/:id', component: User, canActivate: [Profileguard]},
     {path: 'user/:id/:ret', component: User, canActivate: [Profileguard]},

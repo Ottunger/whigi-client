@@ -82,7 +82,7 @@
    "profile.current": "Mot de passe actuel",
    "profile.new": "Nouveau mot de passe (8caractères min)",
    "profile.noMatch": "Mots de passe ne correspondent pas",
-   "profile.noChange": "Mise à jour refusée par le serveur",
+   "profile.noChange": "Mauvais mot de passe actuel",
    "profile.changed": "Mise à jour effectuée",
    "profile.revoke": "Supprimer accès à toutes les valises",
    "profile.revokeID": "ID à bannir",
@@ -95,6 +95,7 @@
    "profile.uname": "Changer nom de compte",
    "profile.whoishare": "Partagé par moi",
    "profile.chUname": "Nom de compte mis à jour",
+   "profile.doChange": "Pensez à changer votre nom de compte et mot de passe à votre convenance",
 
    "filesystem.data_name": "Nom de donnée",
    "filesystem.data": "Valeur",
