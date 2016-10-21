@@ -40,12 +40,12 @@ export class Sidebar implements OnInit {
      */
     ngOnInit(): void {
         if(typeof this.lighted === 'number') {
-            window.$('.linkbars').removeClass('start active');
-            window.$('#linkbars' + this.lighted).addClass('start active');
+            window.$('.linkbars').removeClass('start active').remove('.selected');
+            window.$('#linkbars' + this.lighted).addClass('start active').find('a').append('<span class="selected"></span>');
         } else if(typeof this.lighted !== 'undefined') {
             this.lighted.asObservable().subscribe(function(vals) {
-                window.$('.linkbars').removeClass('start active');
-                window.$('#linkbars' + vals).addClass('start active');
+                window.$('.linkbars').removeClass('start active').remove('.selected');
+                window.$('#linkbars' + vals).addClass('start active').find('a').append('<span class="selected"></span>');
             });
         }
     }
