@@ -27,13 +27,28 @@
                                             <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
                                         </h4>
                                     </div>
-                                    <div class="col-md-5" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys')" />
+                                    <div class="col-md-4" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <div id="tgdisp{{ dataservice.sanit(g) }}">
+                                            <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys')" />
+                                        </div>
+                                        <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;" class="iinput{{ dataservice.sanit(g) }}">
+                                            <input_block [standalone]="true" [g]="g" (out)="regData(g, $event)"></input_block>
+                                        </div>
                                         <tooltip [mode]="'shares'" [right]="true" [uri]="g"></tooltip>
                                     </div>
-                                    <div class="col-md-1" style="left: -20px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <button type="button" class="btn btn-link" (click)="select(g)">
-                                            <i class="fa fa-pencil"></i></button>
+                                    <div class="col-md-2" style="left: -20px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)"
+                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
+                                                    || backend.profile.data[g].id.indexOf('datafragment') != 0">
+                                                    <i class="fa fa-pencil"></i></button>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <button type="button" class="btn btn-link" (click)="select(g)">
+                                                    <i class="fa fa-eye-slash"></i></button>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
@@ -89,20 +104,33 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-5">
                                                         <div class="row">
-                                                            <div *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
+                                                            <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
                                                                 <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys')" />
                                                             </div>
-                                                            <div class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
+                                                            <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
                                                                 {{ 'nothing' | translate }}
+                                                            </div>
+                                                            <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
+                                                                <input_block [standalone]="true" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
                                                             </div>
                                                             <tooltip [right]="false" [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-1" style="left: -20px;">
-                                                        <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">
-                                                            <i class="fa fa-pencil"></i></button>
+                                                    <div class="col-md-2" style="left: -20px;">
+                                                        <div class="row">
+                                                            <div class="col-md-6">
+                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)"
+                                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
+                                                                    || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0">
+                                                                    <i class="fa fa-pencil"></i></button>
+                                                            </div>
+                                                            <div class="col-md-6">
+                                                                <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">
+                                                                    <i class="fa fa-eye-slash"></i></button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </li>
@@ -112,7 +140,7 @@
                                 <!-- END ACTIONS -->
                             </div>
                         </div>
-                        <div style="margin-top:7px; margin-bottom:2px; height:1px; width:100%; border-top:1px solid #2b3643;" *ngIf="!l"></div>
+                        <div style="margin-top:7px; height:1px; width:100%" *ngIf="!l"></div>
                     </div>
                 </div>
                 <div class="form-actions">

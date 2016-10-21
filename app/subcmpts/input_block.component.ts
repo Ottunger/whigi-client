@@ -21,6 +21,7 @@ export class InputBlock implements OnInit {
     private new_data: string;
     private new_data_file: string;
     private new_datas: {[id: string]: string};
+    @Input() standalone: boolean;
     @Input() g: string;
     @Input() writeDesc: boolean;
     @Input() prefill: string;
@@ -47,14 +48,17 @@ export class InputBlock implements OnInit {
         var self = this;
         this.def();
         this.new_data = (!!this.prefill)? this.prefill : this.new_data;
-        window.$('.json' + this.dataservice.sanit(this.g)).ready(function() {
-            window.$('.json' + self.dataservice.sanit(self.g)).addClass(self.writeDesc? 'form-group' : 'row');
-            if(!self.writeDesc) {
-                window.$('.json' + self.dataservice.sanit(self.g)).css('height', '5ex');
-            } else {
-                window.$('.json' + self.dataservice.sanit(self.g)).css('display', 'block');
-            }
-        });
+        this.standalone = this.standalone || false;
+        if(!this.standalone) {
+            window.$('.json' + this.dataservice.sanit(this.g)).ready(function() {
+                window.$('.json' + self.dataservice.sanit(self.g)).addClass(self.writeDesc? 'form-group' : 'row');
+                if(!self.writeDesc) {
+                    window.$('.json' + self.dataservice.sanit(self.g)).css('height', '5ex');
+                } else {
+                    window.$('.json' + self.dataservice.sanit(self.g)).css('display', 'block');
+                }
+            });
+        }
         if(!!this.reset) {
             this.reset.subscribe(function() {
                 self.def();
@@ -71,11 +75,16 @@ export class InputBlock implements OnInit {
     def() {
         this.new_datas = {};
         this.new_data_file = '';
-        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'select')? 'false' : '';
+        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'checkbox')? 'false' : '';
+        if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'select')
+            this.new_data = this.dataservice.getSelect(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].enum)[0];
         if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
             for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
                 this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
-                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'select')? 'false' : '';
+                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'checkbox')? 'false' : '';
+                if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'select')
+                    this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                    this.dataservice.getSelect(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].enum)[0];
             }
         }
         this.iChange(1);
@@ -89,6 +98,8 @@ export class InputBlock implements OnInit {
      * @public
      */
     collapse() {
+        if(this.standalone)
+            return;
         window.$('.json' + this.dataservice.sanit(this.g)).css('display', (window.$('.json' + this.dataservice.sanit(this.g)).css('display') == 'block'? 'none' : 'block'));
         window.$('.keys' + this.dataservice.sanit(this.g)).css('display',
             (window.$('.keys' + this.dataservice.sanit(this.g)).css('display') == 'block' || window.innerWidth <= 991? 'none' : 'block'));

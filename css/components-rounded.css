@@ -2228,18 +2228,18 @@ Custom color buttons
   .btn.green:not(.btn-outline):hover {
     color: #FFFFFF;
     background-color: #e54400;
-    border-color: #2499a3; }
+    border-color: #933d19; }
   .btn.green:not(.btn-outline):active, .btn.green:not(.btn-outline).active,
   .open > .btn.green:not(.btn-outline).dropdown-toggle {
     color: #FFFFFF;
     background-color: #e54400;
-    border-color: #2499a3; }
+    border-color: #933d19; }
     .btn.green:not(.btn-outline):active:hover, .btn.green:not(.btn-outline):active:focus, .btn.green:not(.btn-outline):active.focus, .btn.green:not(.btn-outline).active:hover, .btn.green:not(.btn-outline).active:focus, .btn.green:not(.btn-outline).active.focus,
     .open > .btn.green:not(.btn-outline).dropdown-toggle:hover,
     .open > .btn.green:not(.btn-outline).dropdown-toggle:focus,
     .open > .btn.green:not(.btn-outline).dropdown-toggle.focus {
       color: #FFFFFF;
-      background-color: #1f858e;
+      background-color: #ce4d16;
       border-color: #18666d; }
   .btn.green:not(.btn-outline):active, .btn.green:not(.btn-outline).active,
   .open > .btn.green:not(.btn-outline).dropdown-toggle {
@@ -2644,12 +2644,12 @@ Custom color buttons
   .btn.green-sharp:not(.btn-outline):hover {
     color: #FFFFFF;
     background-color: #218d96;
-    border-color: #1f858e; }
+    border-color: #ce4d16; }
   .btn.green-sharp:not(.btn-outline):active, .btn.green-sharp:not(.btn-outline).active,
   .open > .btn.green-sharp:not(.btn-outline).dropdown-toggle {
     color: #FFFFFF;
     background-color: #218d96;
-    border-color: #1f858e; }
+    border-color: #ce4d16; }
     .btn.green-sharp:not(.btn-outline):active:hover, .btn.green-sharp:not(.btn-outline):active:focus, .btn.green-sharp:not(.btn-outline):active.focus, .btn.green-sharp:not(.btn-outline).active:hover, .btn.green-sharp:not(.btn-outline).active:focus, .btn.green-sharp:not(.btn-outline).active.focus,
     .open > .btn.green-sharp:not(.btn-outline).dropdown-toggle:hover,
     .open > .btn.green-sharp:not(.btn-outline).dropdown-toggle:focus,

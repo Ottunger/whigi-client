@@ -28,7 +28,7 @@ export class GenericBlock implements OnInit {
     @Input() group: string;
     @Input() data_list: string[];
     private previews: {[id: string]: string};
-    private asked: {[id: string]: boolean};
+    private asked: {[id: string]: number[] | boolean};
     private resets: {[id: string]: EventEmitter<any>}
 
     /**
@@ -213,7 +213,12 @@ export class GenericBlock implements OnInit {
         if(name in this.asked)
             return '[]';
         this.asked[name] = true;
-        this.dataservice.getData(this.backend.profile.data[name].id, false).then(function(data) {
+        this.dataservice.getData(this.backend.profile.data[name].id, false, function(data) {
+            return new Promise(function(resolve) {
+                self.asked[name] = data.decr_aes;
+                resolve();
+            });
+        }).then(function(data) {
             if(self.backend.profile.data[name].is_dated) {
                 self.previews[name] = JSON.parse(data.decr_data)[0].value;
             } else {
@@ -228,7 +233,6 @@ export class GenericBlock implements OnInit {
                 }
                 self.previews[name].trim();
             }
-            delete self.asked[name];
             self.check.tick();
         }, function(e) {
             self.previews[name] = '[]';
@@ -281,6 +285,46 @@ export class GenericBlock implements OnInit {
                 window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
                 window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
                 self.dataservice.listData(false);
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+            });
+        }
+    }
+
+    /**
+     * Allows editing a data.
+     * @function tgData
+     * @public
+     * @param {String} fname Full name.
+     * @param {String} gname Generic underlying.
+     */
+    tgData(fname: string, gname: string) {
+        var self = this;
+        if(!window.$('#tgdata' + this.dataservice.sanit(fname)).hasClass('green')) {
+            window.$('#tgdata' + this.dataservice.sanit(fname)).addClass('green').removeClass('btn-link');
+            window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
+            window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
+        } else {
+            if((!this.new_data[fname] || this.new_data[fname] == '') && (!this.new_data_file[fname] || this.new_data_file[fname] == '')) {
+                window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green').addClass('btn-link');
+                window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'none');
+                window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
+                return;
+            }
+            //Build and test
+            window.$('.iinput' + this.dataservice.sanit(fname)).removeClass('has-error');
+            var send = this.dataservice.recGeneric(this.new_data[fname], this.new_data_file[fname], this.new_datas[fname], gname, this.backend.generics[gname][this.backend.generics[gname].length - 1].mode == 'file');
+            if(send.constructor === Array) {
+                this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
+                window.$('.iinput' + this.dataservice.sanit(fname)).addClass('has-error');
+                return;
+            }
+            //Create it
+            this.dataservice.modifyData(fname, send, false, this.backend.generics[gname].length - 1, {}, fname != gname, this.asked[fname]).then(function() {
+                window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green').addClass('btn-link');
+                window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
+                window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
+                self.previews[fname] = send;
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });
