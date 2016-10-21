@@ -1784,7 +1784,7 @@ Page footer
   right: 10px; }
   .scroll-to-top > i {
     display: inline-block;
-    color: #687991;
+    color: #241717;
     font-size: 30px;
     opacity: 0.6 ;
     filter: alpha(opacity=60) ; }
@@ -1840,21 +1840,21 @@ Theme Panel
     z-index: 101;
     cursor: pointer;
     position: absolute;
-    background: #2b3643 url(../img/icon-color-close.png) center no-repeat !important;
+    background: #414142 url(../img/icon-color-close.png) center no-repeat !important;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
     -o-border-radius: 4px;
     border-radius: 4px; }
     .theme-panel > .toggler-close:hover {
-      background-color: #212933 !important; }
+      background-color: #414142 !important; }
   .theme-panel > .theme-options {
     top: 4px;
     right: 0;
     display: none;
     position: absolute;
     z-index: 100;
-    background: #2b3643;
+    background: #414142;
     -webkit-border-radius: 4px;
     -moz-border-radius: 4px;
     -ms-border-radius: 4px;
@@ -1904,9 +1904,9 @@ Theme Panel
             .theme-panel > .theme-options > .theme-option.theme-colors > ul > li.color-default {
               background: #333438; }
             .theme-panel > .theme-options > .theme-option.theme-colors > ul > li.color-darkblue {
-              background: #2b3643; }
+              background: #414142; }
             .theme-panel > .theme-options > .theme-option.theme-colors > ul > li.color-blue {
-              background: #2D5F8B; }
+              background: #775655; }
             .theme-panel > .theme-options > .theme-option.theme-colors > ul > li.color-grey {
               background: #697380; }
             .theme-panel > .theme-options > .theme-option.theme-colors > ul > li.color-light {
@@ -1984,12 +1984,12 @@ Page Quick Sidebar
   right: -320px;
   overflow: hidden;
   color: #99a8b5;
-  background: #21282e; }
+  background: #414142; }
   .page-quick-sidebar-open .page-quick-sidebar-wrapper {
     transition: right 0.3s;
     right: 0; }
   .page-quick-sidebar-wrapper .page-quick-sidebar {
-    background: #21282e;
+    background: #414142;
     /* Quick sidebar tabs content */
     /* Quick sidebar general list heading */
     /* Quick sidebar general list-items */

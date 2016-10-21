@@ -15,7 +15,7 @@ enableProdMode();
     styles: [`
         html, body {
             height: 100%;
-            background-color: #a0b4c9;
+            background-color: #e7e7e7;
         }
         .MenuContainer {
             height: 27px;
@@ -36,7 +36,7 @@ enableProdMode();
             font-size: 16px;
             z-index: 997;
             font-family: 'Cham-WebFont', Arial, sans-serif;
-            background-color: #2b3643;
+            background-color: #241717;
         }
         ul#navigation li {
             display: inline;
@@ -57,7 +57,7 @@ enableProdMode();
             <br />
             <div class="MenuContainer">
                 <ul id="navigation">
-                    <span style="position: absolute; left: 3px; top: 7px; color: #888; font-size: 12px;">{{ 'mention' | translate }}</span>
+                    <span style="position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
                     <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
                     <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
                 </ul>

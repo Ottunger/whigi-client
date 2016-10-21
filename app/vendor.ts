@@ -34,7 +34,7 @@ import '../css/bootstrap-datetimepicker.min.css';
 import '../css/components-rounded.css';
 import '../css/simple-line-icons.min.css';
 import '../css/layout.css';
-import '../css/darkblue.min.css';
+import '../css/envict.min.css';
 import '../css/login.css';
 import '../css/whigi.css';
 import '../css/font-awesome.min.css';
