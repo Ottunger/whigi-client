@@ -648,38 +648,42 @@ export class Data {
      * @function showStr
      * @public
      * @param {String} id DOM element.
-     * @param {String} pass Password.
+     * @param {String} pass DOM Password.
      */
     showStr(id: string, pass: String) {
         var res = 0, l = 0, L = 0, n = 0, o = 0;
         pass = pass || '';
-        for(var i = 0; i < pass.length; i++) {
-            if(pass.charCodeAt(i) >= 97 && pass.charCodeAt(i) <= 122)
-                l++;
-            else if(pass.charCodeAt(i) >= 65 && pass.charCodeAt(i) <= 90)
-                L++;
-            else if(pass.charCodeAt(i) >= 48 && pass.charCodeAt(i) <= 57)
-                n++;
+        setImmediate(function() {
+            pass = window.$('#' + pass).val();
+            pass = pass || '';
+            for(var i = 0; i < pass.length; i++) {
+                if(pass.charCodeAt(i) >= 97 && pass.charCodeAt(i) <= 122)
+                    l++;
+                else if(pass.charCodeAt(i) >= 65 && pass.charCodeAt(i) <= 90)
+                    L++;
+                else if(pass.charCodeAt(i) >= 48 && pass.charCodeAt(i) <= 57)
+                    n++;
+                else
+                    o++;
+            }
+            if(pass.length >= 10)
+                res += 20;
+            if(l > 1)
+                res += 20;
+            if(L > 1)
+                res += 20;
+            if(n > 1)
+                res += 20;
+            if(o > 1)
+                res += 20;
+            window.$('#' + id).css('width', res + '%');
+            if(res >= 80)
+                window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-success');
+            else if(res >= 40)
+                window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-warning');
             else
-                o++;
-        }
-        if(pass.length >= 10)
-            res += 20;
-        if(l > 1)
-            res += 20;
-        if(L > 1)
-            res += 20;
-        if(n > 1)
-            res += 20;
-        if(o > 1)
-            res += 20;
-        window.$('#' + id).css('width', res + '%');
-        if(res >= 80)
-            window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-success');
-        else if(res >= 40)
-            window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-warning');
-        else
-            window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-danger');
+                window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-danger');
+        });
     }
 
 }

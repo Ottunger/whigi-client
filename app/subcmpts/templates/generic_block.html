@@ -118,7 +118,7 @@
                 <div class="form-actions">
                     <div class="row">
                         <div class="col-md-4">
-                            <button type="button" class="btn green" (click)="registerAll()"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                            <button type="button" class="btn green" (click)="registerAll(true)" [disabled]="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
                         </div>
                         <div class="col-md-4">
                             <button type="button" class="btn default" (click)="cancel()">{{ 'cancel' | translate }}</button>

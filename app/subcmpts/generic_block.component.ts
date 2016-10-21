@@ -98,27 +98,42 @@ export class GenericBlock implements OnInit {
      * Registers all entered inputs.
      * @function registerAll
      * @public
+     * @param {Boolean} perf Do operation or check.
+     * @return {Boolean} Doable.
      */
-    registerAll() {
-        var self = this;
-        window.$('.input-holder-' + this.dataservice.sanit(this.group)).each(function(index, el) {
-            var g = window.$(this).attr('data-g');
-            if(self.backend.generics[g][self.backend.generics[g].length - 1].instantiable) {
-                if(!!self.ass_name[g] && self.ass_name[g] != '') {
-                    if(self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') {
-                        self.register(g, true, self.ass_name[g]);
-                    } else if((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) {
-                        self.register(g, false, self.ass_name[g]);
+    registerAll(perf: boolean): boolean {
+        var checks = window.$('.input-holder-' + this.dataservice.sanit(this.group));
+        for(var i = 0; i < checks.length; i++) {
+            var g = window.$(checks[i]).attr('data-g');
+            if(this.backend.generics[g][this.backend.generics[g].length - 1].instantiable) {
+                if(!!this.ass_name[g] && this.ass_name[g] != '') {
+                    if(this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') {
+                        if(!perf)
+                            return false;
+                        else
+                            this.register(g, true, this.ass_name[g]);
+                    } else if((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) {
+                        if(!perf)
+                            return false;
+                        else
+                            this.register(g, false, this.ass_name[g]);
                     }
                 }
             } else {
-                if(self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') {
-                    self.register(g, true);
-                } else if((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) {
-                    self.register(g, false);
+                if(this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') {
+                    if(!perf)
+                        return false;
+                    else
+                        this.register(g, true);
+                } else if((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) {
+                    if(!perf)
+                        return false;
+                    else
+                        this.register(g, false);
                 }
             }
-        });
+        }
+        return true;
     }
 
     /**
