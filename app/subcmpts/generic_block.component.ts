@@ -63,6 +63,11 @@ export class GenericBlock implements OnInit {
         for(var i = 0; i < this.data_list.length; i++) {
             this.new_datas[this.data_list[i]] = {};
             this.resets[this.data_list[i]] = new EventEmitter();
+            if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].instantiable) {
+                var names = this.dataNames(this.data_list[i], 3);
+                for(var j = 0; j < names.length; j++)
+                    this.resets[this.data_list[i] + '/' + names[j]] = new EventEmitter();
+            }
         }
         if(this.group.indexOf('none', this.group.length - 4) != -1) {
             window.$('#apsablegen' + this.dataservice.sanit(this.group)).ready(function() {
@@ -103,6 +108,16 @@ export class GenericBlock implements OnInit {
      */
     registerAll(perf: boolean): boolean {
         var checks = window.$('.input-holder-' + this.dataservice.sanit(this.group));
+        //If in edit mode, say we can save
+        if(!!window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').length && window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').length != 0) {
+            if(perf == false) {
+                return false;
+            } else {
+                window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false).click();
+                return;
+            }
+        }
+        //For adding data
         for(var i = 0; i < checks.length; i++) {
             var g = window.$(checks[i]).attr('data-g');
             if(this.backend.generics[g][this.backend.generics[g].length - 1].instantiable) {
@@ -301,12 +316,12 @@ export class GenericBlock implements OnInit {
     tgData(fname: string, gname: string) {
         var self = this;
         if(!window.$('#tgdata' + this.dataservice.sanit(fname)).hasClass('green')) {
-            window.$('#tgdata' + this.dataservice.sanit(fname)).addClass('green').removeClass('btn-link');
+            window.$('#tgdata' + this.dataservice.sanit(fname)).addClass('green in-edit').removeClass('btn-link').attr('disabled', true);
             window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
             window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
         } else {
             if((!this.new_data[fname] || this.new_data[fname] == '') && (!this.new_data_file[fname] || this.new_data_file[fname] == '')) {
-                window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green').addClass('btn-link');
+                window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
                 return;
@@ -321,10 +336,11 @@ export class GenericBlock implements OnInit {
             }
             //Create it
             this.dataservice.modifyData(fname, send, false, this.backend.generics[gname].length - 1, {}, fname != gname, this.asked[fname]).then(function() {
-                window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green').addClass('btn-link');
+                window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
                 self.previews[fname] = send;
+                self.resets[fname].emit();
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });

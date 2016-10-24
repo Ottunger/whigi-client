@@ -32,7 +32,7 @@
                                             <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys')" />
                                         </div>
                                         <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;" class="iinput{{ dataservice.sanit(g) }}">
-                                            <input_block [standalone]="true" [g]="g" (out)="regData(g, $event)"></input_block>
+                                            <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)"></input_block>
                                         </div>
                                         <tooltip [mode]="'shares'" [right]="true" [uri]="g"></tooltip>
                                     </div>
@@ -113,7 +113,7 @@
                                                                 {{ 'nothing' | translate }}
                                                             </div>
                                                             <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
-                                                                <input_block [standalone]="true" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
+                                                                <input_block [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
                                                             </div>
                                                             <tooltip [right]="false" [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
                                                         </div>
