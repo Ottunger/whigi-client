@@ -96,6 +96,9 @@
    "profile.whoishare": "Partagé par moi",
    "profile.chUname": "Nom de compte mis à jour",
    "profile.doChange": "Pensez à changer votre nom de compte et mot de passe à votre convenance",
+   "profile.noOauth": "Aucune permission OAuth",
+   "profile.explain": "Ce formulaire vous permet de supprimer les accès que vous avez donné à un utilisteur en une seule opération. Vous ne pouvez supprimer les accès donnés à Whigi.",
+   "profile.confirm": "Êtes-vous certain de ovuloir supprimer tous les accès de l'utilisateur suivant?: ",
 
    "filesystem.data_name": "Nom de donnée",
    "filesystem.data": "Valeur",

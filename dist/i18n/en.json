@@ -96,6 +96,9 @@
    "profile.whoishare": "Shared by me",
    "profile.chUname": "Username correctly updated",
    "profile.doChange": "Think about changing username and password to your needs",
+   "profile.noOauth": "No OAuth registered",
+   "profile.explain": "This wizard allows you to revoke all the vaults you may have given to a user with one single action. You cannot revoke shares made to Whigi instances.",
+   "profile.confirm": "Are you sure you want to remove all access to the next user?: ",
 
    "filesystem.data_name": "Data name",
    "filesystem.data": "Data",

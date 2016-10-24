@@ -192,19 +192,22 @@ export class Profile implements OnInit {
      */
     revokeAll() {
         var self = this, keys = Object.getOwnPropertyNames(this.backend.profile.data);
-        this.backend.getUser(this.revoke_id).then(function(user) {
-            keys.forEach(function(val) {
-                if(user._id in self.backend.profile[val].shared_to) {
-                    self.backend.revokeVault(self.backend.profile.data[val].shared_to[user._id]).then(function() {
-                        delete self.backend.profile.data[val].shared_to[user._id];
-                    }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noRevoke'));
-                    });
-                }
+        if(window.confirm(this.translate.instant('profile.confirm') + this.revoke_id)) {
+            this.backend.getUser(this.revoke_id).then(function(user) {
+                keys.forEach(function(val) {
+                    if(user._id in self.backend.profile[val].shared_to) {
+                        self.backend.revokeVault(self.backend.profile.data[val].shared_to[user._id]).then(function() {
+                            delete self.backend.profile.data[val].shared_to[user._id];
+                            delete self.backend.my_shares[self.revoke_id];
+                        }, function(e) {
+                            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noRevoke'));
+                        });
+                    }
+                });
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.noUser'));
             });
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.noUser'));
-        });
+        }
     }
 
     /**
