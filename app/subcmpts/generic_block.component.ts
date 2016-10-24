@@ -194,7 +194,7 @@ export class GenericBlock implements OnInit {
      */
     dataNames(folder: string, nn: number): string[] {
         var i = 0;
-        return this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
+        return this.backend.data_trie.suggestions(folder + '/', '/').reverse().filter(function(el: string): boolean {
             if(el.charAt(el.length - 1) != '/' && i++ < nn)
                 return true;
             return false;
