@@ -53,23 +53,23 @@ export class Remote implements OnInit, OnDestroy {
             self.challenge = params['challenge'];
             self.return_url = window.decodeURIComponent(params['return_url']);
             if(!/^https/.test(self.return_url)) {
-                self.end('null', 'null', self.backend.profile._id);
+                self.end('null', 'null', self.backend.profile._id, self.backend.profile.hidden_id);
             }
             self.dataservice.listData(false).then(function() {
                 if(!!self.backend.profile.data['keys/auth/' + self.id_to]) {
                     self.dataservice.getData(self.backend.profile.data['keys/auth/' + self.id_to].id).then(function(data) {
                         self.backend.encryptAES(self.challenge, self.dataservice.workerMgt(true, function(got) {
                             var send = got.map(function(el) { return el + ''; }).join('-');
-                            self.end(send, window.btoa(self.backend.arr2str(got)), self.backend.profile._id);
+                            self.end(send, window.btoa(self.backend.arr2str(got)), self.backend.profile._id, self.backend.profile.hidden_id);
                         }), self.backend.toBytes(data.decr_data));
                     }, function(e) {
-                        self.end('null', 'null', self.backend.profile._id);
+                        self.end('null', 'null', self.backend.profile._id, self.backend.profile.hidden_id);
                     });
                 } else {
-                    self.end('null', 'null', self.backend.profile._id);
+                    self.end('null', 'null', self.backend.profile._id, self.backend.profile.hidden_id);
                 }
             }, function(e) {
-                self.end('null', 'null', self.backend.profile._id);
+                self.end('null', 'null', self.backend.profile._id, self.backend.profile.hidden_id);
             });
         });
     }
@@ -103,18 +103,19 @@ export class Remote implements OnInit, OnDestroy {
      * @param {String} response Response.
      * @param {String} r64 Response b64.
      * @param {String} user User.
+     * @param {String} hidden_id Hidden unique ID.
      */
-    private end(response: string, r64: string, user: string) {
+    private end(response: string, r64: string, user: string, hidden_id: string) {
         if(typeof Android !== undefined) {
             try {
-                Android.remote(r64 + ':' + user.toLowerCase());
+                Android.remote(r64 + ':' + user.toLowerCase() + ':' + hidden_id);
             } catch(e) {}
         } else if(typeof webkit !== undefined && !!webkit.messageHandlers) {
             try {
-                webkit.messageHandlers.remote.postMessage(r64 + ':' + user.toLowerCase());
+                webkit.messageHandlers.remote.postMessage(r64 + ':' + user.toLowerCase() + ':' + hidden_id);
             } catch(e) {}
         }
-        window.location.href = this.mixin(this.return_url, ['response=' + response, 'r64=' + r64, 'user=' + user.toLowerCase()]);
+        window.location.href = this.mixin(this.return_url, ['response=' + response, 'r64=' + r64, 'user=' + user.toLowerCase(), 'hidden_id=' + hidden_id]);
     }
 
 }
