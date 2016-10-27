@@ -123,17 +123,17 @@ export class Application {
      */
     sendFeedback() {
         window.$(`
-            <div class="modal">
-                <h3>` + this.translate.instant('feedback') + `</h3>
+            <div class="modal fddiv">
+                <h3 id="fdtitle">` + this.translate.instant('feedback') + `</h3>
                 <div>
                     <script type="text/javascript">
                         function fdsend() {
                             var http = new XMLHttpRequest();
                             var params = JSON.stringify({
-                                email: $('#fdemail').val(),
-                                name: $('#fdname').val(),
+                                email: $('.current').find('#fdemail').val(),
+                                name: $('.current').find('#fdname').val(),
                                 feedback: JSON.stringify({
-                                    feedback: $('#fdfd').val(),
+                                    feedback: $('.current').find('#fdfd').val(),
                                     location: location,
                                     session: {
                                         token: localStorage['token'],
@@ -145,9 +145,15 @@ export class Application {
                             });
                             http.open("POST", "` + this.backend.FEEDBACK_URL + `", true);
                             http.setRequestHeader("Content-type", "application/json");
+                            http.onreadystatechange = function() {
+                                if(http.readyState == 4 && http.status == 201) {
+                                    //End here and now
+                                    $('.fd-close').click();
+                                } else if(http.readyState == 4) {
+                                    $('.current').find('#fdtitle').css('color', 'red').text('` + this.translate.instant('error') + `');
+                                }
+                            }
                             http.send(params);
-                            //End here and now
-                            $('.fd-close').click();
                         }
                     </script>
                     <div class="form-group">
@@ -164,7 +170,11 @@ export class Application {
                     </div>
                 </div>
             </div>
-        `).appendTo('body').modal({closeClass: 'fd-close'});
+        `).appendTo('body').modal({
+            closeClass: 'fd-close',
+            escapeClose: false,
+            clickClose: false,
+        });
     }
     
 }
