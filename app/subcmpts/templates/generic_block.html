@@ -64,9 +64,9 @@
                                     <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         {{ 'actual' | translate }}<span>*</span>:
                                     </div>
-                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <input type="text" [(ngModel)]="ass_name[g]" (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
-                                            name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g">
+                                            name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 2px 2px 1px #FF5000!important;">
                                         <datalist id="suggestions{{ g }}">
                                             <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
                                         </datalist>
@@ -78,7 +78,7 @@
                                         </div>
                                     </div>
                                     <!-- input -->
-                                    <div class="col-md-6" *ngIf="!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <div class="col-md-6" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                         <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                     </div>
                                 </div>

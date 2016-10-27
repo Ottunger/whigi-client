@@ -84,7 +84,7 @@ export class Account implements OnInit, OnDestroy {
             });
             
             //We prepare HTTPS
-            if(!/^http/.test(self.return_url_ok)) {
+            if(!/^https/.test(self.return_url_ok)) {
                 self.deny();
             }
             var parts = self.return_url_ok.split('https://');
