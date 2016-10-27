@@ -160,8 +160,14 @@ export class Merge {
                                                 }
                                                 self.backend.revokeVault(work.shared_to[key]).then(aget, aget);
                                             }, function(e) {
-                                                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                                self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                                                if(e.status == 417) {
+                                                    work.index++;
+                                                    index--;
+                                                    next();
+                                                } else {
+                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                    self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                                                }
                                             });
                                         } else {
                                             work.mode = 'new';
