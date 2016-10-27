@@ -51,6 +51,7 @@ export class Backend {
     public RESTORE_URL = 'https://localhost:444/api/v1/';
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public MAIL = 'mailto://whigi.com@gmail.com';
+    public FEEDBACK_URL = 'https://api-beta.prodpad.com/v1/feedbacks?apikey=06d6c2d52e00ae9b8c053b7a0e6ab2d9b7767571e04c3f27fa90a1477cfec20a';
     private rsa_key: string[];
 
     /**

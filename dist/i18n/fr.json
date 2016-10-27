@@ -32,6 +32,7 @@
    "nothing": "Aucune information",
    "cancel": "Annuler",
    "reload": "Le service Google ne peut être joint, essayons après avoir rechargé la page",
+   "feedback": "Feedback",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",

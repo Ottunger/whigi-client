@@ -10,4 +10,13 @@
   -moz-border-radius: 7px;
   -ms-border-radius: 7px;
   -o-border-radius: 7px;
-  border-radius: 7px; }
+  border-radius: 7px;
+}
+
+@media screen and (max-width: 670px) {
+
+  .login .page-content {
+    width: 100%;
+  }
+
+}

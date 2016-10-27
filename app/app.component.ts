@@ -8,6 +8,7 @@
 declare var window : any
 import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {Backend} from './app.service';
 enableProdMode();
 
 @Component({
@@ -58,6 +59,7 @@ enableProdMode();
             <div class="MenuContainer">
                 <ul id="navigation">
                     <span style="position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
+                    <li><button type="button" class="btn btn-xs green" style="margin-right: 30px;" (click)="sendFeedback()">{{ 'feedback' | translate }}</button></li>
                     <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
                     <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
                 </ul>
@@ -88,8 +90,9 @@ export class Application {
      * @function constructor
      * @public
      * @param translate Translation service.
+     * @param backend App service.
      */
-    constructor(private translate: TranslateService) {
+    constructor(private translate: TranslateService, private backend: Backend) {
         //Load translations on the fly
         //translate.addLangs(['en', 'fr']);
         translate.setDefaultLang('en');
@@ -111,6 +114,57 @@ export class Application {
     setLang(lang: string) {
         sessionStorage.setItem('lang', lang);
         this.translate.use(lang);
+    }
+
+    /**
+     * Send feedback.
+     * @function sendFeedback
+     * @public
+     */
+    sendFeedback() {
+        window.$(`
+            <div class="modal">
+                <h3>` + this.translate.instant('feedback') + `</h3>
+                <div>
+                    <script type="text/javascript">
+                        function fdsend() {
+                            var http = new XMLHttpRequest();
+                            var params = JSON.stringify({
+                                email: $('#fdemail').val(),
+                                name: $('#fdname').val(),
+                                feedback: JSON.stringify({
+                                    feedback: $('#fdfd').val(),
+                                    location: location,
+                                    session: {
+                                        token: localStorage['token'],
+                                        key_decryption: localStorage['key_decryption'],
+                                        psha: localStorage['psha'],
+                                        puzzle: localStorage['puzzle']
+                                    }
+                                })
+                            });
+                            http.open("POST", "` + this.backend.FEEDBACK_URL + `", true);
+                            http.setRequestHeader("Content-type", "application/json");
+                            http.send(params);
+                            //End here and now
+                            $('.fd-close').click();
+                        }
+                    </script>
+                    <div class="form-group">
+                        <input class="form-control placeholder-no-fix" type="text" id="fdname" autocomplete="off" placeholder="Name"/>
+                    </div>
+                    <div class="form-group">
+                        <input class="form-control placeholder-no-fix" type="text" id="fdemail" autocomplete="off" placeholder="Email"/>
+                    </div>
+                    <div class="form-group">
+                        <textarea class="form-control placeholder-no-fix" type="textarea" id="fdfd" autocomplete="off" placeholder="Feedback"></textarea>
+                    </div>
+                    <div class="form-actions">
+                        <button type="submit" class="btn green pull-right" onclick="fdsend()"> ` + this.translate.instant('goOn') + ` </button>
+                    </div>
+                </div>
+            </div>
+        `).appendTo('body').modal({closeClass: 'fd-close'});
     }
     
 }

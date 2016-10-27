@@ -32,6 +32,7 @@
    "nothing": "Nothing to show",
    "cancel": "Cancel",
    "reload": "The Google service cannot be reached, let us retry after refreshing the page",
+   "feedback": "Feedback",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",
