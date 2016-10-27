@@ -67,8 +67,6 @@ export class Backend {
         this.data_loaded = false;
         this.rsa_key = [];
         self.generics_trie = new Trie();
-        //Clear for IE
-        document.execCommand('ClearAuthenticationCache', 'false');
         this.backend(true, false, 'GET', {}, 'generics.json', false, false).then(function(response) {
             self.generics = response;
             var keys = Object.getOwnPropertyNames(response);
@@ -392,9 +390,9 @@ export class Backend {
         }
 
         if(auth && token) {
-            headers.append('Authorization', 'Bearer ' + btoa(localStorage.getItem('token')));
+            headers.append('X-Whigi-Authorization', 'Bearer ' + btoa(localStorage.getItem('token')));
         } else if(auth) {
-            headers.append('Authorization', 'Basic ' + btoa(data.username + ':' + data.password));
+            headers.append('X-Whigi-Authorization', 'Basic ' + btoa(data.username + ':' + data.password));
         }
         headers.append('Accept-Language', (('lang' in localStorage)? localStorage.getItem('lang') : 'en') + ';q=1');
         dest = (whigi? this.BASE_URL : this.RESTORE_URL) + url + (puzzle? this.regPuzzle() : '');
