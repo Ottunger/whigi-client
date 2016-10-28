@@ -1783,11 +1783,13 @@ Page footer
   display: none;
   right: 10px; }
   .scroll-to-top > i {
+    background-color: #241717;
+    border-radius: 5px;
     display: inline-block;
     color: #eaf49c;
     font-size: 30px;
-    opacity: 0.6 ;
-    filter: alpha(opacity=60) ; }
+    opacity: 0.8 ;
+    filter: alpha(opacity=80) ; }
   .scroll-to-top:hover {
     cursor: pointer; }
     .scroll-to-top:hover > i {

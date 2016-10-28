@@ -380,13 +380,9 @@ export class GenericBlock implements OnInit {
      */
     cancel() {
         this.ass_name = {};
-        this.new_data = {};
-        this.new_data_file = {};
-        for(var i = 0; i < this.data_list.length; i++) {
-            var keys = Object.getOwnPropertyNames(this.new_datas[this.data_list[i]]);
-            for(var j = 0; j < keys.length; j++)
-                this.new_datas[this.data_list[i]][keys[j]] = '';
-        }
+        var keys = Object.getOwnPropertyNames(this.resets);
+        for(var j = 0; j < keys.length; j++)
+            this.resets[keys[j]].emit();
     }
 
 }
