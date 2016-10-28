@@ -13,6 +13,7 @@ import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
 import {Filesystem} from './subcmpts/filesystem.component';
 import {Dataview} from './subcmpts/dataview.component';
+import {Generics} from './subcmpts/generics.component';
 
 @Injectable()
 export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
@@ -118,6 +119,40 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
             (!component.new_id || component.new_id.length == 0))
             return true;
         return component.dialog(this.translate.instant('confirmation'));
+    }
+
+}
+
+@Injectable()
+export class Genguard implements CanDeactivate<Generics> {
+
+    /**
+     * Creates the service.
+     * @function constructor
+     * @public
+     * @param backend App service.
+     * @param router Router.
+     * @param translate Translation service.
+     */
+    constructor(private backend: Backend, private router: Router, private translate: TranslateService) {
+
+    }
+
+    /**
+     * Checks the guard.
+     * @function canDeactivate
+     * @public
+     * @param component Component.
+     * @param route Actual route.
+     * @param state Actual state.
+     * @return {Boolean} Can go through.
+     */
+    canDeactivate(component: Generics, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        var btns = window.$('.btn-reg-gen');
+        for(var i = 0; i < btns.length; i++)
+            if(!window.$(btns[i]).is(':disabled'))
+                return component.dialog(this.translate.instant('confirmation'));
+        return true;
     }
 
 }

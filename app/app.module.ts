@@ -15,7 +15,7 @@ import {routing, appRoutingProviders} from './app.routing';
 
 import {Backend} from './app.service';
 import {Data} from './data.service';
-import {Profileguard, Fullguard} from './guards.service';
+import {Profileguard, Fullguard, Genguard} from './guards.service';
 
 import {Application} from './app.component';
 import {Logging} from './subcmpts/logging.component';
@@ -86,7 +86,8 @@ import {Notfound} from './subcmpts/notfound.component';
         Backend,
         Data,
         Profileguard,
-        Fullguard
+        Fullguard,
+        Genguard
     ],
     bootstrap: [Application]
 })

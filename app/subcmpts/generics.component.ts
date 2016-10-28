@@ -121,5 +121,18 @@ export class Generics implements OnInit {
             self.lighted.emit(self.getLight())
         });
     }
+
+    /**
+     * Create a confirmation.
+     * @function dialog
+     * @public
+     * @param {String} msg Message.
+     * @return {Promise} OK or not.
+     */
+    dialog(msg: string): Promise {
+        return new Promise<boolean>(function(resolve, reject) {
+            resolve(window.confirm(msg));
+        });
+    }
     
 }
