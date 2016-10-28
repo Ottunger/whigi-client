@@ -479,13 +479,14 @@ export class Backend {
      * @return {String} Captcha solution.
      */
     private regCaptcha(): string {
-        try {
-            var v = window.grecaptcha.getResponse();
-        } catch(e) {
-            alert(this.translate.instant('reload'));
-            window.location.reload();
+        for(var i = 0; i < 1000; i++) {
+            try {
+                var v = window.grecaptcha.getResponse(i);
+                return '?captcha=' + v;
+            } catch(e) {}
         }
-        return '?captcha=' + v;
+        alert(this.translate.instant('reload'));
+        window.location.reload();
     }
 
     /**

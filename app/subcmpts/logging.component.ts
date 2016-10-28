@@ -63,14 +63,15 @@ export class Logging implements OnInit {
             var test = setInterval(function() {
                 if(!!window.grecaptcha) {
                     clearInterval(test);
-                    if(!window.$('#ggccpt').html() || window.$('#ggccpt').html().length == 0) {
-                        try {
-                            window.grecaptcha.render('ggccpt', {
-                                'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
-                            });
-                        } catch(e) {
-                            console.log(e);
-                        }
+                    window.$('#ggccpt').html('');
+                    try {
+                        window.grecaptcha.render('ggccpt', {
+                            'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
+                        }, {
+                            tabindex: 0
+                        });
+                    } catch(e) {
+                        console.log(e);
                     }
                 }
             }, 30);
