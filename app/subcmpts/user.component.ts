@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
+import {Component, enableProdMode, OnInit, OnDestroy, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -24,6 +24,7 @@ export class User implements OnInit, OnDestroy {
     public id: string;
     public ret: string[];
     private sub: Subscription;
+    private ready: EventEmitter<any>;
 
     /**
      * Creates the component.
@@ -38,6 +39,7 @@ export class User implements OnInit, OnDestroy {
     constructor(private translate: TranslateService, private router: Router, private backend: Backend,
         private notif: NotificationsService, private routed: ActivatedRoute) {
         this.user = {};
+        this.ready = new EventEmitter<any>();
     }
 
     /**
@@ -52,6 +54,7 @@ export class User implements OnInit, OnDestroy {
             self.ret = !!params['ret']? JSON.parse(window.decodeURIComponent(params['ret'])) : ['/profile'];
             self.backend.getUser(self.id).then(function(user) {
                 self.user = user;
+                self.ready.emit(user);
             }, function(e) {
                 self.back();
             });

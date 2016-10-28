@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, ApplicationRef, OnInit} from '@angular/core';
+import {Component, enableProdMode, Input, ApplicationRef, OnInit, EventEmitter} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
@@ -21,6 +21,7 @@ import * as template from './templates/userinfo.html';
 export class Userinfo implements OnInit {
 
     @Input() user: any;
+    @Input() ready: EventEmitter<any>;
     public bce: string;
     private pict: string;
 
@@ -49,12 +50,19 @@ export class Userinfo implements OnInit {
         window.$('#eidform').ready(function() {
             window.$('#eidform').attr('method', 'get');
         });
-        var test = setInterval(function() {
-            if(Object.getOwnPropertyNames(self.user).length == 0)
-                return;
-            clearInterval(test);
-            self.dataservice.picts(self.user, 'pict-user');
-        }, 30);
+        if(!!this.ready) {
+            this.ready.subscribe(function(user) {
+                self.user = user;
+                self.dataservice.picts(self.user, 'pict-user');
+            });
+        } else {
+            var test = setInterval(function() {
+                if(Object.getOwnPropertyNames(self.user).length == 0)
+                    return;
+                clearInterval(test);
+                self.dataservice.picts(self.user, 'pict-user');
+            }, 30);
+        }
     }
 
     /**

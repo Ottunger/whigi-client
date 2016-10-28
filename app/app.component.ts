@@ -7,6 +7,7 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
+import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
 enableProdMode();
@@ -63,7 +64,7 @@ enableProdMode();
                     <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
                     <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
                 </ul>
-            </div> 
+            </div>
             <simple-notifications [options]="options"></simple-notifications>
         </div>
     `
@@ -91,17 +92,21 @@ export class Application {
      * @public
      * @param translate Translation service.
      * @param backend App service.
+     * @param router Routing service.
      */
-    constructor(private translate: TranslateService, private backend: Backend) {
-        //Load translations on the fly
-        //translate.addLangs(['en', 'fr']);
+    constructor(private translate: TranslateService, private backend: Backend, private router: Router) {
+        var self = this;
         translate.setDefaultLang('en');
-
         if('lang' in sessionStorage) {
             translate.use(sessionStorage.getItem('lang'));
         } else {
             var browserLang = translate.getBrowserLang();
             translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
+        }
+
+        //Construct a reference to angular router
+        window.ngUserMove = function(key) {
+            self.router.navigate(['/user', key, JSON.stringify(self.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
         }
     }
 

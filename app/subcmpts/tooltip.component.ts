@@ -50,7 +50,8 @@ export class Tooltip {
             var shares = '', keys = Object.getOwnPropertyNames(this.backend.profile.data[this.uri].shared_to);
             for(var i = 0; i < keys.length; i++) {
                 this.mapping[keys[i]] = this.backend.generateRandomString(12);
-                shares += '<li class="list-group-item"><img id="pict__' + this.mapping[keys[i]] + keys[i] + '" height="20px" alt="" style="float: left;margin-right: 10px;" />' + keys[i] + '</li>';
+                shares += '<li class="list-group-item"><img id="pict__' + this.mapping[keys[i]] + keys[i] + '" height="20px" alt="" style="float: left;margin-right: 10px;" />'
+                   + '<a href="javascript:;" onclick="window.$(\'.tp-close\').click(); window.ngUserMove(\'' + keys[i] + '\')">' + keys[i] + '</a></li>';
             }
             shares = (shares == '')? '<li class="list-group-item">' + this.translate.instant('nothing') + '</li>' : shares;
             //Modal
@@ -59,7 +60,7 @@ export class Tooltip {
                     <h3>` + self.translate.instant('dataview.grants') + `</h3>
                     <div class="row text-center"><ul class="list-group">` + shares + `</ul></div>
                 </div>
-            `).appendTo('body').modal();
+            `).appendTo('body').modal({closeClass: 'tp-close'});
             //Pictures
             keys.forEach(function(key) {
                 self.backend.getUser(key).then(function(user) {

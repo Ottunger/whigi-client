@@ -464,7 +464,7 @@ export class Dataview implements OnInit, OnDestroy {
      * @param {String} user The user.
      */
     user(user: string) {
-        this.router.navigate(['/user', user, JSON.stringify(this.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
+        window.ngUserMove(user);
     }
     
 }
