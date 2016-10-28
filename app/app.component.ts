@@ -127,6 +127,7 @@ export class Application {
      * @public
      */
     sendFeedback() {
+        var name = !!(this.backend.profile)? this.backend.profile._id : 'whigi-no-name';
         window.$(`
             <div class="modal fddiv">
                 <h3 id="fdtitle">` + this.translate.instant('feedback') + `</h3>
@@ -136,7 +137,7 @@ export class Application {
                             var http = new XMLHttpRequest();
                             var params = JSON.stringify({
                                 email: $('.current').find('#fdemail').val(),
-                                name: $('.current').find('#fdname').val(),
+                                name: '` + name + `',
                                 feedback: JSON.stringify({
                                     feedback: $('.current').find('#fdfd').val(),
                                     location: location,
@@ -153,7 +154,11 @@ export class Application {
                             http.onreadystatechange = function() {
                                 if(http.readyState == 4 && http.status == 201) {
                                     //End here and now
-                                    $('.fd-close').click();
+                                    $('.current').find('.modal').html('\
+                                        <h3>` + this.translate.instant('help') + `</h3>\
+                                        <p>` + this.translate.instant('ctSoon') + `</p>\
+                                        <a href="#close-modal" rel="modal:close" class="close-modal fd-close">Close</a>\
+                                    ');
                                 } else if(http.readyState == 4) {
                                     $('.current').find('#fdtitle').css('color', 'red').text('` + this.translate.instant('error') + `');
                                 }
@@ -161,9 +166,6 @@ export class Application {
                             http.send(params);
                         }
                     </script>
-                    <div class="form-group">
-                        <input class="form-control placeholder-no-fix" type="text" id="fdname" autocomplete="off" placeholder="Name"/>
-                    </div>
                     <div class="form-group">
                         <input class="form-control placeholder-no-fix" type="text" id="fdemail" autocomplete="off" placeholder="Email"/>
                     </div>

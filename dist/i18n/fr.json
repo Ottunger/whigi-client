@@ -33,6 +33,7 @@
    "cancel": "Annuler",
    "reload": "Le service Google ne peut être joint, essayons après avoir rechargé la page",
    "feedback": "Feedback",
+   "ctSoon": "Merci pour votre feedback. Nosu vous recontacterons dès que possible si vous nous avez laissé votre email.",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
@@ -199,6 +200,7 @@
    "generics.hasValue": "Appliquable",
    "generics.goTo": "Voir / Modifier",
    "generics.moreData": "En voir plus...",
+   "generics.shared": "Partagé à...",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",

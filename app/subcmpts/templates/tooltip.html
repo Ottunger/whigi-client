@@ -1,5 +1,7 @@
 <a href="javascript:;" *ngIf="right && mode=='info' && !!uri && uri != ''" style="float: right;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
 <a href="javascript:;" *ngIf="!right && mode=='info' && !!uri && uri != ''" style="float: left;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
 
-<a href="javascript:;" *ngIf="right && mode=='shares' && !!uri && uri != ''" style="position: absolute; top: 6px; z-index: 990; right: 20px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
-<a href="javascript:;" *ngIf="!right && mode=='shares' && !!uri && uri != ''" style="position: absolute; top: 6px; z-index: 990; right: 10px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
+<a href="javascript:;" *ngIf="right && mode=='shares' && !!uri && uri != ''" title="{{ 'generics.shared' | translate }}"
+    style="position: absolute; top: 6px; z-index: 990; right: 20px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
+<a href="javascript:;" *ngIf="!right && mode=='shares' && !!uri && uri != ''" title="{{ 'generics.shared' | translate }}"
+    style="position: absolute; top: 6px; z-index: 990; right: 10px;" (click)="launch()"><i class="fa fa-commenting"></i></a>

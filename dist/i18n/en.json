@@ -33,6 +33,7 @@
    "cancel": "Cancel",
    "reload": "The Google service cannot be reached, let us retry after refreshing the page",
    "feedback": "Feedback",
+   "ctSoon": "Thanks for your feedback. We will recontact you as soon as possible if you gave us your email.",
 
    "login.title": "Login to your account",
    "login.alert": "Enter any username and password.",
@@ -199,6 +200,7 @@
    "generics.hasValue": "Appliable",
    "generics.goTo": "View / Edit",
    "generics.moreData": "See more...",
+   "generics.shared": "Shared to...",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",
