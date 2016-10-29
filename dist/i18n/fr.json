@@ -34,6 +34,7 @@
    "reload": "Le service Google ne peut être joint, essayons après avoir rechargé la page",
    "feedback": "Feedback",
    "ctSoon": "Merci pour votre feedback. Nosu vous recontacterons dès que possible si vous nous avez laissé votre email.",
+   "rename": "Renommer",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",

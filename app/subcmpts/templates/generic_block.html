@@ -13,131 +13,142 @@
                 <div class="form-body">
                     <div *ngFor="let g of data_list; let l = last" id="iname{{ dataservice.sanit(g) }}">
                         <div class="row input-holder-{{ dataservice.sanit(group) }}" [attr.data-g]="g">
-                            <div class="col-md-12">
-                                <div class="row">
-                                    <!-- EXPL -->
-                                    <div class="col-md-6">
-                                        <h4>
-                                            <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
-                                                src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
-                                            <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
-                                                class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
-                                            {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
-                                            <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
-                                        </h4>
-                                    </div>
-                                    <div class="col-md-4" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <div id="tgdisp{{ dataservice.sanit(g) }}">
-                                            <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys')" />
-                                        </div>
-                                        <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;" class="iinput{{ dataservice.sanit(g) }}">
-                                            <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)"></input_block>
-                                        </div>
-                                        <tooltip [mode]="'shares'" [right]="true" [uri]="g"></tooltip>
-                                    </div>
-                                    <div class="col-md-2" style="left: -20px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)"
-                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
-                                                    || backend.profile.data[g].id.indexOf('datafragment') != 0">
-                                                    <i class="fa fa-pencil"></i></button>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <button type="button" class="btn btn-link" (click)="select(g)">
-                                                    <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
-                                    </div>
-                                    <!-- EXPL -->
+                            <div class="row">
+                                <!-- EXPL -->
+                                <div [class.col-md-12]="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable"
+                                    [class.col-md-5]="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <h4>
+                                        <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
+                                            src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
+                                        <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
+                                            class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
+                                        {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                                        <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
+                                    </h4>
                                 </div>
-                                <div class="row">
-                                    <p style="margin-left: 15px; margin-right: 15px;">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
-                                </div>
-                                <!-- BEGIN SELECT -->
-                                <div class="row igen{{ dataservice.sanit(g) }}">
-                                    <!-- description -->
-                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        {{ 'actual' | translate }}<span>*</span>:
+                                <div class="col-md-6" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <div id="tgdisp{{ dataservice.sanit(g) }}">
+                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys')" />
                                     </div>
-                                    <div class="col-md-6 text-right" style="padding-right: 20px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <input type="text" [(ngModel)]="ass_name[g]" (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
-                                            name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 2px 2px 1px #FF5000!important;">
-                                        <datalist id="suggestions{{ g }}">
-                                            <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
-                                        </datalist>
-                                        <!-- labels -->
-                                        <div style="display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                            <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                                {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <!-- input -->
-                                    <div class="col-md-6" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                    <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;" class="iinput{{ dataservice.sanit(g) }}">
+                                        <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)"></input_block>
                                     </div>
                                 </div>
-                                <!-- END SELECT -->
-                                <!-- BEGIN ACTIONS -->
-                                <div class="row" style="padding-top: 3px;">
-                                    <div *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                        <ul class="list-group">
-                                            <li class="list-group-item" style="border: none; text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3)">
-                                                <div class="row">
-                                                    <div class="col-md-3">
-                                                        <input type="text" style="margin-left: -4px;" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
-                                                    </div>
-                                                    <div class="col-md-2" style="left: -20px;">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <button type="button" style="left: 2px;position: absolute;" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgName(g, d)">
-                                                                    <i class="fa fa-pencil"></i></button>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
-                                                                    <i class="fa fa-remove" title="{{ 'remove' | translate }}"></i> </button>
-                                                            </div>
+                                <div class="col-md-1" style="padding: 0 0; margin-left: -12px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <div class="btn-group btn-group-justified" role="group">
+                                        <div class="btn-group" role="group">
+                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" style="min-width: 0px;">
+                                                <li>
+                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)"
+                                                        [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
+                                                        || backend.profile.data[g].id.indexOf('datafragment') != 0">
+                                                        <i class="fa fa-pencil"></i></button>
+                                                </li>
+                                                <li>
+                                                    <button type="button" class="btn btn-link" (click)="select(g)">
+                                                        <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
+                                                </li>
+                                                <li>
+                                                    <tooltip [mode]="'sharesLink'" [uri]="g"></tooltip>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                </div>
+                                <!-- EXPL -->
+                            </div>
+                            <div class="row">
+                                <p style="margin-left: 15px; margin-right: 15px;">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                            </div>
+                            <!-- BEGIN SELECT -->
+                            <div class="row igen{{ dataservice.sanit(g) }}">
+                                <!-- description -->
+                                <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    {{ 'actual' | translate }}<span>*</span>:
+                                </div>
+                                <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <input type="text" [(ngModel)]="ass_name[g]" (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
+                                        name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 2px 2px 1px #FF5000!important;">
+                                    <datalist id="suggestions{{ g }}">
+                                        <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
+                                    </datalist>
+                                    <!-- labels -->
+                                    <div style="display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- input -->
+                                <div class="col-md-6" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                </div>
+                            </div>
+                            <!-- END SELECT -->
+                            <!-- BEGIN ACTIONS -->
+                            <div class="table" style="margin-bottom: 0px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                <table>
+                                        <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
+                                            <td style="padding-top: 5px;" [style.padding-bottom]="l? '5px' : '0px'">
+                                                <div class="col-md-5" style="padding-left: 9px;">
+                                                    <input type="text" style="margin-left: -4px; box-shadow: 2px 2px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
+                                                            <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys')" />
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-5">
-                                                        <div class="row">
-                                                            <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
-                                                                <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys')" />
-                                                            </div>
-                                                            <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
-                                                                {{ 'nothing' | translate }}
-                                                            </div>
-                                                            <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
-                                                                <input_block [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
-                                                            </div>
-                                                            <tooltip [right]="false" [mode]="'shares'" [uri]="g + '/' + d"></tooltip>
+                                                        <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
+                                                            {{ 'nothing' | translate }}
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-2" style="left: -20px;">
-                                                        <div class="row">
-                                                            <div class="col-md-6">
-                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)"
-                                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
-                                                                    || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0">
-                                                                    <i class="fa fa-pencil"></i></button>
-                                                            </div>
-                                                            <div class="col-md-6">
-                                                                <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">
-                                                                    <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
-                                                            </div>
+                                                        <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
+                                                            <input_block [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                </div>
-                                <!-- END ACTIONS -->
+                                                <div class="col-md-1" style="padding: 0 0;">
+                                                    <div class="btn-group btn-group-justified" role="group">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" style="min-width: 0px;">
+                                                                <li>
+                                                                    <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)"
+                                                                        [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
+                                                                        || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0">
+                                                                        <i class="fa fa-pencil"></i></button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">
+                                                                        <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgName(g, d)">
+                                                                        <i class="fa fa-wrench" title="{{ 'rename' | translate }}"></i></button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
+                                                                        <i class="fa fa-trash" title="{{ 'remove' | translate }}"></i> </button>
+                                                                </li>
+                                                                <li>
+                                                                    <tooltip [mode]="'sharesLink'" [uri]="g + '/' + d"></tooltip>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                </table>
                             </div>
+                            <!-- END ACTIONS -->
                         </div>
                         <div style="margin-top:7px; height:1px; width:100%" *ngIf="!l"></div>
                     </div>

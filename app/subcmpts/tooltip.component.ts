@@ -45,7 +45,7 @@ export class Tooltip {
         var self = this;
         if(!self.uri || self.uri == '')
             return;
-        if(this.mode == 'shares') {
+        if(this.mode.indexOf('shares') == 0) {
             //We are asked for showing who we share a data with
             var shares = '', keys = Object.getOwnPropertyNames(this.backend.profile.data[this.uri].shared_to);
             for(var i = 0; i < keys.length; i++) {
