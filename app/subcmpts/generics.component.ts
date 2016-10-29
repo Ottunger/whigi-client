@@ -15,6 +15,7 @@ import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/generics.html';
+import * as modules from './templates/generics';
 
 @Component({
     template: template
@@ -76,19 +77,14 @@ export class Generics implements OnInit {
         if(this.filter in this.lists)
             return this.lists[this.filter];
         if(this.filter == 'generics.any')
-            obj = Object.getOwnPropertyNames(this.backend.generics);
+            obj = modules.m.modules;
         else
-            obj = Object.getOwnPropertyNames(this.backend.generics).filter(function(el): boolean {
-                return self.backend.generics[el][self.backend.generics[el].length - 1].module == self.filter;
+            obj = modules.m.modules.filter(function(el, i): boolean {
+                return modules.m.keys[self.filter].holds.indexOf(i) != -1;
             });
-        var ret = {};
+        var toRet = [];
         for(var i = 0; i < obj.length; i++) {
-            ret[this.backend.generics[obj[i]][this.backend.generics[obj[i]].length - 1].group] = ret[this.backend.generics[obj[i]][this.backend.generics[obj[i]].length - 1].group] || [];
-            ret[this.backend.generics[obj[i]][this.backend.generics[obj[i]].length - 1].group].push(obj[i]);
-        }
-        var toRet = [], keys = Object.getOwnPropertyNames(ret);
-        for(var i = 0; i < keys.length; i++) {
-            toRet.push([ret[keys[i]], keys[i]]);
+            toRet.push([modules.m.holds[obj[i]].holds, obj[i], modules.m.holds[obj[i]].is_i18n, !modules.m.holds[obj[i]].open]);
         }
         this.lists[this.filter] = toRet;
         return toRet;
@@ -101,12 +97,8 @@ export class Generics implements OnInit {
      * @return {Number} Item.
      */
     getLight(): number {
-        switch(this.filter) {
-            case 'generics.profile':
-                return 1;
-            case 'generics.corporate':
-                return 2;
-        }
+        if(this.filter in modules.m.keys)
+            return modules.m.keys[this.filter].left_num;
         return -1;
     }
 

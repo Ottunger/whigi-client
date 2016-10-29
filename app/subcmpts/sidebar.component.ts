@@ -12,6 +12,7 @@ import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/sidebar.html';
+import * as modules from './templates/generics';
 
 @Component({
     selector: 'sidebar',
@@ -20,6 +21,7 @@ import * as template from './templates/sidebar.html';
 export class Sidebar implements OnInit {
 
     @Input() lighted: EventEmitter<number> | number;
+    private m: any;
 
     /**
      * Creates the component.
@@ -39,6 +41,7 @@ export class Sidebar implements OnInit {
      * @public
      */
     ngOnInit(): void {
+        this.m = modules.m;
         if(typeof this.lighted === 'number') {
             window.$('.linkbars').removeClass('start active').remove('.selected');
             window.$('#linkbars' + this.lighted).addClass('start active').find('a').append('<span class="selected"></span>');

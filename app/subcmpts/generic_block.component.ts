@@ -25,6 +25,8 @@ export class GenericBlock implements OnInit {
     public new_data: {[id: string]: string};
     public new_datas: {[id: string]: {[id: string]: string}};
     public new_data_file: {[id: string]: string};
+    @Input() tsl: boolean;
+    @Input() iclose: boolean;
     @Input() group: string;
     @Input() data_list: string[];
     private previews: {[id: string]: string};
@@ -69,7 +71,7 @@ export class GenericBlock implements OnInit {
                     this.resets[this.data_list[i] + '/' + names[j]] = new EventEmitter();
             }
         }
-        if(this.group.indexOf('none', this.group.length - 4) != -1) {
+        if(this.iclose) {
             window.$('#apsablegen' + this.dataservice.sanit(this.group)).ready(function() {
                 window.$('#apsablegen' + self.dataservice.sanit(self.group)).css('display', 'none');
                 window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('expand');
