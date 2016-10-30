@@ -248,5 +248,6 @@
 
    "/": "Root folder",
    "profile/": "Profile folder",
-   "profile/corporate/": "Corporate profile"
+   "profile/corporate/": "Corporate profile",
+   "profile/corporate/type/": "Corporate profile type"
 }
