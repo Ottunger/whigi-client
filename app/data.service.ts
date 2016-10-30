@@ -352,7 +352,8 @@ export class Data {
                     nok(['vault']);
             }
         }
-        self.backend.triggerVaults(name);
+        //No, we let backend do this
+        //self.backend.triggerVaults(name);
         var is_bound = !!self.backend.profile.data[name]? self.backend.profile.data[name].id.indexOf('datafragment') == 0 : true;
         return new Promise(function(resolve, reject) {
             self.newData(is_bound, name, value, is_dated, version, true, enc_key).then(function() {
