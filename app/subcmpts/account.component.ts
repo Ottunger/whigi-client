@@ -72,7 +72,8 @@ export class Account implements OnInit, OnDestroy {
             self.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
             self.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
             self.with_account = params['with_account'];
-            self.trigger = (!!params['trigger'])? window.decodeURIComponent(params['trigger']) : '';
+            self.trigger = (!!params['trigger'])? 
+                window.decodeURIComponent(params['trigger']).replace(/:whigi_id:/g, self.backend.profile._id).replace(/:whigi_hidden_id:/g, self.backend.profile.hidden_id) : '';
             self.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
             self.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
             self.strangeEmail = (!!params['email'])? window.decodeURIComponent(params['email']) : '';
