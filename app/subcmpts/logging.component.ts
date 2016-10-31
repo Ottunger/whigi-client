@@ -163,7 +163,8 @@ export class Logging implements OnInit {
      * @public
      */
     signUp() {
-        var self = this, asEmail = false, towards;
+        var self = this, asEmail = false, towards: string;
+        var bl: number = (!!this.password)? Math.floor(this.password.length / 2) : 0;
 
         function end(recup: number[], towards: string) {
             self.dataservice.grantVault('whigi-restore', 'profile/recup_id', 'profile/recup_id', towards, 0, new Date(0), '', false, recup).then(function() {
@@ -239,7 +240,7 @@ export class Logging implements OnInit {
                         localStorage.setItem('key_decryption', window.sha256(self.password + user.salt));
                         localStorage.setItem('psha', window.sha256(self.password));
                         self.dataservice.listData(false).then(function() {
-                            var towards = self.backend.generateRandomString(16);
+                            towards = 'wiuser-' + self.backend.generateRandomString(10);
                             self.dataservice.newData(true, 'profile/email/restore', self.email, false, 0, true).then(function(email: number[]) {
                                 self.dataservice.newData(true, 'profile/recup_id', asEmail? towards : self.recup_id, false, 0, true).then(function(recup: number[]) {
                                     self.dataservice.newData(true, 'profile/first_name', self.fname, false, 0, true).then(function(fname: number[]) {

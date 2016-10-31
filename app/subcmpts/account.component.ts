@@ -214,11 +214,6 @@ export class Account implements OnInit, OnDestroy {
                     if(send.constructor === Array) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
                         window.$('#igen' + this.dataservice.sanit(adata)).addClass('has-error');
-                        this.new_data = {};
-                        var keys = Object.getOwnPropertyNames(this.new_datas);
-                        for(var i = 0; i < keys.length; i++) {
-                            this.new_datas[keys[i]] = {};
-                        }
                         return;
                     }
                     //Build name and create
