@@ -56,10 +56,15 @@ export class Merge {
                 self.login = params['mergeu'];
             if(!!params['mergep'])
                 self.password = params['mergep'];
-            if(!!params['mergeu'] && !!params['mergep']) {
-                self.merge().then(function() {
+            if(!!params['mergeu'] && !!params['mergep'] && self.login != self.backend.profile._id) {
+                if(window.confirm(this.translate.instant('merge.confirm') + self.login)) {
+                    self.merge().then(function() {
+                        self.router.navigate(['/generics', 'generics.profile']);
+                    });
+                } else {
+                    //Fallback to a request
                     self.router.navigate(['/generics', 'generics.profile']);
-                });
+                }
             } else {
                 //Fallback to a request
                 window.$('#ctn-merge').ready(function() {
