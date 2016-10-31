@@ -11,6 +11,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {TranslateModule} from 'ng2-translate/ng2-translate';
 import {SimpleNotificationsModule} from 'angular2-notifications';
+import {ReCaptchaModule} from 'angular2-recaptcha/angular2-recaptcha';
 import {routing, appRoutingProviders} from './app.routing';
 
 import {Backend} from './app.service';
@@ -51,6 +52,7 @@ import {Notfound} from './subcmpts/notfound.component';
         HttpModule,
         TranslateModule.forRoot(),
         SimpleNotificationsModule,
+        ReCaptchaModule,
         routing
     ],
     declarations: [

@@ -71,6 +71,7 @@
    "login.badChars": "Mauvais carcatères utilisés: utilisez des lettres et chiffres",
    "login.names": "Merci de spécifier vos nom et prénom",
    "login.noUserMatch": "Les noms de compte ne correspondent pas",
+   "login.wiuser": "Merci de changer votre nom de compte, votre compte sera limité jusqu'à ce moment.",
 
    "header.running": "Opérations en cours",
    "header.operation": "Opération courrante",

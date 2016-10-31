@@ -50,6 +50,7 @@ export class Backend {
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public MAIL = 'mailto://whigi.com@gmail.com';
     public FEEDBACK_URL = 'https://api-beta.prodpad.com/v1/feedbacks?apikey=06d6c2d52e00ae9b8c053b7a0e6ab2d9b7767571e04c3f27fa90a1477cfec20a';
+    private cpt: string;
     private rsa_key: string[];
 
     /**
@@ -469,6 +470,16 @@ export class Backend {
         } while(complete.charAt(0) != '0' || complete.charAt(1) != '0' || complete.charAt(2) != '0');
         return '?puzzle=' + (i - 1);
     }
+
+    /**
+     * Register a string as captcha.
+     * @function cptReg
+     * @public
+     * @param {String} cpt Captcha.
+     */
+    cptReg(cpt: string) {
+        this.cpt = cpt;
+    }
     
     /**
      * Solves the server captcha, then return a string for it.
@@ -477,14 +488,7 @@ export class Backend {
      * @return {String} Captcha solution.
      */
     private regCaptcha(): string {
-        for(var i = 0; i < 1000; i++) {
-            try {
-                var v = window.grecaptcha.getResponse(i);
-                return '?captcha=' + v;
-            } catch(e) {}
-        }
-        alert(this.translate.instant('reload'));
-        window.location.reload();
+        return '?captcha=' + this.cpt;
     }
 
     /**
@@ -659,7 +663,7 @@ export class Backend {
             new_username: uname,
             username: this.profile._id,
             password: window.sha256(password)
-        }, 'profile/uname', true, false, true);
+        }, 'profile/uname' + this.regCaptcha(), true, false);
     }
 
     /**

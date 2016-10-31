@@ -71,6 +71,7 @@
    "login.badChars": "Bad characters used: only can use letters and digits",
    "login.names": "Please fill first and last names",
    "login.noUserMatch": "Usernames do not match",
+   "login.wiuser": "Please change your username as your account will be limited until you do so.",
 
    "header.running": "Running operations",
    "header.operation": "Current operation",

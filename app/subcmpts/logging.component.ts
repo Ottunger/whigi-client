@@ -59,23 +59,6 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
-        window.$('#ggccpt').ready(function() {
-            var test = setInterval(function() {
-                if(!!window.grecaptcha) {
-                    clearInterval(test);
-                    window.$('#ggccpt').html('');
-                    try {
-                        window.grecaptcha.render('ggccpt', {
-                            'sitekey' : '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx'
-                        }, {
-                            tabindex: 0
-                        });
-                    } catch(e) {
-                        console.log(e);
-                    }
-                }
-            }, 30);
-        });
         if(this.onEnd && /end/.test(window.location.href)) {
             //Session has expired
             this.onEnd = false;
@@ -91,6 +74,14 @@ export class Logging implements OnInit {
             this.backend.getProfile().then(function(profile) {
                 //Router.go...
                 self.backend.profile = profile;
+                if(self.backend.profile._id.indexOf('wiuser-') == 0) {
+                    window.$(`
+                        <div class="modal">
+                            <h3>` + self.translate.instant('help') + `</h3>
+                            <p>` + self.translate.instant('login.wiuser') + `</p>
+                        </div>
+                    `).appendTo('body').modal();
+                }
                 if(!!set) {
                     localStorage.setItem('key_decryption', window.sha256(self.password + profile.salt));
                     localStorage.setItem('psha', window.sha256(self.password));
