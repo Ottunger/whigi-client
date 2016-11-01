@@ -36,6 +36,7 @@ export class Dataview implements OnInit, OnDestroy {
     public version: number;
     public gen_name: string;
     public filter: string;
+    private backuri: string;
     private to_filesystem: boolean;
     private sharedVector: string[];
     private sub: Subscription;
@@ -75,6 +76,7 @@ export class Dataview implements OnInit, OnDestroy {
             self.data_name = window.decodeURIComponent(params['name']);
             self.to_filesystem = params['to_filesystem'];
             self.is_dated = self.backend.profile.data[self.data_name].is_dated;
+            self.backuri = (!!params['backuri'])? params['backuri'] : JSON.stringify(['/filesystem', 'data', {folders: this.data_name.replace(/[^\/]+$/, '')}]);
 
             var keys = Object.getOwnPropertyNames(self.backend.profile.data[self.data_name].shared_to);
             keys.forEach(function(val) {
@@ -326,7 +328,7 @@ export class Dataview implements OnInit, OnDestroy {
         if(gen)
             this.router.navigate(['/generics']);
         else
-            this.router.navigate(['/filesystem', 'data', {folders: this.data_name.replace(/[^\/]+$/, '')}]);
+            this.router.navigate(JSON.parse(this.backuri));
     }
 
     /**

@@ -212,7 +212,7 @@ export class GenericBlock implements OnInit {
      * @param {String} name Name of data.
      */
     select(name: string) {
-        this.router.navigate(['/data', window.encodeURIComponent(name)]);
+        this.router.navigate(['/data', window.encodeURIComponent(name), {backuri: JSON.stringify(this.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))}]);
     }
 
     /**

@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit} from '@angular/core';
+import {Component, enableProdMode} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -18,7 +18,7 @@ import * as template from './templates/whoishare.html';
 @Component({
     template: template
 })
-export class WhoIShare implements OnInit {
+export class WhoIShare {
 
     private my_shares: string[];
 
@@ -35,15 +35,6 @@ export class WhoIShare implements OnInit {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router,
         private notif: NotificationsService, private dataservice: Data) {
 
-    }
-
-    /**
-     * Called upon display.
-     * @function ngOnInit
-     * @public
-     */
-    ngOnInit(): void {
-        
     }
 
     /**
@@ -74,7 +65,17 @@ export class WhoIShare implements OnInit {
      * @param {String} name Name of data.
      */
     goTo(name: string) {
-        this.router.navigate(['/data', window.encodeURIComponent(name)]);
+        this.router.navigate(['/data', window.encodeURIComponent(name), {backuri: JSON.stringify(this.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))}]);
+    }
+
+    /**
+     * Navigate to user panel.
+     * @function userLink
+     * @public
+     * @param {String} name Name of user.
+     */
+    userLink(name: string) {
+        this.router.navigate(['/user', name, JSON.stringify(this.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
     }
 
     /**
