@@ -19,6 +19,7 @@ import * as template from './templates/sidebar.html';
 })
 export class Sidebar implements OnInit {
 
+    public new_name: string;
     @Input() lighted: EventEmitter<number> | number;
 
     /**
@@ -47,6 +48,39 @@ export class Sidebar implements OnInit {
                 window.$('.linkbars').removeClass('start active').remove('.selected');
                 window.$('#linkbars' + vals).addClass('start active').find('a').append('<span class="selected"></span>');
             });
+        }
+    }
+
+    /**
+     * Adds a temp column.
+     * @function addColumn
+     * @public
+     */
+    addColumn() {
+        if(this.dataservice.m.kkeys.indexOf(this.new_name) == -1) {
+            this.dataservice.m.kkeys.push(this.new_name);
+            this.dataservice.m.keys[this.new_name] = {
+                is_i18n: false,
+                left_num: Math.floor(Math.random() * 100000) + 1010,
+                holds: []
+            }
+            this.new_name = '';
+            this.dataservice.warnM();
+        }
+    }
+
+    /**
+     * Removes a temp column.
+     * @function removeColumn
+     * @public
+     * @param {String} key Key to remove.
+     */
+    removeColumn(key: string) {
+        var inp = this.dataservice.m.kkeys.indexOf(key);
+        if(inp > -1) {
+            this.dataservice.m.kkeys.splice(inp, 1);
+            delete this.dataservice.m.keys[key];
+            this.dataservice.warnM();
         }
     }
 

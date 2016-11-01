@@ -208,6 +208,10 @@
 
    "error.notfound": "Introuvable",
 
+   "sidebar.add": "Add",
+   "sidebar.saved": "Configuration saved",
+   "sidebar.noSave": "Configuration could not be saved",
+
    "_comment": "HERE START TRANSLATIONS FOR GENERICS",
 
    "generics.any": "Any module",

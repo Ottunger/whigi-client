@@ -206,6 +206,10 @@
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",
 
+   "sidebar.add": "Ajouter",
+   "sidebar.saved": "Configuration sauvegardée",
+   "sidebar.noSave": "La configuration n'a pu être sauvée",
+
    "error.notfound": "Introuvable",
 
    "_comment": "HERE START TRANSLATIONS FOR GENERICS",

@@ -16,8 +16,9 @@ import * as modules from './subcmpts/templates/generics';
 @Injectable()
 export class Data {
 
-    public m : any;
+    public m : {kkeys: string[], keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, modules: string[], holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
     public ev: EventEmitter<[string, boolean]>;
+    private maes: number[];
     private selects: {[id: string]: string[]};
     private marked: {[id: string]: boolean};
     private ee: EventEmitter<number>;
@@ -71,6 +72,7 @@ export class Data {
         this.m = Object.assign({}, modules.m);
         this.getData('keys/display', false, undefined, true).then(function(data) {
             var perso = {kkeys: [], keys: {}, modules: [], holds: {}};
+            self.maes = data.decr_aes || self.backend.newAES();
             try {
                 perso = JSON.parse(data.decr_data);
             } catch(e) {}
@@ -81,6 +83,47 @@ export class Data {
             self.m.keys = Object.assign((perso.keys || {}), self.m.keys);
             self.m.holds = Object.assign((perso.holds || {}), self.m.holds);
         }, function(e) {});
+    }
+
+    /**
+     * Save current personal config.
+     * @function saveRows
+     * @public
+     */
+    saveRows() {
+        var self = this, perso = {};
+        perso['kkeys'] = this.m.kkeys.filter(function(el): boolean {
+            return !self.m.keys[el].is_i18n;
+        });
+        perso['keys'] = self.m.keys;
+        perso['modules'] = this.m.modules.filter(function(el): boolean {
+            return !self.m.holds[el].is_i18n;
+        });
+        perso['holds'] = self.m.holds;
+        this.newData(true, 'keys/display', JSON.stringify(perso), false, 0, true, this.maes).then(function() {
+            self.notif.success(self.translate.instant('error'), self.translate.instant('sidebar.saved'));
+        }, function(e) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('sidebar.noSave'));
+        });
+    }
+
+    /**
+     * Warns for save of mapping.
+     * @fucntion warnM
+     * @public
+     */
+    warnM() {
+        window.$(".whigi-save-config").animate({opacity:0}, 200, 'linear', function() {
+            window.$(this).animate({opacity:1}, 200, function() {
+                window.$(this).animate({opacity:0}, 200, function() {
+                    window.$(this).animate({opacity:1}, 200, function() {
+                        window.$(this).animate({opacity:0}, 200, function() {
+                            window.$(this).animate({opacity:1}, 200);
+                        });
+                    });
+                });
+            });
+        });
     }
 
     /**

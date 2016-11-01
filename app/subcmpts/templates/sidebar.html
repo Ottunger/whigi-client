@@ -18,6 +18,14 @@
                     <i class="icon-graduation"></i>
                     <span class="title" *ngIf="dataservice.m.keys[key].is_i18n">{{ key | translate }}</span>
                     <span class="title" *ngIf="!dataservice.m.keys[key].is_i18n">{{ key }}</span>
+                    <i class="title fa fa-trash" *ngIf="!dataservice.m.keys[key].is_i18n" (click)="removeColumn(key)" style="float: right;"></i>
+                </a>
+            </li>
+            <li class="nav-item linkbars">
+                <a href="javascript:;" class="nav-link" style="cursor: default!important;">
+                    <i class="icon-graduation"></i>
+                    <input type="text" [(ngModel)]="new_name" class="title" style="border-radius: 6px; width: 110px; margin-right: 5px; background: transparent;" />
+                    <button type="button" style="float: right; margin-top: 3px;" class="title btn btn-xs green" (click)="addColumn()" [disabled]="!new_name || new_name == ''">{{ 'sidebar.add' | translate }}</button>
                 </a>
             </li>
             <li class="heading">
