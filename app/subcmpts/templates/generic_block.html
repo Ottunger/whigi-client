@@ -2,7 +2,7 @@
     <div class="portlet box blue-madison">
         <div class="portlet-title">
             <div class="caption" *ngIf="tsl">{{ group | translate }}</div>
-            <div class="caption" *ngIf="!tsl">{{ group }}</div>
+            <div class="caption" *ngIf="!tsl">{{ group }} <a href="javascript:;" (click)="rm.emit(group)"><i class="fa fa-trash"></i></a></div>
             <div class="tools">
                 <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsablegen' + dataservice.sanit(group))"> </a>
             </div>
@@ -18,12 +18,36 @@
                                 <div [class.col-md-12]="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable"
                                     [class.col-md-5]="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <h4>
-                                        <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
-                                            src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
-                                        <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
-                                            class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
-                                        {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
-                                        <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
+                                        <div class="col-md-10" style="padding: 0;">
+                                            <img *ngIf="backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive"
+                                                src="{{ backend.generics[g][backend.generics[g].length - 1].icon }}" width="20px" style="float:left;"/>
+                                            <i *ngIf="backend.generics[g][backend.generics[g].length - 1].icon != '' && backend.generics[g][backend.generics[g].length - 1].icon.indexOf('https') != 0"
+                                                class="{{ backend.generics[g][backend.generics[g].length - 1].icon }}"></i>
+                                            {{ backend.generics[g][backend.generics[g].length - 1].descr_key | translate }}
+                                        </div>
+                                        <div class="col-md-1" style="padding: 0; margin-left: -3px;">
+                                            <!-- personal pages insert/remove -->
+                                            <button type="button" style="min-width: 36px;" class="btn btn-default" *ngIf="!tsl" (click)="deleteTopo(g)">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                            <div class="btn-group btn-group-justified" role="group" *ngIf="tsl">
+                                                <div class="btn-group" role="group">
+                                                    <button type="button" style="min-width: 36px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        <i class="fa fa-hdd-o" style="float: left;"></i>
+                                                    </button>
+                                                    <ul class="dropdown-menu" style="min-width: 0px;">
+                                                        <li *ngFor="let dest of dataservice.destinations(g)">
+                                                            <button type="button" class="btn btn-link" (click)="dataservice.registerTopo(g, dest[0], dest[1])">
+                                                            {{ dest[0] }} >> {{ dest[1] }}</button>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            <!-- end -->
+                                        </div>
+                                        <div class="col-md-1" style="padding: 0;">
+                                            <tooltip [mode]="'info'" [uri]="backend.generics[g][backend.generics[g].length - 1].help_url" [right]="true"></tooltip>
+                                        </div>
                                     </h4>
                                 </div>
                                 <div class="col-md-6" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">

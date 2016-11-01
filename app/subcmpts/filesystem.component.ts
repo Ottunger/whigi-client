@@ -93,7 +93,7 @@ export class Filesystem implements OnInit {
     register(is_dated: boolean, new_name: string, new_data: string) {
         var self = this, send;
         window.$('.inaming').removeClass('has-error');
-        if(!new_name || new_name =='' || this.completeName(new_name) in this.backend.generics || (this.folders.slice(0, -1) in this.backend.generics && 
+        if(this.completeName(new_name) in this.backend.generics || (this.folders.slice(0, -1) in this.backend.generics && 
             this.backend.generics[this.folders.slice(0, -1)][this.backend.generics[this.folders.slice(0, -1)].length - 1].instantiable)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.generics'));
             window.$('.inaming').addClass('has-error');

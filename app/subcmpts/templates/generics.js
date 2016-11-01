@@ -1,26 +1,16 @@
 exports.m = {
-    "kkeys": [
-        "generics.profile",
-        "generics.corporate"
-    ],
     "keys": {
         "generics.profile": {
             "is_i18n": true,
             "left_num": 1000,
-            "holds": [0, 1]
+            "holds": ["generics.perso1", "generics.perso2"]
         },
         "generics.corporate": {
             "is_i18n": true,
             "left_num": 1001,
-            "holds": [2, 3]
+            "holds": ["generics.corp1", "generics.corp2"]
         }
     },
-    "modules": [
-        "generics.perso1",
-        "generics.perso2",
-        "generics.corp1",
-        "generics.corp2none"
-    ],
     "holds": {
         "generics.perso1": {
             "open": true,
@@ -37,7 +27,7 @@ exports.m = {
             "is_i18n": true,
             "holds": ["profile/corporate/name", "profile/corporate/country", "profile/corporate/address"]
         },
-        "generics.corp2none": {
+        "generics.corp2": {
             "open": false,
             "is_i18n": true,
             "holds": ["profile/corporate/type/franco", "profile/corporate/type/open"]

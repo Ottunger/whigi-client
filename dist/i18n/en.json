@@ -75,6 +75,7 @@
 
    "header.running": "Running operations",
    "header.operation": "Current operation",
+   "header.save": "Save custom favorites",
 
    "profile.logout": "Log out",
    "profile.logoutAll": "Log out all",
@@ -221,7 +222,7 @@
    "generics.perso1": "Personal data",
    "generics.perso2": "Addresses",
    "generics.corp1": "Corporate identity",
-   "generics.corp2none": "Corporate addresses",
+   "generics.corp2": "Corporate addresses",
 
    "generics.email": "Emails",
    "generics.last_name": "Last name",

@@ -75,6 +75,7 @@
 
    "header.running": "Opérations en cours",
    "header.operation": "Opération courrante",
+   "header.save": "Sauvegarder les favoris",
 
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Tout déconnecter",
@@ -221,7 +222,7 @@
    "generics.perso1": "Données personnelles",
    "generics.perso2": "Adresses",
    "generics.corp1": "Identité d'entreprise",
-   "generics.corp2none": "Adresses d'entreprise",
+   "generics.corp2": "Adresses d'entreprise",
 
    "generics.email": "Emails",
    "generics.last_name": "Nom de famille",

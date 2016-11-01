@@ -22,6 +22,7 @@ import * as template from './templates/generics.html';
 export class Generics implements OnInit {
 
     public filter: string;
+    public new_name: string;
     private lighted: EventEmitter<number>;
     private sub: Subscription;
     private lists: {[id: string]: any};
@@ -52,6 +53,7 @@ export class Generics implements OnInit {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
             self.filter = !!params['filter']? params['filter'] : 'generics.any';
+            self.filter = (self.filter in self.dataservice.m.keys)? self.filter : 'generics.any';
             self.regUpdate();
         });
     }
@@ -76,10 +78,10 @@ export class Generics implements OnInit {
         if(this.filter in this.lists)
             return this.lists[this.filter];
         if(this.filter == 'generics.any')
-            obj = this.dataservice.m.modules;
+            obj = Object.getOwnPropertyNames(this.dataservice.m.holds);
         else
-            obj = this.dataservice.m.modules.filter(function(el, i): boolean {
-                return self.dataservice.m.keys[self.filter].holds.indexOf(i) != -1;
+            obj = Object.getOwnPropertyNames(this.dataservice.m.holds).filter(function(el): boolean {
+                return self.dataservice.m.keys[self.filter].holds.indexOf(el) != -1;
             });
         var toRet = [];
         for(var i = 0; i < obj.length; i++) {
@@ -124,6 +126,38 @@ export class Generics implements OnInit {
         return new Promise<boolean>(function(resolve, reject) {
             resolve(window.confirm(msg));
         });
+    }
+
+    /**
+     * Adds an empty removable temp block.
+     * 
+     */
+    addBlock() {
+        if(!(this.new_name in this.dataservice.m.holds)) {
+            this.dataservice.m.holds[this.new_name] = {
+                is_i18n: false,
+                open: true,
+                holds: []
+            }
+            this.dataservice.m.keys[this.filter].holds.push(this.new_name);
+            this.new_name = '';
+            this.lists = {};
+            this.dataservice.warnM();
+        }
+    }
+
+    /**
+     * Removes the link in topology, removing the group.
+     * @function unlink
+     * @public
+     * @param {String} target Target to remove.
+     */
+    unlink(target: string) {
+        delete this.dataservice.m.holds[target];
+        var inp = this.dataservice.m.keys[this.filter].holds.indexOf(target);
+        this.dataservice.m.keys[this.filter].holds.splice(inp, 1);
+        this.lists = {};
+        this.dataservice.warnM();
     }
     
 }

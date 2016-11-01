@@ -12,20 +12,30 @@
                 <!-- BEGIN CONTENT BODY -->
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
-                    <h1 class="page-title"> {{ 'generics.title' | translate }}</h1>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <h1 class="page-title"> {{ 'generics.title' | translate }}</h1>
+                        </div>
+                        <div class="col-md-4 text-right">
+                            <input *ngIf="!!dataservice.m.keys[filter] && !dataservice.m.keys[filter].is_i18n" type="text" [(ngModel)]="new_name" class="title" style="border-radius: 6px; margin-right: 5px; background: transparent;" />
+                            <button *ngIf="!!dataservice.m.keys[filter] && !dataservice.m.keys[filter].is_i18n" type="button" class="btn btn-sm green" (click)="addBlock()" [disabled]="!new_name || new_name == ''">
+                                {{ 'sidebar.add' | translate }}
+                            </button>
+                        </div>
+                    </div>
                     <!-- END PAGE TITLE-->
                     <div class="row">
                         <div class="col-md-6">
                             <!-- BEGIN BLOCK -->
                             <div class="tab-content" *ngFor="let g of generics(); let e = even">
-                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="g[3]"></generic_block>
+                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="g[3]" (rm)="unlink($event)"></generic_block>
                             </div>
                             <!-- END BLOCK -->
                         </div>
                         <div class="col-md-6">
                             <!-- BEGIN BLOCK -->
                             <div class="tab-content" *ngFor="let g of generics(); let e = odd">
-                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="g[3]"></generic_block>
+                                <generic_block *ngIf="e" [data_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="g[3]" (rm)="unlink($event)"></generic_block>
                             </div>
                             <!-- END BLOCK -->
                         </div>

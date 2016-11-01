@@ -16,7 +16,7 @@ import * as modules from './subcmpts/templates/generics';
 @Injectable()
 export class Data {
 
-    public m : {kkeys: string[], keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, modules: string[], holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
+    public m : {keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
     public ev: EventEmitter<[string, boolean]>;
     private maes: number[];
     private selects: {[id: string]: string[]};
@@ -61,7 +61,6 @@ export class Data {
         return a;
     }
 
-
     /**
      * Extend the modules for one user.
      * @function extendModules
@@ -76,9 +75,6 @@ export class Data {
             try {
                 perso = JSON.parse(data.decr_data);
             } catch(e) {}
-            //Keys
-            self.m.kkeys = self.unique(self.m.kkeys.concat(perso.kkeys || []));
-            self.m.modules = self.unique(self.m.modules.concat(perso.modules || []));
             //Objects
             self.m.keys = Object.assign((perso.keys || {}), self.m.keys);
             self.m.holds = Object.assign((perso.holds || {}), self.m.holds);
@@ -92,14 +88,18 @@ export class Data {
      */
     saveRows() {
         var self = this, perso = {};
-        perso['kkeys'] = this.m.kkeys.filter(function(el): boolean {
+        var keys = Object.getOwnPropertyNames(this.m.keys).filter(function(el): boolean {
             return !self.m.keys[el].is_i18n;
         });
-        perso['keys'] = self.m.keys;
-        perso['modules'] = this.m.modules.filter(function(el): boolean {
+        perso['keys'] = {};
+        for(var i = 0; i < keys.length; i++)
+            perso['keys'][keys[i]] = this.m.keys[keys[i]];
+        keys = Object.getOwnPropertyNames(this.m.holds).filter(function(el): boolean {
             return !self.m.holds[el].is_i18n;
         });
-        perso['holds'] = self.m.holds;
+        perso['holds'] = {};
+        for(var i = 0; i < keys.length; i++)
+            perso['holds'][keys[i]] = this.m.holds[keys[i]];
         this.newData(true, 'keys/display', JSON.stringify(perso), false, 0, true, this.maes).then(function() {
             self.notif.success(self.translate.instant('error'), self.translate.instant('sidebar.saved'));
         }, function(e) {
@@ -124,6 +124,53 @@ export class Data {
                 });
             });
         });
+    }
+
+    /**
+     * List possible destinations for a generic.
+     * @function destinations
+     * @param {String} gen Generic name.
+     * @return {String[][]} Array holding modules and submodules.
+     */
+    destinations(gen: string): string[][] {
+        var ret: string[][] = [];
+        var kkeys = Object.getOwnPropertyNames(this.m.keys);
+        for(var i = 0; i < kkeys.length; i++) {
+            if(!this.m.keys[kkeys[i]].is_i18n) {
+                for(var j = 0; j < this.m.keys[kkeys[i]].holds.length; j++) {
+                    var lk = this.m.keys[kkeys[i]].holds[j];
+                    if(!this.m.holds[lk].is_i18n && this.m.holds[lk].holds.indexOf(gen) == -1)
+                        ret.push([kkeys[i], lk]);
+                }
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Register generic in tier2 level of tier1 page.
+     * @function registerTopo
+     * @public
+     * @param {String} gen Generic name.
+     * @param {String} t1 Tier 1.
+     * @param {String} t2 Tier 2.
+     */
+    registerTopo(gen: string, t1: string, t2: string) {
+        if(this.m.keys[t1].holds.indexOf(t2) == -1)
+            this.m.keys[t1].holds.push(t2);
+        this.m.holds[t2].holds.push(gen);
+        this.warnM();
+    }
+
+    /**
+     * Wrapper around getOwnPropertyNames.
+     * @function keys
+     * @public
+     * @param {Object} o Input.
+     * @return {String[]} Keys.
+     */
+    keys(o: any): string[] {
+        return Object.getOwnPropertyNames(o);
     }
 
     /**

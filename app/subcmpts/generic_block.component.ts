@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, ApplicationRef, Input, OnInit, EventEmitter} from '@angular/core';
+import {Component, enableProdMode, ApplicationRef, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
@@ -29,6 +29,7 @@ export class GenericBlock implements OnInit {
     @Input() iclose: boolean;
     @Input() group: string;
     @Input() data_list: string[];
+    @Output() rm: EventEmitter<string>;
     private previews: {[id: string]: string};
     private asked: {[id: string]: number[] | boolean};
     private resets: {[id: string]: EventEmitter<any>}
@@ -53,6 +54,7 @@ export class GenericBlock implements OnInit {
         this.previews = {};
         this.asked = {};
         this.resets = {};
+        this.rm = new EventEmitter<string>();
     }
 
     /**
@@ -385,6 +387,18 @@ export class GenericBlock implements OnInit {
         var keys = Object.getOwnPropertyNames(this.resets);
         for(var j = 0; j < keys.length; j++)
             this.resets[keys[j]].emit();
+    }
+
+    /**
+     * Removes a generic from the topo list.
+     * @function deleteTopo
+     * @public
+     * @param {String} gen Generic to remove.
+     */
+    deleteTopo(gen: string) {
+        var me = this.dataservice.m.holds[this.group].holds.indexOf(gen);
+        this.dataservice.m.holds[this.group].holds.splice(me, 1);
+        this.dataservice.warnM();
     }
 
 }

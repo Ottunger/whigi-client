@@ -57,8 +57,7 @@ export class Sidebar implements OnInit {
      * @public
      */
     addColumn() {
-        if(this.dataservice.m.kkeys.indexOf(this.new_name) == -1) {
-            this.dataservice.m.kkeys.push(this.new_name);
+        if(!(this.new_name in this.dataservice.m.keys)) {
             this.dataservice.m.keys[this.new_name] = {
                 is_i18n: false,
                 left_num: Math.floor(Math.random() * 100000) + 1010,
@@ -76,12 +75,10 @@ export class Sidebar implements OnInit {
      * @param {String} key Key to remove.
      */
     removeColumn(key: string) {
-        var inp = this.dataservice.m.kkeys.indexOf(key);
-        if(inp > -1) {
-            this.dataservice.m.kkeys.splice(inp, 1);
-            delete this.dataservice.m.keys[key];
-            this.dataservice.warnM();
-        }
+        for(var i = 0; i < this.dataservice.m.keys[key].holds.length; i++)
+            delete this.dataservice.m.holds[this.dataservice.m.keys[key].holds[i]];
+        delete this.dataservice.m.keys[key];
+        this.dataservice.warnM();
     }
 
 }
