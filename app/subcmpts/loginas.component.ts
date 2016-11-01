@@ -9,6 +9,7 @@ declare var window : any
 import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 
 @Component({
@@ -23,8 +24,9 @@ export class Loginas implements OnInit {
      * @param backend App service.
      * @param router Routing service.
      * @param routed Current route.
+     * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute) {
+    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute, private dataservice: Data) {
 
     }
 
@@ -40,6 +42,7 @@ export class Loginas implements OnInit {
             self.backend.createToken(user, pwd, false).then(function(ticket) {
                 localStorage.setItem('token', ticket._id);
                 self.backend.getProfile().then(function(profile) {
+                    self.dataservice.extendModules();
                     //Router.go...
                     self.backend.profile = profile;
                     localStorage.setItem('key_decryption', window.sha256(pwd + profile.salt));

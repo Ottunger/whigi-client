@@ -13,11 +13,11 @@
             <li class="heading">
                 <h3 class="uppercase">{{ 'profile.generics' | translate }}</h3>
             </li>
-            <li *ngFor="let key of m.kkeys" class="nav-item linkbars" id="linkbars{{ m.keys[key].left_num }}">
+            <li *ngFor="let key of dataservice.m.kkeys" class="nav-item linkbars" id="linkbars{{ dataservice.m.keys[key].left_num }}">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', key])">
                     <i class="icon-graduation"></i>
-                    <span class="title" *ngIf="m.keys[key].is_i18n">{{ key | translate }}</span>
-                    <span class="title" *ngIf="!m.keys[key].is_i18n">{{ key }}</span>
+                    <span class="title" *ngIf="dataservice.m.keys[key].is_i18n">{{ key | translate }}</span>
+                    <span class="title" *ngIf="!dataservice.m.keys[key].is_i18n">{{ key }}</span>
                 </a>
             </li>
             <li class="heading">

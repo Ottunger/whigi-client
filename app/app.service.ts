@@ -771,6 +771,17 @@ export class Backend {
     }
 
     /**
+     * Retrieves a piece of data.
+     * @function getDataByName
+     * @public
+     * @param {String} name Request name.
+     * @return {Promise} JSON response from backend.
+     */
+    getDataByName(name: string): Promise {
+        return this.backend(true, false, 'GET', {}, 'data/byname/' + window.encodeURIComponent(name), true, true);
+    }
+
+    /**
      * Renames a piece of data.
      * @function rename
      * @public

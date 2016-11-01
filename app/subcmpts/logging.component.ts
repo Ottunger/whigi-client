@@ -72,6 +72,7 @@ export class Logging implements OnInit {
         }
         if('token' in localStorage) {
             this.backend.getProfile().then(function(profile) {
+                self.dataservice.extendModules();
                 //Router.go...
                 self.backend.profile = profile;
                 if(self.backend.profile._id.indexOf('wiuser-') == 0) {

@@ -15,7 +15,6 @@ import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/generics.html';
-import * as modules from './templates/generics';
 
 @Component({
     template: template
@@ -77,14 +76,14 @@ export class Generics implements OnInit {
         if(this.filter in this.lists)
             return this.lists[this.filter];
         if(this.filter == 'generics.any')
-            obj = modules.m.modules;
+            obj = this.dataservice.m.modules;
         else
-            obj = modules.m.modules.filter(function(el, i): boolean {
-                return modules.m.keys[self.filter].holds.indexOf(i) != -1;
+            obj = this.dataservice.m.modules.filter(function(el, i): boolean {
+                return self.dataservice.m.keys[self.filter].holds.indexOf(i) != -1;
             });
         var toRet = [];
         for(var i = 0; i < obj.length; i++) {
-            toRet.push([modules.m.holds[obj[i]].holds, obj[i], modules.m.holds[obj[i]].is_i18n, !modules.m.holds[obj[i]].open]);
+            toRet.push([this.dataservice.m.holds[obj[i]].holds, obj[i], this.dataservice.m.holds[obj[i]].is_i18n, !this.dataservice.m.holds[obj[i]].open]);
         }
         this.lists[this.filter] = toRet;
         return toRet;
@@ -97,8 +96,8 @@ export class Generics implements OnInit {
      * @return {Number} Item.
      */
     getLight(): number {
-        if(this.filter in modules.m.keys)
-            return modules.m.keys[this.filter].left_num;
+        if(this.filter in this.dataservice.m.keys)
+            return this.dataservice.m.keys[this.filter].left_num;
         return -1;
     }
 

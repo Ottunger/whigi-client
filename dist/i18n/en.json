@@ -104,8 +104,6 @@
    "profile.explain": "This wizard allows you to revoke all the vaults you may have given to a user with one single action. You cannot revoke shares made to Whigi instances.",
    "profile.confirm": "Are you sure you want to remove all access to the next user?: ",
 
-   "filesystem.data_name": "Data name",
-   "filesystem.data": "Data",
    "filesystem.mix": "Garbled data",
    "filesystem.goTo": "View",
    "filesystem.exists": "This data already exists, edit it instead",

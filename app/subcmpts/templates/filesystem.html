@@ -14,89 +14,92 @@
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title"><breadcrump [ev]="dataservice.ev"></breadcrump></h1>
                     <h3 *ngIf="!!hasKey('descr')">{{ hasKey('descr') | translate }}<tooltip [mode]="'info'" [uri]="hasKey('url')" [right]="true"></tooltip></h3>
-                    <p *ngIf="!!hasKey('long')">{{ hasKey('long') | translate }}</p>
+                    <p *ngIf="!!hasKey('long')">{{ hasKey('long') | translate }}</p><br />
                     <!-- END PAGE TITLE-->
                     <div class="row">
                         <div class="col-md-12">
                             <!-- BEGIN BLOCK -->
                             <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            <th>{{ 'filesystem.data_name' | translate }}</th>
-                                            <th>{{ 'filesystem.data' | translate }}</th>
-                                            <th>{{ 'action' | translate }}</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="info">
-                                            <td></td>
-                                            <td>{{ 'filesystem.folder' | translate }}</td>
-                                            <td><button type="button" class="btn default" (click)="getUp()" [disabled]="folders==''">{{ 'filesystem.getUp' | translate }}</button></td>
+                                <table class="table table-hover table-bordered">
+                                    <tbody style="text-align: center;">
+                                        <tr *ngIf="folders != ''" class="info">
+                                            <td style="padding: 1px;"></td>
+                                            <td style="padding: 1px;">{{ 'filesystem.folder' | translate }}</td>
+                                            <td style="padding: 1px;"><button type="button" class="btn default" (click)="getUp()">{{ 'filesystem.getUp' | translate }}</button></td>
                                         </tr>
                                         <tr *ngFor="let d of folderNames()"  class="info">
-                                            <td>{{ d }}</td>
-                                            <td>{{ 'filesystem.folder' | translate }}</td>
-                                            <td><button type="button" class="btn default" (click)="select(d)">{{ 'filesystem.goTo' | translate }}</button></td>
+                                            <td style="padding: 1px;">{{ d }}</td>
+                                            <td style="padding: 1px;">{{ 'filesystem.folder' | translate }}</td>
+                                            <td style="padding: 1px;"><button type="button" class="btn default" (click)="select(d)">{{ 'filesystem.goTo' | translate }}</button></td>
                                         </tr>
                                         <tr *ngFor="let d of dataNames()">
-                                            <td>{{ d }}</td>
-                                            <td><i>{{ 'filesystem.mix' | translate }}</i></td>
-                                            <td><button type="button" class="btn default" (click)="view(d)">{{ 'filesystem.goTo' | translate }}</button></td>
+                                            <td style="padding: 1px;">{{ d }}</td>
+                                            <td style="padding: 1px;"><i>{{ 'filesystem.mix' | translate }}</i></td>
+                                            <td style="padding: 1px;"><button type="button" class="btn default" (click)="view(d)">{{ 'filesystem.goTo' | translate }}</button></td>
                                         </tr>
+
+                                        <tr><td style="height: 60px;"></td></tr>
                                         <tr *ngIf="mode=='data'" class="info">
-                                            <td><input type="text" [(ngModel)]="nw_folder_name" name="s0" class="form-control"></td>
-                                            <td>{{ 'filesystem.folder' | translate }}</td>
-                                            <td>
+                                            <td style="padding: 1px;"><input type="text" [(ngModel)]="nw_folder_name" name="s0" class="form-control"></td>
+                                            <td style="padding: 1px;">{{ 'filesystem.folder' | translate }}</td>
+                                            <td style="padding: 1px;">
                                                 <button type="button" class="btn default" (click)="select(nw_folder_name); nw_folder_name='';" [disabled]="!nw_folder_name || nw_folder_name==''">{{ 'filesystem.newFolder' | translate }}</button>
                                             </td>
                                         </tr>
 
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_00" name="s0" class="form-control"></div></td>
-                                            <td><input type="text" [(ngModel)]="nw_data_value_00" name="s1" class="form-control"></td>
-                                            <td>
+                                            <td style="padding: 1px;"><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_00" name="s0" class="form-control"></div></td>
+                                            <td style="padding: 1px;"><input type="text" [(ngModel)]="nw_data_value_00" name="s1" class="form-control"></td>
+                                            <td style="padding: 1px;">
                                                 <button type="button" class="btn green" (click)="register(false, nw_data_name_00, nw_data_value_00); nw_data_name_00=''; nw_data_value_00='';"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
                                             </td>
                                         </tr>
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_01" name="s0" class="form-control"></div></td>
-                                            <td>
+                                            <td style="padding: 1px;"><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_01" name="s0" class="form-control"></div></td>
+                                            <td style="padding: 1px;">
                                                 <button type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs1')"><i class="fa fa-cloud-upload"></i></button>
                                                 <input id="fs1" style="display: none;" type="file" (change)="fileLoad($event)" name="n50" class="form-control" />
                                             </td>
-                                            <td>
+                                            <td style="padding: 1px;">
                                                 <button type="button" class="btn green" (click)="register(false, nw_data_name_01, data_value_file); nw_data_name_01='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
                                             </td>
                                         </tr>
 
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_10" name="s0" class="form-control"></div></td>
-                                            <td><input type="text" [(ngModel)]="nw_data_value_10" name="s1" class="form-control"></td>
-                                            <td>
-                                                <div class='input-group date' id='pick1'>
-                                                    <input type='text' class="form-control" />
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
+                                            <td style="padding: 1px;"><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_10" name="s0" class="form-control"></div></td>
+                                            <td style="padding: 1px;"><input type="text" [(ngModel)]="nw_data_value_10" name="s1" class="form-control"></td>
+                                            <td style="padding: 1px;">
+                                                <div class="col-md-6">
+                                                    <div class='input-group date' id='pick1'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <button type="button" class="btn green" (click)="register(true, nw_data_name_10, nw_data_value_10); nw_data_name_10=''; nw_data_value_10='';"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn green" (click)="register(true, nw_data_name_10, nw_data_value_10); nw_data_name_10=''; nw_data_value_10='';"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                </div>
                                             </td>
                                         </tr>
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
-                                            <td><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_11" name="s0" class="form-control"></div></td>
-                                            <td>
+                                            <td style="padding: 1px;"><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_11" name="s0" class="form-control"></div></td>
+                                            <td style="padding: 1px;">
                                                 <button type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs2')"><i class="fa fa-cloud-upload"></i></button>
                                                 <input id="fs2" style="display: none;" type="file" (change)="fileLoad($event)" name="n50" class="form-control" />
                                             </td>
-                                            <td>
-                                                <div class='input-group date' id='pick2'>
-                                                    <input type='text' class="form-control" />
-                                                    <span class="input-group-addon">
-                                                        <span class="glyphicon glyphicon-calendar"></span>
-                                                    </span>
+                                            <td style="padding: 1px;">
+                                                <div class="col-md-6">
+                                                    <div class='input-group date' id='pick2'>
+                                                        <input type='text' class="form-control" />
+                                                        <span class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </span>
+                                                    </div>
                                                 </div>
-                                                <button type="button" class="btn green" (click)="register(true, nw_data_name_11, data_value_file); nw_data_name_11='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <div class="col-md-6">
+                                                    <button type="button" class="btn green" (click)="register(true, nw_data_name_11, data_value_file); nw_data_name_11='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                </div>
                                             </td>
                                         </tr>
                                     </tbody>

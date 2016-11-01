@@ -104,8 +104,6 @@
    "profile.explain": "Ce formulaire vous permet de supprimer les accès que vous avez donné à un utilisteur en une seule opération. Vous ne pouvez supprimer les accès donnés à Whigi.",
    "profile.confirm": "Êtes-vous certain de ovuloir supprimer tous les accès de l'utilisateur suivant?: ",
 
-   "filesystem.data_name": "Nom de donnée",
-   "filesystem.data": "Valeur",
    "filesystem.mix": "Données brouillées",
    "filesystem.goTo": "Voir",
    "filesystem.exists": "Cette donnée existe déjà, modifiez-la",

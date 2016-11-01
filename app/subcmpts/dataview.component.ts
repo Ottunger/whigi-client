@@ -76,7 +76,7 @@ export class Dataview implements OnInit, OnDestroy {
             self.data_name = window.decodeURIComponent(params['name']);
             self.to_filesystem = params['to_filesystem'];
             self.is_dated = self.backend.profile.data[self.data_name].is_dated;
-            self.backuri = (!!params['backuri'])? params['backuri'] : JSON.stringify(['/filesystem', 'data', {folders: this.data_name.replace(/[^\/]+$/, '')}]);
+            self.backuri = (!!params['backuri'])? params['backuri'] : JSON.stringify(['/filesystem', 'data', {folders: self.data_name.replace(/[^\/]+$/, '')}]);
 
             var keys = Object.getOwnPropertyNames(self.backend.profile.data[self.data_name].shared_to);
             keys.forEach(function(val) {

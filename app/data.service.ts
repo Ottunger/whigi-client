@@ -11,10 +11,12 @@ import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
 import {Trie} from '../utils/Trie';
+import * as modules from './subcmpts/templates/generics';
 
 @Injectable()
 export class Data {
 
+    public m : any;
     public ev: EventEmitter<[string, boolean]>;
     private selects: {[id: string]: string[]};
     private marked: {[id: string]: boolean};
@@ -32,11 +34,53 @@ export class Data {
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef) {
+        var self = this;
+        this.m = modules.m;
         this.ev = new EventEmitter<[string, boolean]>();
         this.selects = {};
         this.marked = {};
         this.ee = new EventEmitter<number>();
         this.how = new EventEmitter<number>();
+    }
+
+    /**
+     * Unique out an array in n^2 time.
+     * @function unique
+     * @private
+     * @param {Array} a Input.
+     * @return {Array} Output.
+     */
+    private unique(a: any[]): any[] {
+        for(var i = 0; i < a.length; ++i) {
+            for(var j = i+1; j < a.length; ++j) {
+                if(a[i] === a[j])
+                    a.splice(j--, 1);
+            }
+        }
+        return a;
+    }
+
+
+    /**
+     * Extend the modules for one user.
+     * @function extendModules
+     * @public
+     */
+    extendModules() {
+        var self = this;
+        this.m = Object.assign({}, modules.m);
+        this.getData('keys/display', false, undefined, true).then(function(data) {
+            var perso = {kkeys: [], keys: {}, modules: [], holds: {}};
+            try {
+                perso = JSON.parse(data.decr_data);
+            } catch(e) {}
+            //Keys
+            self.m.kkeys = self.unique(self.m.kkeys.concat(perso.kkeys || []));
+            self.m.modules = self.unique(self.m.modules.concat(perso.modules || []));
+            //Objects
+            self.m.keys = Object.assign((perso.keys || {}), self.m.keys);
+            self.m.holds = Object.assign((perso.holds || {}), self.m.holds);
+        }, function(e) {});
     }
 
     /**
@@ -522,12 +566,13 @@ export class Data {
      * @param {String} id Datafragment ID.
      * @param {Boolean} front Frontend display.
      * @param {Function} inter An intermediate callback that returns a promise to run before decryption. Will receive data and may be undefined.
+     * @param {Boolean} byName If want to use name rather than ID.
      * @return {Promise} The datafragment, completed with decrypted data.
      */
-    getData(id: string, front?: boolean, inter?: Function): Promise {
-        var self = this;
+    getData(id: string, front?: boolean, inter?: Function, byName?: boolean): Promise {
+        var self = this, getter: Function = (!!byName && byName)? this.backend.getDataByName : this.backend.getData;
         return new Promise(function(resolve, reject) {
-            self.backend.getData(id).then(function(data) {
+            getter.call(self.backend, id).then(function(data) {
                 function complete(key: number[]) {
                     self.backend.decryptAES(self.backend.str2arr(data.encr_data), self.workerMgt(false, function(got) {
                         data.decr_data = got;
