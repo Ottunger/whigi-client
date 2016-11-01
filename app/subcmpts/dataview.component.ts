@@ -339,10 +339,7 @@ export class Dataview implements OnInit, OnDestroy {
         var self = this;
         if(this.data_name.indexOf('keys/pwd/') == 0 && !window.confirm(this.translate.instant('dataview.revokeKey')))
             return;
-        this.backend.revokeVault(this.backend.profile.data[this.data_name].shared_to[shared_to_id]).then(function() {
-            delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
-            var i = self.backend.my_shares[shared_to_id].indexOf(self.data_name);
-            delete self.backend.my_shares[shared_to_id][i];
+        this.dataservice.revoke(this.data_name, shared_to_id).then(function() {
             delete self.sharedVector;
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
@@ -387,8 +384,7 @@ export class Dataview implements OnInit, OnDestroy {
     revokeAll() {
         var self = this, keys = Object.getOwnPropertyNames(this.backend.profile.data[this.data_name].shared_to);
         keys.forEach(function(val) {
-            this.backend.revokeVault(this.backend.profile.data[this.data_name].shared_to[val]).then(function() {
-                delete self.backend.profile.data[self.data_name].shared_to[val];
+            self.dataservice.revoke(self.data_name, val).then(function() {
                 delete self.sharedVector;
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));

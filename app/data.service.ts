@@ -306,6 +306,36 @@ export class Data {
     }
 
     /**
+     * Try to revoke a vault.
+     * @function revoke
+     * @public
+     * @param {String} data_name Data name to revoke in.
+     * @param {String} shared_to_id ID to revoke.
+     * @return {Promise} Whether went OK.
+     */
+    revoke(data_name: string, shared_to_id: string): Promise {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            if(!(data_name in self.backend.profile.data)) {
+                reject('No such data');
+                return;
+            }
+            if(!(shared_to_id in self.backend.profile.data[data_name].shared_to)) {
+                resolve();
+                return;
+            }
+            self.backend.revokeVault(self.backend.profile.data[data_name].shared_to[shared_to_id]).then(function() {
+                delete self.backend.profile.data[data_name].shared_to[shared_to_id];
+                var i = self.backend.my_shares[shared_to_id].indexOf(data_name);
+                delete self.backend.my_shares[shared_to_id][i];
+                resolve();
+            }, function(e) {
+                reject(e);
+            });
+        });
+    }
+
+    /**
      * Removes a data if no associated vaults.
      * @function remove
      * @public

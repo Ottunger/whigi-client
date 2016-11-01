@@ -10,6 +10,7 @@ import {Component, enableProdMode, Input} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/tooltip.html';
 
@@ -31,8 +32,9 @@ export class Tooltip {
      * @param backend App service.
      * @param translate I18N service.
      * @param notif Event service.
+     * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private translate: TranslateService, private notif: NotificationsService) {
+    constructor(private backend: Backend, private translate: TranslateService, private notif: NotificationsService, private dataservice: Data) {
         this.mapping = {};
     }
 
@@ -50,15 +52,30 @@ export class Tooltip {
             var shares = '', keys = Object.getOwnPropertyNames(this.backend.profile.data[this.uri].shared_to);
             for(var i = 0; i < keys.length; i++) {
                 this.mapping[keys[i]] = this.backend.generateRandomString(12);
-                shares += '<li class="list-group-item"><img id="pict__' + this.mapping[keys[i]] + keys[i] + '" height="20px" alt="" style="float: left;margin-right: 10px;" />'
-                   + '<a href="javascript:;" onclick="window.$(\'.tp-close\').click(); window.ngUserMove(\'' + keys[i] + '\')">' + keys[i] + '</a></li>';
+                shares += '<li id="li__' + this.mapping[keys[i]] + '" class="list-group-item"><img id="pict__' + this.mapping[keys[i]] + keys[i] + '" height="20px" alt="" style="float: left;margin-right: 10px;" />'
+                   + '<a href="javascript:;" onclick="window.$(\'.tp-close\').click(); window.ngUserMove(\'' + keys[i] + '\')">' + keys[i] + '</a>'
+                   + (this.dataservice.isWhigi(keys[i])? '' : ('<button style="float: right; margin-top: -5px;" class="btn btn-link" onclick="delUserShare(\'' + keys[i] + '\', \''
+                   + this.mapping[keys[i]] + '\')"><i class="fa fa-trash" title="' + this.translate.instant('remove') + '"></i></button>'))
+                   + '</li>';
             }
             shares = (shares == '')? '<li class="list-group-item">' + this.translate.instant('nothing') + '</li>' : shares;
             //Modal
             window.$(`
                 <div class="modal">
                     <h3>` + self.translate.instant('dataview.grants') + `</h3>
-                    <div class="row text-center"><ul class="list-group">` + shares + `</ul></div>
+                    <div class="row text-center">
+                        <script type="text/javascript">
+                            function delUserShare(key, lid) {
+                                window.ngData.revoke('` + this.uri + `', key).then(function() {
+                                    $('#li__' + lid).remove();
+                                    if(!$($('.modal')[$('.modal').length - 1]).find('li').length || $($('.modal')[$('.modal').length - 1]).find('li').length == 0) {
+                                        $('.tp-close').click();
+                                    }
+                                });
+                            }
+                        </script>
+                        <ul class="list-group">` + shares + `</ul>
+                    </div>
                 </div>
             `).appendTo('body').modal({closeClass: 'tp-close'});
             //Pictures
@@ -77,6 +94,7 @@ export class Tooltip {
                 });
             });
         } else if(this.mode == 'info') {
+            //Help for anything, mostly for longest generic definition
             this.backend.tooltip(this.uri).then(function(vals) {
                 window.$(`
                     <div class="modal">

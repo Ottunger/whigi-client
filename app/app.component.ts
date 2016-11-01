@@ -10,6 +10,7 @@ import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
+import {Data} from './data.service';
 enableProdMode();
 
 @Component({
@@ -93,8 +94,9 @@ export class Application {
      * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
+     * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router) {
+    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private dataservice: Data) {
         var self = this;
         translate.setDefaultLang('en');
         if('lang' in sessionStorage) {
@@ -108,6 +110,8 @@ export class Application {
         window.ngUserMove = function(key) {
             self.router.navigate(['/user', key, JSON.stringify(self.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
         }
+        //Construct a reference to our data service
+        window.ngData = dataservice;
     }
 
     /**
@@ -157,7 +161,7 @@ export class Application {
                                     $('.current').find('.modal').html('\
                                         <h3>` + this.translate.instant('help') + `</h3>\
                                         <p>` + this.translate.instant('ctSoon') + `</p>\
-                                        <a href="#close-modal" rel="modal:close" class="close-modal fd-close">Close</a>\
+                                        <a href="#close-modal" rel="modal:close" class="close-modal">Close</a>\
                                     ');
                                 } else if(http.readyState == 4) {
                                     $('.current').find('#fdtitle').css('color', 'red').text('` + this.translate.instant('error') + `');
@@ -178,7 +182,6 @@ export class Application {
                 </div>
             </div>
         `).appendTo('body').modal({
-            closeClass: 'fd-close',
             escapeClose: false,
             clickClose: false,
         });

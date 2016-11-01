@@ -132,7 +132,7 @@ export class WhoIShare implements OnInit {
         var self = this;
         if(name.indexOf('keys/pwd/') == 0 && !window.confirm(this.translate.instant('dataview.revokeKey')))
             return;
-        this.backend.revokeVault(this.backend.profile.data[name].shared_to[shared_to_id]).then(function() {
+        this.dataservice.revoke(name, shared_to_id).then(function() {
             self.dataservice.listData(false);
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
