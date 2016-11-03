@@ -101,7 +101,7 @@ export class Data {
         for(var i = 0; i < keys.length; i++)
             perso['holds'][keys[i]] = this.m.holds[keys[i]];
         this.newData(true, 'keys/display', JSON.stringify(perso), false, 0, true, this.maes).then(function() {
-            self.notif.success(self.translate.instant('error'), self.translate.instant('sidebar.saved'));
+            self.notif.success(self.translate.instant('success'), self.translate.instant('sidebar.saved'));
         }, function(e) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('sidebar.noSave'));
         });
