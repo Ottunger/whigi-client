@@ -26,17 +26,16 @@
             <!-- END REFLECTED HEADER -->
             <!-- BEGIN DATA -->
             <div class="panel-group accordion" id="tgabble">
-                <div class="panel panel-default panel-clearable" *ngFor="let p of data_list" [class.panel-success]="(!!backend.generics[p] && !backend.generics[p][backend.generics[p].length - 1].instantiable 
-                    && !!backend.profile && !backend.profile.data[p]) || (!!backend.generics[p] && backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)"
-                    id="accord{{ dataservice.sanit(p) }}" [style.display]="(!!backend.generics[p])? 'block' : 'none'">
+                <div class="panel panel-default panel-clearable" *ngFor="let p of data_list" [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable 
+                    && !!backend.profile && !backend.profile.data[p]) || (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)" id="accord{{ dataservice.sanit(p) }}">
                     <div class="panel-heading" *ngIf="!!backend.generics[p]">
                         <h4 class="panel-title" style="text-align: right;">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p) }}">
                                 <div style="float:left;">
-                                    <img *ngIf="backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
-                                        src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
-                                    <i *ngIf="backend.generics[p][backend.generics[p].length - 1].icon != '' && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0"
-                                        class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}"></i>
+                                    <img *ngIf="!!backend.generics[p][backend.generics[p].length - 1].icon && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') == 0"
+                                        class="img-circle img-responsive pull-left" src="{{ backend.generics[p][backend.generics[p].length - 1].icon }}" width="20px" />
+                                    <i *ngIf="!!backend.generics[p][backend.generics[p].length - 1].icon && backend.generics[p][backend.generics[p].length - 1].icon != ''
+                                        && backend.generics[p][backend.generics[p].length - 1].icon.indexOf('https') != 0" class="{{ backend.generics[p][backend.generics[p].length - 1].icon }}"></i>
                                 </div>
                                 {{ backend.generics[p][backend.generics[p].length - 1].descr_key | translate }}
                                 <div style="padding-left:50px;float:right;">

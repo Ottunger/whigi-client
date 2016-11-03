@@ -24,8 +24,8 @@ export class Backend {
     public data_loaded: boolean;
     public master_key: number[];
     public generics: {[id: string]: [{
+        has_requirements?: boolean,
         is_dated: boolean,
-        country: boolean,
         instantiable: boolean,
         descr_key: string,
         long_descr_key: string,
@@ -37,7 +37,9 @@ export class Backend {
         json_keys: {descr_key: string, mode: string, enum: string, required: boolean, placeholder?: string}[],
         new_key?: string[],
         new_keys_only?: boolean,
-        placeholder?: string
+        placeholder?: string,
+        requires?: string,
+        modes?: string[][]
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {
@@ -45,6 +47,7 @@ export class Backend {
         long_descr_key: string,
         help_url: string
     }};
+    public MY_URL = 'http://localhost:3000/';
     public EID_HOST = 'localhost/api/v1/eid';
     public BASE_URL = 'https://localhost/api/v1/';
     public RESTORE_URL = 'https://localhost:444/api/v1/';

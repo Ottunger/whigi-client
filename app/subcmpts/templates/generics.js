@@ -15,7 +15,7 @@ exports.m = {
         "generics.perso1": {
             "open": true,
             "is_i18n": true,
-            "holds": ["profile/first_name", "profile/last_name", "profile/email", "profile/tel"]
+            "holds": ["profile/country", "profile/first_name", "profile/last_name", "profile/email", "profile/tel"]
         },
         "generics.perso2": {
             "open": true,

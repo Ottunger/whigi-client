@@ -238,6 +238,7 @@
    "generics.city": "City",
    "generics.country": "Country",
    "generics.tel": "Phone number",
+   "generics.telother": "Other phone number",
    "generics.corporate_type": "Organization type",
    "generics.rrn": "National number",
    "generics.corporate_open": "Open capital",

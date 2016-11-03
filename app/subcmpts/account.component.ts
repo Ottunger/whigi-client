@@ -36,6 +36,8 @@ export class Account implements OnInit, OnDestroy {
     public trigger: string;
     public with_account: string;
     public strangeEmail: string;
+    private unreqing: boolean;
+    private cpar: any;
     private sub: Subscription;
 
     /**
@@ -58,6 +60,7 @@ export class Account implements OnInit, OnDestroy {
         this.new_name = {};
         this.filter = {};
         this.strangeEmail = '';
+        this.unreqing = false;
     }
 
     /**
@@ -67,56 +70,83 @@ export class Account implements OnInit, OnDestroy {
      */
     ngOnInit(): void {
         var self = this;
-        this.sub = this.routed.params.subscribe(function(params) {
-            self.id_to = params['id_to'];
-            self.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
-            self.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
-            self.with_account = params['with_account'];
-            self.trigger = (!!params['trigger'])? 
-                window.decodeURIComponent(params['trigger']).replace(/:whigi_id:/g, self.backend.profile._id).replace(/:whigi_hidden_id:/g, self.backend.profile.hidden_id) : '';
-            self.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
-            self.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
-            self.strangeEmail = (!!params['email'])? window.decodeURIComponent(params['email']) : '';
-            self.sec_key = (!!params['sec_key'])? window.decodeURIComponent(params['sec_key']) : '';
+        this.sub = this.routed.params.subscribe(this.onRouting.bind(this));
+    }
 
-            window.$('#pick3').ready(function() {
-                window.$('#pick3').datetimepicker();
-                window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));
-            });
-            
-            //We prepare HTTPS
-            if(!/^https/.test(self.return_url_ok)) {
-                self.deny();
-            }
-            var parts = self.return_url_ok.split('https://');
-            if(parts.length == 3) {
-                self.return_url_ok = 'https://' + parts[1] + window.encodeURIComponent('https://' + parts[2]);
-            }
+    /**
+     * Called upon routing change.
+     * @function onRouting
+     * @private
+     * @param {Object} params URI params.
+     */
+    private onRouting(params: any) {
+        var self = this;
+        this.cpar = params;
+        this.id_to = params['id_to'];
+        this.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
+        this.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
+        this.with_account = params['with_account'];
+        this.trigger = (!!params['trigger'])? 
+            window.decodeURIComponent(params['trigger']).replace(/:whigi_id:/g, this.backend.profile._id).replace(/:whigi_hidden_id:/g, this.backend.profile.hidden_id) : '';
+        this.expire_epoch = (!!params['expire_epoch'])? new Date(parseInt(params['expire_epoch'])) : new Date(0);
+        this.forever = parseInt(params['expire_epoch']) < (new Date).getTime();
+        this.strangeEmail = (!!params['email'])? window.decodeURIComponent(params['email']) : '';
+        this.sec_key = (!!params['sec_key'])? window.decodeURIComponent(params['sec_key']) : '';
 
-            //List data
-            self.dataservice.listData(false).then(function() {
-                var all = true, more = [];
-                self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
-                //If we are asked for folders, go see what's underneath
-                for(var i = 0; i < self.data_list.length; i++) {
-                    if(self.data_list[i].charAt(self.data_list[i].length - 1) == '/') {
-                        more = more.concat(self.backend.generics_trie.suggestions(self.data_list[i]));
-                    }
+        window.$('#pick3').ready(function() {
+            window.$('#pick3').datetimepicker();
+            window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));
+        });
+        
+        //We prepare HTTPS
+        if(!/^https/.test(this.return_url_ok)) {
+            this.deny();
+        }
+        var parts = this.return_url_ok.split('https://');
+        if(parts.length == 3) {
+            this.return_url_ok = 'https://' + parts[1] + window.encodeURIComponent('https://' + parts[2]);
+        }
+
+        //List data
+        this.dataservice.listData(false).then(function() {
+            var all = true, more = [];
+            self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
+            //If we are asked for folders, go see what's underneath
+            for(var i = 0; i < self.data_list.length; i++) {
+                if(self.data_list[i].charAt(self.data_list[i].length - 1) == '/') {
+                    more = more.concat(self.backend.generics_trie.suggestions(self.data_list[i]));
                 }
-                self.data_list = self.data_list.concat(more).filter(function(el: string): boolean {
-                    return el.charAt(el.length - 1) != '/';
-                });
-                self.data_list = (function(arr) {
-                    var u = {}, a = [];
-                    for(var i = 0, l = arr.length; i < l; ++i){
-                        if(u.hasOwnProperty(arr[i])) {
-                            continue;
-                        }
-                        a.push(arr[i]);
-                        u[arr[i]] = 1;
+            }
+            self.data_list = self.data_list.concat(more).filter(function(el: string): boolean {
+                return el.charAt(el.length - 1) != '/';
+            });
+            self.data_list = (function(arr) {
+                var u = {}, a = [];
+                for(var i = 0, l = arr.length; i < l; ++i) {
+                    if(u.hasOwnProperty(arr[i])) {
+                        continue;
                     }
-                    return a;
-                })(self.data_list);
+                    a.push(arr[i]);
+                    u[arr[i]] = true;
+                }
+                return a;
+            })(self.data_list);
+            self.data_list = self.data_list.filter(function(el: string): boolean {
+                return (el in self.backend.generics) && !self.backend.generics[el][self.backend.generics[el].length - 1].has_requirements;
+            });
+
+            //Now that we know what 3rd party wants, turn it into the required variables
+            self.dataservice.filterKnown(self.data_list, function(now: string[], unreq: string[], req: string[]) {
+                if(unreq.length > 0) {
+                    //We miss some requirements!
+                    self.data_list = unreq;
+                    self.unreqing = true;
+                } else {
+                    //We have all that is required, go on with turned values
+                    self.data_list = req.concat(now);
+                    self.unreqing = false;
+                }
+
                 for(var i = 0; i < self.data_list.length; i++) {
                     if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].instantiable) {
                         if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_keys_only) {
@@ -157,17 +187,17 @@ export class Account implements OnInit, OnDestroy {
                 window.$('#ctn-acc').ready(function() {
                     window.$('#ctn-acc').css('display', 'block');
                 });
-            }, function() {
-                self.deny();
             });
-            self.backend.getUser(self.id_to).then(function(user) {
-                self.requester = user;
-                if(self.strangeEmail == '')
-                    self.dataservice.picts(user, 'pict-user');
-                self.check.tick();
-            }, function(e) {
-                self.deny();
-            });
+        }, function() {
+            self.deny();
+        });
+        this.backend.getUser(this.id_to).then(function(user) {
+            self.requester = user;
+            if(self.strangeEmail == '')
+                self.dataservice.picts(user, 'pict-user');
+            self.check.tick();
+        }, function(e) {
+            self.deny();
         });
     }
 
@@ -214,7 +244,7 @@ export class Account implements OnInit, OnDestroy {
             }
             for(var i = 0; i < this.data_list.length; i++) {
                 var adata = this.data_list[i];
-                if(adata in this.backend.generics && ((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new'))) {
+                if((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new')) {
                     //Build and test
                     window.$('#igen' + this.dataservice.sanit(adata)).removeClass('has-error');
                     var send = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
@@ -382,6 +412,12 @@ export class Account implements OnInit, OnDestroy {
      * @private
      */
     private ok() {
+        //If we were unreqing, now is the real deal
+        if(this.unreqing) {
+            this.onRouting(this.cpar);
+            return;
+        }
+        //Quit, we've done everything
         if(typeof Android !== undefined) {
             try {
                 Android.ok();

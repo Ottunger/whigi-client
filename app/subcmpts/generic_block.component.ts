@@ -25,10 +25,11 @@ export class GenericBlock implements OnInit {
     public new_data: {[id: string]: string};
     public new_datas: {[id: string]: {[id: string]: string}};
     public new_data_file: {[id: string]: string};
+    public data_list: string[];
     @Input() tsl: boolean;
     @Input() iclose: boolean;
     @Input() group: string;
-    @Input() data_list: string[];
+    @Input() raw_list: string[];
     @Output() rm: EventEmitter<string>;
     private previews: {[id: string]: string};
     private asked: {[id: string]: number[] | boolean};
@@ -64,25 +65,28 @@ export class GenericBlock implements OnInit {
      */
     ngOnInit() {
         var self = this;
-        for(var i = 0; i < this.data_list.length; i++) {
-            this.new_datas[this.data_list[i]] = {};
-            this.resets[this.data_list[i]] = new EventEmitter();
-            if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].instantiable) {
-                if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_keys_only) {
-                    this.ass_name[this.data_list[i]] = this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key[0].substr(4);
+        this.dataservice.filterKnown(this.raw_list, function(now) {
+            self.data_list = now;
+            for(var i = 0; i < self.data_list.length; i++) {
+                self.new_datas[self.data_list[i]] = {};
+                self.resets[self.data_list[i]] = new EventEmitter();
+                if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].instantiable) {
+                    if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_keys_only) {
+                        self.ass_name[self.data_list[i]] = self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_key[0].substr(4);
+                    }
+                    var names = self.dataNames(self.data_list[i], 3);
+                    for(var j = 0; j < names.length; j++)
+                        self.resets[self.data_list[i] + '/' + names[j]] = new EventEmitter();
                 }
-                var names = this.dataNames(this.data_list[i], 3);
-                for(var j = 0; j < names.length; j++)
-                    this.resets[this.data_list[i] + '/' + names[j]] = new EventEmitter();
             }
-        }
-        if(this.iclose) {
-            window.$('#apsablegen' + this.dataservice.sanit(this.group)).ready(function() {
-                window.$('#apsablegen' + self.dataservice.sanit(self.group)).css('display', 'none');
-                window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('expand');
-                window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('collapse');
-            });
-        }
+            if(self.iclose) {
+                window.$('#apsablegen' + self.dataservice.sanit(self.group)).ready(function() {
+                    window.$('#apsablegen' + self.dataservice.sanit(self.group)).css('display', 'none');
+                    window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('expand');
+                    window.$('#apsablegen' + self.dataservice.sanit(self.group)).prev().find('a').toggleClass('collapse');
+                });
+            }
+        });
     }
 
     /**
@@ -182,6 +186,9 @@ export class GenericBlock implements OnInit {
         this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
             self.resets[name].emit();
+            self.dataservice.filterKnown(self.raw_list, function(now) {
+                self.data_list = now;
+            });
         }, function(err) {
             if(err[0] == 'server') {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
@@ -349,6 +356,9 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
                 self.previews[fname] = send;
                 self.resets[fname].emit();
+                self.dataservice.filterKnown(self.raw_list, function(now) {
+                    self.data_list = now;
+                });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });
@@ -402,6 +412,8 @@ export class GenericBlock implements OnInit {
     deleteTopo(gen: string) {
         var me = this.dataservice.m.holds[this.group].holds.indexOf(gen);
         this.dataservice.m.holds[this.group].holds.splice(me, 1);
+        me = this.data_list.indexOf(gen);
+        this.data_list.splice(me, 1);
         this.dataservice.warnM();
     }
 

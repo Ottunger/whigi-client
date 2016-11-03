@@ -187,6 +187,59 @@ export class Data {
     }
 
     /**
+     * Filters the list to only accept those who meet the requirements.
+     * @function filterKnown
+     * @public
+     * @param {String[]} l Input.
+     * @param {Function} callback Callback to be called with filtered elements and missing elements and required elements.
+     */
+    filterKnown(l: string[], callback: Function) {
+        var self = this, more = [], req = [], unreq = [], decr = {}, done = 0;
+        function complete() {
+            var alwaysin = l.filter(function(el: string): boolean {
+                if(!self.backend.generics[el][self.backend.generics[el].length - 1].requires)
+                    return true;
+                if(!(self.backend.generics[el][self.backend.generics[el].length - 1].requires in self.backend.profile.data))
+                    return false;
+                for(var i = 0; i < self.backend.generics[el][self.backend.generics[el].length - 1].modes.length; i++) {
+                    if(new RegExp(self.backend.generics[el][self.backend.generics[el].length - 1].modes[i][0]).test(decr[self.backend.generics[el][self.backend.generics[el].length - 1].requires])) {
+                        more.push(self.backend.generics[el][self.backend.generics[el].length - 1].modes[i][1]);
+                        break;
+                    }
+                }
+                return false;
+            });
+            callback(alwaysin.concat(more), unreq, req);
+        }
+
+        for(var i = 0; i < l.length; i++) {
+            if(!!self.backend.generics[l[i]][self.backend.generics[l[i]].length - 1].requires)
+                req.push(self.backend.generics[l[i]][self.backend.generics[l[i]].length - 1].requires);
+        }
+        for(var i = 0; i < req.length; i++) {
+            if(!(req[i] in self.backend.profile.data)) {
+                unreq.push(req[i]);
+                done++;
+                if(done >= req.length)
+                    complete();
+                continue;
+            }
+            self.getData(self.backend.profile.data[req[i]].id, false).then(function(data) {
+                decr[this] = data.decr_data;
+                done++;
+                if(done >= req.length)
+                    complete();
+            }.bind(req[i]), function(e) {
+                done++;
+                if(done >= req.length)
+                    complete();
+            });
+        }
+        if(req.length == 0)
+            complete();
+    }
+
+    /**
      * Manages a worker.
      * @function workerMgt
      * @public
@@ -789,6 +842,10 @@ export class Data {
      */
     picts(user: any, dom: string) {
         var self = this;
+        //Cascading shares hack
+        if(!!window.$('#' + dom).find('#mypict').length && window.$('#' + dom).find('#mypict').length > 0)
+            return;
+        //Really add pictures
         if(!!user.company_info && !!user.company_info.picture)
             window.$('#' + dom).prepend('<img id="mypict" src="' + user.company_info.picture + '" height="32px" alt="" style="float: left;margin-right: 10px;" />');
         else

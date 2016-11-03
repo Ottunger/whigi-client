@@ -238,6 +238,7 @@
    "generics.city": "Ville",
    "generics.country": "Pays",
    "generics.tel": "Numéro de téléphone",
+   "generics.telother": "Autre numéro de téléphone",
    "generics.corporate_type": "Forme juridique",
    "generics.rrn": "Numéro national",
    "generics.corporate_open": "Capital ouvert",

@@ -47,7 +47,7 @@ export class InputBlock implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.def();
-        this.new_data = (!!this.prefill)? this.prefill : this.new_data;
+        this.new_data = (!!this.prefill)? this.prefill : undefined;
         this.standalone = this.standalone || false;
         if(!this.standalone) {
             window.$('.json' + this.dataservice.sanit(this.g)).ready(function() {
@@ -75,16 +75,11 @@ export class InputBlock implements OnInit {
     def() {
         this.new_datas = {};
         this.new_data_file = '';
-        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'checkbox')? 'false' : '';
-        if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'select')
-            this.new_data = this.dataservice.getSelect(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].enum)[0];
+        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'checkbox')? 'false' : undefined;
         if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
             for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
                 this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
-                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'checkbox')? 'false' : '';
-                if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'select')
-                    this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
-                    this.dataservice.getSelect(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].enum)[0];
+                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'checkbox')? 'false' : undefined;
             }
         }
         this.iChange(1);
