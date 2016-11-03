@@ -78,6 +78,7 @@ export class Backend {
         this.backend(true, false, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
             self.generics_paths = response;
         });
+        window.WHIGI_URL = this.BASE_URL;
     }
 
     /**

@@ -49,6 +49,7 @@ export class Logging implements OnInit {
         this.safe = false;
         this.use_file = false;
         this.onEnd = true;
+        window.whigiLogin = this.ngOnInit.bind(this, false);
     }
 
     /**
@@ -83,7 +84,7 @@ export class Logging implements OnInit {
                         </div>
                     `).appendTo('body').modal();
                 }
-                if(!!set) {
+                if(!!set && set) {
                     localStorage.setItem('key_decryption', window.sha256(self.password + profile.salt));
                     localStorage.setItem('psha', window.sha256(self.password));
                 }
