@@ -117,6 +117,13 @@ export class Account implements OnInit, OnDestroy {
                     }
                     return a;
                 })(self.data_list);
+                for(var i = 0; i < self.data_list.length; i++) {
+                    if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].instantiable) {
+                        if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_keys_only) {
+                            self.new_name[self.data_list[i]] = self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_key[0].substr(4);
+                        }
+                    }
+                }
 
                 //Check if already granted
                 for(var i = 0; i < self.data_list.length; i++) {

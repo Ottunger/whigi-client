@@ -68,6 +68,9 @@ export class GenericBlock implements OnInit {
             this.new_datas[this.data_list[i]] = {};
             this.resets[this.data_list[i]] = new EventEmitter();
             if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].instantiable) {
+                if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_keys_only) {
+                    this.ass_name[this.data_list[i]] = this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key[0].substr(4);
+                }
                 var names = this.dataNames(this.data_list[i], 3);
                 for(var j = 0; j < names.length; j++)
                     this.resets[this.data_list[i] + '/' + names[j]] = new EventEmitter();

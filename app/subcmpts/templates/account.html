@@ -61,10 +61,19 @@
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select><br />
                                 <div *ngIf="filter[p] == '/new'" id="igen{{ dataservice.sanit(p) }}">
-                                    <input type="text" [(ngModel)]="new_name[p]" class="form-control grant-required" [attr.list]="'suggestions' + p" [attr.data-forid]="'#accord' + dataservice.sanit(p)">
-                                    <datalist id="suggestions{{ p }}">
+                                    <!-- free name -->
+                                    <input type="text" [(ngModel)]="new_name[p]" class="form-control grant-required" [attr.list]="'suggestions' + p" 
+                                        *ngIf="!backend.generics[p][backend.generics[p].length - 1].new_keys_only" [attr.data-forid]="'#accord' + dataservice.sanit(p)">
+                                    <datalist *ngIf="!backend.generics[p][backend.generics[p].length - 1].new_keys_only" id="suggestions{{ p }}">
                                         <option *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].new_key" value="{{ k | translate }}">
                                     </datalist>
+                                    <!-- end free name -->
+                                    <!-- forced name -->
+                                    <select *ngIf="backend.generics[p][backend.generics[p].length - 1].new_keys_only" [(ngModel)]="new_name[p]"
+                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p)">
+                                        <option *ngFor="let k of backend.generics[p][backend.generics[p].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
+                                    </select>
+                                    <!-- end forced name -->
                                     <br />
                                     <input_block *ngIf="strangeEmail=='' || p!='profile/email'" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                                     <input_block *ngIf="strangeEmail!='' && p=='profile/email'" [prefill]="strangeEmail" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
