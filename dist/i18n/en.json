@@ -203,6 +203,7 @@
    "generics.goTo": "View / Edit",
    "generics.moreData": "See more...",
    "generics.shared": "Shared to...",
+   "generics.tooLong": "Your input is too long to be accepted",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",

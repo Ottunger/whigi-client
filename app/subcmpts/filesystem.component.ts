@@ -138,6 +138,7 @@ export class Filesystem implements OnInit {
      * @param {String} name Folder name.
      */
     select(name: string) {
+        name = name.replace(/\//g, ':').substr(0, 63);
         this.router.navigate(['/filesystem', this.mode, {folders: this.folders + name + '/'}]);
     }
 
@@ -210,7 +211,7 @@ export class Filesystem implements OnInit {
      * @return {String} Describing name.
      */
     private completeName(name: string): string {
-        return this.folders + name.replace('/', ':');
+        return this.folders + name.replace(/\//g, ':').substr(0, 63);
     } 
 
     /**

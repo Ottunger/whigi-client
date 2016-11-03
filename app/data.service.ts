@@ -279,11 +279,16 @@ export class Data {
      * @return {String} Built up data or undefined if cannot pass test.
      */
     recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
-        raw_data = raw_data.toString().trim();
+        raw_data = !!raw_data? raw_data.toString().trim() : '';
+        if(raw_data.length > 127 && !as_file)
+            return ['error', 'generics.tooLong'];
         //Build up the data, keys wrapping and date wrapping
         if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'json_keys') {
             var ret = {};
             for(var i = 0; i < this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys.length; i++) {
+                if(!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
+                    || data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].length > 127)
+                    return ['error', 'generics.tooLong'];
                 ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim();
             }
             raw_data = JSON.stringify(ret);

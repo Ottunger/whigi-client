@@ -166,6 +166,7 @@ export class GenericBlock implements OnInit {
     register(name: string, as_file: boolean, new_name?: string) {
         var self = this, send;
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
+        new_name = new_name.substr(0, 63);
         //Build and test
         window.$('.igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
