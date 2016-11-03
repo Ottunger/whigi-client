@@ -59,6 +59,8 @@ export class Oauth implements OnInit, OnDestroy {
             self.prefix = window.decodeURIComponent(params['prefix']);
             self.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
             self.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
+            //First, check if we need to add 3rd party css
+            self.dataservice.providerCSS(self.for_id);
             if(!/^https/.test(self.return_url_ok)) {
                 window.location.href = self.mixin(self.return_url_deny, ['reason=https']);
             }

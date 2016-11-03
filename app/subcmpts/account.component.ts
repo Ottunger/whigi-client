@@ -93,6 +93,9 @@ export class Account implements OnInit, OnDestroy {
         this.strangeEmail = (!!params['email'])? window.decodeURIComponent(params['email']) : '';
         this.sec_key = (!!params['sec_key'])? window.decodeURIComponent(params['sec_key']) : '';
 
+        //First, check if we need to add 3rd party css
+        this.dataservice.providerCSS(this.id_to);
+
         window.$('#pick3').ready(function() {
             window.$('#pick3').datetimepicker();
             window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));

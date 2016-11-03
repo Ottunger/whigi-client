@@ -23,7 +23,7 @@ import {Merge} from './subcmpts/merge.component';
 import {Loginas} from './subcmpts/loginas.component';
 import {WhoIShare} from './subcmpts/whoishare.component';
 import {Notfound} from './subcmpts/notfound.component';
-import {Profileguard, Fullguard, Genguard} from './guards.service';
+import {Profileguard, Fullguard, Genguard, CSSguard} from './guards.service';
 
 const appRoutes: Routes = [
     {path: '', component: Logging},
@@ -43,11 +43,11 @@ const appRoutes: Routes = [
     {path: 'password-help/:id/:data_name', component: Resethelp, canActivate: [Profileguard]},
     {path: 'password-recovery/:id/:pwd/:key', component: Reset},
     {path: 'save-key/:key/:value/:is_dated/:return_url', component: Savekey, canActivate: [Fullguard]},
-    {path: 'oauth/:for_id/:prefix/:token/:return_url_ok/:return_url_deny', component: Oauth, canActivate: [Profileguard]},
-    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account', component: Account, canActivate: [Profileguard]},
-    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch', component: Account, canActivate: [Profileguard]},
-    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch/:trigger', component: Account, canActivate: [Profileguard]},
-    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch/:trigger/:email/:sec_key', component: Account, canActivate: [Profileguard]},
+    {path: 'oauth/:for_id/:prefix/:token/:return_url_ok/:return_url_deny', component: Oauth, canActivate: [Profileguard], canDeactivate: [CSSguard]},
+    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account', component: Account, canActivate: [Profileguard], canDeactivate: [CSSguard]},
+    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch', component: Account, canActivate: [Profileguard], canDeactivate: [CSSguard]},
+    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch/:trigger', component: Account, canActivate: [Profileguard], canDeactivate: [CSSguard]},
+    {path: 'account/:id_to/:return_url_ok/:return_url_deny/:with_account/:data_list/:expire_epoch/:trigger/:email/:sec_key', component: Account, canActivate: [Profileguard], canDeactivate: [CSSguard]},
     {path: 'remote/:id_to/:challenge/:return_url', component: Remote, canActivate: [Profileguard]},
     {path: 'generics', component: Generics, canActivate: [Fullguard], canDeactivate: [Genguard]},
     {path: 'generics/:filter', component: Generics, canActivate: [Fullguard], canDeactivate: [Genguard]},

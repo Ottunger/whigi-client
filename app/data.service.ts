@@ -914,4 +914,29 @@ export class Data {
         });
     }
 
+    /**
+     * Check if we are on a customized page for CSS.
+     * @function providerCSS
+     * @public
+     * @param {String} uri ID to.
+     */
+    providerCSS(uri: string) {
+        var todo: string;
+        if(uri.match(/^facebook$/))
+            todo = 'facebook';
+        else if(uri.match(/whigi/))
+            todo = 'localhost';
+        if(!!todo)
+            window.$('head').append('<link id="custom-css" rel="stylesheet" type="text/css" href="custom_css/' + todo + '.css">');
+    }
+
+    /**
+     * Removes any custom CSS.
+     * @function normalCSS
+     * @public
+     */
+    normalCSS() {
+        window.$('#custom-css').remove();
+    }
+
 }

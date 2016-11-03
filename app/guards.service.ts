@@ -11,6 +11,7 @@ import {CanActivate} from '@angular/router';
 import {Router, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
+import {Data} from './data.service';
 import {Filesystem} from './subcmpts/filesystem.component';
 import {Dataview} from './subcmpts/dataview.component';
 import {Generics} from './subcmpts/generics.component';
@@ -152,6 +153,35 @@ export class Genguard implements CanDeactivate<Generics> {
         for(var i = 0; i < btns.length; i++)
             if(!window.$(btns[i]).is(':disabled'))
                 return component.dialog(this.translate.instant('confirmation'));
+        return true;
+    }
+
+}
+
+@Injectable()
+export class CSSguard implements CanDeactivate<Generics> {
+
+    /**
+     * Creates the service.
+     * @function constructor
+     * @public
+     * @param dataservice Data service.
+     */
+    constructor(private dataservice: Data) {
+
+    }
+
+    /**
+     * Checks the guard.
+     * @function canDeactivate
+     * @public
+     * @param component Component.
+     * @param route Actual route.
+     * @param state Actual state.
+     * @return {Boolean} Can go through.
+     */
+    canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        this.dataservice.normalCSS();
         return true;
     }
 
