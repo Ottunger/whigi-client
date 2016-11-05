@@ -242,6 +242,7 @@
    "generics.corporate_type": "Organization type",
    "generics.rrn": "National number",
    "generics.corporate_open": "Open capital",
+   "generics.langs": "Preferred language",
 
    "generics.badpostcode": "Your postal code does not match expected format",
 
