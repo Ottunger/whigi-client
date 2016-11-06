@@ -93,8 +93,6 @@ export class InputBlock implements OnInit {
      * @public
      */
     collapse() {
-        if(this.standalone)
-            return;
         window.$('.json' + this.dataservice.sanit(this.g)).css('display', (window.$('.json' + this.dataservice.sanit(this.g)).css('display') == 'block'? 'none' : 'block'));
         window.$('.keys' + this.dataservice.sanit(this.g)).css('display',
             (window.$('.keys' + this.dataservice.sanit(this.g)).css('display') == 'block' || window.innerWidth <= 991? 'none' : 'block'));

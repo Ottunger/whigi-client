@@ -334,11 +334,14 @@ export class GenericBlock implements OnInit {
             window.$('#tgdata' + this.dataservice.sanit(fname)).addClass('green in-edit').removeClass('btn-link').attr('disabled', true);
             window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
             window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
+            window.$('#on-edit' + this.dataservice.sanit(fname)).addClass('keys' + this.dataservice.sanit(gname));
         } else {
-            if((!this.new_data[fname] || this.new_data[fname] == '') && (!this.new_data_file[fname] || this.new_data_file[fname] == '')) {
+            if(this.backend.generics[gname][this.backend.generics[gname].length - 1].mode != 'json_keys'
+                && (!this.new_data[fname] || this.new_data[fname] == '') && (!this.new_data_file[fname] || this.new_data_file[fname] == '')) {
                 window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
+                window.$('#on-edit' + this.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + this.dataservice.sanit(gname));
                 return;
             }
             //Build and test
@@ -354,7 +357,14 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
-                self.previews[fname] = send;
+                window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(gname));
+                if(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'json_keys' && self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'file')
+                    self.previews[fname] = send;
+                else if(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys') {
+                    delete self.asked[fname];
+                    delete self.previews[fname];
+                    self.preview(fname, true);
+                }
                 self.resets[fname].emit();
                 self.dataservice.filterKnown(self.raw_list, function(now) {
                     self.data_list = now;

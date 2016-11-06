@@ -130,6 +130,13 @@
                                         <td style="padding-top: 5px;" [style.padding-bottom]="l? '5px' : '0px'">
                                             <div class="col-md-5" style="padding-left: 9px;">
                                                 <input type="text" style="margin-left: -4px; box-shadow: 2px 2px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
+                                                <!-- json labels -->
+                                                <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                                    <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                                        {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                    </div>
+                                                </div>
+                                                <!-- end json labels -->
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="row">
@@ -153,7 +160,7 @@
                                                         <ul class="dropdown-menu" style="min-width: 0px;">
                                                             <li>
                                                                 <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)"
-                                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
+                                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].is_dated
                                                                     || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0">
                                                                     <i class="fa fa-pencil"></i></button>
                                                             </li>
