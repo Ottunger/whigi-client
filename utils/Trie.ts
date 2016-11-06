@@ -46,19 +46,21 @@ export class Trie {
      * @param {Object} value Associated value.
      */
     add(str: string, value: any) {
-        var cur = this.rootObj, newleaf = false;
+        var cur = this.rootObj, newleaf: boolean = false;
         for(var i = 0; i < str.length; i++) {
             var c = str[i];
             if(cur.children.hasOwnProperty(c)) {
                 cur = cur.children[c];
                 if(i == str.length - 1 && !cur.end) {
                     cur.end = true;
-                    this.cnt++;
+                    if(str[i] != '/')
+                        this.cnt++;
                 }
                 if(i == str.length - 1)
                     cur.value = value;
             } else {
-                newleaf = true;
+                if(str[str.length - 1] != '/')
+                    newleaf = true;
                 cur = cur.children[c] = new Node(value, i == str.length - 1);
             }
         }
@@ -166,7 +168,7 @@ export class Trie {
     }
 
     /**
-     * Returns the number of elements.
+     * Returns the number of elements that do not end with '/'.
      * @fucntion count
      * @public
      * @return {Number} Elements.
@@ -189,6 +191,8 @@ export class Trie {
             return false;
         if(level == str.length) {
             if(cur.end) {
+                if(str[str.length - 1] != '/')
+                    this.cnt--;
                 cur.end = false;
                 if(Object.getOwnPropertyNames(cur.children).length == 0)
                     return true;

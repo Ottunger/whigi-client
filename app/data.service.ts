@@ -821,19 +821,6 @@ export class Data {
     }
 
     /**
-     * Length of trie.
-     * @function length
-     * @public
-     * @param {Trie} cpt Trie.
-     * @return {Number} Length.
-     */
-    length(cpt: Trie): number {
-        if(!cpt)
-            return 0;
-        return cpt.suggestions('').filter(function(el) {return el.charAt(el.length - 1) != '/';}).length;
-    }
-
-    /**
      * Add pictures to DOM.
      * @function picts
      * @public
