@@ -147,7 +147,7 @@
                                                         {{ 'nothing' | translate }}
                                                     </div>
                                                     <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
-                                                        <input_block [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
+                                                        <input_block [prefill]="'/' + d" [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
                                                     </div>
                                                 </div>
                                             </div>

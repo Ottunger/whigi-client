@@ -47,15 +47,16 @@ export class InputBlock implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.def();
-        this.new_data = (!!this.prefill)? this.prefill : undefined;
+        this.new_data = (!!this.prefill && !this.standalone)? this.prefill : undefined;
+        this.prefill = this.prefill || '';
         this.standalone = this.standalone || false;
-        if(!this.standalone) {
-            window.$('.json' + this.dataservice.sanit(this.g)).ready(function() {
-                window.$('.json' + self.dataservice.sanit(self.g)).addClass(self.writeDesc? 'form-group' : 'row');
+        if(!this.standalone || this.prefill != '') {
+            window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).ready(function() {
+                window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).addClass(self.writeDesc? 'form-group' : 'row');
                 if(!self.writeDesc) {
-                    window.$('.json' + self.dataservice.sanit(self.g)).css('height', '5ex');
+                    window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).css('height', '5ex');
                 } else {
-                    window.$('.json' + self.dataservice.sanit(self.g)).css('display', 'block');
+                    window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).css('display', 'block');
                 }
             });
         }
@@ -93,9 +94,10 @@ export class InputBlock implements OnInit {
      * @public
      */
     collapse() {
-        window.$('.json' + this.dataservice.sanit(this.g)).css('display', (window.$('.json' + this.dataservice.sanit(this.g)).css('display') == 'block'? 'none' : 'block'));
-        window.$('.keys' + this.dataservice.sanit(this.g)).css('display',
-            (window.$('.keys' + this.dataservice.sanit(this.g)).css('display') == 'block' || window.innerWidth <= 991? 'none' : 'block'));
+        window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display',
+            (window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display') == 'block'? 'none' : 'block'));
+        window.$('.keys' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display',
+            (window.$('.keys' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display') == 'block' || window.innerWidth <= 991? 'none' : 'block'));
     }
 
     /**
