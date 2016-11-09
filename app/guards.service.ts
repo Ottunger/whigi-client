@@ -60,6 +60,8 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
      * @return {Boolean} Can go through.
      */
     canDeactivate(component: Filesystem, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        if(this.backend.forceMove)
+            return true;
         if((!component.data_name || component.data_name.length == 0) &&
             (!component.data_value || component.data_value.length == 0)) {
             //On route change, reset the route
@@ -116,6 +118,8 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
      * @return {Boolean} Can go through.
      */
     canDeactivate(component: Dataview, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        if(this.backend.forceMove)
+            return true;
         if((!component.new_data || component.new_data.length == 0) &&
             (!component.new_id || component.new_id.length == 0))
             return true;
@@ -149,6 +153,8 @@ export class Genguard implements CanDeactivate<Generics> {
      * @return {Boolean} Can go through.
      */
     canDeactivate(component: Generics, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+        if(this.backend.forceMove)
+            return true;
         var btns = window.$('.btn-reg-gen');
         for(var i = 0; i < btns.length; i++)
             if(!window.$(btns[i]).is(':disabled'))

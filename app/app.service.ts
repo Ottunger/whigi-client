@@ -17,6 +17,7 @@ import {Trie} from '../utils/Trie';
 @Injectable()
 export class Backend {
 
+    public forceMove: boolean;
     public profile: any;
     public data_trie: Trie;
     public shared_with_me_trie: Trie;
@@ -68,6 +69,7 @@ export class Backend {
      */
     constructor(private http: Http, private notif: NotificationsService, private translate: TranslateService, private router: Router) {
         var self = this;
+        this.forceMove = false;
         this.data_loaded = false;
         this.rsa_key = [];
         self.generics_trie = new Trie();
@@ -388,6 +390,8 @@ export class Backend {
                 window.$.unblockUI();
                 if(e.status == 418 && token) {
                     self.forceReload();
+                    //Session has expired; we need to reach login page!
+                    self.forceMove = true;
                     self.router.navigate(['/end']);
                 }
                 reject(e);

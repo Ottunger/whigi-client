@@ -61,8 +61,9 @@ export class Logging implements OnInit {
     ngOnInit(set: boolean): void {
         var self = this;
         if(this.onEnd && /end/.test(window.location.href)) {
-            //Session has expired
+            //Session has expired, now moves will be done normally
             this.onEnd = false;
+            this.backend.forceMove = false;
             localStorage.removeItem('token');
             localStorage.removeItem('key_decryption');
             localStorage.removeItem('psha');
