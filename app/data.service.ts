@@ -42,6 +42,10 @@ export class Data {
         this.marked = {};
         this.ee = new EventEmitter<number>();
         this.how = new EventEmitter<number>();
+        //Periodically refresh the token we have while page is on.
+        setInterval(function() {
+            self.backend.getUser('whigi-wissl').then(function() {}, function(e) {});
+        }, 20 * 60 * 1000);
     }
 
     /**
