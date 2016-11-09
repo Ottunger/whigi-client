@@ -5,11 +5,11 @@
  */
 
 'use strict';
-import {HttpModule} from '@angular/http';
-import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
-import {TranslateModule} from 'ng2-translate/ng2-translate';
+import {HttpModule, Http} from '@angular/http';
+import {BrowserModule} from '@angular/platform-browser';
+import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 import {ReCaptchaModule} from 'angular2-recaptcha/angular2-recaptcha';
 import {routing, appRoutingProviders} from './app.routing';
@@ -45,13 +45,21 @@ import {Tooltip} from './subcmpts/tooltip.component';
 import {Breadcrump} from './subcmpts/breadcrump.component';
 import {Notfound} from './subcmpts/notfound.component';
 
+export function createTranslateLoader(http: Http) {
+    return new TranslateStaticLoader(http);
+}
+
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
-        TranslateModule.forRoot(),
         SimpleNotificationsModule,
+        TranslateModule.forRoot({
+            provide: TranslateLoader,
+            useFactory: createTranslateLoader,
+            deps: [Http]
+        }),
         ReCaptchaModule,
         routing
     ],
@@ -95,7 +103,5 @@ import {Notfound} from './subcmpts/notfound.component';
     bootstrap: [Application]
 })
 export class AppModule {
-
-
 
 }
