@@ -67,8 +67,7 @@
                                             <ul class="dropdown-menu" style="min-width: 0px;">
                                                 <li>
                                                     <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)"
-                                                        [disabled]="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys' || backend.generics[g][backend.generics[g].length - 1].is_dated
-                                                        || backend.profile.data[g].id.indexOf('datafragment') != 0">
+                                                        [disabled]="backend.generics[g][backend.generics[g].length - 1].is_dated || backend.profile.data[g].id.indexOf('datafragment') != 0">
                                                         <i class="fa fa-pencil"></i></button>
                                                 </li>
                                                 <li>
@@ -82,7 +81,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g]
+                                    && !backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
                                     <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                 </div>
                                 <!-- EXPL -->
@@ -93,22 +93,25 @@
                             <!-- BEGIN SELECT -->
                             <div class="row igen{{ dataservice.sanit(g) }}">
                                 <!-- description -->
-                                <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <!-- select name any -->
-                                    <input *ngIf="!backend.generics[g][backend.generics[g].length - 1].new_keys_only" type="text" [(ngModel)]="ass_name[g]"
-                                        (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
+                                    <input *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only"
+                                        type="text" [(ngModel)]="ass_name[g]" (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
                                         name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 2px 2px 1px #FF5000!important;">
-                                    <datalist *ngIf="!backend.generics[g][backend.generics[g].length - 1].new_keys_only" id="suggestions{{ g }}">
+                                    <datalist *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only" id="suggestions{{ g }}">
                                         <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
                                     </datalist>
                                     <!-- end select name any -->
                                     <!-- select name force -->
-                                    <select *ngIf="backend.generics[g][backend.generics[g].length - 1].new_keys_only" [(ngModel)]="ass_name[g]"
-                                        (change)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
+                                    <select *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].new_keys_only"
+                                        [(ngModel)]="ass_name[g]" (change)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
                                         name="new_name{{ dataservice.sanit(g) }}" class="form-control" style="box-shadow: 2px 2px 1px #FF5000!important;">
                                         <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
                                     </select>
                                     <!-- end select name force -->
+                                    <!-- padding non instatiable json keys -->
+                                    <div style="height: 34px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable"></div>
+                                    <!-- end padding non instatiable json keys -->
                                     <!-- json labels -->
                                     <div style="display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                         <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
@@ -118,7 +121,8 @@
                                     <!-- end json labels -->
                                 </div>
                                 <!-- input -->
-                                <div class="col-md-6" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                <div class="col-md-6" *ngIf="(!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')
+                                    || backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                 </div>
                             </div>

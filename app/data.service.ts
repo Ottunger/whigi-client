@@ -480,6 +480,26 @@ export class Data {
             if(!self.backend.master_key)
                 self.backend.decryptMaster();
 
+            //If we create/modify a share_as_folder data, we'll end up here. Let's check that to update the upwards data.
+            var upwards = name.replace(/\/[^\/]*$/, '');
+            if(upwards in self.backend.generics && self.backend.generics[upwards][self.backend.generics[upwards].length - 1].share_as_folder) {
+                function change(dict: {[id: string]: string}, taes: number[]) {
+                    dict[name.replace(/.+\//, '')] = value;
+                    self.modifyData(upwards, JSON.stringify(dict), false, 0, {}, false, taes).then(function() {}, function(e) {});
+                }
+                //Check if built once
+                if(upwards in self.backend.profile.data) {
+                    self.getData(self.backend.profile.data[upwards].id, false).then(function(data) {
+                        change(JSON.parse(data.decr_data), data.decr_aes);
+                    }, function(e) {});
+                } else {
+                    var taes = self.backend.newAES();
+                    self.newData(true, upwards, '{}', false, 0, true, taes).then(function() {
+                        change({}, taes);
+                    }, function(e) {});
+                }
+            }
+
             naes = is_bound? (naes || self.backend.newAES()) : self.backend.master_key;
             self.backend.encryptAES(value, self.workerMgt(true, function(got) {
                 if(is_bound)
@@ -600,8 +620,8 @@ export class Data {
                 } else {
                     resolve();
                 }
-            }, function(err, e) {
-                reject(err, e);
+            }, function(e) {
+                reject(e);
             });
         });
     }

@@ -237,30 +237,20 @@ export class Logging implements OnInit {
                             towards = 'wiuser-' + self.backend.generateRandomString(10);
                             self.dataservice.newData(true, 'profile/email/restore', self.email, false, 0, true).then(function(email: number[]) {
                                 self.dataservice.newData(true, 'profile/recup_id', asEmail? towards : self.recup_id, false, 0, true).then(function(recup: number[]) {
-                                    self.dataservice.newData(true, 'profile/first_name', self.fname, false, 0, true).then(function(fname: number[]) {
-                                        self.dataservice.newData(true, 'profile/last_name', self.lname, false, 0, true).then(function(lname: number[]) {
-                                            self.dataservice.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
-                                                self.dataservice.grantVault('whigi-wissl', 'profile/first_name', 'profile/first_name', self.fname, 0, new Date(0), '', false, fname).then(function() {
-                                                    self.dataservice.grantVault('whigi-wissl', 'profile/last_name', 'profile/last_name', self.lname, 0, new Date(0), '', false, lname).then(function() {
-                                                        if(self.recuperable) {
-                                                            self.dataservice.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
-                                                                safe(recup);
-                                                            }, function() {
-                                                                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                                self.logout();
-                                                            });
-                                                        } else {
-                                                            self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                                                            self.logout().then(function() {self.enter();});
-                                                        }
-                                                    }, function(e) {
+                                    self.dataservice.newData(true, 'profile/name', JSON.stringify({'generics.last_name': self.lname, 'generics.first_name': self.fname}), false, 0, true).then(function(fname: number[]) {
+                                        self.dataservice.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
+                                            self.dataservice.grantVault('whigi-wissl', 'profile/name', 'profile/name', self.fname, 0, new Date(0), '', false, fname).then(function() {
+                                                if(self.recuperable) {
+                                                    self.dataservice.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
+                                                        safe(recup);
+                                                    }, function() {
                                                         self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                                         self.logout();
                                                     });
-                                                }, function(e) {
-                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                    self.logout();
-                                                });
+                                                } else {
+                                                    self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                                                    self.logout().then(function() {self.enter();});
+                                                }
                                             }, function(e) {
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                                 self.logout();

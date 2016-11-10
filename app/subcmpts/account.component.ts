@@ -247,7 +247,15 @@ export class Account implements OnInit, OnDestroy {
             }
             for(var i = 0; i < this.data_list.length; i++) {
                 var adata = this.data_list[i];
-                if((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new')) {
+                if(this.backend.generics[adata][this.backend.generics[adata].length - 1].share_as_folder) {
+                    saves.push({
+                        mode: 'build-and-grant',
+                        to: this.id_to,
+                        name: adata,
+                        until: this.expire_epoch,
+                        trigger: this.trigger
+                    });
+                } else if((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new')) {
                     //Build and test
                     window.$('#igen' + this.dataservice.sanit(adata)).removeClass('has-error');
                     var send = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
@@ -279,7 +287,7 @@ export class Account implements OnInit, OnDestroy {
                         version: this.backend.generics[adata].length - 1,
                         trigger: this.trigger
                     });
-                } else if(adata in this.backend.generics) {
+                } else {
                     var name = adata;
                     if(this.backend.generics[adata][this.backend.generics[adata].length - 1].instantiable) {
                         name += '/' + this.filter[adata];
@@ -355,6 +363,37 @@ export class Account implements OnInit, OnDestroy {
                             }, function(e) {
                                 reject(e);
                             });
+                            break;
+                        case 'build-and-grant':
+                            if(work.name in self.backend.profile.data) {
+                                array.push({
+                                    mode: 'get-and-grant',
+                                    to: work.to,
+                                    name: work.name,
+                                    real_name: work.name,
+                                    until: work.until,
+                                    trigger: work.trigger
+                                });
+                                next();
+                            } else {
+                                var naes = self.backend.newAES();
+                                self.dataservice.newData(true, work.name, '{}', false, 0, true, naes).then(function() {
+                                    array.push({
+                                        mode: 'grant',
+                                        data: '{}',
+                                        to: work.to,
+                                        name: work.name,
+                                        real_name: work.name,
+                                        until: work.until,
+                                        trigger: work.trigger,
+                                        version: 0,
+                                        decr_aes: naes
+                                    });
+                                    next();
+                                }, function(e) {
+                                    reject(e);
+                                });
+                            }
                             break;
                         default:
                             break;

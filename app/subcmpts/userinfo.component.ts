@@ -106,15 +106,11 @@ export class Userinfo implements OnInit {
      */
     load() {
         var self = this;
-        if(!!this.backend.profile.data['profile/last_name'] && !!this.backend.profile.data['profile/first_name']) {
-            this.dataservice.getData(this.backend.profile.data['profile/last_name'].id).then(function(data) {
-                var lname = data.decr_data;
-                self.dataservice.getData(self.backend.profile.data['profile/last_name'].id).then(function(data) {
-                    self.backend.profile.company_info.name = data.decr_data + ' ' + lname;
-                    self.modify();
-                }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
-                });
+        if(!!this.backend.profile.data['profile/name']) {
+            self.dataservice.getData(self.backend.profile.data['profile/name'].id).then(function(data) {
+                var decr = JSON.parse(data.decr_data);
+                self.backend.profile.company_info.name = decr['generics.first_name'] + ' ' + decr['generics.last_name'];
+                self.modify();
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });

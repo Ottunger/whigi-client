@@ -27,7 +27,8 @@
             <!-- BEGIN DATA -->
             <div class="panel-group accordion" id="tgabble">
                 <div class="panel panel-default panel-clearable" *ngFor="let p of data_list" [class.panel-success]="(!backend.generics[p][backend.generics[p].length - 1].instantiable 
-                    && !!backend.profile && !backend.profile.data[p]) || (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)" id="accord{{ dataservice.sanit(p) }}">
+                    && !!backend.profile && !backend.profile.data[p]) || (backend.generics[p][backend.generics[p].length - 1].instantiable && filters(p).length == 1)
+                    || backend.generics[p][backend.generics[p].length - 1].share_as_folder" id="accord{{ dataservice.sanit(p) }}">
                     <div class="panel-heading" *ngIf="!!backend.generics[p]">
                         <h4 class="panel-title" style="text-align: right;">
                             <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p) }}">
@@ -55,7 +56,7 @@
                                 <p *ngIf="!!backend.profile && !!backend.profile.data[p]">{{ 'account.shared' | translate }}</p>
                                 <input_block *ngIf="!!backend.profile && !backend.profile.data[p]" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                             </div>
-                            <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable">
+                            <div *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable && !backend.generics[p][backend.generics[p].length - 1].share_as_folder">
                                 <select class="form-control" [(ngModel)]="filter[p]">
                                     <option *ngFor="let f of filters(p)" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select><br />
@@ -78,6 +79,9 @@
                                     <input_block *ngIf="strangeEmail!='' && p=='profile/email'" [prefill]="strangeEmail" [g]="p" (out)="regData(p, $event)" [writeDesc]="true"></input_block>
                                 </div>
                             </div>
+                            <p *ngIf="backend.generics[p][backend.generics[p].length - 1].instantiable && backend.generics[p][backend.generics[p].length - 1].share_as_folder">
+                                {{ 'account.folderShared' | translate }}
+                            </p>
                             <!-- END ITEM SELECT -->
                         </div>
                     </div>

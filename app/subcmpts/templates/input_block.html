@@ -29,7 +29,7 @@
         <!-- select -->
         <select class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" [class.grant-required]="k.required"
             (change)="regChange(3)" [attr.data-forid]="'#accord' + dataservice.sanit(g)">
-            <option *ngFor="let f of dataservice.getSelect(k.enum)" [value]="f">{{ f }}</option>
+            <option *ngFor="let f of dataservice.getSelect(k.enum)" [value]="f">{{ f | translate }}</option>
         </select>
         <!-- checkbox -->
         <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="k.mode == 'checkbox'" (change)="iChange(3)">
@@ -37,20 +37,17 @@
             <span></span>
         </label>
         <!-- date -->
-        <div class='input-group date' id='pickgen{{ dataservice.sanit(k.descr_key) }}' *ngIf="k.mode == 'date'">
+        <div class='input-group date pickgen{{ dataservice.sanit(k.descr_key) }}' *ngIf="k.mode == 'date'">
             <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(3)"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
         </div>
-        <script type="text/javascript" *ngIf="k.mode == 'date'">
-            $('#pickgen{{ dataservice.sanit(k.descr_key) }}').datetimepicker();
-        </script>
     </div>
 </div>
 <!-- SELECT -->
 <select class="form-control grant-required" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="regChange(1)" [attr.data-forid]="'#accord' + dataservice.sanit(g)">
-    <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f }}</option>
+    <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f | translate }}</option>
 </select>
 <!-- CHECKBOX -->
 <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'checkbox'" (change)="iChange(1)">
@@ -58,12 +55,9 @@
     <span></span>
 </label>
 <!-- DATE -->
-<div class='input-group date' id='pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
+<div class='input-group date pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
     <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
     </span>
 </div>
-<script type="text/javascript" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
-    $('#pickgen{{ dataservice.sanit(g) }}').datetimepicker();
-</script>

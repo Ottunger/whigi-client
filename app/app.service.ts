@@ -40,7 +40,8 @@ export class Backend {
         new_keys_only?: boolean,
         placeholder?: string,
         requires?: string,
-        modes?: string[][]
+        modes?: string[][],
+        share_as_folder?: boolean
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {

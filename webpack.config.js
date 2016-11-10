@@ -67,12 +67,14 @@ module.exports = {
             }
         }),
         new ExtractTextPlugin('[name].css'),
+        /*
         new OptimizeCssAssetsPlugin({
             assetNameRegExp: /.*\.css$/,
             cssProcessor: require('cssnano'),
             cssProcessorOptions: {discardComments: {removeAll: true}},
             canPrint: false
         }),
+        */
         new webpack.DefinePlugin({
             'process.env': {
                 'ENV': JSON.stringify(ENV)
