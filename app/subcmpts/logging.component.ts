@@ -77,7 +77,7 @@ export class Logging implements OnInit {
                 self.dataservice.extendModules();
                 //Router.go...
                 self.backend.profile = profile;
-                if(self.backend.profile._id.indexOf('wiuser-') == 0) {
+                if(self.backend.profile._id.indexOf('wiuser-') == 0 && (!sessionStorage.getItem('return_url') || !/account/.test(sessionStorage.getItem('return_url')))) {
                     window.$(`
                         <div class="modal">
                             <h3>` + self.translate.instant('help') + `</h3>
