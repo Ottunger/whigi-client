@@ -67,7 +67,8 @@
                                             <ul class="dropdown-menu" style="min-width: 0px;">
                                                 <li>
                                                     <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)"
-                                                        [disabled]="backend.generics[g][backend.generics[g].length - 1].is_dated || backend.profile.data[g].id.indexOf('datafragment') != 0">
+                                                        [disabled]="backend.generics[g][backend.generics[g].length - 1].is_dated || backend.profile.data[g].id.indexOf('datafragment') != 0
+                                                        || backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                                         <i class="fa fa-pencil"></i></button>
                                                 </li>
                                                 <li>
@@ -164,8 +165,7 @@
                                                         <ul class="dropdown-menu" style="min-width: 0px;">
                                                             <li>
                                                                 <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)"
-                                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].is_dated
-                                                                    || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0">
+                                                                    [disabled]="backend.generics[g][backend.generics[g].length - 1].is_dated || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0">
                                                                     <i class="fa fa-pencil"></i></button>
                                                             </li>
                                                             <li>

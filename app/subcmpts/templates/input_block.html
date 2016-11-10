@@ -33,12 +33,12 @@
         </select>
         <!-- checkbox -->
         <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="k.mode == 'checkbox'" (change)="iChange(3)">
-            <input type="checkbox" name="new_data" [(ngModel)]="new_data" value="false" /> {{ 'generics.hasValue' | translate }}
+            <input type="checkbox" name="new_data" [(ngModel)]="new_datas[k.descr_key]" value="false" /> {{ 'generics.hasValue' | translate }}
             <span></span>
         </label>
         <!-- date -->
         <div class='input-group date pickgen{{ dataservice.sanit(k.descr_key) }}' *ngIf="k.mode == 'date'">
-            <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(3)"/>
+            <input type='text' class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data" (change)="iChange(3)"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
@@ -55,7 +55,7 @@
     <span></span>
 </label>
 <!-- DATE -->
-<div class='input-group date pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
+<div class='input-group date grant-required pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
     <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>

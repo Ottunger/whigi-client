@@ -69,13 +69,17 @@ export class InputBlock implements OnInit {
         //Prepare the dates
         if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'date') {
             window.$('.pickgen' + this.dataservice.sanit(this.g)).ready(function() {
-                window.$('.pickgen' + self.dataservice.sanit(self.g)).datetimepicker();
+                window.$('.pickgen' + self.dataservice.sanit(self.g)).datetimepicker().on('dp.change', function(e) {
+                    self.new_data = e.date.format('DD/MM/YYYY HH:MM');
+                });
             });
         } else if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
             for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
                 if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'date') {
                     window.$('.pickgen' + this.dataservice.sanit(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key)).ready(function() {
-                        window.$('.pickgen' + self.dataservice.sanit(self.backend.generics[self.g][self.backend.generics[self.g].length - 1].json_keys[this].descr_key)).datetimepicker();
+                        window.$('.pickgen' + self.dataservice.sanit(self.backend.generics[self.g][self.backend.generics[self.g].length - 1].json_keys[this].descr_key)).datetimepicker().on('dp.change', function(e) {
+                            self.new_datas[self.backend.generics[self.g][self.backend.generics[self.g].length - 1].json_keys[this].descr_key] = e.date.format('DD/MM/YYYY HH:MM');
+                        }.bind(this));
                     }.bind(i));
                 }
             }
@@ -89,14 +93,8 @@ export class InputBlock implements OnInit {
      */
     def() {
         this.new_datas = {};
-        this.new_data_file = '';
-        this.new_data = (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'checkbox')? 'false' : undefined;
-        if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
-            for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
-                this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
-                    (this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'checkbox')? 'false' : undefined;
-            }
-        }
+        delete this.new_data_file;
+        delete this.new_data;
         this.iChange(1);
         this.iChange(2);
         this.iChange(3);
