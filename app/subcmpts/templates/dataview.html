@@ -36,7 +36,7 @@
                         <div class="col-md-12">
                             <!-- BEGIN BLOCK -->
                             <clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="data_name" [change]="true"
-                                [is_folder]="is_generic && backend.generics[gen_name][version].mode == 'json_keys'"
+                                [is_folder]="is_generic && backend.generics[gen_name][version].mode == 'json_keys' && !backend.generics[gen_name][version].share_as_folder"
                                 (notify)="mod($event, false)" [gen_name]="gen_name" [version]="version"></clear-view>
                             <!-- END BLOCK -->
                             <!-- BEGIN BLOCK -->

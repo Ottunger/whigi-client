@@ -176,10 +176,13 @@ export class GenericBlock implements OnInit {
         new_name = new_name.substr(0, 63);
         //Build and test
         window.$('.igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
+        window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', '');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
         if(send.constructor === Array) {
-            this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
+            if(send[1] != 'generics.silent')
+                this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
             window.$('.igen' + this.dataservice.sanit(name)).addClass('has-error');
+            window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', 'red');
             return;
         }
         //Create it

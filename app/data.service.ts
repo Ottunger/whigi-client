@@ -336,7 +336,8 @@ export class Data {
      * @return {String} Built up data or undefined if cannot pass test.
      */
     recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
-        raw_data = !!raw_data? raw_data.toString().trim() : '';
+        raw_data = (this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'checkbox')?
+            (raw_data || false) : (!!raw_data? raw_data.toString().trim() : '');
         if(raw_data.length > 127 && !as_file)
             return ['error', 'generics.tooLong'];
         //Build up the data, keys wrapping and date wrapping
@@ -344,13 +345,18 @@ export class Data {
             var ret = {};
             for(var i = 0; i < this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys.length; i++) {
                 if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].required && 
-                    !data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key])
-                    return ['error', 'generics.regexp'];
+                    data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] === undefined)
+                    return ['error', 'generics.silent'];
                 if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
                     && data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].length > 127)
                     return ['error', 'generics.tooLong'];
-                if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key])
-                    ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim();
+                if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] && 
+                    this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].mode != 'checkbox')
+                    ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] 
+                        = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim();
+                else if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key])
+                    ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] 
+                        = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] || false;
             }
             raw_data = JSON.stringify(ret);
         }

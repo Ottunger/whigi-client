@@ -111,7 +111,8 @@
                                     </select>
                                     <!-- end select name force -->
                                     <!-- padding non instatiable json keys -->
-                                    <div style="height: 34px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable"></div>
+                                    <div style="height: 34px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable
+                                        && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'"></div>
                                     <!-- end padding non instatiable json keys -->
                                     <!-- json labels -->
                                     <div style="display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
