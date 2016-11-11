@@ -562,8 +562,7 @@ export class Data {
             }
             self.backend.revokeVault(self.backend.profile.data[data_name].shared_to[shared_to_id]).then(function() {
                 delete self.backend.profile.data[data_name].shared_to[shared_to_id];
-                var i = self.backend.my_shares[shared_to_id].indexOf(data_name);
-                delete self.backend.my_shares[shared_to_id][i];
+                self.backend.my_shares[shared_to_id].splice(self.backend.my_shares[shared_to_id].indexOf(data_name), 1);
                 resolve();
             }, function(e) {
                 reject(e);

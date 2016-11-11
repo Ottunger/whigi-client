@@ -211,6 +211,7 @@
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",
+   "whoishare.dunno": "Champ non standardisé",
 
    "sidebar.add": "Ajouter",
    "sidebar.saved": "Configuration sauvegardée",

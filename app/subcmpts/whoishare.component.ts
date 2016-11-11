@@ -47,7 +47,7 @@ export class WhoIShare {
      */
     genName(gen: string, help: boolean): string {
         if(!gen)
-            return '';
+            return this.translate.instant('whoishare.dunno');
         if(!!this.backend.generics[gen]) {
             return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         } else if(!!this.backend.generics[gen.replace(/\/[^\/]*$/, '')] &&
@@ -55,7 +55,7 @@ export class WhoIShare {
             gen = gen.replace(/\/[^\/]*$/, '');
             return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         }
-        return '';
+        return this.translate.instant('whoishare.dunno');
     }
 
     /**

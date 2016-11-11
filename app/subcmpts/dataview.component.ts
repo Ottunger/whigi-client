@@ -360,23 +360,21 @@ export class Dataview implements OnInit, OnDestroy {
     change(shared_to_id: string) {
         var self = this;
         this.backend.getAccessVault(this.backend.profile.data[this.data_name].shared_to[shared_to_id]).then(function(timer) {
-            self.backend.revokeVault(self.backend.profile.data[self.data_name].shared_to[shared_to_id]).then(function() {
-                //Remove actual vault
-                delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
-                //Get other data and create its vault
-                self.dataservice.getData(self.backend.profile.data[self.gen_name + '/' + self.filter].id).then(function(data) {
-                    self.dataservice.grantVault(shared_to_id, self.gen_name, self.gen_name + '/' + self.filter, data.decr_data, self.version, new Date(timer.expire_epoch), timer.trigger, false, data.decr_aes).then(function() {
-                        self.backend.triggerVaults(self.gen_name + '/' + self.filter);
-                        self.notif.success(self.translate.instant('success'), self.translate.instant('dataview.transfered'));
-                        delete self.sharedVector;
-                    }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
-                    });
+            //Get other data and create its vault
+            self.dataservice.getData(self.backend.profile.data[self.gen_name + '/' + self.filter].id).then(function(data) {
+                self.dataservice.grantVault(shared_to_id, self.gen_name, self.gen_name + '/' + self.filter, data.decr_data, self.version, new Date(timer.expire_epoch), timer.trigger, false, data.decr_aes).then(function() {
+                    //Remove actual vault
+                    delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
+                    self.backend.my_shares[shared_to_id].splice(self.backend.my_shares[shared_to_id].indexOf(self.data_name), 1);
+                    delete self.sharedVector;
+                    //Housekeeping
+                    self.backend.triggerVaults(self.gen_name + '/' + self.filter);
+                    self.notif.success(self.translate.instant('success'), self.translate.instant('dataview.transferred'));
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
                 });
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
+                self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });
         });
     }
