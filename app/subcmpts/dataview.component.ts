@@ -39,6 +39,8 @@ export class Dataview implements OnInit, OnDestroy {
     private backuri: string;
     private to_filesystem: boolean;
     private sharedVector: string[];
+    private changed: EventEmitter<string>;
+    private reset: EventEmitter<any>;
     private sub: Subscription;
 
     /**
@@ -61,7 +63,8 @@ export class Dataview implements OnInit, OnDestroy {
         this.new_datas = {};
         this.filter = '';
         this.version = 0;
-        new window.Clipboard('.btn-copier');
+        this.changed = new EventEmitter<string>();
+        this.reset = new EventEmitter<any>();
     }
 
     /**
@@ -190,26 +193,29 @@ export class Dataview implements OnInit, OnDestroy {
      */
     modify() {
         var replacement, done = false, err;
+        window.$('.igen' + this.dataservice.sanit(this.gen_name)).removeClass('has-error');
+        window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', '');
         if(this.is_generic && (err = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, this.gen_name, this.backend.generics[this.gen_name][this.version].mode == 'file')).constructor === Array) {
             this.notif.error(this.translate.instant('error'), this.translate.instant(err[1]));
-            window.$('.igen' + this.dataservice.sanit(name)).addClass('has-error');
+            window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('has-error');
+            window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', 'red');
             return;
         }
-        if(this.is_generic && this.backend.generics[this.gen_name][this.version].mode == 'json_keys') {
-            var ret = {};
-            for(var i = 0; i < this.backend.generics[this.gen_name][this.version].json_keys.length; i++) {
-                ret[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key] = this.new_datas[this.backend.generics[this.gen_name][this.version].json_keys[i].descr_key].trim();
-            }
-            this.new_data = JSON.stringify(ret);
+        //Generic data, use what has been returned by recGeneric. If we are dated, sicard the date info.
+        if(this.is_generic && this.backend.generics[this.gen_name][this.version].is_dated) {
+            this.new_data = JSON.parse(err)[0].value;
+        } else if(this.is_generic) {
+            this.new_data = err;
         }
+        //Add the date info
         if(this.is_dated) {
-            var from = window.$('#pick4').datetimepicker('date').toDate();
-            replacement = JSON.parse(this.decr_data);
+            var from = window.$('#pick4').datetimepicker('date').toDate().getTime();
+            replacement = JSON.parse(this.decr_data) || [];
             for(var i = 0; i < replacement.length; i++) {
                 if(from > replacement[i].from) {
                     replacement.splice(i, 0, {
                         from: from,
-                        value:(this.new_data_file != '')? this.new_data_file : this.new_data
+                        value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
                     });
                     done = true;
                     break;
@@ -218,35 +224,32 @@ export class Dataview implements OnInit, OnDestroy {
             if(!done) {
                 replacement.push({
                     from: from,
-                    value:(this.new_data_file != '')? this.new_data_file : this.new_data
+                    value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
                 });
             }
             replacement = JSON.stringify(replacement);
         } else {
-            replacement = (this.new_data_file != '')? this.new_data_file : this.new_data.trim();
+            replacement = (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data.trim();
         }
-        this.mod(replacement, true);
+        this.reset.emit();
+        this.mod(replacement);
     }
 
     /**
      * Modifies a data the way asked.
      * @function mod
-     * @public
+     * @private
      * @param {String} replacement New value.
-     * @param {Boolean} back Should back.
      */
-    mod(replacement: string, back: boolean) {
+    private mod(replacement: string) {
         var self = this, names = this.sharedIds(), dict: {[id: string]: {date: Date, trigger: string}} = {}
         for(var i = 0; i < names.length; i++) {
             if(!!this.timings[names[i]])
                 dict[names[i]] = {date: this.timings[names[i]].ee, trigger: this.timings[names[i]].trigger};
         }
         this.dataservice.modifyData(this.data_name, replacement, this.is_dated, this.version, dict, (this.is_generic && this.data_name != this.gen_name), this.data.decr_aes).then(function() {
-            self.new_datas = {};
-            self.new_data = '';
             self.decr_data = replacement;
-            if(back)
-                self.back(false);
+            self.changed.emit(self.decr_data);
         }, function(err) {
             if(err[0] == 'server')
                 if(err[1].status == 413)

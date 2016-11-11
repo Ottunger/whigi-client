@@ -237,9 +237,10 @@ export class GenericBlock implements OnInit {
      * @public
      * @param {String} name Data name.
      * @param {Boolean} keyded Whether JSON keyded.
+     * @param {String} gen_name Original generic.
      * @return {String} Decrypted data.
      */
-    preview(name: string, keyded: boolean): string {
+    preview(name: string, keyded: boolean, gen_name: string): string {
         var self = this;
         if(name in this.previews)
             return this.previews[name];
@@ -262,7 +263,18 @@ export class GenericBlock implements OnInit {
                 var keys = Object.getOwnPropertyNames(obj);
                 self.previews[name] = '';
                 for(var i = 0; i < keys.length; i++) {
-                    self.previews[name] += obj[keys[i]] + ' ';
+                    var idx = 0;
+                    for(var j = 0; j < self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys.length; j++) {
+                        if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[j].descr_key == keys[i]) {
+                            idx = j;
+                            break;
+                        }
+                    }
+                    if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select')
+                        try { self.previews[name] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { self.previews[name] += obj[keys[i]] + ' '; }
+                    else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
+                        && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
+                        self.previews[name] += self.translate.instant(obj[keys[i]]) + ' ';
                 }
                 self.previews[name].trim();
             }

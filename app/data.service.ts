@@ -7,9 +7,11 @@
 'use strict';
 declare var window: any
 import {Injectable, ApplicationRef, EventEmitter} from '@angular/core';
+import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
+import {Check} from './check.service';
 import {Trie} from '../utils/Trie';
 import * as modules from './subcmpts/templates/generics';
 
@@ -32,9 +34,11 @@ export class Data {
      * @param router Routing service.
      * @param backend Backend service.
      * @param check Check service.
+     * @param checking Checks service.
+     * @param router Routing service.
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
-        private check: ApplicationRef) {
+        private check: ApplicationRef, public checking: Check, private router: Router) {
         var self = this;
         this.m = modules.m;
         this.ev = new EventEmitter<[string, boolean]>();
@@ -46,6 +50,12 @@ export class Data {
         setInterval(function() {
             self.backend.getUser('whigi-wissl').then(function() {}, function(e) {});
         }, 20 * 60 * 1000);
+        //Construct a reference to angular router navigate to user
+        window.ngUserMove = function(key) {
+            self.router.navigate(['/user', key, JSON.stringify(self.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
+        }
+        //Construct a reference to our data service
+        window.ngData = this;
     }
 
     /**
@@ -816,7 +826,7 @@ export class Data {
     sanit(s: string): string {
         if(!s)
             return '';
-        return s.replace(/[\/\.#]/g, '_');
+        return s.replace(/[\/\.# :à]/g, '_');
     }
 
     /**

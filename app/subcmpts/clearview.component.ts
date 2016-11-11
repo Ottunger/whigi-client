@@ -6,10 +6,11 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, Output, EventEmitter} from '@angular/core';
+import {Component, enableProdMode, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
+import {Data} from '../data.service';
 enableProdMode();
 import * as template from './templates/clearview.html';
 
@@ -26,8 +27,10 @@ export class Clearview {
     @Input() is_folder: boolean;
     @Input() version: number;
     @Input() gen_name: string;
+    @Input() changed: EventEmitter<string>;
     @Output() notify: EventEmitter<string>;
     private values: {from: Date, value: string}[];
+    private cpt: {[id: string]: string};
 
     /**
      * Creates the component.
@@ -37,11 +40,29 @@ export class Clearview {
      * @param notif Notification service.
      * @param check Check service.
      * @param backend App service.
+     * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend) {
+    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         this.values = undefined;
         this.notify = new EventEmitter<string>();
+        this.cpt = {};
         new window.Clipboard('.btn-copier');
+    }
+
+    /**
+     * Called upon display.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnInit(): void {
+        var self = this;
+        if(!!this.changed) {
+            this.changed.subscribe(function(nw_val) {
+                self.decr_data = nw_val;
+                delete self.values;
+                self.cpt = {};
+            });
+        }
     }
 
     /**
@@ -51,7 +72,14 @@ export class Clearview {
      */
     computeValues(): {from: Date, value: string}[] {
         if(!this.values) {
-            this.values = JSON.parse(this.decr_data);
+            try {
+                this.values = JSON.parse(this.decr_data);
+            } catch(e) {
+                this.values = [];
+            }
+            this.values = this.values.sort(function(a, b): number {
+                return (a.from < b.from)? - 1 : 1;
+            });
             for(var i = 0; i < this.values.length; i++) {
                 this.values[i].from = new Date(this.values[i].from);
             }
@@ -68,11 +96,17 @@ export class Clearview {
      * @param {Number} i Index to remove.
      */
     rem(i: number) {
-        this.values.splice(i, 1);
-        this.notify.emit(JSON.stringify(this.values.map(function(el) {
-            el.from = el.from.getTime();
-            return el;
-        })));
+        var str;
+        try {
+            str = JSON.parse(this.decr_data);
+        } catch(e) {
+            str = [];
+        }
+        str = str.sort(function(a, b): number {
+            return (a.from < b.from)? - 1 : 1;
+        });
+        str.splice(i, 1);
+        this.notify.emit(JSON.stringify(str));
     }
 
     /**
@@ -80,11 +114,30 @@ export class Clearview {
      * @function recover
      * @param {String} key Key.
      * @param {String} json JSON.
+     * @param {Date} from Desinbiguifier. 
      * @return {String} Associated value.
      */
-    recover(key: string, json: string): string {
-        var ret = JSON.parse(json);
-        return ret[key];
+    recover(key: string, json: string, from: Date): string {
+        if(key + '___' + from in this.cpt)
+            return this.cpt[key + '___' + from];
+        var idx = 0;
+        var ret = JSON.parse(json), bk;
+        for(var i = 0; i < this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys.length; i++) {
+            if(this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys[i].descr_key == key) {
+                idx = i;
+                break;
+            }
+        }
+        if(this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys[idx].mode == 'select')
+            try { bk = this.translate.instant(ret[key]); } catch(e) { bk = ret[key]; }
+        if(this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys[idx].mode == 'checkbox')
+            bk = this.translate.instant(ret[key]? 'Yes' : 'No');
+        else
+            bk = ret[key];
+        if(!bk || bk.trim() == '')
+            bk = ret[key];
+        this.cpt[key + '___' + from] = bk;
+        return bk;
     }
 
     /**

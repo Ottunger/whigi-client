@@ -13,7 +13,7 @@ exports.m = {
         "generics.family": {
             "is_i18n": true,
             "left_num": 1002,
-            "holds": ["generics.family1", "generics.family3", "generics.family2"]
+            "holds": ["generics.family1", "generics.family2", "generics.family3"]
         }
     },
     "holds": {
@@ -42,15 +42,15 @@ exports.m = {
             "is_i18n": true,
             "holds": ["family/mother", "family/father", "family/children"]
         },
-        "generics.family2": {
-            "open": true,
-            "is_i18n": true,
-            "holds": ["family/status", "family/partners"]
-        },
         "generics.family3": {
             "open": true,
             "is_i18n": true,
             "holds": ["family/employers", "family/employees"]
+        },
+        "generics.family2": {
+            "open": true,
+            "is_i18n": true,
+            "holds": ["family/status", "family/partners"]
         }
     }
 };

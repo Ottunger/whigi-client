@@ -20,7 +20,7 @@
                             <div *ngIf="is_folder">
                                 <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
                                     {{ k.descr_key | translate }}<br />
-                                    <input type="text" value="{{ recover(k.descr_key, decr_data) }}" name="decr" class="form-control" readonly>
+                                    <input type="text" value="{{ recover(k.descr_key, decr_data, '') }}" name="decr" class="form-control" readonly>
                                 </div>
                             </div>
 
@@ -31,23 +31,32 @@
                             <br />
                         </div>
                         <div *ngIf="is_dated">
-                            <div *ngFor="let p of computeValues(); let i = index">
-                                <div>{{ 'actualFrom' | translate }}{{ p.from.toLocaleString() }}</div>
-                                <div *ngIf="!is_folder">
-                                    <input *ngIf="p.value.length < 150" type="text" [ngModel]="p.value" class="form-control" name="decr" readonly>
-                                    <input *ngIf="p.value.length >= 150" type="text" value="{{ 'dataview.tooLong' | translate }}" class="form-control" readonly>
-                                </div>
-                                <div *ngIf="is_folder">
-                                    <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
-                                        {{ k.descr_key | translate }}<br />
-                                        <input type="text" value="{{ recover(k.descr_key, p.value) }}" name="decr" class="form-control" readonly>
+                            <!-- Nav tabs -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" *ngFor="let p of computeValues(); let i = index" [class.active]="i == 0">
+                                    <a href="#{{ dataservice.sanit(p.from.toLocaleString()) }}" [attr.aria-controls]="dataservice.sanit(p.from.toLocaleString())"
+                                    role="tab" data-toggle="tab">{{ p.from.toLocaleString() }}</a></li>
+                            </ul>
+                            <!-- Tab panes -->
+                            <div class="tab-content">
+                                <div role="tabpanel" *ngFor="let p of computeValues(); let i = index" class="tab-pane" [class.active]="i == 0" id="{{ dataservice.sanit(p.from.toLocaleString()) }}">
+                                    <div>{{ 'actualFrom' | translate }}{{ p.from.toLocaleString() }}</div>
+                                    <div *ngIf="!is_folder">
+                                        <input *ngIf="p.value.length < 150" type="text" [ngModel]="p.value" class="form-control" name="decr" readonly>
+                                        <input *ngIf="p.value.length >= 150" type="text" value="{{ 'dataview.tooLong' | translate }}" class="form-control" readonly>
                                     </div>
-                                </div>
+                                    <div *ngIf="is_folder">
+                                        <div class="form-group" *ngFor="let k of backend.generics[gen_name][version].json_keys">
+                                            {{ k.descr_key | translate }}<br />
+                                            <input type="text" value="{{ recover(k.descr_key, p.value, p.from) }}" name="decr" class="form-control" readonly>
+                                        </div>
+                                    </div>
 
-                                <button type="button" class="btn default" (click)="dl(p.value)">
-                                    <i class="fa fa-cloud-download"></i> {{ 'download' | translate }}</button>
-                                <button *ngIf="change" type="button" class="btn green" (click)="rem(i)" [disabled]="computeValues().length < 2">
-                                    <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
+                                    <button type="button" class="btn default" (click)="dl(p.value)">
+                                        <i class="fa fa-cloud-download"></i> {{ 'download' | translate }}</button>
+                                    <button *ngIf="change" type="button" class="btn green" (click)="rem(i)" [disabled]="computeValues().length < 2">
+                                        <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
+                                </div>
                             </div>
                         </div>
                     </div>
