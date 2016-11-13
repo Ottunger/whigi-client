@@ -247,7 +247,8 @@
    "generics.twitter": "Twitter ID",
    "generics.birthdata": "Naissance",
    "generics.identity": "Identification",
-   "generics.eidNo": "Numéro de carte d'identité",
+   "generics.eidNo": "Numéro de carte d'identité/passeport",
+   "generics.driving": "Numéro de permis de conduire",
    "generics.permitNo": "Permis de travail",
    "generics.livingNo": "Permis de résidence",
    "generics.bank": "Informations bancaires",
@@ -297,6 +298,7 @@
    "generics.badeidno": "Mauvais format de numéro de carte d'identité",
    "generics.badrrn": "Mavais format de numéro d'ordre national",
    "generics.badaccount": "Mauvais format de numéro de compte",
+   "generics.baddriving": "Mauvais format de numéro de permis de conduire",
 
    "new.email": "Email",
    "new.tel": "Telephone",

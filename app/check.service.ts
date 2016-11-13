@@ -109,7 +109,39 @@ export class Check {
         var obj = JSON.parse(test);
         switch(obj['generics.country']) {
             case 'BE':
-                if(!/[1-9][0-9]{3}/.test(obj['generics.postcode']))
+                if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'ES':
+                if(!/^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'DE':
+                if(!/^((?:0[1-46-9]\d{3})|(?:[1-357-9]\d{4})|(?:[4][0-24-9]\d{3})|(?:[6][013-9]\d{3}))$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'FR':
+                if(!/^((0[1-9])|([1-8][0-9])|(9[0-8])|(2A)|(2B))[0-9]{3}$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'IT':
+                if(!/^(V-|I-)?[0-9]{5}$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'LU':
+                if(!/^L-[1-9][0-9]{3}$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'NL':
+                if(!/^[1-9][0-9]{3}\s?([a-zA-Z]{2})?$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'UK':
+                if(!/^(GIR|[A-Z]\d[A-Z\d]??|[A-Z]{2}\d[A-Z\d]??)[ ]??(\d[A-Z]{2})$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+             case 'US':
+                if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
             default:
@@ -137,6 +169,62 @@ export class Check {
                     if(97 - (Math.floor(res / 100) % 97) != res % 100)
                         return 'generics.badrrn';
                 }
+                if(!!obj['generics.driving'] && !/^[0-9]{10}$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
+                break;
+            case 'France':
+                if(!/^[0-9]{12}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                if(!!obj['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
+                break;
+            case 'Germany':
+                if(!/^T[0-9]{8}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                if(!!obj['generics.driving'] && !/^[A-Z][0-9]{3}[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
+                break;
+            case 'Italy':
+                if(!/^[0-9]{5}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                break;
+            case 'Luxembourg':
+                if(!/^[0-9]{12}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                if(!!obj['generics.driving'] && !/^[0-9]{6}$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
+                break;
+            case 'Netherlands':
+                if(!/^[A-Z]{7}[0-9]{2}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                if(!!obj['generics.driving'] && !/^[0-9]{10}$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
+                break;
+            case 'Spain':
+                if(!/^[A-Z]{3}[0-9]{6}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                if(!!obj['generics.driving'] && !/^[0-9]{8}-[0-9A-Z]$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
+                break;
+            case 'United Kingdom':
+                if(!/^[0-9]{9}$/.test(obj['generics.eidNo'])) {
+                    return 'generics.badeidno';
+                }
+                if(!!obj['generics.driving'] && !/^[A-Z]+[0-9]{6}[A-Z]{6}$/.test(obj['generics.driving'])) {
+                    return 'generics.baddriving';
+                }
                 break;
             default:
                 break;
@@ -156,6 +244,34 @@ export class Check {
         switch(obj['generics.country']) {
             case 'Belgium':
                 if(!/^BE\d{14}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'France':
+                if(!/^FR\d{12}[0-9A-Z]{11}\d{2}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'Germany':
+                if(!/^DE\d{20}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'Italy':
+                if(!/^IT\d{2}[A-Z]\d{10}[0-9A-Z]{12}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'Luxembourg':
+                if(!/^LU\d{5}[0-9A-Z]{13}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'Netherlands':
+                if(!/^NL\d{2}[A-Z]{4}\d{10}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'Spain':
+                if(!/^ES\d{22}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
+                    return 'generics.badaccount';
+                break;
+            case 'United Kingdom':
+                if(!/^GB\d{2}[A-Z]{4}\d{14}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
                     return 'generics.badaccount';
                 break;
             default:

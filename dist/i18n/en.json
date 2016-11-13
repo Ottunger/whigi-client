@@ -247,7 +247,8 @@
    "generics.twitter": "Twitter ID",
    "generics.birthdata": "Birth information",
    "generics.identity": "Identification data",
-   "generics.eidNo": "Identity card number",
+   "generics.eidNo": "Identity card/Passport number",
+   "generics.driving": "Driving license number",
    "generics.permitNo": "Labour permit number",
    "generics.livingNo": "Residence permit number",
    "generics.bank": "Banking information",
@@ -297,6 +298,7 @@
    "generics.badeidno": "Wrong ID card number",
    "generics.badrrn": "Wrong RRN number",
    "generics.badaccount": "Wrong account number",
+   "generics.baddriving": "Wrong driving license number",
 
    "new.email": "Email",
    "new.tel": "Telephone",
