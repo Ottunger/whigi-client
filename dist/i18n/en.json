@@ -186,7 +186,8 @@
    "userinfo.addr": "Home address",
    "userinfo.bce": "BCE number: ",
    "userinfo.goBCE": "Load company name from BCE",
-   "userinfo.modifyPict": "Upload picture",
+   "userinfo.modifyPict": "Upload profile picture: ",
+   "userinfo.nothing": "No personal data registered",
 
    "merge.title": "Merge an account",
    "merge.login": "Username",
@@ -288,6 +289,7 @@
    "generics.rrn": "National number",
    "generics.langs": "Lang",
    "generics.langslong": "Preferred language",
+   "generics.religion": "Religion",
 
    "generics.badurl": "Wrong URL format",
    "generics.badtwitter": "Wrong twitter account format",

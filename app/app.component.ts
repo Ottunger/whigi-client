@@ -30,7 +30,8 @@ enableProdMode();
             height: 27px;
             list-style: none;
             margin: 0;
-            padding: 0;
+            padding-left: 26vw;
+            padding-right: 0px;
             border: 1px solid #ccc;
             border-width: 1px 0;    
             text-align: center;
@@ -38,6 +39,7 @@ enableProdMode();
             z-index: 997;
             font-family: 'Cham-WebFont', Arial, sans-serif;
             background-color: #241717;
+            overflow-x: hidden;
         }
         ul#navigation li {
             display: inline;
@@ -46,6 +48,9 @@ enableProdMode();
             margin: 0;
             padding: 0;
             z-index: 997;
+        }
+        ul#navigation li.first {
+            margin-left: -13vw;
         }
         ul#navigation li.last {
             margin-right: 0;
@@ -58,8 +63,8 @@ enableProdMode();
             <br />
             <div class="MenuContainer">
                 <ul id="navigation">
-                    <span style="position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
-                    <li><button type="button" class="btn btn-xs green" style="margin-right: 30px;" (click)="sendFeedback()">{{ 'feedback' | translate }}</button></li>
+                    <span style="overflow-x: hidden; max-width: 25vw; position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
+                    <li class="first"><button type="button" class="btn btn-xs green" style="margin-right: 30px;" (click)="sendFeedback()">{{ 'feedback' | translate }}</button></li>
                     <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
                     <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
                 </ul>

@@ -30,7 +30,7 @@
                                             <button type="button" style="min-width: 36px;" class="btn btn-default" *ngIf="!tsl" (click)="deleteTopo(g)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
-                                            <div class="btn-group btn-group-justified" role="group" *ngIf="tsl">
+                                            <div class="btn-may btn-group btn-group-justified" role="group" *ngIf="tsl">
                                                 <div class="btn-group" role="group">
                                                     <button type="button" style="min-width: 36px;" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <i class="fa fa-hdd-o" style="float: left;"></i>
@@ -50,7 +50,7 @@
                                         </div>
                                     </h4>
                                 </div>
-                                <div class="col-md-6" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                <div class="col-md-6 whigi-sm-pad" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <div id="tgdisp{{ dataservice.sanit(g) }}">
                                         <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g)" />
                                     </div>
@@ -58,7 +58,7 @@
                                         <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)"></input_block>
                                     </div>
                                 </div>
-                                <div class="col-md-1" style="padding: 0 0; margin-left: -12px;" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                <div class="col-md-1 btn-may btn-may-lefter" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <div class="btn-group btn-group-justified" role="group">
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -81,13 +81,13 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 igen{{ dataservice.sanit(g) }}" *ngIf="!backend.profile.data[g]
+                                <div class="col-md-6 igen{{ dataservice.sanit(g) }} whigi-sm-pad" *ngIf="!backend.profile.data[g]
                                     && !backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
                                     <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                 </div>
                                 <!-- EXPL -->
                             </div>
-                            <div class="row">
+                            <div class="row whigi-md-block" *ngIf="backend.generics[g][backend.generics[g].length - 1].long_descr_key != ''">
                                 <p style="margin-left: 15px; margin-right: 15px;">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
                             </div>
                             <!-- BEGIN SELECT -->
@@ -122,7 +122,7 @@
                                     <!-- end json labels -->
                                 </div>
                                 <!-- input -->
-                                <div class="col-md-6" *ngIf="(!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')
+                                <div class="col-md-6 whigi-sm-pad" *ngIf="(!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')
                                     || backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
                                 </div>
@@ -130,10 +130,10 @@
                             <!-- END SELECT -->
                             <!-- BEGIN ACTIONS -->
                             <div class="table" style="margin-bottom: 0px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                <table>
+                                <table style="width: 100%">
                                     <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
                                         <td style="padding-top: 5px;" [style.padding-bottom]="l? '5px' : '0px'">
-                                            <div class="col-md-5" style="padding-left: 9px;">
+                                            <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
                                                 <input type="text" style="margin-left: -4px; box-shadow: 2px 2px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
                                                 <!-- json labels -->
                                                 <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
@@ -156,7 +156,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-1" style="padding: 0 0;">
+                                            <div class="col-md-1 btn-may">
                                                 <div class="btn-group btn-group-justified" role="group">
                                                     <div class="btn-group" role="group">
                                                         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -196,7 +196,7 @@
                     </div>
                 </div>
                 <div class="form-actions">
-                    <div class="row">
+                    <div class="row text-center">
                         <div class="col-md-4">
                             <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" [disabled]="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
                         </div>

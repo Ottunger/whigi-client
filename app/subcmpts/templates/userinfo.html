@@ -2,10 +2,13 @@
     <!-- BEGIN FORM-->
     <form class="form-horizontal" role="form" id="eidform" action="https://{{backend.EID_HOST}}">
         <div class="form-body" id="pict-user">
-            <h3 class="form-section">{{ dataservice.forDisplay(user._id) }}  <small>{{ 'account.user' | translate }}</small></h3>
-            <h4 class="form-section">{{ 'userinfo.public' | translate }}</h4>
+            <h3>{{ dataservice.forDisplay(user._id) }}  <small>{{ 'account.user' | translate }}</small></h3>
+            <h4>{{ 'userinfo.public' | translate }}</h4>
             <div class="row">
                 <div class="col-md-12">
+                    <div class="form-group" *ngIf="!user.company_info || (!user.company_info.name && !user.company_info.bce && !user.company_info.rrn && getAddr() == '')">
+                        <p>{{ 'userinfo.nothing' | translate }}</p>
+                    </div>
                     <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.name">
                         <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
                         <div class="col-md-8">
@@ -25,7 +28,7 @@
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!!user.company_info && getAddr() != ''">
-                        <label class="control-label col-md-4">{{ 'userinfo.addr' | translate }}</label>
+                        <label class="control-label col-md-4">{{ 'userinfo.addr' | translate }}: </label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" [ngModel]="getAddr()" name="addr" readonly="readonly" />
                         </div>
@@ -60,8 +63,8 @@
             </div>
             <!--/row-->
         </div>
-        <div class="form-actions" *ngIf="user._id == backend.profile._id">
-            <div class="row">
+        <div class="form-actions" style="margin-bottom: -13px;" *ngIf="user._id == backend.profile._id">
+            <div class="row text-center">
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12">
@@ -84,8 +87,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-md-offset-4 col-md-8">
+            <div class="row text-center">
+                <div class="col-md-12">
                     <button type="button" class="btn green" (click)="modifyPict()" [disabled]="!pict || pict == ''">
                             <i class="fa fa-upload"></i> {{ 'userinfo.modifyPict' | translate }}</button>
                 </div>

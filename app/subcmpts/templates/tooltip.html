@@ -1,10 +1,10 @@
-<a href="javascript:;" *ngIf="right && mode=='info' && !!uri && uri != ''" style="float: right;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
-<a href="javascript:;" *ngIf="!right && mode=='info' && !!uri && uri != ''" style="float: left;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
+<a class="whigi-md-block" href="javascript:;" *ngIf="right && mode=='info' && !!uri && uri != ''" style="float: right;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
+<a class="whigi-md-block" href="javascript:;" *ngIf="!right && mode=='info' && !!uri && uri != ''" style="float: left;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
 
-<a href="javascript:;" *ngIf="right && mode=='shares' && !!uri && uri != ''" title="{{ 'generics.shared' | translate }}"
+<a class="whigi-md-block" href="javascript:;" *ngIf="right && mode=='shares' && !!uri && uri != ''" title="{{ 'generics.shared' | translate }}"
     style="position: absolute; top: 6px; z-index: 990; right: 20px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
-<a href="javascript:;" *ngIf="!right && mode=='shares' && !!uri && uri != ''" title="{{ 'generics.shared' | translate }}"
+<a class="whigi-md-block" href="javascript:;" *ngIf="!right && mode=='shares' && !!uri && uri != ''" title="{{ 'generics.shared' | translate }}"
     style="position: absolute; top: 6px; z-index: 990; right: 10px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
 
-<button type="button" *ngIf="mode=='sharesLink' && !!uri && uri != ''" class="btn btn-link" (click)="launch()">
+<button type="button" *ngIf="mode=='sharesLink' && !!uri && uri != ''" class="whigi-md-block btn btn-link" (click)="launch()">
     <i class="fa fa-commenting" title="{{ 'generics.shared' | translate }}"></i></button>

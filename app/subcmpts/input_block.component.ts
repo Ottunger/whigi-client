@@ -54,7 +54,7 @@ export class InputBlock implements OnInit {
             window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).ready(function() {
                 window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).addClass(self.writeDesc? 'form-group' : 'row');
                 if(!self.writeDesc) {
-                    window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).css('height', '5ex');
+                    window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).addClass('whigi-ex');
                 } else {
                     window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).css('display', 'block');
                 }

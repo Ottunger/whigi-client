@@ -20,3 +20,47 @@
   }
 
 }
+
+@media screen and (max-width: 991px) {
+
+  .btn-may {
+    padding-left: 6px;
+    max-width: 65px;
+  }
+  .btn-may-lefter {
+    margin-left: 15px;
+  }
+  .whigi-md-block {
+    display: none;
+  }
+  .whigi-ex {
+    height: 8ex;
+    padding: 0px 20px;
+  }
+  .whigi-sm-name {
+    padding-right: 2px;
+    padding-bottom: 3px;
+  }
+
+}
+
+@media screen and (min-width: 992px) {
+
+  .btn-may {
+    padding: 0px 0px;
+    max-width: 45px;
+  }
+  .btn-may-lefter {
+    margin-left: -12px;
+  }
+  .whigi-md-block {
+    display: block;
+  }
+  .whigi-ex {
+    height: 5ex;
+  }
+  .whigi-sm-pad {
+    padding-left: 5px;
+  }
+
+}

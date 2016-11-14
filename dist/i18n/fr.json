@@ -186,7 +186,8 @@
    "userinfo.addr": "Adresse du domicile",
    "userinfo.bce": "Numéro BCE: ",
    "userinfo.goBCE": "Charger le nom depuis la BCE",
-   "userinfo.modifyPict": "Uploader l'image",
+   "userinfo.modifyPict": "Uploader l'image utilisateur: ",
+   "userinfo.nothing": "Aucune donnée personnelle enregistrée",
 
    "merge.title": "Fusionner un compte",
    "merge.login": "Nom de compte",
@@ -288,6 +289,7 @@
    "generics.rrn": "Numéro national",
    "generics.langs": "Langue",
    "generics.langslong": "Langue préférée",
+   "generics.religion": "Religion",
 
    "generics.badurl": "Mauvais format d'URL",
    "generics.badtwitter": "Mauvais format de compte twitter",
