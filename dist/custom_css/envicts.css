@@ -1,0 +1,9 @@
+body {
+    background-color: #ea8354!important;
+}
+
+div .login {
+    box-shadow: 5px 5px 5px #ff5000;
+    border-radius: 20px;
+    background-color: #da9b7e!important;
+}

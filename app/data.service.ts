@@ -952,10 +952,12 @@ export class Data {
      */
     providerCSS(uri: string) {
         var todo: string;
-        if(uri.match(/^facebook$/))
-            todo = 'facebook';
-        else if(uri.match(/whigi/))
-            todo = 'localhost';
+        if(uri.match(/(whigi)|(wissl)/))
+            todo = 'envicts';
+        /*
+        else if(uri.match(/^$/))
+            todo = '';
+        */
         if(!!todo)
             window.$('head').append('<link id="custom-css" rel="stylesheet" type="text/css" href="custom_css/' + todo + '.css">');
     }
