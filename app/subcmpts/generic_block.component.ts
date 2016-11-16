@@ -108,6 +108,11 @@ export class GenericBlock implements OnInit {
                 this.new_datas[group] = event[1];
                 break;
         }
+        if(!!event[1] && !!window.$('#setname' + this.dataservice.sanit(group)).length && window.$('#setname' + this.dataservice.sanit(group)).length > 0) {
+            this.ass_name[window.$('#setname' + this.dataservice.sanit(group)).attr('g')] = event[1][window.$('#setname' + this.dataservice.sanit(group)).attr('nwkey')];
+            window.$('#setname' + this.dataservice.sanit(group)).val(event[1][window.$('#setname' + this.dataservice.sanit(group)).attr('nwkey')]);
+        }
+        this.registerAll(false);
     }
 
     /**
@@ -196,8 +201,7 @@ export class GenericBlock implements OnInit {
         window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', '');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
         if(send.constructor === Array) {
-            if(send[1] != 'generics.silent')
-                this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
+            this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
             window.$('.igen' + this.dataservice.sanit(name)).addClass('has-error');
             window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', 'red');
             return;
@@ -370,9 +374,11 @@ export class GenericBlock implements OnInit {
      * @public
      * @param {String} fname Full name.
      * @param {String} gname Generic underlying.
+     * @param {Boolean} skip Force skip.
      */
-    tgData(fname: string, gname: string) {
+    tgData(fname: string, gname: string, skip?: boolean) {
         var self = this;
+        skip = skip === true;
         function allEmpty(): boolean {
             var keys = Object.getOwnPropertyNames(self.new_datas[fname]);
             for(var i = 0; i < keys.length ; i++) {
@@ -387,14 +393,18 @@ export class GenericBlock implements OnInit {
             window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
             window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
             window.$('#on-edit' + this.dataservice.sanit(fname)).addClass('keys' + this.dataservice.sanit(fname));
+            //Auto expand input_block
+            window.$('#igen2' + this.dataservice.sanit(fname)).click();
         } else {
-            if((this.backend.generics[gname][this.backend.generics[gname].length - 1].mode != 'json_keys'
+            if(skip || (this.backend.generics[gname][this.backend.generics[gname].length - 1].mode != 'json_keys'
                 && (!this.new_data[fname] || this.new_data[fname] == '') && (!this.new_data_file[fname] || this.new_data_file[fname] == '')) ||
                 (this.backend.generics[gname][this.backend.generics[gname].length - 1].mode == 'json_keys' && allEmpty())) {
                 window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
                 window.$('#on-edit' + this.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + this.dataservice.sanit(fname));
+                if(skip)
+                    self.resets[fname].emit([]);
                 return;
             }
             //Build and test
@@ -418,7 +428,8 @@ export class GenericBlock implements OnInit {
                     delete self.previews[fname];
                     self.preview(fname, true, gname);
                 }
-                self.resets[fname].emit();
+                self.resets[fname].emit(send);
+                self.resets[fname].emit([]);
                 self.dataservice.filterKnown(self.raw_list, function(now) {
                     self.data_list = now;
                 });
@@ -460,10 +471,12 @@ export class GenericBlock implements OnInit {
      * @public
      */
     cancel() {
-        this.ass_name = {};
-        var keys = Object.getOwnPropertyNames(this.resets);
-        for(var j = 0; j < keys.length; j++)
-            this.resets[keys[j]].emit();
+        var self = this;
+        window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false).each(function() {
+            var f = window.$(this).attr('data-f');
+            var g = window.$(this).attr('data-g');
+            self.tgData(f, g, true);
+        });
     }
 
     /**

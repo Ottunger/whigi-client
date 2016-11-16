@@ -36,7 +36,8 @@ export class Backend {
         enum: string,
         validate: string,
         json_keys: {descr_key: string, mode: string, enum: string, required: boolean, placeholder?: string}[],
-        new_key?: string[],
+        new_key: string[],
+        new_key_is?: string
         new_keys_only?: boolean,
         placeholder?: string,
         requires?: string,

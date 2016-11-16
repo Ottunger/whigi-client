@@ -62,8 +62,12 @@ export class InputBlock implements OnInit {
         }
         if(!!this.reset) {
             this.reset.subscribe(function(params) {
-                self.within = params;
-                self.def();
+                if(params.constructor === Array) {
+                    self.collapse(true);
+                } else {
+                    self.within = params;
+                    self.def();
+                }
             });
         }
         //Prepare the dates
@@ -116,12 +120,14 @@ export class InputBlock implements OnInit {
      * Collapse/Expand.
      * @function collapse
      * @public
+     * @param {Boolean} force Force close.
      */
-    collapse() {
+    collapse(force?: boolean) {
+        force = force === true;
         window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display',
-            (window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display') == 'block'? 'none' : 'block'));
+            (window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display') == 'block' || force? 'none' : 'block'));
         window.$('.keys' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display',
-            (window.$('.keys' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display') == 'block' || window.innerWidth <= 991? 'none' : 'block'));
+            (window.$('.keys' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display') == 'block' || window.innerWidth <= 991 || force? 'none' : 'block'));
     }
 
     /**

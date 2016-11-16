@@ -187,6 +187,11 @@
    "userinfo.goBCE": "Load company name from BCE",
    "userinfo.modifyPict": "Upload profile picture: ",
    "userinfo.nothing": "No personal data registered",
+   "userinfo.request": "Request sentence (contact us to have a translatable one): ",
+   "requests.unspecified": "The user did not specify the purpose of these shares",
+   "requests.restore": "Data required by paswword recovery subsystem",
+   "requests.gwp": "Data required by free WordPress granter subsystem",
+   "requests.whigi": "Data required by the system to stay in touch",
 
    "merge.title": "Merge an account",
    "merge.login": "Username",
@@ -199,7 +204,7 @@
    "merge.explain": "When merging accounts, you enter here an account and copy all of its contents to your profile. The data this account had and how it shared it is perfetcly transferred, however, the data shared to it cannot be directly redirected. Updates on the shared data will be done to this account, but you will not have access to it in the mean time. Therefore, if your to-be-merged account has password recovery keys, we encourage you to ask the sharer to update them.",
    "merge.confirm": "Are you sure you want to incorporate the next account?: ",
 
-   "generics.silent": "Your input does not match expected format",
+   "generics.silent": "Your input lacks required fields",
    "generics.regexp": "Your input does not match expected format",
    "generics.descr": "Description",
    "generics.goTo": "View / Edit",

@@ -31,6 +31,8 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body form" id="apsableshare{{ dataservice.sanit(p) }}" style="display: none;">
+                                        <kbd *ngIf="!!users[p] && !!users[p].company_info && !!users[p].company_info.request">{{ users[p].company_info.request | translate }}</kbd>
+                                        <kbd *ngIf="!users[p] || !users[p].company_info || !users[p].company_info.request">{{ 'requests.unspecified' | translate }}</kbd>
                                         <!-- BEGIN TABLE -->
                                         <div class="table-responsive">
                                             <table class="table table-hover">

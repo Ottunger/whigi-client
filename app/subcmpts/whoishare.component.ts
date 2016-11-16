@@ -20,6 +20,7 @@ import * as template from './templates/whoishare.html';
 })
 export class WhoIShare {
 
+    public users: {[id: string]: any};
     private my_shares: string[];
 
     /**
@@ -34,7 +35,7 @@ export class WhoIShare {
      */
     constructor(private translate: TranslateService, private backend: Backend, private router: Router,
         private notif: NotificationsService, private dataservice: Data) {
-
+        this.users = {};
     }
 
     /**
@@ -107,15 +108,16 @@ export class WhoIShare {
             return this.my_shares;
         var ret = Object.getOwnPropertyNames(this.backend.my_shares);
         ret.forEach(function(d: string) {
-            window.$('#pict__' + d).ready(function() {
-                self.backend.getUser(d).then(function(user) {
+            self.backend.getUser(d).then(function(user) {
+                self.users[d] = user;
+                window.$('#pict__' + d).ready(function() {
                     if(!!user && !!user.company_info && !!user.company_info.picture)
                         window.$('#pict__' + d).attr('src', user.company_info.picture);
                     else
                         window.$('#pict__' + d).attr('src', 'assets/logo.png');
-                }, function(e) {
-                    window.$('#pict__' + d).attr('src', 'assets/logo.png');
                 });
+            }, function(e) {
+                window.$('#pict__' + d).attr('src', 'assets/logo.png');
             });
         });
         this.my_shares = ret;

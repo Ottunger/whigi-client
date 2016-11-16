@@ -14,9 +14,10 @@
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title">
                         <breadcrump [ev]="dataservice.ev"></breadcrump>
-                        <!-- personal pages insert -->
                         <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
                         <button *ngIf="is_generic" type="button" class="btn green" style="float: right; margin-right: 5px;" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
+                        <!-- personal pages insert -->
+                        <!--
                         <div class="btn-group btn-group-justified" style="float: right; margin-right: 150px; max-width: 36px;" role="group" *ngIf="is_generic">
                             <div class="btn-group" role="group">
                                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,6 +31,7 @@
                                 </ul>
                             </div>
                         </div>
+                        -->
                         <!-- end -->
                     </h1>
                     <!-- END PAGE TITLE-->

@@ -103,9 +103,17 @@ export class Dataview implements OnInit, OnDestroy {
                     if(!!self.backend.generics[self.data_name]) {
                         self.is_generic = true;
                         self.gen_name = self.data_name;
+                        //Auto expand input_block
+                        setImmediate(function() {
+                            window.$('#igen2' + self.dataservice.sanit(self.gen_name)).click();
+                        });
                     } else if(!!self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')] && self.backend.generics[self.data_name.replace(/\/[^\/]*$/, '')][self.version].instantiable) {
                         self.is_generic = true;
                         self.gen_name = self.data_name.replace(/\/[^\/]*$/, '');
+                        //Auto expand input_block
+                        setImmediate(function() {
+                            window.$('#igen2' + self.dataservice.sanit(self.gen_name)).click();
+                        });
                     }
                     resolve();
                 });

@@ -69,7 +69,7 @@
                                             <ul class="dropdown-menu" style="min-width: 0px;">
                                                 <li *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_dated && backend.profile.data[g].id.indexOf('datafragment') == 0
                                                         && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
-                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)">
+                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g">
                                                         <i class="fa fa-pencil"></i></button>
                                                 </li>
                                                 <li>
@@ -97,21 +97,27 @@
                                 <!-- description -->
                                 <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <!-- select name any -->
-                                    <input *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only"
-                                        type="text" [(ngModel)]="ass_name[g]" (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
-                                        name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 1px 1px 1px #FF5000!important;"
-                                        placeholder="{{ 'generics.label' | translate }}">
+                                    <input *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only
+                                        && !backend.generics[g][backend.generics[g].length - 1].new_key_is" type="text" [(ngModel)]="ass_name[g]"
+                                        (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')" name="new_name{{ dataservice.sanit(g) }}"
+                                        class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 1px 1px 1px #FF5000!important;" placeholder="{{ 'generics.label' | translate }}">
                                     <datalist *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only" id="suggestions{{ g }}">
                                         <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
                                     </datalist>
                                     <!-- end select name any -->
                                     <!-- select name force -->
-                                    <select *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].new_keys_only"
-                                        [(ngModel)]="ass_name[g]" (change)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
+                                    <select *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].new_keys_only
+                                        && !backend.generics[g][backend.generics[g].length - 1].new_key_is" [(ngModel)]="ass_name[g]"
+                                        (change)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
                                         name="new_name{{ dataservice.sanit(g) }}" class="form-control" style="box-shadow: 1px 1px 1px #FF5000!important;">
                                         <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
                                     </select>
                                     <!-- end select name force -->
+                                    <!-- force name -->
+                                    <input type="text" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !!backend.generics[g][backend.generics[g].length - 1].new_key_is"
+                                        style="box-shadow: 1px 1px 1px #FF5000!important;" [(ngModel)]="ass_name[g]" class="form-control" id="setname{{ dataservice.sanit(g) }}" [attr.g]="g"
+                                        [attr.nwkey]="backend.generics[g][backend.generics[g].length - 1].new_key_is" readonly="readonly" name="new_name{{ dataservice.sanit(g) }}"/>
+                                    <!-- end force name -->
                                     <!-- padding non instatiable json keys -->
                                     <div style="height: 34px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable
                                         && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'"></div>
@@ -137,7 +143,7 @@
                                     <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
                                         <td style="padding-top: 5px;" [style.padding-bottom]="l? '5px' : '0px'">
                                             <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
-                                                <input type="text" style="margin-left: -4px; box-shadow: 2px 2px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
+                                                <input type="text" style="margin-left: -4px; box-shadow: 1px 1px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
                                                     placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"/>
                                                 <!-- json labels -->
                                                 <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
@@ -168,7 +174,7 @@
                                                         </button>
                                                         <ul class="dropdown-menu" style="min-width: 0px;">
                                                             <li *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_dated && backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
-                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)">
+                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
                                                                     <i class="fa fa-pencil"></i></button>
                                                             </li>
                                                             <li>
