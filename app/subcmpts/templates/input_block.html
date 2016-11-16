@@ -33,8 +33,8 @@
         </select>
         <!-- checkbox -->
         <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="k.mode == 'checkbox'" (change)="iChange(3)">
-            <input type="checkbox" name="new_data" [(ngModel)]="new_datas[k.descr_key]" value="false" /> {{ 'generics.hasValue' | translate }}
-            <span></span>
+            <input type="checkbox" name="new_data" [(ngModel)]="new_datas[k.descr_key]" value="false" />
+            <span style="margin-top: 1em;"></span>
         </label>
         <!-- date -->
         <div class='input-group date pickgen{{ dataservice.sanit(k.descr_key) }}' *ngIf="k.mode == 'date'">
@@ -51,8 +51,8 @@
 </select>
 <!-- CHECKBOX -->
 <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'checkbox'" (change)="iChange(1)">
-    <input type="checkbox" name="new_data" [(ngModel)]="new_data" value="false" /> {{ 'generics.hasValue' | translate }}
-    <span></span>
+    <input type="checkbox" name="new_data" [(ngModel)]="new_data" value="false" />
+    <span style="margin-top: 1em;"></span>
 </label>
 <!-- DATE -->
 <div class='input-group date grant-required pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">

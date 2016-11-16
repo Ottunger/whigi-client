@@ -108,39 +108,39 @@ export class Check {
     areAddress(test: string): string | boolean {
         var obj = JSON.parse(test);
         switch(obj['generics.country']) {
-            case 'BE':
+            case 'Belgium':
                 if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
-            case 'ES':
-                if(!/^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
-                break;
-            case 'DE':
-                if(!/^((?:0[1-46-9]\d{3})|(?:[1-357-9]\d{4})|(?:[4][0-24-9]\d{3})|(?:[6][013-9]\d{3}))$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
-                break;
-            case 'FR':
+            case 'France':
                 if(!/^((0[1-9])|([1-8][0-9])|(9[0-8])|(2A)|(2B))[0-9]{3}$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
-            case 'IT':
+            case 'Germany':
+                if(!/^((?:0[1-46-9]\d{3})|(?:[1-357-9]\d{4})|(?:[4][0-24-9]\d{3})|(?:[6][013-9]\d{3}))$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'Italy':
                 if(!/^(V-|I-)?[0-9]{5}$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
-            case 'LU':
+            case 'Luxembourg':
                 if(!/^L-[1-9][0-9]{3}$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
-            case 'NL':
+            case 'Netherlands':
                 if(!/^[1-9][0-9]{3}\s?([a-zA-Z]{2})?$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
-            case 'UK':
+            case 'Spain':
+                if(!/^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/.test(obj['generics.postcode']))
+                    return 'generics.badpostcode';
+                break;
+            case 'United Kingdom':
                 if(!/^(GIR|[A-Z]\d[A-Z\d]??|[A-Z]{2}\d[A-Z\d]??)[ ]??(\d[A-Z]{2})$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;
-             case 'US':
+             case 'United States':
                 if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
                     return 'generics.badpostcode';
                 break;

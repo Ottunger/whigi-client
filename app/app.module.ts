@@ -44,6 +44,7 @@ import {WhoIShare} from './subcmpts/whoishare.component';
 import {InputBlock} from './subcmpts/input_block.component';
 import {Tooltip} from './subcmpts/tooltip.component';
 import {Breadcrump} from './subcmpts/breadcrump.component';
+import {ClearSingleview} from './subcmpts/clearsingleview.component';
 import {Notfound} from './subcmpts/notfound.component';
 
 export function createTranslateLoader(http: Http) {
@@ -90,6 +91,7 @@ export function createTranslateLoader(http: Http) {
         InputBlock,
         Tooltip,
         Breadcrump,
+        ClearSingleview,
         Notfound
     ],
     providers: [

@@ -13,7 +13,8 @@
                 <div class="page-content" style="min-height:800px">
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title">
-                        <breadcrump [ev]="dataservice.ev"></breadcrump><!-- personal pages insert -->
+                        <breadcrump [ev]="dataservice.ev"></breadcrump>
+                        <!-- personal pages insert -->
                         <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
                         <button *ngIf="is_generic" type="button" class="btn green" style="float: right; margin-right: 5px;" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
                         <div class="btn-group btn-group-justified" style="float: right; margin-right: 150px; max-width: 36px;" role="group" *ngIf="is_generic">
@@ -64,10 +65,10 @@
                                                             </div>
                                                         </div>
                                                         <!-- BEGIN INPUT -->
-                                                        <div class="col-md-4 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;" *ngIf="!is_generic || !backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
+                                                        <div class="col-md-2 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;" *ngIf="!is_generic || !backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
                                                             {{ 'actual' | translate }}<span>*</span>:
                                                         </div>
-                                                        <div class="col-md-4 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;">
+                                                        <div class="col-md-3 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;">
                                                             <div class="row" style="height: 34px;" *ngIf="is_generic"></div>
                                                             <!-- labels -->
                                                             <div style="display: none;" class="keys{{ dataservice.sanit(gen_name) }} text-right" *ngIf="is_generic && backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
@@ -91,21 +92,20 @@
                                                 </div>
                                                 <div class="form-actions">
                                                     <div class="row text-center">
-                                                        <div class="col-md-12">
-                                                            <div class="row">
-                                                                <div class="col-md-3">
-                                                                    <button type="submit" class="btn green" [disabled]="!decr_data" (click)="modify()">
-                                                                        <i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
-                                                                </div>
-                                                                <div class="col-md-3">
-                                                                    <button type="submit" class="btn green" (click)="revokeAll()">
-                                                                        <i class="fa fa-exclamation"></i> {{ 'dataview.revokeAll' | translate }}</button>
-                                                                </div>
-                                                                <div class="col-md-offset-3 col-md-3">
-                                                                    <button type="submit" class="btn green" [disabled]="shared() || !!backend.generics[data_name]" (click)="remove()">
-                                                                        <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
-                                                                </div>
-                                                            </div>
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn default" [disabled]="!decr_data" (click)="modify()">
+                                                                <i class="fa fa-pencil"></i> 
+                                                                <span *ngIf="!is_dated">{{ 'modify' | translate }}</span>
+                                                                <span *ngIf="is_dated">{{ 'record' | translate }}</span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button type="submit" class="btn green" (click)="revokeAll()">
+                                                                <i class="fa fa-exclamation"></i> {{ 'dataview.revokeAll' | translate }}</button>
+                                                        </div>
+                                                        <div class="col-md-offset-3 col-md-2">
+                                                            <button type="submit" class="btn green" [disabled]="shared() || !!backend.generics[data_name]" (click)="remove()">
+                                                                <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
                                                         </div>
                                                     </div>
                                                 </div>

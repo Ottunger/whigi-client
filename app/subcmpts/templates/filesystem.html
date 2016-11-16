@@ -51,7 +51,7 @@
                                             <td style="padding: 1px;"><div class="inaming"><input type="text" [(ngModel)]="nw_data_name_00" name="s0" class="form-control"></div></td>
                                             <td style="padding: 1px;"><input type="text" [(ngModel)]="nw_data_value_00" name="s1" class="form-control"></td>
                                             <td style="padding: 1px;">
-                                                <button type="button" class="btn green" (click)="register(false, nw_data_name_00, nw_data_value_00); nw_data_name_00=''; nw_data_value_00='';"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <button type="button" class="btn green" (click)="register(false, nw_data_name_00, nw_data_value_00); nw_data_name_00=''; nw_data_value_00='';"><i class="fa fa-edit"></i> {{ 'record' | translate }}</button>
                                             </td>
                                         </tr>
                                         <tr *ngIf="mode=='data' && !backend.generics[folders.slice(0, -1)]">
@@ -61,7 +61,7 @@
                                                 <input id="fs1" style="display: none;" type="file" (change)="fileLoad($event)" name="n50" class="form-control" />
                                             </td>
                                             <td style="padding: 1px;">
-                                                <button type="button" class="btn green" (click)="register(false, nw_data_name_01, data_value_file); nw_data_name_01='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                <button type="button" class="btn green" (click)="register(false, nw_data_name_01, data_value_file); nw_data_name_01='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'record' | translate }}</button>
                                             </td>
                                         </tr>
 
@@ -78,7 +78,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <button type="button" class="btn green" (click)="register(true, nw_data_name_10, nw_data_value_10); nw_data_name_10=''; nw_data_value_10='';"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                    <button type="button" class="btn green" (click)="register(true, nw_data_name_10, nw_data_value_10); nw_data_name_10=''; nw_data_value_10='';"><i class="fa fa-edit"></i> {{ 'record' | translate }}</button>
                                                 </div>
                                             </td>
                                         </tr>
@@ -98,7 +98,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">
-                                                    <button type="button" class="btn green" (click)="register(true, nw_data_name_11, data_value_file); nw_data_name_11='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'filesystem.record' | translate }}</button>
+                                                    <button type="button" class="btn green" (click)="register(true, nw_data_name_11, data_value_file); nw_data_name_11='';" [disabled]="data_value_file==''"><i class="fa fa-edit"></i> {{ 'record' | translate }}</button>
                                                 </div>
                                             </td>
                                         </tr>

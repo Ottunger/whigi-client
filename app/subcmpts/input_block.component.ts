@@ -18,6 +18,7 @@ import * as template from './templates/input_block.html';
 })
 export class InputBlock implements OnInit {
 
+    public within: string;
     private new_data: string;
     private new_data_file: string;
     private new_datas: {[id: string]: string};
@@ -47,7 +48,6 @@ export class InputBlock implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.def();
-        this.new_data = (!!this.prefill && !this.standalone)? this.prefill : undefined;
         this.prefill = this.prefill || '';
         this.standalone = this.standalone || false;
         if(!this.standalone || this.prefill != '') {
@@ -61,9 +61,9 @@ export class InputBlock implements OnInit {
             });
         }
         if(!!this.reset) {
-            this.reset.subscribe(function() {
+            this.reset.subscribe(function(params) {
+                self.within = params;
                 self.def();
-                self.collapse();
             });
         }
         //Prepare the dates
@@ -95,6 +95,18 @@ export class InputBlock implements OnInit {
         this.new_datas = {};
         delete this.new_data_file;
         delete this.new_data;
+        //Prefill?
+        if(!!this.within) {
+            if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
+                var obj = JSON.parse(this.within);
+                for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
+                    this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                        obj[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key];
+                }
+            } else {
+                this.new_data = this.new_data_file = this.within;
+            }
+        }
         this.iChange(1);
         this.iChange(2);
         this.iChange(3);

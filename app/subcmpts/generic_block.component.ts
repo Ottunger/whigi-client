@@ -31,7 +31,7 @@ export class GenericBlock implements OnInit {
     @Input() group: string;
     @Input() raw_list: string[];
     @Output() rm: EventEmitter<string>;
-    private previews: {[id: string]: string};
+    private previews: {[id: string]: string[]};
     private asked: {[id: string]: number[] | boolean};
     private resets: {[id: string]: EventEmitter<any>}
 
@@ -133,33 +133,50 @@ export class GenericBlock implements OnInit {
             var g = window.$(checks[i]).attr('data-g');
             if(this.backend.generics[g][this.backend.generics[g].length - 1].instantiable) {
                 if(!!this.ass_name[g] && this.ass_name[g] != '') {
-                    if(this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') {
-                        if(!perf)
+                    if((this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') && this.notOrEdit(g + '/' + this.ass_name[g])) {
+                        if(!perf) {
                             return false;
-                        else
+                        } else {
                             this.register(g, true, this.ass_name[g]);
-                    } else if((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) {
-                        if(!perf)
+                        }
+                    } else if(((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) && this.notOrEdit(g + '/' + this.ass_name[g])) {
+                        if(!perf) {
                             return false;
-                        else
+                        } else {
                             this.register(g, false, this.ass_name[g]);
+                        }
                     }
                 }
             } else {
-                if(this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') {
-                    if(!perf)
+                if((this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') && this.notOrEdit(g)) {
+                    if(!perf) {
                         return false;
-                    else
+                    } else {
                         this.register(g, true);
-                } else if((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) {
-                    if(!perf)
+                    }
+                } else if(((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) && this.notOrEdit(g)) {
+                    if(!perf) {
                         return false;
-                    else
+                    } else {
                         this.register(g, false);
+                    }
                 }
             }
         }
         return true;
+    }
+
+    /**
+     * Returns whether editing or creating a name.
+     * @function notOrEdit
+     * @private
+     * @param {String} name Name.
+     * @return {Boolean} Whether indeed.
+     */
+    private notOrEdit(name: string): boolean {
+        if(!(name in this.backend.profile.data))
+            return true;
+        return window.$('#tgdata' + this.dataservice.sanit(name)).hasClass('in-edit');
     }
 
     /**
@@ -238,12 +255,15 @@ export class GenericBlock implements OnInit {
      * @param {String} name Data name.
      * @param {Boolean} keyded Whether JSON keyded.
      * @param {String} gen_name Original generic.
+     * @param {Boolean} full Full decrypted data.
      * @return {String} Decrypted data.
      */
-    preview(name: string, keyded: boolean, gen_name: string): string {
+    preview(name: string, keyded: boolean, gen_name: string, full?: boolean | number): string {
         var self = this;
+        full = full || false;
+        full = full? 1 : 0;
         if(name in this.previews)
-            return this.previews[name];
+            return this.previews[name][full];
         if(name in this.asked)
             return '[]';
         this.asked[name] = true;
@@ -254,14 +274,15 @@ export class GenericBlock implements OnInit {
             });
         }).then(function(data) {
             if(self.backend.profile.data[name].is_dated) {
-                self.previews[name] = JSON.parse(data.decr_data)[0].value;
+                self.previews[name] = [JSON.parse(data.decr_data)[0].value, ''];
+                self.previews[name] = [self.previews[name][0], self.previews[name][0]];
             } else {
-                self.previews[name] = data.decr_data;
+                self.previews[name] = [data.decr_data, data.decr_data];
             }
             if(keyded) {
-                var obj = JSON.parse(self.previews[name]);
+                var obj = JSON.parse(self.previews[name][1]);
                 var keys = Object.getOwnPropertyNames(obj);
-                self.previews[name] = '';
+                self.previews[name][0] = '';
                 for(var i = 0; i < keys.length; i++) {
                     var idx = 0;
                     for(var j = 0; j < self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys.length; j++) {
@@ -271,16 +292,18 @@ export class GenericBlock implements OnInit {
                         }
                     }
                     if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select')
-                        try { self.previews[name] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { self.previews[name] += obj[keys[i]] + ' '; }
+                        try { self.previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { self.previews[name][0] += obj[keys[i]] + ' '; }
                     else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
                         && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
-                        self.previews[name] += self.translate.instant(obj[keys[i]]) + ' ';
+                        self.previews[name][0] += obj[keys[i]] + ' ';
                 }
-                self.previews[name].trim();
+                self.previews[name][0].trim();
             }
+            if(!!self.resets[name])
+                self.resets[name].emit(self.previews[name][1]);
             self.check.tick();
         }, function(e) {
-            self.previews[name] = '[]';
+            self.previews[name] = ['[]', '[]'];
             delete self.asked[name];
         });
     }
@@ -317,19 +340,24 @@ export class GenericBlock implements OnInit {
         var self = this;
         if(!window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
             window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');
-            window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', false).val('');
+            window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', false);
         } else {
             if(!window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() || window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() == '') {
                 window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
                 window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
                 return;
             }
-            if((folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()) in this.backend.profile.data)
+            if((folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()) in this.backend.profile.data) {
+                window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
+                window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
                 return;
+            }
             this.backend.rename(folder + '/' + efix, folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()).then(function() {
                 window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
                 window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
-                self.dataservice.listData(false);
+                self.dataservice.listData(false).then(function() {
+                    self.ngOnInit();
+                });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });
@@ -346,13 +374,14 @@ export class GenericBlock implements OnInit {
     tgData(fname: string, gname: string) {
         var self = this;
         function allEmpty(): boolean {
-            var keys = Object.getOwnPropertyNames(self.new_datas[gname]);
-            for(var i = 0; i < keys.length ; i++)
-                if(!!self.new_datas[gname][keys[i]] && self.new_datas[gname][keys[i]] != '')
+            var keys = Object.getOwnPropertyNames(self.new_datas[fname]);
+            for(var i = 0; i < keys.length ; i++) {
+                if(!!self.new_datas[fname][keys[i]] && self.new_datas[fname][keys[i]] != '') {
                     return false;
+                }
+            }
             return true;
         }
-
         if(!window.$('#tgdata' + this.dataservice.sanit(fname)).hasClass('green')) {
             window.$('#tgdata' + this.dataservice.sanit(fname)).addClass('green in-edit').removeClass('btn-link').attr('disabled', true);
             window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
@@ -383,11 +412,11 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
                 window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
                 if(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'json_keys' && self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'file')
-                    self.previews[fname] = send;
+                    self.previews[fname] = [send, send];
                 else if(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys') {
                     delete self.asked[fname];
                     delete self.previews[fname];
-                    self.preview(fname, true);
+                    self.preview(fname, true, gname);
                 }
                 self.resets[fname].emit();
                 self.dataservice.filterKnown(self.raw_list, function(now) {

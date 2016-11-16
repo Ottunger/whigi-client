@@ -111,7 +111,7 @@ export class Dataview implements OnInit, OnDestroy {
                 });
             }).then(function(data) {
                 self.decr_data = data.decr_data;
-                self.check.tick();
+                self.changed.emit(self.decr_data);
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });

@@ -30,7 +30,6 @@ export class Clearview {
     @Input() changed: EventEmitter<string>;
     @Output() notify: EventEmitter<string>;
     private values: {from: Date, value: string}[];
-    private cpt: {[id: string]: string};
 
     /**
      * Creates the component.
@@ -45,7 +44,6 @@ export class Clearview {
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         this.values = undefined;
         this.notify = new EventEmitter<string>();
-        this.cpt = {};
         new window.Clipboard('.btn-copier');
     }
 
@@ -60,7 +58,6 @@ export class Clearview {
             this.changed.subscribe(function(nw_val) {
                 self.decr_data = nw_val;
                 delete self.values;
-                self.cpt = {};
             });
         }
     }
@@ -107,37 +104,6 @@ export class Clearview {
         });
         str.splice(i, 1);
         this.notify.emit(JSON.stringify(str));
-    }
-
-    /**
-     * Spreads a part of a folder generic content.
-     * @function recover
-     * @param {String} key Key.
-     * @param {String} json JSON.
-     * @param {Date} from Desinbiguifier. 
-     * @return {String} Associated value.
-     */
-    recover(key: string, json: string, from: Date): string {
-        if(key + '___' + from in this.cpt)
-            return this.cpt[key + '___' + from];
-        var idx = 0;
-        var ret = JSON.parse(json), bk;
-        for(var i = 0; i < this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys.length; i++) {
-            if(this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys[i].descr_key == key) {
-                idx = i;
-                break;
-            }
-        }
-        if(this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys[idx].mode == 'select')
-            try { bk = this.translate.instant(ret[key]); } catch(e) { bk = ret[key]; }
-        if(this.backend.generics[this.gen_name][this.backend.generics[this.gen_name].length - 1].json_keys[idx].mode == 'checkbox')
-            bk = this.translate.instant(ret[key]? 'Yes' : 'No');
-        else
-            bk = ret[key];
-        if(!bk || bk.trim() == '')
-            bk = ret[key];
-        this.cpt[key + '___' + from] = bk;
-        return bk;
     }
 
     /**

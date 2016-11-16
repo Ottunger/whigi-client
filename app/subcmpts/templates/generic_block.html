@@ -27,6 +27,7 @@
                                         </div>
                                         <div class="col-md-1" style="padding: 0; margin-left: -3px;">
                                             <!-- personal pages insert/remove -->
+                                            <!--
                                             <button type="button" style="min-width: 36px;" class="btn btn-default" *ngIf="!tsl" (click)="deleteTopo(g)">
                                                 <i class="fa fa-trash"></i>
                                             </button>
@@ -43,6 +44,7 @@
                                                     </ul>
                                                 </div>
                                             </div>
+                                            -->
                                             <!-- end -->
                                         </div>
                                         <div class="col-md-1" style="padding: 0;">
@@ -97,7 +99,8 @@
                                     <!-- select name any -->
                                     <input *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only"
                                         type="text" [(ngModel)]="ass_name[g]" (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')"
-                                        name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 1px 1px 1px #FF5000!important;">
+                                        name="new_name{{ dataservice.sanit(g) }}" class="form-control" [attr.list]="'suggestions' + g" style="box-shadow: 1px 1px 1px #FF5000!important;"
+                                        placeholder="{{ 'generics.label' | translate }}">
                                     <datalist *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only" id="suggestions{{ g }}">
                                         <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">
                                     </datalist>
@@ -114,7 +117,7 @@
                                         && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'"></div>
                                     <!-- end padding non instatiable json keys -->
                                     <!-- json labels -->
-                                    <div style="display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                    <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                         <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
                                             {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                         </div>
@@ -134,9 +137,10 @@
                                     <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
                                         <td style="padding-top: 5px;" [style.padding-bottom]="l? '5px' : '0px'">
                                             <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
-                                                <input type="text" style="margin-left: -4px; box-shadow: 2px 2px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}" class="form-control" value="{{ d }}" readonly="readonly"/>
+                                                <input type="text" style="margin-left: -4px; box-shadow: 2px 2px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
+                                                    placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"/>
                                                 <!-- json labels -->
-                                                <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                                <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                                     <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
                                                         {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                                     </div>
@@ -198,7 +202,7 @@
                 <div class="form-actions">
                     <div class="row text-center">
                         <div class="col-md-4">
-                            <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" [disabled]="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'filesystem.record' | translate }}</button>
+                            <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" [disabled]="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                         </div>
                         <div class="col-md-4">
                             <button type="button" class="btn default" (click)="cancel()">{{ 'cancel' | translate }}</button>
