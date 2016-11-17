@@ -73,7 +73,7 @@
                                                         <div class="col-md-3 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;">
                                                             <div class="row" style="height: 34px;" *ngIf="is_generic"></div>
                                                             <!-- labels -->
-                                                            <div style="display: none;" class="keys{{ dataservice.sanit(gen_name) }} text-right" *ngIf="is_generic && backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
+                                                            <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(gen_name) }} text-right" *ngIf="is_generic && backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
                                                                 <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[gen_name][backend.generics[gen_name].length - 1].json_keys">
                                                                     {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                                                 </div>
@@ -177,7 +177,7 @@
                                                             <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>
                                                             <td *ngIf="is_generic && data_name != gen_name">
                                                                 <select class="form-control" [(ngModel)]="filter">
-                                                                    <option *ngFor="let f of filters()" [value]="f">{{ f | translate }}</option>
+                                                                    <option *ngFor="let f of filters()" [value]="f">{{ f }}</option>
                                                                 </select>
                                                             </td>
                                                             <td>

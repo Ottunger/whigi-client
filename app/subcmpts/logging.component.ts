@@ -76,7 +76,7 @@ export class Logging implements OnInit {
         }
         if('token' in localStorage) {
             this.backend.getProfile().then(function(profile) {
-                this.dataservice.wentLogin = true;
+                self.dataservice.wentLogin = true;
                 self.dataservice.extendModules();
                 //Router.go...
                 self.backend.profile = profile;
@@ -99,7 +99,7 @@ export class Logging implements OnInit {
                     self.router.navigate(ret);
                 } else {
                     sessionStorage.removeItem('return_url');
-                    self.router.navigate(['/generics/generics.profile']);
+                    self.router.navigate(['/happenings']);
                 }
             }, function(e) {
                 localStorage.removeItem('token');

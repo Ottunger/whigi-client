@@ -357,7 +357,8 @@ export class Data {
             var ret = {};
             for(var i = 0; i < this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys.length; i++) {
                 if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].required && 
-                    data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] === undefined)
+                    (data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] === undefined
+                    || data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim() == ''))
                     return ['error', 'generics.silent'];
                 if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
                     && data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].length > 127)

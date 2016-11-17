@@ -22,6 +22,7 @@ import {User} from './subcmpts/user.component';
 import {Merge} from './subcmpts/merge.component';
 import {Loginas} from './subcmpts/loginas.component';
 import {WhoIShare} from './subcmpts/whoishare.component';
+import {Happenings} from './subcmpts/happenings.component';
 import {Notfound} from './subcmpts/notfound.component';
 import {Profileguard, Fullguard, Genguard, CSSguard} from './guards.service';
 
@@ -31,6 +32,7 @@ const appRoutes: Routes = [
     {path: 'end', component: Logging},
     {path: 'endPwd', component: Logging},
     {path: 'llight', component: Logging},
+    {path: 'happenings', component: Happenings, canActivate: [Fullguard]},
     {path: 'profile', component: Profile, canActivate: [Profileguard]},
     {path: 'profile/pass/:pwd', component: Profile, canActivate: [Profileguard]},
     {path: 'profile/eidok', component: Profile, canActivate: [Profileguard]},

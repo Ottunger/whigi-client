@@ -68,7 +68,7 @@ export class Account implements OnInit, OnDestroy {
      * @function ngOnInit
      * @public
      */
-    ngOnInit(): void {
+    ngOnInit() {
         var self = this;
         this.sub = this.routed.params.subscribe(this.onRouting.bind(this));
     }

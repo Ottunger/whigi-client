@@ -1,0 +1,82 @@
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [cur]="dataservice.ee" [run]="dataservice.how"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix"> </div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="40"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ 'profile.happenings' | translate }}</h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- TABS -->
+                            <ul class="nav nav-tabs" role="tablist">
+                                <li role="presentation" class="active">
+                                    <a href="#hap_move" aria-controls="hap_move" role="tab" data-toggle="tab">{{ 'happenings.move' | translate }}</a>
+                                </li>
+                            </ul>
+                            <!-- END TABS -->
+                            <!-- PANES -->
+                            <div class="tab-content">
+                                <div role="tabpanel" class="tab-pane active" id="hap_move">
+                                    <!-- begin new adress -->
+                                    <div class="row igenprofile_address">
+                                        <div class="col-md-4 text-right" style="padding-right: 10px;">
+                                            <!-- select name any -->
+                                            <input type="text" [(ngModel)]="new_names['profile/address']" name="new_nameprofile_address"
+                                                class="form-control" list="suggestionsprofile_address" style="box-shadow: 1px 1px 1px #FF5000!important;" placeholder="{{ 'generics.label' | translate }}">
+                                            <datalist id="suggestionsprofile_address">
+                                                <option *ngFor="let k of backend.generics['profile/address'][backend.generics['profile/address'].length - 1].new_key" value="{{ k | translate }}">
+                                            </datalist>
+                                            <!-- end select name any -->
+                                            <!-- labels -->
+                                            <div style="padding-top: 1em;display: none;" class="keysprofile_address text-right">
+                                                <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics['profile/address'][backend.generics['profile/address'].length - 1].json_keys">
+                                                    {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <input_block [reset]="resets['profile/address']" [g]="'profile/address'" (out)="regData('profile/address', $event)" [writeDesc]="false"></input_block>
+                                        </div>
+                                        <div class="col-md-4 text-center">
+                                            <h4>{{ 'action' | translate }}</h4>
+                                            <select style="margin-bottom: 1em;" class="form-control" [(ngModel)]="redir['profile/address']">
+                                                <option *ngFor="let f of filters('profile/address')" [value]="f">{{ f }}</option>
+                                            </select>
+                                            <button type="button" class="btn default" (click)="register('profile/address', new_names['profile/address'], false, false)"
+                                                [disabled]="!new_names['profile/address'] || new_names['profile/address'] == ''">
+                                                <i class="fa fa-check-square"></i> {{ 'add' | translate }}</button>
+                                            <button type="button" (click)="register('profile/address', new_names['profile/address'], false, true, 'profile/address/' + redir['profile/address'])"
+                                                class="btn green" [disabled]="!redir['profile/address'] || redir['profile/address'] == '' || !new_names['profile/address'] || new_names['profile/address'] == ''">
+                                                <i class="fa fa-random"></i> {{ 'happenings.redir' | translate }}</button>
+                                        </div>
+                                    </div>
+                                    <!-- end new address -->
+                                </div>
+                            </div>
+                            <!-- END PANES -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+    </div>
+</div>
