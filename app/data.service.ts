@@ -18,6 +18,7 @@ import * as modules from './subcmpts/templates/generics';
 @Injectable()
 export class Data {
 
+    public wentLogin: boolean;
     public m : {keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
     public ev: EventEmitter<[string, boolean]>;
     private maes: number[];
@@ -40,6 +41,7 @@ export class Data {
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
         private check: ApplicationRef, public checking: Check, private router: Router) {
         var self = this;
+        this.wentLogin = false;
         this.m = modules.m;
         this.ev = new EventEmitter<[string, boolean]>();
         this.selects = {};

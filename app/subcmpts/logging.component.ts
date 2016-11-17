@@ -67,13 +67,16 @@ export class Logging implements OnInit {
             localStorage.removeItem('token');
             localStorage.removeItem('key_decryption');
             localStorage.removeItem('psha');
-            window.setTimeout(function() {
-                self.notif.remove();
-                self.notif.alert(self.translate.instant('error'), self.translate.instant(/endPwd/.test(window.location.href)? 'reset.noLink' : 'sessionExpired'));
-            }, 500);
+            if(this.dataservice.wentLogin) {
+                window.setTimeout(function() {
+                    self.notif.remove();
+                    self.notif.alert(self.translate.instant('error'), self.translate.instant(/endPwd/.test(window.location.href)? 'reset.noLink' : 'sessionExpired'));
+                }, 500);
+            }
         }
         if('token' in localStorage) {
             this.backend.getProfile().then(function(profile) {
+                this.dataservice.wentLogin = true;
                 self.dataservice.extendModules();
                 //Router.go...
                 self.backend.profile = profile;
