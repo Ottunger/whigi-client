@@ -191,7 +191,7 @@
    "userinfo.bce": "Numéro BCE: ",
    "userinfo.goBCE": "Charger le nom depuis la BCE",
    "userinfo.modifyPict": "Uploader l'image utilisateur: ",
-   "userinfo.nothing": "Aucune donnée personnelle enregistrée",
+   "userinfo.hid": "Identifiant unique",
    "userinfo.request": "Texte de demande (contactez-nous pour en obtenir une traduisible): ",
    "requests.unspecified": "L'utilisateur n'a pas spécifié le but de ces partages",
    "requests.restore": "Données nécessaires au système de récupération de mot de passe",

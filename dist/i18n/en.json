@@ -191,7 +191,7 @@
    "userinfo.bce": "BCE number: ",
    "userinfo.goBCE": "Load company name from BCE",
    "userinfo.modifyPict": "Upload profile picture: ",
-   "userinfo.nothing": "No personal data registered",
+   "userinfo.hid": "Hidden ID",
    "userinfo.request": "Request sentence (contact us to have a translatable one): ",
    "requests.unspecified": "The user did not specify the purpose of these shares",
    "requests.restore": "Data required by paswword recovery subsystem",
