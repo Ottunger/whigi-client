@@ -197,7 +197,7 @@ export class Account implements OnInit, OnDestroy {
                 }
                 self.data_list_shared_as.forEach(function(req: string[]) {
                     //A data to check...
-                    if((!(req[0] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[req[0]].shared_to)) && req[0] in self.backend.generics) {
+                    if(req[0] in self.backend.generics && (!(req[0] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[req[0]].shared_to))) {
                         if(self.backend.generics[req[0]][0].instantiable) {
                             //Instances we have
                             var ret = self.backend.data_trie.suggestions(req[0] + '/', '/').filter(function(el: string): boolean {
@@ -227,8 +227,8 @@ export class Account implements OnInit, OnDestroy {
                                         self.backend.getAccessVault(self.backend.profile.data[record].shared_to[self.id_to]).then(function(info) {
                                             if(info.shared_as == req[1]) {
                                                 nice = true;
-                                                completeRound();
                                             }
+                                            completeRound();
                                         }, function(e) {
                                             completeRound();
                                         });
@@ -240,7 +240,7 @@ export class Account implements OnInit, OnDestroy {
                             if(todo == 0)
                                 completeRound();
                         } else {
-                            //Not instatiable, but we do not have it...
+                            //Not instantiable, but we do not have it...
                             fallback();
                         }
                     } else {
