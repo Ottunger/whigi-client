@@ -145,7 +145,7 @@ export class Happenings {
                 }
                 keys.forEach(function(key) {
                     self.backend.getAccessVault(self.backend.profile.data[towards].shared_to[key]).then(function(info) {
-                        self.dataservice.grantVault(self.backend.profile.data[towards].shared_to[key], folder, new_name, send, this.backend.generics[folder].length - 1,
+                        self.dataservice.grantVault(self.backend.profile.data[towards].shared_to[key], info.shared_as, new_name, send, this.backend.generics[folder].length - 1,
                             new Date(info.expire_epoch), info.trigger, true, naes).then(function() {
                                 done++;
                                 if(done >= keys.length)

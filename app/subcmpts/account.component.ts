@@ -23,7 +23,7 @@ export class Account implements OnInit, OnDestroy {
 
     public sec_key: string;
     public id_to: string;
-    public data_list: string[];
+    public data_list_shared_as: string[][];
     public return_url_ok: string;
     public return_url_deny: string;
     public expire_epoch: Date;
@@ -81,6 +81,7 @@ export class Account implements OnInit, OnDestroy {
      */
     private onRouting(params: any) {
         var self = this;
+        this.data_list_shared_as = [];
         this.cpar = params;
         this.id_to = params['id_to'];
         this.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
@@ -104,6 +105,7 @@ export class Account implements OnInit, OnDestroy {
         //We prepare HTTPS
         if(!/^https/.test(this.return_url_ok)) {
             this.deny();
+            return;
         }
         var parts = this.return_url_ok.split('https://');
         if(parts.length == 3) {
@@ -113,17 +115,18 @@ export class Account implements OnInit, OnDestroy {
         //List data
         this.dataservice.listData(false).then(function() {
             var all = true, more = [];
-            self.data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
+            var data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
             //If we are asked for folders, go see what's underneath
-            for(var i = 0; i < self.data_list.length; i++) {
-                if(self.data_list[i].charAt(self.data_list[i].length - 1) == '/') {
-                    more = more.concat(self.backend.generics_trie.suggestions(self.data_list[i]));
+            for(var i = 0; i < data_list.length; i++) {
+                if(data_list[i].charAt(data_list[i].length - 1) == '/') {
+                    more = more.concat(self.backend.generics_trie.suggestions(data_list[i]));
                 }
             }
-            self.data_list = self.data_list.concat(more).filter(function(el: string): boolean {
+            data_list = data_list.concat(more).filter(function(el: string): boolean {
                 return el.charAt(el.length - 1) != '/';
             });
-            self.data_list = (function(arr) {
+            //Keep only one instance if one is written twice
+            data_list = (function(arr) {
                 var u = {}, a = [];
                 for(var i = 0, l = arr.length; i < l; ++i) {
                     if(u.hasOwnProperty(arr[i])) {
@@ -133,36 +136,59 @@ export class Account implements OnInit, OnDestroy {
                     u[arr[i]] = true;
                 }
                 return a;
-            })(self.data_list);
-            self.data_list = self.data_list.filter(function(el: string): boolean {
-                return (el in self.backend.generics) && !self.backend.generics[el][self.backend.generics[el].length - 1].has_requirements;
+            })(data_list);
+            //Now separate in both required and where to share
+            self.data_list_shared_as = data_list.map(function(el: string): string[] {
+                var exp = el.split('//');
+                if(exp.length == 1) {
+                    return [el, el];
+                } else {
+                    return [exp[0], exp[1]];
+                }
             });
+            //Keep only the generics
+            self.data_list_shared_as = self.data_list_shared_as.filter(function(el: string[]): boolean {
+                return (el[0] in self.backend.generics) && !self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].has_requirements;
+            });
+            //Cannot register two under the same name
+            if(new Set(self.data_list_shared_as.map(function(el: string[]): string {
+                return el[1];
+            })).size != self.data_list_shared_as.length) {
+                self.deny();
+                return;
+            }
 
             //Now that we know what 3rd party wants, turn it into the required variables
-            self.dataservice.filterKnown(self.data_list, function(now: string[], unreq: string[], req: string[]) {
+            self.dataservice.filterKnown(self.data_list_shared_as, function(now: string[][], unreq: string[][], req: string[][]) {
                 if(unreq.length > 0) {
                     //We miss some requirements!
-                    self.data_list = unreq;
+                    self.data_list_shared_as = unreq;
                     self.unreqing = true;
                 } else {
                     //We have all that is required, go on with turned values
-                    self.data_list = req.concat(now);
+                    self.data_list_shared_as = req.concat(now);
                     self.unreqing = false;
                 }
 
-                for(var i = 0; i < self.data_list.length; i++) {
-                    if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].instantiable) {
-                        if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_keys_only) {
-                            self.new_name[self.data_list[i]] = self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_key[0].substr(4);
+                for(var i = 0; i < self.data_list_shared_as.length; i++) {
+                    if(self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].instantiable) {
+                        if(self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_keys_only) {
+                            self.new_name[self.data_list_shared_as[i][0]] = self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key[0].substr(4);
                         }
                     }
                 }
 
                 //Check if already granted
-                for(var i = 0; i < self.data_list.length; i++) {
-                    if((!(self.data_list[i] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[self.data_list[i]].shared_to)) && self.data_list[i] in self.backend.generics) {
-                        if(self.backend.generics[self.data_list[i]][0].instantiable) {
-                            var ret = self.backend.data_trie.suggestions(self.data_list[i] + '/', '/').filter(function(el: string): boolean {
+                for(var i = 0; i < self.data_list_shared_as.length; i++) {
+                    //Custom name, fall back to re register maybe
+                    if(self.data_list_shared_as[i][0] != self.data_list_shared_as[i][1]) {
+                        all = false;
+                        break;
+                    }
+                    //Classic name, do we share it?
+                    if((!(self.data_list_shared_as[i][0] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[self.data_list_shared_as[i][0]].shared_to)) && self.data_list_shared_as[i][0] in self.backend.generics) {
+                        if(self.backend.generics[self.data_list_shared_as[i][0]][0].instantiable) {
+                            var ret = self.backend.data_trie.suggestions(self.data_list_shared_as[i] + '/', '/').filter(function(el: string): boolean {
                                 return el.charAt(el.length - 1) != '/';
                             });
                             var nice = false;
@@ -220,7 +246,7 @@ export class Account implements OnInit, OnDestroy {
      * @param {Boolean} ok True if create account.
      */
     finish(ok: boolean) {
-        var self = this, saves: any[] = [], key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
+        var self = this, saves: any[] = [], used = {}, key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
         if(ok) {
             if(!this.allFilled()) {
                 this.notif.error(this.translate.instant('error'), this.translate.instant('account.fill'));
@@ -245,57 +271,74 @@ export class Account implements OnInit, OnDestroy {
                     version: 0
                 });
             }
-            for(var i = 0; i < this.data_list.length; i++) {
-                var adata = this.data_list[i];
-                if(this.backend.generics[adata][this.backend.generics[adata].length - 1].share_as_folder) {
+            for(var i = 0; i < this.data_list_shared_as.length; i++) {
+                var adata = this.data_list_shared_as[i];
+                if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].share_as_folder) {
                     saves.push({
                         mode: 'build-and-grant',
                         to: this.id_to,
-                        name: adata,
+                        name: adata[0],
                         until: this.expire_epoch,
                         trigger: this.trigger
                     });
-                } else if((!(adata in this.filter) && !(adata in this.backend.profile.data)) || (adata in this.filter && this.filter[adata] == '/new')) {
+                } else if((!(adata[1] in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1] in this.filter && this.filter[adata[1]] == '/new')) {
                     //Build and test
-                    window.$('#igen' + this.dataservice.sanit(adata)).removeClass('has-error');
-                    var send = this.dataservice.recGeneric(this.new_data[adata], '', this.new_datas[adata], adata, false);
+                    window.$('#igen' + this.dataservice.sanit(adata[1])).removeClass('has-error');
+                    var send = this.dataservice.recGeneric(this.new_data[adata[1]], '', this.new_datas[adata[1]], adata[0], false);
                     if(send.constructor === Array) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                        window.$('#igen' + this.dataservice.sanit(adata)).addClass('has-error');
+                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
                         return;
                     }
-                    //Build name and create
-                    var name = adata;
-                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].instantiable) {
-                        name += '/' + this.new_name[adata];
+                    //Build name
+                    var name = adata[0];
+                    if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
+                        name += '/' + this.new_name[adata[1]];
                     }
+                    //Once only
+                    if(name in used) {
+                        this.notif.error(this.translate.instant('error'), this.translate.instant('account.twice'));
+                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
+                        return;
+                    }
+                    used[name] = true;
+                    //Create
                     saves.push({
                         mode: 'new',
                         data: send,
                         name: name,
-                        is_dated: this.backend.generics[adata][this.backend.generics[adata].length - 1].is_dated,
-                        version: this.backend.generics[adata].length - 1,
+                        is_dated: this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].is_dated,
+                        version: this.backend.generics[adata[0]].length - 1,
                         force: false
                     });
                     saves.push({
                         mode: 'grant',
                         data: send,
                         to: this.id_to,
-                        name: adata,
+                        name: adata[1],
                         real_name: name,
                         until: this.expire_epoch,
-                        version: this.backend.generics[adata].length - 1,
+                        version: this.backend.generics[adata[0]].length - 1,
                         trigger: this.trigger
                     });
                 } else {
-                    var name = adata;
-                    if(this.backend.generics[adata][this.backend.generics[adata].length - 1].instantiable) {
-                        name += '/' + this.filter[adata];
+                    //Build name
+                    var name = adata[0];
+                    if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
+                        name += '/' + this.filter[adata[1]];
                     }
+                    //Once only
+                    if(name in used) {
+                        this.notif.error(this.translate.instant('error'), this.translate.instant('account.twice'));
+                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
+                        return;
+                    }
+                    used[name] = true;
+                    //Get and grant
                     saves.push({
                         mode: 'get-and-grant',
                         to: this.id_to,
-                        name: adata,
+                        name: adata[1],
                         real_name: name,
                         until: this.expire_epoch,
                         trigger: this.trigger
@@ -432,18 +475,19 @@ export class Account implements OnInit, OnDestroy {
      * @function filters
      * @public
      * @param {String} folder to list.
+     * @param {String} forName Name under which will be registered.
      * @return {Array} Known fields.
      */
-    filters(folder: string): string[] {
+    filters(folder: string, forName: string): string[] {
         var ret = this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
             return el.charAt(el.length - 1) != '/';
         }).map(function(el: string): string {
             return el.replace(/.+\//, '');
         }).concat(['/new']);
 
-        if(!this.new_datas[folder] && !this.filter[folder]) {
-            this.new_datas[folder] = {};
-            this.filter[folder] = ret[0];
+        if(!this.new_datas[forName] && !this.filter[forName]) {
+            this.new_datas[forName] = {};
+            this.filter[forName] = ret[0];
         }
         return ret;
     }
@@ -536,6 +580,17 @@ export class Account implements OnInit, OnDestroy {
             }
         }
         return ok;
+    }
+
+    /**
+     * Last part of name.
+     * @function lightName
+     * @public
+     * @param {String} str Input.
+     * @return {String} Name.
+     */
+    lightName(str: string): string {
+        return str.replace(/[^\/]*\//g, '');
     }
 
 }

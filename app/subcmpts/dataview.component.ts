@@ -28,7 +28,7 @@ export class Dataview implements OnInit, OnDestroy {
     public new_data: string;
     public new_data_file: string;
     public new_id: string;
-    public timings: {[id: string]: {la: Date, ee: Date, seen: boolean, ends: boolean, trigger: string}};
+    public timings: {[id: string]: {la: Date, ee: Date, seen: boolean, ends: boolean, trigger: string, shared_as: string}};
     public is_dated: boolean;
     public is_storable: boolean;
     public new_trigger: string;
@@ -89,7 +89,8 @@ export class Dataview implements OnInit, OnDestroy {
                         ee: new Date(parseInt(got.expire_epoch)),
                         seen: parseInt(got.last_access) > 0,
                         ends: parseInt(got.expire_epoch) > (new Date).getTime(),
-                        trigger: got.trigger
+                        trigger: got.trigger,
+                        shared_as: got.shared_as
                     };
                 }, function(e) {
                     delete self.backend.profile.data[self.data_name].shared_to[val];
@@ -250,10 +251,10 @@ export class Dataview implements OnInit, OnDestroy {
      * @param {String} replacement New value.
      */
     private mod(replacement: string) {
-        var self = this, names = this.sharedIds(), dict: {[id: string]: {date: Date, trigger: string}} = {}
+        var self = this, names = this.sharedIds(), dict: {[id: string]: {date: Date, trigger: string, shared_as: string}} = {}
         for(var i = 0; i < names.length; i++) {
             if(!!this.timings[names[i]])
-                dict[names[i]] = {date: this.timings[names[i]].ee, trigger: this.timings[names[i]].trigger};
+                dict[names[i]] = {date: this.timings[names[i]].ee, trigger: this.timings[names[i]].trigger, shared_as: this.timings[names[i]].shared_as};
         }
         this.dataservice.modifyData(this.data_name, replacement, this.is_dated, this.version, dict, (this.is_generic && this.data_name != this.gen_name), this.data.decr_aes).then(function() {
             self.decr_data = replacement;
@@ -370,7 +371,7 @@ export class Dataview implements OnInit, OnDestroy {
         this.backend.getAccessVault(this.backend.profile.data[this.data_name].shared_to[shared_to_id]).then(function(timer) {
             //Get other data and create its vault
             self.dataservice.getData(self.backend.profile.data[self.gen_name + '/' + self.filter].id).then(function(data) {
-                self.dataservice.grantVault(shared_to_id, self.gen_name, self.gen_name + '/' + self.filter, data.decr_data, self.version, new Date(timer.expire_epoch), timer.trigger, false, data.decr_aes).then(function() {
+                self.dataservice.grantVault(shared_to_id, timer.shared_as, self.gen_name + '/' + self.filter, data.decr_data, self.version, new Date(timer.expire_epoch), timer.trigger, false, data.decr_aes).then(function() {
                     //Remove actual vault
                     delete self.backend.profile.data[self.data_name].shared_to[shared_to_id];
                     self.backend.my_shares[shared_to_id].splice(self.backend.my_shares[shared_to_id].indexOf(self.data_name), 1);
@@ -413,7 +414,7 @@ export class Dataview implements OnInit, OnDestroy {
         var date: Date = window.$('#pick5').datetimepicker('date').toDate();
         this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger, this.is_storable, this.data.decr_aes).then(function(user, id) {
             self.timings[user._id] = {la: new Date(0), ee: date, seen: false,
-                ends: date.getTime() > (new Date).getTime(), trigger: self.new_trigger};
+                ends: date.getTime() > (new Date).getTime(), trigger: self.new_trigger, shared_as: self.data_name};
             self.new_id = '';
             self.is_storable = false;
             delete self.sharedVector;

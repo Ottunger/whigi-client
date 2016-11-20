@@ -206,20 +206,20 @@ export class Data {
      * Filters the list to only accept those who meet the requirements.
      * @function filterKnown
      * @public
-     * @param {String[]} l Input.
+     * @param {String[][]} l Input.
      * @param {Function} callback Callback to be called with filtered elements and missing elements and required elements.
      */
-    filterKnown(l: string[], callback: Function) {
-        var self = this, more = [], req = [], unreq = [], decr = {}, done = 0;
+    filterKnown(l: string[][], callback: Function) {
+        var self = this, more: string[][] = [], req: string[][] = [], unreq: string[][] = [], decr = {}, done = 0;
         function complete() {
-            var alwaysin = l.filter(function(el: string): boolean {
-                if(!self.backend.generics[el][self.backend.generics[el].length - 1].requires)
+            var alwaysin = l.filter(function(el: string[]): boolean {
+                if(!self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].requires)
                     return true;
-                if(!(self.backend.generics[el][self.backend.generics[el].length - 1].requires in self.backend.profile.data))
+                if(!(self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].requires in self.backend.profile.data))
                     return false;
-                for(var i = 0; i < self.backend.generics[el][self.backend.generics[el].length - 1].modes.length; i++) {
-                    if(new RegExp(self.backend.generics[el][self.backend.generics[el].length - 1].modes[i][0]).test(decr[self.backend.generics[el][self.backend.generics[el].length - 1].requires])) {
-                        more.push(self.backend.generics[el][self.backend.generics[el].length - 1].modes[i][1]);
+                for(var i = 0; i < self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].modes.length; i++) {
+                    if(new RegExp(self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].modes[i][0]).test(decr[self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].requires])) {
+                        more.push([self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].modes[i][1], self.backend.generics[el[0]][self.backend.generics[el[0]].length - 1].modes[i][1]]);
                         break;
                     }
                 }
@@ -229,18 +229,18 @@ export class Data {
         }
 
         for(var i = 0; i < l.length; i++) {
-            if(!!self.backend.generics[l[i]][self.backend.generics[l[i]].length - 1].requires)
-                req.push(self.backend.generics[l[i]][self.backend.generics[l[i]].length - 1].requires);
+            if(!!self.backend.generics[l[i][0]][self.backend.generics[l[i][0]].length - 1].requires)
+                req.push([self.backend.generics[l[i][0]][self.backend.generics[l[i][0]].length - 1].requires, self.backend.generics[l[i][0]][self.backend.generics[l[i][0]].length - 1].requires]);
         }
         for(var i = 0; i < req.length; i++) {
-            if(!(req[i] in self.backend.profile.data)) {
+            if(!(req[i][0] in self.backend.profile.data)) {
                 unreq.push(req[i]);
                 done++;
                 if(done >= req.length)
                     complete();
                 continue;
             }
-            self.getData(self.backend.profile.data[req[i]].id, false).then(function(data) {
+            self.getData(self.backend.profile.data[req[i][0]].id, false).then(function(data) {
                 decr[this] = data.decr_data;
                 done++;
                 if(done >= req.length)
@@ -606,7 +606,7 @@ export class Data {
      * @param {Number[]} enc_key Used encryption key for bound data.
      * @return {Promise} Whether it went OK.
      */
-    modifyData(name: string, value: string, is_dated: boolean, version: number, users_mapping: {[id: string]: {date: Date, trigger: string}}, is_folder: boolean, enc_key: number[]): Promise {
+    modifyData(name: string, value: string, is_dated: boolean, version: number, users_mapping: {[id: string]: {date: Date, trigger: string, shared_as: string}}, is_folder: boolean, enc_key: number[]): Promise {
         var i = 0, names = Object.getOwnPropertyNames(users_mapping), max = names.length, went = true;
         var self = this;
 
@@ -628,7 +628,7 @@ export class Data {
                 if(names.length > 0 && !is_bound) {
                     names.forEach(function(id) {
                         var time: Date = (!!users_mapping[id].date && !!users_mapping[id].date.getTime)? users_mapping[id].date : new Date(0);
-                        self.grantVault(id, is_folder? name.replace(/\/[^\/]*$/, '') : name, name, value, version, time, users_mapping[id].trigger, false, undefined).then(function(user, newid) {
+                        self.grantVault(id, users_mapping[id].shared_as, name, value, version, time, users_mapping[id].trigger, false, undefined).then(function(user, newid) {
                             check(resolve, reject);
                         }, function() {
                             went = false;
