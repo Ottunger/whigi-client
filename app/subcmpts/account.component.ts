@@ -114,7 +114,7 @@ export class Account implements OnInit, OnDestroy {
 
         //List data
         this.dataservice.listData(false).then(function() {
-            var all = true, more = [];
+            var more = [];
             var data_list = (!!params['data_list'] && params['data_list'] != '-')? window.decodeURIComponent(params['data_list']).split('::') : [];
             //If we are asked for folders, go see what's underneath
             for(var i = 0; i < data_list.length; i++) {
@@ -179,42 +179,74 @@ export class Account implements OnInit, OnDestroy {
                 }
 
                 //Check if already granted
-                for(var i = 0; i < self.data_list_shared_as.length; i++) {
-                    //Custom name, fall back to re register maybe
-                    if(self.data_list_shared_as[i][0] != self.data_list_shared_as[i][1]) {
-                        all = false;
-                        break;
+                var done = 0, len = self.data_list_shared_as.length;
+                function fallback() {
+                    //Fallback to a request
+                    window.$('#ctn-acc').ready(function() {
+                        window.$('#ctn-acc').css('display', 'block');
+                    });
+                }
+                function tryMove() {
+                    done++;
+                    if(done >= len && (self.with_account == 'false' || ('keys/auth/' + self.id_to in self.backend.profile.data &&
+                        self.id_to in self.backend.profile.data['keys/auth/' + self.id_to].shared_to))) {
+                        self.ok();
+                    } else if(done >= len) {
+                        fallback();
                     }
-                    //Classic name, do we share it?
-                    if((!(self.data_list_shared_as[i][0] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[self.data_list_shared_as[i][0]].shared_to)) && self.data_list_shared_as[i][0] in self.backend.generics) {
-                        if(self.backend.generics[self.data_list_shared_as[i][0]][0].instantiable) {
-                            var ret = self.backend.data_trie.suggestions(self.data_list_shared_as[i] + '/', '/').filter(function(el: string): boolean {
+                }
+                self.data_list_shared_as.forEach(function(req: string[]) {
+                    //A data to check...
+                    if((!(req[0] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[req[0]].shared_to)) && req[0] in self.backend.generics) {
+                        if(self.backend.generics[req[0]][0].instantiable) {
+                            //Instances we have
+                            var ret = self.backend.data_trie.suggestions(req[0] + '/', '/').filter(function(el: string): boolean {
                                 return el.charAt(el.length - 1) != '/';
                             });
-                            var nice = false;
-                            for(var j = 0; j < ret.length; j++) {
-                                if(ret[j] in self.backend.profile.data && self.id_to in self.backend.profile.data[ret[j]].shared_to) {
-                                    nice = true;
-                                    break;
+                            //Check each one, is it shared to the person, and under the correct name?
+                            var nice = false, did = 0, todo = ret.length, answ = false;
+                            function completeRound() {
+                                did++;
+                                if(nice || did >= todo) {
+                                    if(answ)
+                                        return;
+                                    answ = true;
+                                    if(nice) {
+                                        tryMove();
+                                    } else {
+                                        fallback();
+                                    }
                                 }
                             }
-                            if(!nice) {
-                                all = false;
-                                break;
-                            }
+                            ret.forEach(function(record) {
+                                if(self.id_to in self.backend.profile.data[record].shared_to) {
+                                    if(req[0] == req[1]) {
+                                        nice = true;
+                                        completeRound();
+                                    } else {
+                                        self.backend.getAccessVault(self.backend.profile.data[record].shared_to[self.id_to]).then(function(info) {
+                                            if(info.shared_as == req[1]) {
+                                                nice = true;
+                                                completeRound();
+                                            }
+                                        }, function(e) {
+                                            completeRound();
+                                        });
+                                    }
+                                } else {
+                                    completeRound();
+                                }
+                            });
+                            if(todo == 0)
+                                completeRound();
                         } else {
-                            all = false;
-                            break;
+                            //Not instatiable, but we do not have it...
+                            fallback();
                         }
+                    } else {
+                        //No need to check this one
+                        tryMove();
                     }
-                }
-                if(all && (self.with_account == 'false' || ('keys/auth/' + self.id_to in self.backend.profile.data &&
-                    self.id_to in self.backend.profile.data['keys/auth/' + self.id_to].shared_to))) {
-                    self.ok();
-                }
-                //Fallback to a request
-                window.$('#ctn-acc').ready(function() {
-                    window.$('#ctn-acc').css('display', 'block');
                 });
             });
         }, function() {
