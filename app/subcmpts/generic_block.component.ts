@@ -65,8 +65,8 @@ export class GenericBlock implements OnInit {
      */
     ngOnInit() {
         var self = this;
-        this.dataservice.filterKnown(this.raw_list, function(now) {
-            self.data_list = now;
+        this.dataservice.filterKnown(this.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
+            self.data_list = now.map(function(el) { return el[0]; });
             for(var i = 0; i < self.data_list.length; i++) {
                 self.new_datas[self.data_list[i]] = {};
                 self.resets[self.data_list[i]] = new EventEmitter();
@@ -210,8 +210,8 @@ export class GenericBlock implements OnInit {
         this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
             self.resets[name].emit();
-            self.dataservice.filterKnown(self.raw_list, function(now) {
-                self.data_list = now;
+            self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
+                self.data_list = now.map(function(el) { return el[0]; });
             });
         }, function(err) {
             if(err[0] == 'server') {
@@ -430,8 +430,8 @@ export class GenericBlock implements OnInit {
                 }
                 self.resets[fname].emit(send);
                 self.resets[fname].emit([]);
-                self.dataservice.filterKnown(self.raw_list, function(now) {
-                    self.data_list = now;
+                self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
+                    self.data_list = now.map(function(el) { return el[0]; });
                 });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
