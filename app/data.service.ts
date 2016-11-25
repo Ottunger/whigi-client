@@ -974,4 +974,16 @@ export class Data {
         window.$('#custom-css').remove();
     }
 
+    /**
+     * Click if enter.
+     * @function clickOnEnter
+     * @public
+     * @param {Event} e HTML event.
+     * @param {String} id Where to click.
+     */
+    clickOnEnter(e: any, id: string) {
+        if(e.keyCode == 13)
+            window.$(id).click();
+    }
+
 }

@@ -24,10 +24,10 @@
                             <input type="text" class="form-control" [ngModel]="user.company_info.bce" name="bce" readonly="readonly" />
                         </div>
                     </div>
-                    <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.request">
-                        <label class="control-label col-md-4">{{ 'userinfo.request' | translate }}</label>
+                    <div class="form-group" *ngFor="let n of (!!user.company_info && !!user.company_info.request)? dataservice.keys(user.company_info.request) : []">
+                        <label class="control-label col-md-4">{{ 'userinfo.request' | translate }} ({{ n }})</label>
                         <div class="col-md-8">
-                            <input type="text" class="form-control" [ngModel]="user.company_info.request" name="request" readonly="readonly" />
+                            <input type="text" class="form-control" [ngModel]="user.company_info.request[n]" name="request" readonly="readonly" />
                         </div>
                     </div>
                     <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.rrn">
@@ -58,12 +58,6 @@
                         <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
                         <div class="col-md-8">
                             <input type="text" class="form-control" [(ngModel)]="bce" name="bce" />
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label class="control-label col-md-4">{{ 'userinfo.request' | translate }}</label>
-                        <div class="col-md-8">
-                            <input type="text" class="form-control" [(ngModel)]="backend.profile.company_info.request" name="request" />
                         </div>
                     </div>
                     <div class="form-group">

@@ -89,8 +89,10 @@
                                 </div>
                                 <!-- EXPL -->
                             </div>
-                            <div class="row whigi-md-block" *ngIf="backend.generics[g][backend.generics[g].length - 1].long_descr_key != ''">
-                                <p style="margin-left: 15px; margin-right: 15px;">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                            <div class="row whigi-md-block">
+                                <p *ngIf="backend.generics[g][backend.generics[g].length - 1].long_descr_key != ''"
+                                    style="margin-left: 15px; margin-right: 15px;">{{ backend.generics[g][backend.generics[g].length - 1].long_descr_key | translate }}</p>
+                                <p *ngIf="backend.generics[g][backend.generics[g].length - 1].long_descr_key == ''"></p>
                             </div>
                             <!-- BEGIN SELECT -->
                             <div class="row igen{{ dataservice.sanit(g) }}">
@@ -145,7 +147,8 @@
                                         <td style="padding-top: 5px;" [style.padding-bottom]="l? '5px' : '0px'">
                                             <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
                                                 <input type="text" style="margin-left: -4px; box-shadow: 1px 1px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
-                                                    placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"/>
+                                                    placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"
+                                                    (keyup)="dataservice.clickOnEnter($event, '#tgname' + dataservice.sanit(g + '/' + d))"/>
                                                 <!-- json labels -->
                                                 <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                                     <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
@@ -156,13 +159,14 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="row">
-                                                    <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
+                                                    <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" style="margin-right: 1px;"
+                                                        *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
                                                         <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g)" />
                                                     </div>
                                                     <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
                                                         {{ 'nothing' | translate }}
                                                     </div>
-                                                    <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
+                                                    <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;margin-right: 1px;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
                                                         <input_block [prefill]="'/' + d" [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
                                                     </div>
                                                 </div>

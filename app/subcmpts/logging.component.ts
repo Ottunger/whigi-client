@@ -60,6 +60,12 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
+        window.$('#wlogin-pass').ready(function() {
+            window.$('#wlogin-pass').keyup(function(e) {
+                if(e.keyCode == 13)
+                    window.$('#wlogin-btn').click();
+            });
+        });
         if(this.onEnd && /end/.test(window.location.href)) {
             //Session has expired, now moves will be done normally
             this.onEnd = false;

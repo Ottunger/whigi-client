@@ -21,6 +21,7 @@ import * as template from './templates/account.html';
 })
 export class Account implements OnInit, OnDestroy {
 
+    public request: string;
     public sec_key: string;
     public id_to: string;
     public data_list_shared_as: string[][];
@@ -83,7 +84,8 @@ export class Account implements OnInit, OnDestroy {
         var self = this;
         this.data_list_shared_as = [];
         this.cpar = params;
-        this.id_to = params['id_to'];
+        this.id_to = params['id_to'].split(':')[0];
+        this.request = params['id_to'].split(':')[1];
         this.return_url_ok = window.decodeURIComponent(params['return_url_ok']);
         this.return_url_deny = window.decodeURIComponent(params['return_url_deny']);
         this.with_account = params['with_account'];

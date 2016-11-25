@@ -23,7 +23,7 @@
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.pass' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.pass' | translate }}" name="password" /> </div>
+                        <input class="form-control placeholder-no-fix" id="wlogin-pass" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.pass' | translate }}" name="password" /> </div>
                 </div>
                 <div class="form-group ilogging" style="display: none;">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
@@ -40,7 +40,7 @@
                         <input type="checkbox" name="remember" [(ngModel)]="persistent" /> {{ 'login.remember' | translate }}
                         <span></span>
                     </label>
-                    <button type="submit" class="btn green pull-right" (click)="enter()"> {{ 'goOn' | translate }} </button>
+                    <button type="submit" class="btn green pull-right" id="wlogin-btn" (click)="enter()"> {{ 'goOn' | translate }} </button>
                 </div>
                 <div class="forget-password">
                     <h4>{{ 'login.forgot' | translate }}</h4>

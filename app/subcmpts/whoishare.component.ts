@@ -106,7 +106,9 @@ export class WhoIShare {
             return [];
         if(this.my_shares)
             return this.my_shares;
-        var ret = Object.getOwnPropertyNames(this.backend.my_shares);
+        var ret = Object.getOwnPropertyNames(this.backend.my_shares).filter(function(el) {
+            return self.dataservice.forDisplay(el) != self.dataservice.forDisplay(self.backend.profile._id);
+        });
         ret.forEach(function(d: string) {
             self.backend.getUser(d).then(function(user) {
                 self.users[d] = user;

@@ -21,6 +21,7 @@ import * as template from './templates/oauth.html';
 })
 export class Oauth implements OnInit, OnDestroy {
 
+    public request: string;
     public for_id: string;
     public prefix: string;
     public return_url_ok: string;
@@ -54,7 +55,8 @@ export class Oauth implements OnInit, OnDestroy {
     ngOnInit(): void {
         var self = this;
         this.sub = this.routed.params.subscribe(function(params) {
-            self.for_id = params['for_id'];
+            self.for_id = params['for_id'].split(':')[0];
+            self.request = params['for_id'].split(':')[1];
             self.token = params['token'];
             self.prefix = window.decodeURIComponent(params['prefix']);
             self.return_url_ok = window.decodeURIComponent(params['return_url_ok']);

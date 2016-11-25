@@ -39,7 +39,7 @@ export class Check {
      * @return {String|Boolean} String containing error or true.
      */
     isEmail(test: string): string | boolean {
-        return /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$/.test(test)? true : 'generics.bademail';
+        return /^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/.test(test)? true : 'generics.bademail';
     }
 
     /**

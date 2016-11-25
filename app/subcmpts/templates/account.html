@@ -6,7 +6,16 @@
         <!-- BEGIN GRANT -->
         <div class="page-content" id="pict-user">
             <!-- NORMAL HEADER -->
-            <h1 *ngIf="strangeEmail==''" class="page-title">{{ dataservice.forDisplay(id_to) }}  <a href="javascript:;" (click)="router.navigate(reqLink())"><small>{{ 'account.user' | translate }}</small></a></h1>
+            <h1 *ngIf="strangeEmail==''" class="page-title">{{ dataservice.forDisplay(id_to) }}  
+                <a href="javascript:;" (click)="router.navigate(reqLink())">
+                    <small *ngIf="!!request && !!requester && !!requester.company_info && !!requester.company_info.request && !!requester.company_info.request[request]">
+                        {{ requester.company_info.request[request] | translate }}
+                    </small>
+                    <small *ngIf="!request || !requester || !requester.company_info || !requester.company_info.request || !requester.company_info.request[request]">
+                        {{ 'account.user' | translate }}
+                    </small>
+                </a>
+            </h1>
             <p *ngIf="strangeEmail==''">{{ 'account.question' | translate }}</p>
             <p *ngIf="strangeEmail==''">{{ 'account.explain' | translate }}</p>
             <p *ngIf="strangeEmail=='' && with_account != 'false'">{{ 'account.withAccount' | translate }}</p>
