@@ -69,14 +69,16 @@ export class GenericBlock implements OnInit {
             self.data_list = now.map(function(el) { return el[0]; });
             for(var i = 0; i < self.data_list.length; i++) {
                 self.new_datas[self.data_list[i]] = {};
-                self.resets[self.data_list[i]] = new EventEmitter();
+                if(!self.resets[self.data_list[i]])
+                    self.resets[self.data_list[i]] = new EventEmitter();
                 if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].instantiable) {
                     if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_keys_only) {
                         self.ass_name[self.data_list[i]] = self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_key[0].substr(4);
                     }
                     var names = self.dataNames(self.data_list[i], 3);
                     for(var j = 0; j < names.length; j++)
-                        self.resets[self.data_list[i] + '/' + names[j]] = new EventEmitter();
+                        if(!self.resets[self.data_list[i] + '/' + names[j]])
+                            self.resets[self.data_list[i] + '/' + names[j]] = new EventEmitter();
                 }
             }
             if(self.iclose) {
@@ -283,7 +285,9 @@ export class GenericBlock implements OnInit {
             } else {
                 self.previews[name] = [data.decr_data, data.decr_data];
             }
-            if(keyded) {
+            if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].mode == 'select') {
+                try { self.previews[name][0] = self.translate.instant(self.previews[name][0]) + ' '; } catch(e) {}
+            } else if(keyded) {
                 var obj = JSON.parse(self.previews[name][1]);
                 var keys = Object.getOwnPropertyNames(obj);
                 self.previews[name][0] = '';
@@ -295,9 +299,9 @@ export class GenericBlock implements OnInit {
                             break;
                         }
                     }
-                    if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select')
+                    if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select') {
                         try { self.previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { self.previews[name][0] += obj[keys[i]] + ' '; }
-                    else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
+                    } else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
                         && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
                         self.previews[name][0] += obj[keys[i]] + ' ';
                 }
@@ -346,20 +350,24 @@ export class GenericBlock implements OnInit {
             window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');
             window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', false);
         } else {
+            var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val();
             if(!window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() || window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() == '') {
                 window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
                 window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
                 return;
             }
-            if((folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()) in this.backend.profile.data) {
+            if(after in this.backend.profile.data) {
                 window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
                 window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
                 return;
             }
-            this.backend.rename(folder + '/' + efix, folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val()).then(function() {
+            this.backend.rename(before, after).then(function() {
                 window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
                 window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
                 self.dataservice.listData(false).then(function() {
+                    self.previews = {};
+                    self.asked = {};
+                    self.resets[after] = self.resets[before];
                     self.ngOnInit();
                 });
             }, function(e) {

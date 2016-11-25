@@ -62,10 +62,11 @@ export class InputBlock implements OnInit {
         }
         if(!!this.reset) {
             this.reset.subscribe(function(params) {
-                if(params.constructor === Array) {
+                if(!!params && params.constructor === Array) {
                     self.collapse(true);
                 } else {
-                    self.within = params;
+                    if(!!params)
+                        self.within = params;
                     self.def();
                 }
             });
