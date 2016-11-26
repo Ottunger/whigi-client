@@ -376,7 +376,7 @@ export class Data {
         if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].is_dated) {
             raw_data = JSON.stringify([{
                 value: as_file? raw_data_file : raw_data,
-                from: (new Date).getTime()
+                from: -2207520000000 //Near 1 Jan 1900
             }]);
         } else {
             raw_data = as_file? raw_data_file : raw_data;
@@ -828,7 +828,7 @@ export class Data {
     sanit(s: string): string {
         if(!s)
             return '';
-        return s.replace(/[\/\.# :à]/g, '_');
+        return s.replace(/[\/\.# :à,]/g, '_');
     }
 
     /**

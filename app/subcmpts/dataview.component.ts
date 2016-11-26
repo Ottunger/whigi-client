@@ -24,9 +24,6 @@ export class Dataview implements OnInit, OnDestroy {
     public data: any;
     public data_name: string;
     public decr_data: string;
-    public new_datas: {[id: string]: string};
-    public new_data: string;
-    public new_data_file: string;
     public new_id: string;
     public timings: {[id: string]: {la: Date, ee: Date, seen: boolean, ends: boolean, trigger: string, shared_as: string}};
     public is_dated: boolean;
@@ -40,7 +37,6 @@ export class Dataview implements OnInit, OnDestroy {
     private to_filesystem: boolean;
     private sharedVector: string[];
     private changed: EventEmitter<string>;
-    private reset: EventEmitter<any>;
     private sub: Subscription;
 
     /**
@@ -56,15 +52,12 @@ export class Dataview implements OnInit, OnDestroy {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data, private check: ApplicationRef) {
         this.decr_data = '[]';
-        this.new_data_file = '';
         this.is_generic = false;
         this.is_storable = false;
         this.timings = {};
-        this.new_datas = {};
         this.filter = '';
         this.version = 0;
         this.changed = new EventEmitter<string>();
-        this.reset = new EventEmitter<any>();
     }
 
     /**
@@ -124,10 +117,6 @@ export class Dataview implements OnInit, OnDestroy {
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
             });
-            window.$('#pick4').ready(function() {
-                window.$('#pick4').datetimepicker();
-                window.$('#pick4').datetimepicker('date', window.moment());
-            });
             window.$('#pick5').ready(function() {
                 window.$('#pick5').datetimepicker();
                 window.$('#pick5').datetimepicker('date', window.moment());
@@ -160,27 +149,6 @@ export class Dataview implements OnInit, OnDestroy {
     }
 
     /**
-     * Register data from input_block.
-     * @function regData
-     * @public
-     * @param {String} group Attached group.
-     * @param {Object[]} Event.
-     */
-    regData(event: any[]) {
-        switch(event[0]) {
-            case 1:
-                this.new_data = event[1];
-                break;
-            case 2:
-                this.new_data_file = event[1];
-                break;
-            case 3:
-                this.new_datas = event[1];
-                break;
-        }
-    }
-
-    /**
      * Returns other possible values.
      * @function filters
      * @public
@@ -193,55 +161,6 @@ export class Dataview implements OnInit, OnDestroy {
         }).map(function(el: string): string {
             return el.replace(/.+\//, '');
         });
-    }
-
-    /**
-     * Modifies the data.
-     * @function modify
-     * @public
-     */
-    modify() {
-        var replacement, done = false, err;
-        window.$('.igen' + this.dataservice.sanit(this.gen_name)).removeClass('has-error');
-        window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', '');
-        if(this.is_generic && (err = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, this.gen_name, this.backend.generics[this.gen_name][this.version].mode == 'file')).constructor === Array) {
-            this.notif.error(this.translate.instant('error'), this.translate.instant(err[1]));
-            window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('has-error');
-            window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', 'red');
-            return;
-        }
-        //Generic data, use what has been returned by recGeneric. If we are dated, sicard the date info.
-        if(this.is_generic && this.backend.generics[this.gen_name][this.version].is_dated) {
-            this.new_data = JSON.parse(err)[0].value;
-        } else if(this.is_generic) {
-            this.new_data = err;
-        }
-        //Add the date info
-        if(this.is_dated) {
-            var from = window.$('#pick4').datetimepicker('date').toDate().getTime();
-            replacement = JSON.parse(this.decr_data) || [];
-            for(var i = 0; i < replacement.length; i++) {
-                if(from > replacement[i].from) {
-                    replacement.splice(i, 0, {
-                        from: from,
-                        value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
-                    });
-                    done = true;
-                    break;
-                }
-            }
-            if(!done) {
-                replacement.push({
-                    from: from,
-                    value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
-                });
-            }
-            replacement = JSON.stringify(replacement);
-        } else {
-            replacement = (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data.trim();
-        }
-        this.reset.emit();
-        this.mod(replacement);
     }
 
     /**
@@ -434,36 +353,6 @@ export class Dataview implements OnInit, OnDestroy {
         return new Promise<boolean>(function(resolve, reject) {
             resolve(window.confirm(msg));
         });
-    }
-
-    /**
-     * Loads a file as data.
-     * @function fileLoad
-     * @public
-     * @param {Event} e The change event.
-     */
-    fileLoad(e: any) {
-        var self = this;
-        var file: File = e.target.files[0]; 
-        var r: FileReader = new FileReader();
-        r.onloadend = function(e) {
-            if(/^data:;base64,/.test(r.result))
-                self.new_data_file = atob(r.result.split(',')[1]);
-            else
-                self.new_data_file = r.result;
-            window.$('.load-button').removeClass('default').addClass('green');
-        }
-        r.readAsDataURL(file);
-    }
-
-    /**
-     * Undo file loading.
-     * @function undoLoad
-     * @public
-     */
-    undoLoad() {
-        this.new_data_file = '';
-        window.$('.load-button').addClass('default').removeClass('green');
     }
 
     /**
