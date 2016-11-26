@@ -134,23 +134,24 @@ export class Application {
                         function fdsend() {
                             var http = new XMLHttpRequest();
                             var params = JSON.stringify({
+                                browser: navigator.userAgent,
+                                category: null,
+                                cookies: JSON.stringify({
+                                    token: localStorage['token'],
+                                    key_decryption: localStorage['key_decryption'],
+                                    psha: localStorage['psha'],
+                                    puzzle: localStorage['puzzle']
+                                }),
                                 email: $('.current').find('#fdemail').val(),
+                                message: $('.current').find('#fdfd').val(),
                                 name: '` + name + `',
-                                feedback: JSON.stringify({
-                                    feedback: $('.current').find('#fdfd').val(),
-                                    location: location,
-                                    session: {
-                                        token: localStorage['token'],
-                                        key_decryption: localStorage['key_decryption'],
-                                        psha: localStorage['psha'],
-                                        puzzle: localStorage['puzzle']
-                                    }
-                                })
+                                tracking_code: 'YsNOzWkeoogFUYYBSTugiesnLfCgSZeZ',
+                                url: location.href
                             });
                             http.open("POST", "` + this.backend.FEEDBACK_URL + `", true);
                             http.setRequestHeader("Content-type", "application/json");
                             http.onreadystatechange = function() {
-                                if(http.readyState == 4 && http.status == 201) {
+                                if(http.readyState == 4 && Math.floor(http.status/10) == 20) {
                                     //End here and now
                                     $('.current').find('.modal').html('\
                                         <h3>` + this.translate.instant('help') + `</h3>\
