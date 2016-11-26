@@ -109,8 +109,12 @@
    "profile.happenings": "Evénements marquants",
 
    "happenings.move": "Je déménage",
+   "happenings.partners": "Je change de partenaire",
+   "happenings.children": "Ajouter un enfant",
    "happenings.redir": "Partager à la place de...",
    "happenings.saved": "Nouvelle donnée sauvegardée",
+   "happenings.do": "Valider tout",
+   "happenings.error": "Erreur dans le formulaire. Certaines données peuvent avoir été enregistrées.",
 
    "filesystem.mix": "Données brouillées",
    "filesystem.goTo": "Voir",

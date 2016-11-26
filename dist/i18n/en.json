@@ -109,8 +109,12 @@
    "profile.happenings": "Life events",
 
    "happenings.move": "I'm moving places",
+   "happenings.partners": "I change partner",
+   "happenings.children": "Add a new child",
    "happenings.redir": "Share in place of...",
    "happenings.saved": "New data saved",
+   "happenings.do": "Validate form",
+   "happenings.error": "Error working on form. Some values might be recorded.",
 
    "filesystem.mix": "Garbled data",
    "filesystem.goTo": "View",

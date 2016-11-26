@@ -18,48 +18,73 @@
                         <div class="col-md-12">
                             <!-- TABS -->
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" class="active">
-                                    <a href="#hap_move" aria-controls="hap_move" role="tab" data-toggle="tab">{{ 'happenings.move' | translate }}</a>
+                                <li role="presentation" *ngFor="let h of ha" class="active">
+                                    <a href="#{{ h.sid }}" [attr.aria-controls]="h.sid" role="tab" data-toggle="tab">{{ h.name | translate }}</a>
                                 </li>
                             </ul>
                             <!-- END TABS -->
                             <!-- PANES -->
                             <div class="tab-content">
-                                <div role="tabpanel" class="tab-pane active" id="hap_move">
-                                    <!-- begin new adress -->
-                                    <div class="row igenprofile_address">
-                                        <div class="col-md-4 text-right" style="padding-right: 10px;">
-                                            <!-- select name any -->
-                                            <input type="text" [(ngModel)]="new_names['profile/address']" name="new_nameprofile_address"
-                                                class="form-control" list="suggestionsprofile_address" style="box-shadow: 1px 1px 1px #FF5000!important;" placeholder="{{ 'generics.label' | translate }}">
-                                            <datalist id="suggestionsprofile_address">
-                                                <option *ngFor="let k of backend.generics['profile/address'][backend.generics['profile/address'].length - 1].new_key" value="{{ k | translate }}">
-                                            </datalist>
-                                            <!-- end select name any -->
-                                            <!-- labels -->
-                                            <div style="padding-top: 1em;display: none;" class="keysprofile_address text-right">
-                                                <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics['profile/address'][backend.generics['profile/address'].length - 1].json_keys">
-                                                    {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                <div *ngFor="let h of ha" role="tabpanel" class="tab-pane active" id="{{ h.sid }}">
+                                    <div *ngFor="let s of h.steps; let i = index" [style.display]="cstep[h.sid] == i? 'block' : 'none'">
+                                        <div [ngSwitch]="s.mode">
+                                            <div *ngSwitchCase="'creating'" class="row igen{{ dataservice.sanit(s.gen) }}">
+                                                <div class="col-md-4 text-right" style="padding-right: 10px;">
+                                                    <!-- select name any -->
+                                                    <input *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only
+                                                        && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" type="text" [(ngModel)]="new_names[h.sid + i + s.gen]" name="new_name{{ dataservice.sanit(s.gen) }}"
+                                                        class="form-control" [attr.list]="'suggestions' + dataservice.sanit(s.gen)" style="box-shadow: 1px 1px 1px #FF5000!important;" placeholder="{{ 'generics.label' | translate }}">
+                                                    <datalist *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only"
+                                                        id="suggestions{{ dataservice.sanit(s.gen) }}">
+                                                        <option *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key" value="{{ k | translate }}">
+                                                    </datalist>
+                                                    <!-- end select name any -->
+                                                    <!-- select name force -->
+                                                    <select *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only
+                                                        && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" [(ngModel)]="new_names[h.sid + i + s.gen]"
+                                                        name="new_name{{ dataservice.sanit(s.gen) }}" class="form-control" style="box-shadow: 1px 1px 1px #FF5000!important;">
+                                                        <option *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
+                                                    </select>
+                                                    <!-- end select name force -->
+                                                    <!-- force name -->
+                                                    <input type="text" *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !!backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is"
+                                                        style="box-shadow: 1px 1px 1px #FF5000!important;" [(ngModel)]="new_names[h.sid + i + s.gen]" class="form-control" id="setname{{ h.sid}}{{ i }}{{ dataservice.sanit(s.gen) }}" [attr.g]="g"
+                                                        [attr.nwkey]="backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" readonly="readonly" name="new_name{{ dataservice.sanit(s.gen) }}"/>
+                                                    <!-- end force name -->
+                                                    <!-- labels -->
+                                                    <div style="padding-top: 1em;display: none;" class="keysprofile_address text-right">
+                                                        <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].json_keys">
+                                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                        </div>
+                                                    </div>
+                                                    <!-- end labels -->
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <input_block [reset]="resets[h.sid + i + s.gen]" [g]="s.gen" (out)="regData(s.gen, $event, h.sid, i)" [writeDesc]="false"></input_block>
+                                                </div>
+                                                <div class="col-md-4 text-center">
+                                                    <h4>{{ 'action' | translate }}</h4>
+                                                    <div *ngIf="s.options.share_instead">
+                                                        <label class="mt-checkbox mt-checkbox-outline">
+                                                            <input type="checkbox" [(ngModel)]="doRedir[h.sid + i + s.gen]" /> {{ 'happenings.redir' | translate }}
+                                                            <span></span>
+                                                        </label>
+                                                        <select style="margin-bottom: 1em;" class="form-control" [(ngModel)]="redir[h.sid + i + s.gen]">
+                                                            <option *ngFor="let f of filters(s.gen)" [value]="f">{{ f }}</option>
+                                                        </select>
+                                                    </div>
+                                                    <div *ngFor="let o of s.outputs">
+                                                        <button type="button" *ngIf="!o.is_terminal" class="btn default" [disabled]="!new_names[h.sid + i + s.gen] || new_names[h.sid + i + s.gen] == ''"
+                                                            (click)="register(s.gen, new_names[h.sid + i + s.gen], backend.generics[s.gen][backend.generics[s.gen].length - 1].mode == 'file',
+                                                                h.sid, i, o.next)"><i class="fa fa-check-square"></i> {{ o.nextHelp | translate }}</button>
+                                                        <button type="button" *ngIf="!!o.is_terminal && o.is_terminal" class="btn green" [disabled]="!new_names[h.sid + i + s.gen] || new_names[h.sid + i + s.gen] == ''"
+                                                            (click)="register(s.gen, new_names[h.sid + i + s.gen], backend.generics[s.gen][backend.generics[s.gen].length - 1].mode == 'file',
+                                                            h.sid, i, h.entryStep) && finish(h.sid)"><i class="fa fa-check-square"></i> {{ 'happenings.do' | translate }}</button>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-4">
-                                            <input_block [reset]="resets['profile/address']" [g]="'profile/address'" (out)="regData('profile/address', $event)" [writeDesc]="false"></input_block>
-                                        </div>
-                                        <div class="col-md-4 text-center">
-                                            <h4>{{ 'action' | translate }}</h4>
-                                            <select style="margin-bottom: 1em;" class="form-control" [(ngModel)]="redir['profile/address']">
-                                                <option *ngFor="let f of filters('profile/address')" [value]="f">{{ f }}</option>
-                                            </select>
-                                            <button type="button" class="btn default" (click)="register('profile/address', new_names['profile/address'], false, false)"
-                                                [disabled]="!new_names['profile/address'] || new_names['profile/address'] == ''">
-                                                <i class="fa fa-check-square"></i> {{ 'add' | translate }}</button>
-                                            <button type="button" (click)="register('profile/address', new_names['profile/address'], false, true, 'profile/address/' + redir['profile/address'])"
-                                                class="btn green" [disabled]="!redir['profile/address'] || redir['profile/address'] == '' || !new_names['profile/address'] || new_names['profile/address'] == ''">
-                                                <i class="fa fa-random"></i> {{ 'happenings.redir' | translate }}</button>
-                                        </div>
                                     </div>
-                                    <!-- end new address -->
                                 </div>
                             </div>
                             <!-- END PANES -->

@@ -71,6 +71,7 @@ export class Clearview {
                 self.decr_data = nw_val;
                 delete self.values;
                 self.reset.emit();
+                window.$('.wlimore').removeClass('active');
             });
         }
     }
@@ -140,7 +141,7 @@ export class Clearview {
                 if(from > replacement[i].from) {
                     replacement.splice(i, 0, {
                         from: from,
-                        value: (this.new_data_file != '')? this.new_data_file : this.new_data
+                        value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
                     });
                     done = true;
                     break;
@@ -149,12 +150,12 @@ export class Clearview {
             if(!done) {
                 replacement.push({
                     from: from,
-                    value: (this.new_data_file != '')? this.new_data_file : this.new_data
+                    value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
                 });
             }
             replacement = JSON.stringify(replacement);
         } else {
-            replacement = (this.new_data_file != '')? this.new_data_file : this.new_data.trim();
+            replacement = (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data.trim();
         }
         this.notify.emit(replacement);
     }

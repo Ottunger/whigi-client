@@ -121,10 +121,10 @@
                                         style="box-shadow: 1px 1px 1px #FF5000!important;" [(ngModel)]="ass_name[g]" class="form-control" id="setname{{ dataservice.sanit(g) }}" [attr.g]="g"
                                         [attr.nwkey]="backend.generics[g][backend.generics[g].length - 1].new_key_is" readonly="readonly" name="new_name{{ dataservice.sanit(g) }}"/>
                                     <!-- end force name -->
-                                    <!-- padding non instatiable json keys -->
+                                    <!-- padding non instantiable json keys -->
                                     <div style="height: 34px;" *ngIf="!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable
                                         && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'"></div>
-                                    <!-- end padding non instatiable json keys -->
+                                    <!-- end padding non instantiable json keys -->
                                     <!-- json labels -->
                                     <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                         <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">

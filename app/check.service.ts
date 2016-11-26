@@ -103,10 +103,11 @@ export class Check {
      * @function isAddress
      * @public
      * @param {String} test Input.
+     * @param {Boolean} noparse If object is given.
      * @return {String|Boolean} String containing error or true.
      */
-    areAddress(test: string): string | boolean {
-        var obj = JSON.parse(test);
+    areAddress(test: string, noparse?: boolean): string | boolean {
+        var obj = (noparse === true)? test : JSON.parse(test);
         switch(obj['generics.country']) {
             case 'Belgium':
                 if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
@@ -159,75 +160,78 @@ export class Check {
      */
     areIdentity(test: string): string | boolean {
         var obj = JSON.parse(test), res;
-        switch(obj['generics.country']) {
-            case 'Belgium':
-                res = parseInt(obj['generics.eidNo'].replace(/\.-/g, ''));
-                if(Math.floor(res / 100) % 97 != res % 100)
-                    return 'generics.badeidno';
-                if(!!obj['generics.rrn']) {
-                    res = parseInt(obj['generics.rrn'].replace(/\.-/g, ''));
-                    if(97 - (Math.floor(res / 100) % 97) != res % 100)
-                        return 'generics.badrrn';
-                }
-                if(!!obj['generics.driving'] && !/^[0-9]{10}$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            case 'France':
-                if(!/^[0-9]{12}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                if(!!obj['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            case 'Germany':
-                if(!/^T[0-9]{8}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                if(!!obj['generics.driving'] && !/^[A-Z][0-9]{3}[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            case 'Italy':
-                if(!/^[0-9]{5}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                break;
-            case 'Luxembourg':
-                if(!/^[0-9]{12}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                if(!!obj['generics.driving'] && !/^[0-9]{6}$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            case 'Netherlands':
-                if(!/^[A-Z]{7}[0-9]{2}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                if(!!obj['generics.driving'] && !/^[0-9]{10}$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            case 'Spain':
-                if(!/^[A-Z]{3}[0-9]{6}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                if(!!obj['generics.driving'] && !/^[0-9]{8}-[0-9A-Z]$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            case 'United Kingdom':
-                if(!/^[0-9]{9}$/.test(obj['generics.eidNo'])) {
-                    return 'generics.badeidno';
-                }
-                if(!!obj['generics.driving'] && !/^[A-Z]+[0-9]{6}[A-Z]{6}$/.test(obj['generics.driving'])) {
-                    return 'generics.baddriving';
-                }
-                break;
-            default:
-                break;
+        for(var i = 0; i < obj.length ; i++) {
+            var loc = JSON.parse(obj[i].value);
+            switch(loc['generics.country']) {
+                case 'Belgium':
+                    res = parseInt(loc['generics.eidNo'].replace(/\.-/g, ''));
+                    if(Math.floor(res / 100) % 97 != res % 100)
+                        return 'generics.badeidno';
+                    if(!!loc['generics.rrn']) {
+                        res = parseInt(loc['generics.rrn'].replace(/\.-/g, ''));
+                        if(97 - (Math.floor(res / 100) % 97) != res % 100)
+                            return 'generics.badrrn';
+                    }
+                    if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                case 'France':
+                    if(!/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    if(!!loc['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                case 'Germany':
+                    if(!/^T[0-9]{8}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    if(!!loc['generics.driving'] && !/^[A-Z][0-9]{3}[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                case 'Italy':
+                    if(!/^[0-9]{5}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    break;
+                case 'Luxembourg':
+                    if(!/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    if(!!loc['generics.driving'] && !/^[0-9]{6}$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                case 'Netherlands':
+                    if(!/^[A-Z]{7}[0-9]{2}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                case 'Spain':
+                    if(!/^[A-Z]{3}[0-9]{6}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    if(!!loc['generics.driving'] && !/^[0-9]{8}-[0-9A-Z]$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                case 'United Kingdom':
+                    if(!/^[0-9]{9}$/.test(loc['generics.eidNo'])) {
+                        return 'generics.badeidno';
+                    }
+                    if(!!loc['generics.driving'] && !/^[A-Z]+[0-9]{6}[A-Z]{6}$/.test(loc['generics.driving'])) {
+                        return 'generics.baddriving';
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
         return true;
     }
@@ -241,41 +245,44 @@ export class Check {
      */
     areAccount(test: string): string | boolean {
         var obj = JSON.parse(test), res;
-        switch(obj['generics.country']) {
-            case 'Belgium':
-                if(!/^BE\d{14}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'France':
-                if(!/^FR\d{12}[0-9A-Z]{11}\d{2}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'Germany':
-                if(!/^DE\d{20}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'Italy':
-                if(!/^IT\d{2}[A-Z]\d{10}[0-9A-Z]{12}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'Luxembourg':
-                if(!/^LU\d{5}[0-9A-Z]{13}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'Netherlands':
-                if(!/^NL\d{2}[A-Z]{4}\d{10}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'Spain':
-                if(!/^ES\d{22}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            case 'United Kingdom':
-                if(!/^GB\d{2}[A-Z]{4}\d{14}$/.test(obj['generics.IBAN']) || this.isAccount(obj['generics.IBAN']) !== true)
-                    return 'generics.badaccount';
-                break;
-            default:
-                break;
+        for(var i = 0; i < obj.length; i++) {
+            var loc = JSON.parse(obj[i].value);
+            switch(loc['generics.country']) {
+                case 'Belgium':
+                    if(!/^BE\d{14}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'France':
+                    if(!/^FR\d{12}[0-9A-Z]{11}\d{2}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'Germany':
+                    if(!/^DE\d{20}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'Italy':
+                    if(!/^IT\d{2}[A-Z]\d{10}[0-9A-Z]{12}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'Luxembourg':
+                    if(!/^LU\d{5}[0-9A-Z]{13}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'Netherlands':
+                    if(!/^NL\d{2}[A-Z]{4}\d{10}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'Spain':
+                    if(!/^ES\d{22}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                case 'United Kingdom':
+                    if(!/^GB\d{2}[A-Z]{4}\d{14}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
+                        return 'generics.badaccount';
+                    break;
+                default:
+                    break;
+            }
         }
         return true;
     }
@@ -288,12 +295,15 @@ export class Check {
      * @return {String|Boolean} String containing error or true.
      */
     areCorporate(test: string): string | boolean {
-        var res = this.areAddress(test);
-        if(res !== true)
-            return res;
         var obj = JSON.parse(test);
-        if(!!obj['generics.site_url'] && this.isURL(obj['generics.site_url']) !== true)
-            return 'generics.badurl';
+        for(var i = 0; i < obj.length; i++) {
+            var loc = JSON.parse(obj[i].value);
+            if(this.areAddress(loc, true) != true) {
+                return this.areAddress(loc, true);
+            }
+            if(!!loc['generics.site_url'] && this.isURL(loc['generics.site_url']) !== true)
+                return 'generics.badurl';
+        }
         return true;
     }
 
@@ -308,15 +318,20 @@ export class Check {
      */
     keyIs(mode: string, key: string, test: string): string | boolean {
         var obj = JSON.parse(test), res;
-        switch(mode) {
-            case 'date':
-                res = this.isDate(obj[key]);
-                if(res !== true)
-                    return res;
-                return true;
-            default:
-                return true;
+        obj = (obj.constructor === Array)? obj : [{value: test}];
+        for(var i = 0; i < obj.length; i++) {
+            var loc = JSON.parse(obj[i].value);
+            switch(mode) {
+                case 'date':
+                    res = this.isDate(loc[key]);
+                    if(res !== true)
+                        return res;
+                    break;
+                default:
+                    break;
+            }
         }
+        return true;
     }
 
     /**

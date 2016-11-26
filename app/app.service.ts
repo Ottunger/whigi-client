@@ -42,7 +42,8 @@ export class Backend {
         placeholder?: string,
         requires?: string,
         modes?: string[][],
-        share_as_folder?: boolean
+        share_as_folder?: boolean,
+        from_now?: boolean
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {
