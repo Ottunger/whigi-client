@@ -34,6 +34,7 @@ const appRoutes: Routes = [
     {path: 'llight', component: Logging},
     {path: 'happenings', component: Happenings, canActivate: [Fullguard]},
     {path: 'profile', component: Profile, canActivate: [Profileguard]},
+    {path: 'dotesting', component: Profile, canActivate: [Profileguard]}, //Chrome extension can look up for this, and start testing.
     {path: 'profile/pass/:pwd', component: Profile, canActivate: [Profileguard]},
     {path: 'profile/eidok', component: Profile, canActivate: [Profileguard]},
     {path: 'user/:id', component: User, canActivate: [Profileguard]},
