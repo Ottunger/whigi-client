@@ -292,7 +292,7 @@ export class Backend {
                 dec.setPrivateKey(this.rsa_key[i]);
                 var r = dec.decrypt(data);
                 var h = r.substring(0, 64), next = r.substring(64);
-                if(window.sha256(next) == h) {
+                if(/^[a-fA-F0-9]{64}$/.test(h)) {
                     return this.str2arr(next);
                 }
             } catch(e) {}

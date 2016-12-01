@@ -632,7 +632,7 @@ export class Data {
                 if(names.length > 0 && !is_bound) {
                     names.forEach(function(id) {
                         var time: Date = (!!users_mapping[id].date && !!users_mapping[id].date.getTime)? users_mapping[id].date : new Date(0);
-                        self.grantVault(id, users_mapping[id].shared_as, name, value, version, time, users_mapping[id].trigger, false, undefined).then(function(user, newid) {
+                        self.grantVault(id, users_mapping[id].shared_as, name, value, version, time, users_mapping[id].trigger, false, undefined).then(function() {
                             check(resolve, reject);
                         }, function() {
                             went = false;
@@ -707,7 +707,7 @@ export class Data {
                         self.backend.my_shares[id] = self.backend.my_shares[id] || [];
                         if(self.backend.my_shares[id].indexOf(real_name) == -1)
                             self.backend.my_shares[id].push(real_name);
-                        resolve(user, res._id);
+                        resolve([user, res._id]);
                     }, function(e) {
                         reject(e);
                     });

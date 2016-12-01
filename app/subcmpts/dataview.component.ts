@@ -331,7 +331,8 @@ export class Dataview implements OnInit, OnDestroy {
     register() {
         var self = this;
         var date: Date = window.$('#pick5').datetimepicker('date').toDate();
-        this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger, this.is_storable, this.data.decr_aes).then(function(user, id) {
+        this.dataservice.grantVault(this.new_id, this.data_name, this.data_name, this.decr_data, this.version, date, this.new_trigger, this.is_storable, this.data.decr_aes).then(function(more) {
+            var user = more[0], id = more[1];
             self.timings[user._id] = {la: new Date(0), ee: date, seen: false,
                 ends: date.getTime() > (new Date).getTime(), trigger: self.new_trigger, shared_as: self.data_name};
             self.new_id = '';
