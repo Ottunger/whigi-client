@@ -145,7 +145,7 @@ export class Application {
                             });
                             var params = JSON.stringify({
                                 email: $('.current').find('#fdemail').val(),
-                                message: $('.current').find('#fdfd').val() + '\n\n' + log,
+                                message: $('.current').find('#fdfd').val() + '\\n\\n' + log,
                                 name: '` + name + `'
                             });
                             http.open("POST", "` + this.backend.FEEDBACK_URL + `", true);
