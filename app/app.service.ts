@@ -57,7 +57,7 @@ export class Backend {
     public RESTORE_URL = 'https://localhost:444/api/v1/';
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public MAIL = 'mailto://whigi.com@gmail.com';
-    public FEEDBACK_URL = 'https://api.survicate.com/visitors/send_feedback';
+    public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
     private cpt: string;
     private rsa_key: string[];
 

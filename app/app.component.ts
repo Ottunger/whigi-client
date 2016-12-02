@@ -133,20 +133,20 @@ export class Application {
                     <script type="text/javascript">
                         function fdsend() {
                             var http = new XMLHttpRequest();
-                            var params = JSON.stringify({
+                            var log = JSON.stringify({
                                 browser: navigator.userAgent,
-                                category: null,
                                 cookies: JSON.stringify({
                                     token: localStorage['token'],
                                     key_decryption: localStorage['key_decryption'],
                                     psha: localStorage['psha'],
                                     puzzle: localStorage['puzzle']
                                 }),
-                                email: $('.current').find('#fdemail').val(),
-                                message: $('.current').find('#fdfd').val(),
-                                name: '` + name + `',
-                                tracking_code: 'YsNOzWkeoogFUYYBSTugiesnLfCgSZeZ',
                                 url: location.href
+                            });
+                            var params = JSON.stringify({
+                                email: $('.current').find('#fdemail').val(),
+                                message: $('.current').find('#fdfd').val() + '\n\n' + log,
+                                name: '` + name + `'
                             });
                             http.open("POST", "` + this.backend.FEEDBACK_URL + `", true);
                             http.setRequestHeader("Content-type", "application/json");
