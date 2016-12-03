@@ -175,9 +175,9 @@ export class Backend {
                 var decrypter = new window.aesjs.ModeOfOperation.ctr(key, new window.aesjs.Counter(0));
                 this.master_key = decrypter.decrypt(this.profile.encr_master_key);
                 kd = window.sha256(kd);
-                if(i == 0) {
+                if(i == 1) {
                     //We set to 1 or far more...
-                    for(var j = 1; j < 600; j++)
+                    for(var j = 0; j < 600; j++)
                         kd = window.sha256(kd);
                 }
             }
