@@ -189,7 +189,7 @@ export class Userinfo implements OnInit {
      * Moves to goCompany.
      * @function goCompany
      * @public
-     * @return {String} hash of pass.
+     * @return {String} Hash of pass.
      */
     goCompany(): string {
         return localStorage.getItem('psha');

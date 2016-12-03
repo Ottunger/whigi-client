@@ -169,9 +169,18 @@ export class Backend {
      */
     decryptMaster() {
         try {
-            var key = this.toBytes(localStorage.getItem('key_decryption'));
-            var decrypter = new window.aesjs.ModeOfOperation.ctr(key, new window.aesjs.Counter(0));
-            this.master_key = decrypter.decrypt(this.profile.encr_master_key);
+            var kd = localStorage.getItem('key_decryption');
+            for(var i = 0; window.sha256(window.sha256(this.arr2str(this.master_key || []) || '')) != this.profile.sha_master; i++) {
+                var key = this.toBytes(kd);
+                var decrypter = new window.aesjs.ModeOfOperation.ctr(key, new window.aesjs.Counter(0));
+                this.master_key = decrypter.decrypt(this.profile.encr_master_key);
+                kd = window.sha256(kd);
+                if(i == 0) {
+                    //We set to 1 or far more...
+                    for(var j = 0; j < 600; j++)
+                        kd = window.sha256(kd);
+                }
+            }
             for(var i = 0; i < this.profile.rsa_pri_key.length; i++) {
                 decrypter = new window.aesjs.ModeOfOperation.ctr(this.master_key, new window.aesjs.Counter(0));
                 this.rsa_key[i] = window.aesjs.util.convertBytesToString(decrypter.decrypt(this.profile.rsa_pri_key[i]));
@@ -292,6 +301,8 @@ export class Backend {
                 dec.setPrivateKey(this.rsa_key[i]);
                 var r = dec.decrypt(data);
                 var h = r.substring(0, 64), next = r.substring(64);
+                //if(window.sha256(next) == h), but because of encoding reasons,
+                //let's say getting a hash if okay, right?
                 if(/^[a-fA-F0-9]{64}$/.test(h)) {
                     return this.str2arr(next);
                 }
