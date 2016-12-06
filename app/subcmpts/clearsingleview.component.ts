@@ -67,6 +67,22 @@ export class ClearSingleview {
     }
 
     /**
+     * Prepares input for showing.
+     * @function show
+     * @public
+     * @return {String} Display.
+     */
+    show(): string {
+        if(this.gen in this.backend.generics) {
+            if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].mode == 'checkbox')
+                return this.translate.instant(this.data? 'Yes' : 'No');
+            else if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].mode == 'select')
+                return this.translate.instant(this.data + '');
+        }
+        return this.data;
+    }
+
+    /**
      * Spreads a part of a folder generic content.
      * @function recover
      * @param {String} key Key.
@@ -86,8 +102,8 @@ export class ClearSingleview {
             }
         }
         if(this.keys[idx].mode == 'select')
-            try { bk = this.translate.instant(ret[key]); } catch(e) { bk = ret[key]; }
-        if(this.keys[idx].mode == 'checkbox')
+            try { bk = this.translate.instant(ret[key] + ''); } catch(e) { bk = ret[key]; }
+        else if(this.keys[idx].mode == 'checkbox')
             bk = this.translate.instant(ret[key]? 'Yes' : 'No');
         else
             bk = ret[key];

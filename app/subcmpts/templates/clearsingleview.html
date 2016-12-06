@@ -1,5 +1,5 @@
 <div class="row">
-    <input id="decrypted" *ngIf="!jsoned && data.length < 150" type="text" [ngModel]="data" class="form-control" name="decr" readonly>
+    <input id="decrypted" *ngIf="!jsoned && data.length < 150" type="text" [ngModel]="show()" class="form-control" name="decr" readonly>
     <span *ngIf="!jsoned && data.length >= 150"><i class="fa fa-warning"></i> {{ 'dataview.tooLong' | translate }}</span>
 
     <div class ="col-md-6" *ngIf="jsoned">

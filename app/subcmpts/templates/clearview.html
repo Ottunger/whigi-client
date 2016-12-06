@@ -13,9 +13,9 @@
                     <div class="form-body">
                         <!-- Nav tabs -->
                         <ul class="nav nav-tabs" role="tablist">
-                            <li role="presentation" *ngIf="!is_dated" class="active">
+                            <li role="presentation" *ngIf="!is_dated" class="fi-listable active">
                                 <a href="#whigi-undated" aria-controls="whigi-undated" role="tab" data-toggle="tab">{{ 'actual' | translate }}</a></li>
-                            <li role="presentation" *ngFor="let p of is_dated? computeValues() : []; let i = index" [class.active]="i == 0">
+                            <li role="presentation" *ngFor="let p of is_dated? computeValues() : []; let i = index" [class.active]="i == 0" [class.fi-listable]="i == 0">
                                 <a href="#{{ dataservice.sanit(p.from.toLocaleString()) }}" [attr.aria-controls]="dataservice.sanit(p.from.toLocaleString())"
                                 role="tab" data-toggle="tab">{{ p.from.toLocaleString() }}</a></li>
                             <li role="presentation" class="wlimore" *ngIf="change">
@@ -26,7 +26,7 @@
                         <!-- Tab panes -->
                         <div class="tab-content">
                             <!-- begin show undated -->
-                            <div role="tabpanel" *ngIf="!is_dated" class="tab-pane active" id="whigi-undated">
+                            <div role="tabpanel" *ngIf="!is_dated" class="fi-listable tab-pane active" id="whigi-undated">
                                 <p>{{ 'actual' | translate }}</p>
                                 <clear-single-view [jsoned]="is_folder" [data]="decr_data" [gen]="gen_name" [version]="version" [rst]="changed"></clear-single-view>
 
@@ -45,7 +45,7 @@
                             </div>
                             <!-- end show undated -->
                             <!-- begin show dated -->
-                            <div role="tabpanel" *ngFor="let p of is_dated? computeValues() : []; let i = index" class="tab-pane" [class.active]="i == 0"
+                            <div role="tabpanel" *ngFor="let p of is_dated? computeValues() : []; let i = index" class="tab-pane" [class.active]="i == 0" [class.fi-listable]="i == 0"
                                 id="{{ dataservice.sanit(p.from.toLocaleString()) }}">
                                 <p>{{ 'actualFrom' | translate }}</p>
                                 <div class='input-group date' id='pick-chg{{ dataservice.sanit(p.from.toLocaleString()) }}'>

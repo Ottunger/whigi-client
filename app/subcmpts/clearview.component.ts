@@ -72,6 +72,7 @@ export class Clearview {
                 delete self.values;
                 self.reset.emit();
                 window.$('.wlimore').removeClass('active');
+                window.$('.fi-listable').addClass('active');
             });
         }
     }
