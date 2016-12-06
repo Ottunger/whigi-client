@@ -339,6 +339,22 @@ export class Data {
     }
 
     /**
+     * Checks if a source was empty.
+     * @function allEmpty
+     * @private
+     * @param {Array} gen JSON keys.
+     * @param {Object} data_source Source.
+     * @return {Boolean} If empty.
+     */
+    allEmpty(gen: any[], data_source: {[id: string]: string}): boolean {
+        for(var i = 0; i < gen.length; i++) {
+            if(data_source[gen[i].desc_key] !== undefined && !!data_source[gen[i].descr_key].trim && data_source[gen[i].descr_key].trim() != '')
+                return false;
+        }
+        return true;
+    }
+
+    /**
      * Build up a generic and test it.
      * @param {String} raw_data Source for data.
      * @param {String} raw_data_file Source for file.
@@ -364,7 +380,7 @@ export class Data {
                 if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].required && 
                     (data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] === undefined
                     || data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim() == ''))
-                    return ['error', 'generics.silent'];
+                    return ['error', this.allEmpty(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys, data_source)? 'generics.silent' : 'generics.regexp'];
                 if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
                     && data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].length > 127)
                     return ['error', 'generics.tooLong'];
