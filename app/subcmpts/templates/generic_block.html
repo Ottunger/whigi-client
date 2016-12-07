@@ -180,7 +180,7 @@
                                                         <ul class="dropdown-menu" style="min-width: 0px;">
                                                             <li *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_dated && backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
                                                                 <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
-                                                                    <i class="fa fa-pencil"></i></button>
+                                                                    <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
                                                             </li>
                                                             <li>
                                                                 <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">

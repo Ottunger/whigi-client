@@ -162,7 +162,7 @@ export class Happenings {
             is_dated: this.backend.generics[folder][this.backend.generics[folder].length - 1].is_dated,
             version: this.backend.generics[folder].length - 1,
             fid: sid + step + folder,
-            redir: this.doRedir[sid + step + folder] && !!this.redir[sid + step + folder],
+            redir: !!this.doRedir[sid + step + folder] && this.redir[sid + step + folder],
             towards: this.redir[sid + step + folder]
         });
         this.cstep[sid] = next;

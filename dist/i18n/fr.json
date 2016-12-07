@@ -106,7 +106,7 @@
    "profile.noOauth": "Aucune permission OAuth",
    "profile.explain": "Ce formulaire vous permet de supprimer les accès que vous avez donné à un utilisteur en une seule opération. Vous ne pouvez supprimer les accès donnés à Whigi.",
    "profile.confirm": "Êtes-vous certain de vouloir supprimer tous les accès de l'utilisateur suivant?: ",
-   "profile.happenings": "Evénements marquants",
+   "profile.happenings": "Changements standards",
 
    "happenings.move": "Je déménage",
    "happenings.partners": "Je change de partenaire",
@@ -115,6 +115,8 @@
    "happenings.saved": "Nouvelle donnée sauvegardée",
    "happenings.do": "Valider tout",
    "happenings.error": "Erreur dans le formulaire. Certaines données peuvent avoir été enregistrées.",
+   "happenings.explain": "A chaque étape, nommez la nouvelle donnée que vous créez, remplissez la, puis passer au formulaire suivant.",
+   "happenings.redirExp": "Vous pouvez ici choisir une précédente copie de la donnée pour laquelle vous préferiez partager celle-ci plutôt que l'ancienne. Cela n'est pas obligatoire.",
 
    "filesystem.mix": "Données brouillées",
    "filesystem.goTo": "Voir",
@@ -219,9 +221,11 @@
    "generics.descr": "Description",
    "generics.goTo": "Voir / Modifier",
    "generics.moreData": "En voir plus...",
+   "generics.lessData": "Replier...",
    "generics.shared": "Partagé à...",
    "generics.tooLong": "Votre entrée est trop longue",
    "generics.label": "Nommer la valeur...",
+   "generics.iEdit": "Modification en place",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",

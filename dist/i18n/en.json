@@ -115,6 +115,8 @@
    "happenings.saved": "New data saved",
    "happenings.do": "Validate form",
    "happenings.error": "Error working on form. Some values might be recorded.",
+   "happenings.explain": "At each step, name the new data you will create if required, fill it in, then move to the next step of the form.",
+   "happenings.redirExp": "You can here select the previous copy of the data for which you'd like to share this copy instead of the old one. This is not mandatory.",
 
    "filesystem.mix": "Garbled data",
    "filesystem.goTo": "View",
@@ -219,9 +221,11 @@
    "generics.descr": "Description",
    "generics.goTo": "View / Edit",
    "generics.moreData": "See more...",
+   "generics.lessData": "Hide inputs...",
    "generics.shared": "Shared to...",
    "generics.tooLong": "Your input is too long to be accepted",
    "generics.label": "Name the data...",
+   "generics.iEdit": "Inline edit",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",

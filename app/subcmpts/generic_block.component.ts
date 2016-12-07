@@ -487,6 +487,9 @@ export class GenericBlock implements OnInit {
             var g = window.$(this).attr('data-g');
             self.tgData(f, g, true);
         });
+        for(var i = 0; i < this.data_list.length; i++) {
+            this.resets[this.data_list[i]].emit();
+        }
     }
 
     /**

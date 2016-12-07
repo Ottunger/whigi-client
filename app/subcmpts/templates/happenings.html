@@ -25,6 +25,7 @@
                             <!-- END TABS -->
                             <!-- PANES -->
                             <div class="tab-content">
+                                <p style="text-align: center;">{{ 'happenings.explain' | translate }}</p>
                                 <div *ngFor="let h of ha" role="tabpanel" class="tab-pane active" id="{{ h.sid }}">
                                     <div *ngFor="let s of h.steps; let i = index" [style.display]="cstep[h.sid] == i? 'block' : 'none'">
                                         <div [ngSwitch]="s.mode">
@@ -64,7 +65,8 @@
                                                 </div>
                                                 <div class="col-md-4 text-center">
                                                     <h4>{{ 'action' | translate }}</h4>
-                                                    <div *ngIf="s.options.share_instead">
+                                                    <div *ngIf="s.options.share_instead && filters(s.gen).length > 0">
+                                                        <p style="text-align: center;">{{ 'happenings.redirExp' | translate }}</p>
                                                         <label class="mt-checkbox mt-checkbox-outline">
                                                             <input type="checkbox" [(ngModel)]="doRedir[h.sid + i + s.gen]" /> {{ 'happenings.redir' | translate }}
                                                             <span></span>

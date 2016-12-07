@@ -105,7 +105,7 @@ export class Logging implements OnInit {
                     self.router.navigate(ret);
                 } else {
                     sessionStorage.removeItem('return_url');
-                    self.router.navigate(['/happenings']);
+                    self.router.navigate(['/generics', 'generics.profile']);
                 }
             }, function(e) {
                 localStorage.removeItem('token');

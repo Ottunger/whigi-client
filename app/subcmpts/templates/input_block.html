@@ -11,7 +11,7 @@
     [attr.data-forid]="'#accord' + dataservice.sanit(g)" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"/>
 <!-- JSON KEYS -->
 <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-    <button *ngIf="!writeDesc" type="button" id="igen2{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" class="btn btn-link wigen2" (click)="collapse()">{{ 'generics.moreData' | translate }}</button>
+    <button *ngIf="!writeDesc" type="button" id="igen2{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" class="btn btn-link wigen2" (click)="collapse()">{{ getMyText() | translate }}</button>
     <div class="json{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" style="display: none;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
         <div *ngIf="writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
         <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
