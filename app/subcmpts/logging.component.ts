@@ -82,10 +82,10 @@ export class Logging implements OnInit {
         }
         if('token' in localStorage) {
             this.backend.getProfile().then(function(profile) {
-                self.dataservice.wentLogin = true;
-                self.dataservice.extendModules();
                 //Router.go...
                 self.backend.profile = profile;
+                self.dataservice.wentLogin = true;
+                self.dataservice.extendModules();
                 if(self.backend.profile._id.indexOf('wiuser-') == 0 && (!sessionStorage.getItem('return_url') || !/account/.test(sessionStorage.getItem('return_url')))) {
                     window.$(`
                         <div class="modal">

@@ -9,6 +9,7 @@ declare var window : any
 import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
+import {Data} from './data.service';
 enableProdMode();
 
 @Component({
@@ -65,8 +66,8 @@ enableProdMode();
                 <ul id="navigation">
                     <span style="overflow-x: hidden; max-width: 25vw; position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
                     <li class="first"><button type="button" class="btn btn-xs green" style="margin-right: 30px;" (click)="sendFeedback()">{{ 'feedback' | translate }}</button></li>
-                    <li><button type="button" class="btn btn-xs green" (click)="setLang('en')">EN</button></li>
-                    <li class="last"><button type="button" class="btn btn-xs green" (click)="setLang('fr')">FR</button></li>
+                    <li><button type="button" class="btn btn-xs green" (click)="dataservice.setLang('en')">EN</button></li>
+                    <li class="last"><button type="button" class="btn btn-xs green" (click)="dataservice.setLang('fr')">FR</button></li>
                 </ul>
             </div>
             <simple-notifications [options]="options"></simple-notifications>
@@ -96,8 +97,9 @@ export class Application {
      * @public
      * @param translate Translation service.
      * @param backend App service.
+     * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend) {
+    constructor(private translate: TranslateService, private backend: Backend, private dataservice: Data) {
         var self = this;
         translate.setDefaultLang('en');
         if('lang' in sessionStorage) {
@@ -106,17 +108,6 @@ export class Application {
             var browserLang = translate.getBrowserLang();
             translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
         }
-    }
-
-    /**
-     * Changes the language for the app.
-     * @function setLang
-     * @public
-     * @param {String} lang New language.
-     */
-    setLang(lang: string) {
-        sessionStorage.setItem('lang', lang);
-        this.translate.use(lang);
     }
 
     /**

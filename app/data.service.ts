@@ -78,12 +78,14 @@ export class Data {
     }
 
     /**
-     * Extend the modules for one user.
+     * Extend the modules for one user, and loads his language.
      * @function extendModules
      * @public
      */
     extendModules() {
         var self = this;
+        if(!!this.backend.profile.company_info && !!this.backend.profile.company_info.lang)
+            this.setLang(this.backend.profile.company_info.lang, true);
         this.m = Object.assign({}, modules.m);
         this.getData('keys/display', false, undefined, true).then(function(data) {
             var perso = {kkeys: [], keys: {}, modules: [], holds: {}};
@@ -1004,6 +1006,20 @@ export class Data {
     clickOnEnter(e: any, id: string) {
         if(e.keyCode == 13)
             window.$(id).click();
+    }
+
+    /**
+     * Changes the language for the app.
+     * @function setLang
+     * @public
+     * @param {String} lang New language.
+     * @param {Boolean} skip Do not save.
+     */
+    setLang(lang: string, skip?: boolean) {
+        sessionStorage.setItem('lang', lang);
+        this.translate.use(lang);
+        if(this.backend.data_loaded && skip !== true)
+            this.backend.remLang(lang);
     }
 
 }

@@ -612,6 +612,17 @@ export class Backend {
     }
 
     /**
+     * Changes user's language eveywhere.
+     * @function remLang
+     * @public
+     * @param {String} code New lang.
+     * @return {Promise} JSON response from backend.
+     */
+    remLang(code: string): Promise {
+        return this.backend(true, false, 'POST', {lang: code}, 'profile/info3', true, true);
+    }
+
+    /**
      * Loads data from BCE.
      * @function goBCE
      * @public

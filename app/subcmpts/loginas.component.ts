@@ -42,9 +42,9 @@ export class Loginas implements OnInit {
             self.backend.createToken(user, pwd, false).then(function(ticket) {
                 localStorage.setItem('token', ticket._id);
                 self.backend.getProfile().then(function(profile) {
-                    self.dataservice.extendModules();
                     //Router.go...
                     self.backend.profile = profile;
+                    self.dataservice.extendModules();
                     localStorage.setItem('key_decryption', window.sha256(pwd + profile.salt));
                     localStorage.setItem('psha', window.sha256(pwd));
 
