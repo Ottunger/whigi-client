@@ -70,7 +70,7 @@
                                                 <li *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_dated && backend.profile.data[g].id.indexOf('datafragment') == 0
                                                         && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
                                                     <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g">
-                                                        <i class="fa fa-pencil"></i></button>
+                                                        <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
                                                 </li>
                                                 <li>
                                                     <button type="button" class="btn btn-link" (click)="select(g)">

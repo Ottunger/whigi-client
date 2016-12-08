@@ -850,7 +850,7 @@ export class Data {
     sanit(s: string): string {
         if(!s)
             return '';
-        return s.replace(/[\/\.# :à,]/g, '_');
+        return s.replace(/[\/\.# :*à,]/g, '_');
     }
 
     /**

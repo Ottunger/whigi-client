@@ -154,7 +154,7 @@ export class Account implements OnInit, OnDestroy {
             });
             //Cannot register two under the same name
             if(new Set(self.data_list_shared_as.map(function(el: string[]): string {
-                return el[1];
+                return el[1].replace('*', '');
             })).size != self.data_list_shared_as.length) {
                 self.deny();
                 return;
@@ -222,12 +222,12 @@ export class Account implements OnInit, OnDestroy {
                             }
                             ret.forEach(function(record) {
                                 if(self.id_to in self.backend.profile.data[record].shared_to) {
-                                    if(req[0] == req[1]) {
+                                    if(req[0] == req[1].replace('*', '')) {
                                         nice = true;
                                         completeRound();
                                     } else {
                                         self.backend.getAccessVault(self.backend.profile.data[record].shared_to[self.id_to]).then(function(info) {
-                                            if(info.shared_as == req[1]) {
+                                            if(info.shared_as == req[1].replace('*', '')) {
                                                 nice = true;
                                             }
                                             completeRound();
@@ -307,7 +307,11 @@ export class Account implements OnInit, OnDestroy {
             }
             for(var i = 0; i < this.data_list_shared_as.length; i++) {
                 var adata = this.data_list_shared_as[i];
-                if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].share_as_folder) {
+                console.log(adata[1], adata[1].substr(0, 1) == '*', '#removals' + this.dataservice.sanit(adata[1]), window.$('#removals' + this.dataservice.sanit(adata[1])).hasClass('green'))
+                if(adata[1].substr(0, 1) == '*' && window.$('#removals' + this.dataservice.sanit(adata[1])).hasClass('green')) {
+                    //Make sure that flagged out ones are not tested
+                    continue;
+                } else if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].share_as_folder) {
                     saves.push({
                         mode: 'build-and-grant',
                         to: this.id_to,
@@ -315,24 +319,24 @@ export class Account implements OnInit, OnDestroy {
                         until: this.expire_epoch,
                         trigger: this.trigger
                     });
-                } else if((!(adata[1] in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1] in this.filter && this.filter[adata[1]] == '/new')) {
+                } else if((!(adata[1].replace('*', '') in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1].replace('*', '') in this.filter && this.filter[adata[1].replace('*', '')] == '/new')) {
                     //Build and test
-                    window.$('#igen' + this.dataservice.sanit(adata[1])).removeClass('has-error');
-                    var send = this.dataservice.recGeneric(this.new_data[adata[1]], '', this.new_datas[adata[1]], adata[0], false);
+                    window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).removeClass('has-error');
+                    var send = this.dataservice.recGeneric(this.new_data[adata[1].replace('*', '')], '', this.new_datas[adata[1].replace('*', '')], adata[0], false);
                     if(send.constructor === Array) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
+                        window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('has-error');
                         return;
                     }
                     //Build name
                     var name = adata[0];
                     if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
-                        name += '/' + this.new_name[adata[1]];
+                        name += '/' + this.new_name[adata[1].replace('*', '')];
                     }
                     //Once only
                     if(name in used) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant('account.twice'));
-                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
+                        window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('has-error');
                         return;
                     }
                     used[name] = true;
@@ -359,12 +363,12 @@ export class Account implements OnInit, OnDestroy {
                     //Build name
                     var name = adata[0];
                     if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
-                        name += '/' + this.filter[adata[1]];
+                        name += '/' + this.filter[adata[1].replace('*', '')];
                     }
                     //Once only
                     if(name in used) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant('account.twice'));
-                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
+                        window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('has-error');
                         return;
                     }
                     used[name] = true;
@@ -372,7 +376,7 @@ export class Account implements OnInit, OnDestroy {
                     saves.push({
                         mode: 'get-and-grant',
                         to: this.id_to,
-                        name: adata[1],
+                        name: adata[1].replace('*', ''),
                         real_name: name,
                         until: this.expire_epoch,
                         trigger: this.trigger
@@ -608,6 +612,9 @@ export class Account implements OnInit, OnDestroy {
         var obj = window.$('.grant-required'), ok = true;
         window.$('.panel-clearable').removeClass('panel-danger');
         for(var i = 0; i < obj.length; i++) {
+            if(!!window.$(obj[i]).closest('.panel').find('button').length && window.$(obj[i]).closest('.panel').find('button').length > 0
+                && window.$(obj[i]).closest('.panel').find('button').hasClass('green'))
+                continue;
             if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '') {
                 var ok = false;
                 window.$(window.$(obj[i]).attr('data-forid')).addClass('panel-danger');
