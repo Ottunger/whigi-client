@@ -227,6 +227,9 @@
    "generics.tooLong": "Votre entrée est trop longue",
    "generics.label": "Nommer la valeur...",
    "generics.iEdit": "Modification en place",
+   "generics.deleteOne": "Supprimer cette valeur",
+   "generics.addOne": "Ajouter une valeur délimitée",
+   "generics.changeOne": "Changer de début",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",

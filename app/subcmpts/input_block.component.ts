@@ -83,8 +83,8 @@ export class InputBlock implements OnInit {
         } else if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
             for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
                 if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].mode == 'date') {
-                    window.$('.pickgen' + this.dataservice.sanit(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key)).ready(function() {
-                        window.$('.pickgen' + self.dataservice.sanit(self.backend.generics[self.g][self.backend.generics[self.g].length - 1].json_keys[this].descr_key)).datetimepicker()
+                    window.$('.pickgen' + self.dataservice.sanit(self.g) + this.dataservice.sanit(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key)).ready(function() {
+                        window.$('.pickgen' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.backend.generics[self.g][self.backend.generics[self.g].length - 1].json_keys[this].descr_key)).datetimepicker()
                             .datetimepicker('options', {format: 'DD/MM/YYYY'}).on('dp.change', function(e) {
                                 self.new_datas[self.backend.generics[self.g][self.backend.generics[self.g].length - 1].json_keys[this].descr_key] = e.date.format('DD/MM/YYYY');
                         }.bind(this));

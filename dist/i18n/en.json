@@ -227,6 +227,9 @@
    "generics.tooLong": "Your input is too long to be accepted",
    "generics.label": "Name the data...",
    "generics.iEdit": "Inline edit",
+   "generics.deleteOne": "Suppress this value",
+   "generics.addOne": "Add a delimited value",
+   "generics.changeOne": "Change beginning",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",

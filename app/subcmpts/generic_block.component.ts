@@ -21,6 +21,9 @@ import * as template from './templates/generic_block.html';
 })
 export class GenericBlock implements OnInit {
 
+    public sincefrom: {[id: string]: {min: number, max: number, act: number}};
+    public cached: {[id: string]: any};
+    public changing: boolean;
     public ass_name: {[id: string]: string};
     public new_data: {[id: string]: string};
     public new_datas: {[id: string]: {[id: string]: string}};
@@ -32,7 +35,7 @@ export class GenericBlock implements OnInit {
     @Input() raw_list: string[];
     @Output() rm: EventEmitter<string>;
     private previews: {[id: string]: string[]};
-    private asked: {[id: string]: number[] | boolean};
+    private asked: {[id: string]: boolean};
     private resets: {[id: string]: EventEmitter<any>}
 
     /**
@@ -55,6 +58,9 @@ export class GenericBlock implements OnInit {
         this.previews = {};
         this.asked = {};
         this.resets = {};
+        this.cached = {};
+        this.sincefrom = {};
+        this.changing = false;
         this.rm = new EventEmitter<string>();
     }
 
@@ -213,7 +219,7 @@ export class GenericBlock implements OnInit {
         //Create it
         this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
-            self.resets[name].emit();
+            self.resets[name].emit([]);
             self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
                 self.data_list = now.map(function(el) { return el[0]; });
             });
@@ -257,6 +263,59 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Deal with dating of already existing datas.
+     * @function dateModifs
+     * @public
+     * @param {String} fname Full name of data.
+     * @param {Number} dir Direction in array.
+     * @param {Number} place Add or remove from array.
+     * @param {Boolean} mod Change current timestamp.
+     * @param {String} gname Underlying generic.
+     */
+    dateModifs(fname: string, dir: number, place: number, mod: boolean, gname: string) {
+        var self = this, ret: {from: number, value: string}[];
+        //Complete consists in removing preview
+        function complete(res: string) {
+            delete self.previews[fname];
+            delete self.asked[fname];
+            self.cached[fname].decr_data = res;
+            self.preview(fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys', gname);
+        }
+
+        //Parse object
+        ret = this.dataservice.strToObj(this.cached[fname].decr_data);
+        //Move cursor
+        if(dir != 0) {
+            this.sincefrom[fname].act += dir;
+            window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date', window.moment(ret[this.sincefrom[fname].act].from));
+        }
+        //Remove or add values.
+        if(place < 0) {
+            ret.splice(this.sincefrom[fname].act, place);
+        } else if(place > 0) {
+            //TODO: add values.
+        }
+        //Modify current timestamp
+        if(mod) {
+            ret[this.sincefrom[fname].act].from = window.$('#sincefrom' + this.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
+        }
+        //Save?
+        if(mod || place < 0) {
+            this.changing = true;
+            var send = JSON.stringify(ret);
+            this.dataservice.modifyData(fname, send, true, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
+                self.changing = false;
+                complete(send);
+            }, function(e) {
+                self.changing = false;
+                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+            });
+        } else if(place <= 0) {
+            complete(this.cached[fname].decr_data);
+        }
+    }
+
+    /**
      * Preview a non instatiable held data.
      * @function preview
      * @public
@@ -267,7 +326,7 @@ export class GenericBlock implements OnInit {
      * @return {String} Decrypted data.
      */
     preview(name: string, keyded: boolean, gen_name: string, full?: boolean | number): string {
-        var self = this;
+        var self = this, ret;
         full = full || false;
         full = full? 1 : 0;
         if(name in this.previews)
@@ -275,15 +334,19 @@ export class GenericBlock implements OnInit {
         if(name in this.asked)
             return '[]';
         this.asked[name] = true;
-        this.dataservice.getData(this.backend.profile.data[name].id, false, function(data) {
-            return new Promise(function(resolve) {
-                self.asked[name] = data.decr_aes;
-                resolve();
-            });
-        }).then(function(data) {
+
+        function complete(data) {
             if(self.backend.profile.data[name].is_dated) {
-                self.previews[name] = [JSON.parse(data.decr_data)[0].value, ''];
-                self.previews[name] = [self.previews[name][0], self.previews[name][0]];
+                ret = self.dataservice.strToObj(data.decr_data);
+                if(!(name in self.sincefrom)) {
+                    //If this is a dated data the first time we go here, init everything. Move will do this afterwards.
+                    self.sincefrom[name] = {min: 0, max: ret.length - 1, act: ret.length - 1};
+                    window.$('#sincefrom' + self.dataservice.sanit(name)).ready(function() {
+                        window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker();
+                        window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('date', window.moment(ret[ret.length - 1].from));
+                    });
+                }
+                self.previews[name] = [ret[self.sincefrom[name].act].value, ret[self.sincefrom[name].act].value];
             } else {
                 self.previews[name] = [data.decr_data, data.decr_data];
             }
@@ -311,11 +374,21 @@ export class GenericBlock implements OnInit {
             }
             if(!!self.resets[name])
                 self.resets[name].emit(self.previews[name][1]);
-            self.check.tick();
-        }, function(e) {
-            self.previews[name] = ['[]', '[]'];
             delete self.asked[name];
-        });
+            self.check.tick();
+        }
+        //Now get the data or do it right away
+        if(name in self.cached) {
+            complete(self.cached[name]);
+        } else {
+            this.dataservice.getData(this.backend.profile.data[name].id, false).then(function(data) {
+                self.cached[name] = data;
+                complete(data);
+            }, function(e) {
+                self.previews[name] = ['[]', '[]'];
+                delete self.asked[name];
+            });
+        }
     }
 
     /**
@@ -426,7 +499,7 @@ export class GenericBlock implements OnInit {
                 return;
             }
             //Create it
-            this.dataservice.modifyData(fname, send, false, this.backend.generics[gname].length - 1, {}, fname != gname, this.asked[fname]).then(function() {
+            this.dataservice.modifyData(fname, send, false, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
                 window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');

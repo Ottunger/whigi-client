@@ -341,6 +341,27 @@ export class Data {
     }
 
     /**
+     * Parses a data and orders it.
+     * @function strToObj
+     * @public
+     * @param {String} str Input JSON.
+     * @return {Object} Decoded value.
+     */
+    strToObj(str: string): {from: number, value: string}[] {
+        var ret: {from: number, value: string}[];
+        try {
+            ret = JSON.parse(str);
+        } catch(e) {
+            ret = [];
+        }
+        ret = ret.sort(function(a, b): number {
+            return (a.from < b.from)? - 1 : 1;
+        });
+        return ret;
+    }
+
+
+    /**
      * Checks if a source was empty.
      * @function allEmpty
      * @private
@@ -350,7 +371,7 @@ export class Data {
      */
     allEmpty(gen: any[], data_source: {[id: string]: string}): boolean {
         for(var i = 0; i < gen.length; i++) {
-            if(data_source[gen[i].desc_key] !== undefined && !!data_source[gen[i].descr_key].trim && data_source[gen[i].descr_key].trim() != '')
+            if(data_source[gen[i].descr_key] !== undefined && !!data_source[gen[i].descr_key].trim && data_source[gen[i].descr_key].trim() != '')
                 return false;
         }
         return true;

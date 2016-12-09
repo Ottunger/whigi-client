@@ -37,8 +37,8 @@
             <span style="margin-top: 1em;"></span>
         </label>
         <!-- date -->
-        <div class='input-group date pickgen{{ dataservice.sanit(k.descr_key) }}' *ngIf="k.mode == 'date'">
-            <input type='text' class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data" (change)="iChange(3)"/>
+        <div class="input-group date pickgen{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" *ngIf="k.mode == 'date'">
+            <input type='text' class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data{{ g + k.descr_key }}" (change)="iChange(3)"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
@@ -55,8 +55,8 @@
     <span style="margin-top: 1em;"></span>
 </label>
 <!-- DATE -->
-<div class='input-group date grant-required pickgen{{ dataservice.sanit(g) }}' *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
-    <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"/>
+<div class="input-group date grant-required pickgen{{ dataservice.sanit(g) }}" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
+    <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data{{ g }}" (change)="iChange(1)"/>
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
     </span>

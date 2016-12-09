@@ -85,7 +85,7 @@ export class Clearview {
     computeValues(): {from: Date, value: string}[] {
         var self = this;
         if(!this.values) {
-            this.values = this.strToObj(this.decr_data);
+            this.values = this.dataservice.strToObj(this.decr_data);
             for(var i = 0; i < this.values.length; i++) {
                 this.values[i].from = new Date(this.values[i].from);
                 window.$('#pick-chg' + this.dataservice.sanit(this.values[i].from.toLocaleString())).ready(function() {
@@ -108,7 +108,7 @@ export class Clearview {
      */
     recFrom(dom: string, i: number) {
         var date = window.$('#' + dom).datetimepicker('date').valueOf();
-        var str = this.strToObj(this.decr_data);
+        var str = this.dataservice.strToObj(this.decr_data);
         str[i].from = date;
         this.notify.emit(JSON.stringify(str));
     }
@@ -137,7 +137,7 @@ export class Clearview {
         //Add the date info
         if(this.is_dated) {
             var from = window.$('#pick4').datetimepicker('date').toDate().getTime();
-            replacement = this.strToObj(this.decr_data) || [];
+            replacement = this.dataservice.strToObj(this.decr_data) || [];
             for(var i = 0; i < replacement.length; i++) {
                 if(from > replacement[i].from) {
                     replacement.splice(i, 0, {
@@ -168,7 +168,7 @@ export class Clearview {
      * @param {Number} i Index to remove.
      */
     rem(i: number) {
-        var str = this.strToObj(this.decr_data);
+        var str = this.dataservice.strToObj(this.decr_data);
         str.splice(i, 1);
         this.notify.emit(JSON.stringify(str));
     }
@@ -194,26 +194,6 @@ export class Clearview {
         if(this.is_generic)
             return this.translate.instant(this.backend.generics[this.gen_name][this.version].descr_key);
         return '';
-    }
-
-    /**
-     * Parses a data and orders it.
-     * @function strToObj
-     * @private
-     * @param {String} str Input JSON.
-     * @return {Object} Decoded value.
-     */
-    private strToObj(str: string): {from: number, value: string}[] {
-        var ret: {from: number, value: string}[];
-        try {
-            ret = JSON.parse(this.decr_data);
-        } catch(e) {
-            ret = [];
-        }
-        ret = ret.sort(function(a, b): number {
-            return (a.from < b.from)? - 1 : 1;
-        });
-        return ret;
     }
 
     /**
