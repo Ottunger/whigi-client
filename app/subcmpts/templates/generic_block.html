@@ -75,8 +75,8 @@
                                                 <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu" style="min-width: 0px;">
-                                                <li *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_dated && backend.profile.data[g].id.indexOf('datafragment') == 0">
-                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g">
+                                                <li *ngIf="backend.profile.data[g].id.indexOf('datafragment') == 0">
+                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link to-click" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g">
                                                         <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
                                                 </li>
                                                 <li>
@@ -104,15 +104,16 @@
                             <div class="row" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated && !!backend.profile.data[g] && backend.profile.data[g].id.indexOf('datafragment') == 0
                                 && !backend.generics[g][backend.generics[g].length - 1].instantiable" style="margin: 0 0;">
                                 <div class="col-md-6 text-right" style="padding-top: 4px;">
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].act" (click)="dateModifs(g, -1, 0, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, -1, 0, false, g)">
                                         <i class="fa fa-angle-double-left"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].max == sincefrom[g].act" (click)="dateModifs(g, 1, 0, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].max == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, 1, 0, false, g)">
                                         <i class="fa fa-angle-double-right"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].max" (click)="dateModifs(g, 0, -1, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].max || addDisabled(g)" (click)="dateModifs(g, 0, -1, false, g)">
                                         <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing" (click)="dateModifs(g, 0, 1, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || addDisabled(g)" id="tgch2{{ dataservice.sanit(g) }}"
+                                        (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g), 'green in-edit');foranew[g] = 'tgch2' + dataservice.sanit(g);tgData(g, g);">
                                         <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing" (click)="dateModifs(g, 0, 0, true, g)">
+                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || addDisabled(g)" (click)="dateModifs(g, 0, 0, true, g)">
                                         <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
                                 </div>
                                 <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g) }}">
@@ -206,8 +207,8 @@
                                                             <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
                                                         </button>
                                                         <ul class="dropdown-menu" style="min-width: 0px;">
-                                                            <li *ngIf="!backend.generics[g][backend.generics[g].length - 1].is_dated && backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
-                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
+                                                            <li *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
+                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link to-click" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
                                                                     <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
                                                             </li>
                                                             <li>
@@ -234,16 +235,21 @@
                                     <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
                                         <td style="padding-top: 5px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" [style.padding-bottom]="l? '5px' : '0px'">
                                             <div class="col-md-6 text-right" style="padding-top: 4px;">
-                                                <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].act" (click)="dateModifs(g + '/' + d, -1, 0, false, g)">
+                                                <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
+                                                    (click)="dateModifs(g + '/' + d, -1, 0, false, g)">
                                                     <i class="fa fa-angle-double-left"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].max == sincefrom[g + '/' + d].act" (click)="dateModifs(g + '/' + d, 1, 0, false, g)">
+                                                <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].max == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
+                                                    (click)="dateModifs(g + '/' + d, 1, 0, false, g)">
                                                     <i class="fa fa-angle-double-right"></i></button>
                                                 <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0
-                                                    || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].max" (click)="dateModifs(g + '/' + d, 0, -1, false, g)">
+                                                    || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].max || addDisabled(g + '/' + d)" (click)="dateModifs(g + '/' + d, 0, -1, false, g)">
                                                     <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0" (click)="dateModifs(g + '/' + d, 0, 1, false, g)">
+                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
+                                                    id="tgch2{{ dataservice.sanit(g + '/' + d) }}" (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g + '/' + d), 'green in-edit');
+                                                    foranew[g + '/' + d] = 'tgch2' + dataservice.sanit(g + '/' + d);tgData(g + '/' + d, g);">
                                                     <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0" (click)="dateModifs(g + '/' + d, 0, 0, true, g)">
+                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
+                                                    (click)="dateModifs(g + '/' + d, 0, 0, true, g)">
                                                     <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
                                             </div>
                                             <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g + '/' + d) }}">

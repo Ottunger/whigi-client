@@ -21,6 +21,7 @@ import * as template from './templates/generic_block.html';
 })
 export class GenericBlock implements OnInit {
 
+    public foranew: {[id: string]: string};
     public sincefrom: {[id: string]: {min: number, max: number, act: number}};
     public cached: {[id: string]: any};
     public changing: boolean;
@@ -60,6 +61,7 @@ export class GenericBlock implements OnInit {
         this.resets = {};
         this.cached = {};
         this.sincefrom = {};
+        this.foranew = {};
         this.changing = false;
         this.rm = new EventEmitter<string>();
     }
@@ -137,7 +139,8 @@ export class GenericBlock implements OnInit {
             if(perf == false) {
                 return false;
             } else {
-                window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false).click();
+                window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false);
+                window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click').click();
                 return;
             }
         }
@@ -292,8 +295,9 @@ export class GenericBlock implements OnInit {
         //Remove or add values.
         if(place < 0) {
             ret.splice(this.sincefrom[fname].act, place);
+            self.sincefrom[fname].max += place;
         } else if(place > 0) {
-            //TODO: add values.
+            //Cannot add values, do this with tgData...
         }
         //Modify current timestamp
         if(mod) {
@@ -310,7 +314,7 @@ export class GenericBlock implements OnInit {
                 self.changing = false;
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });
-        } else if(place <= 0) {
+        } else if(place == 0) {
             complete(this.cached[fname].decr_data);
         }
     }
@@ -372,8 +376,6 @@ export class GenericBlock implements OnInit {
                 }
                 self.previews[name][0].trim();
             }
-            if(!!self.resets[name])
-                self.resets[name].emit(self.previews[name][1]);
             delete self.asked[name];
             self.check.tick();
         }
@@ -476,6 +478,11 @@ export class GenericBlock implements OnInit {
             window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
             window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
             window.$('#on-edit' + this.dataservice.sanit(fname)).addClass('keys' + this.dataservice.sanit(fname));
+            //Prefill
+            if(!!this.resets[fname] && !!this.foranew[fname])
+                this.resets[fname].emit();
+            else
+                this.resets[fname].emit(this.previews[fname][1]);
             //Auto expand input_block
             window.$('#igen2' + this.dataservice.sanit(fname)).click();
         } else {
@@ -498,28 +505,55 @@ export class GenericBlock implements OnInit {
                 window.$('.iinput' + this.dataservice.sanit(fname)).addClass('has-error');
                 return;
             }
+            //If it is dated, some more modifications need to be done
+            var is_dated = this.backend.generics[gname][this.backend.generics[gname].length - 1].is_dated;
+            if(is_dated) {
+                var sd: string = JSON.parse(send)[0].value;
+                var from = window.$('#sincefrom' + this.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
+                var replacement = this.dataservice.strToObj(this.cached[fname].decr_data) || [];
+                if(!!this.foranew[fname]) {
+                    replacement.push({from: from, value: sd});
+                } else {
+                    replacement[this.sincefrom[fname].act] = {from: from, value: sd};
+                }
+                send = JSON.stringify(replacement);
+            }
             //Create it
-            this.dataservice.modifyData(fname, send, false, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
+            this.dataservice.modifyData(fname, send, is_dated, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
                 window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
                 window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
-                if(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'json_keys' && self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'file')
-                    self.previews[fname] = [send, send];
-                else if(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys') {
-                    delete self.asked[fname];
-                    delete self.previews[fname];
-                    self.preview(fname, true, gname);
-                }
+                //Refresh preview
+                delete self.asked[fname];
+                delete self.previews[fname];
+                self.cached[fname].decr_data = send;
+                self.preview(fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys', gname);
+                //Reset the input blocks
                 self.resets[fname].emit(send);
                 self.resets[fname].emit([]);
                 self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
                     self.data_list = now.map(function(el) { return el[0]; });
                 });
+                //If this was dated, some more modifs...
+                if(!!self.foranew[fname]) {
+                    self.sincefrom[fname].max++;
+                    window.$('#' + self.foranew[fname]).removeClass('green in-edit');
+                    delete self.foranew[fname];
+                }
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });
         }
+    }
+
+    /**
+     * Returns if in edit.
+     * @param {String} who Full name.
+     * @return {Boolean} In edit.
+     */
+    addDisabled(who: string): boolean {
+        return window.$('#tgdata' + this.dataservice.sanit(who)).hasClass('in-edit');
     }
 
     /**

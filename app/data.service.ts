@@ -948,6 +948,17 @@ export class Data {
     }
 
     /**
+     * Classes.
+     * @function addClasses
+     * @public
+     * @param {String} id The ID of the input.
+     * @param {String} cl Classes.
+     */
+    addClasses(id: string, cl: string) {
+        window.$('#' + id).addClass(cl);
+    }
+
+    /**
      * Show password strength.
      * @function showStr
      * @public
