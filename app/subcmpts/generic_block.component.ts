@@ -30,14 +30,17 @@ export class GenericBlock implements OnInit {
     public new_datas: {[id: string]: {[id: string]: string}};
     public new_data_file: {[id: string]: string};
     public data_list: string[];
+    public toview: string;
     @Input() tsl: boolean;
     @Input() iclose: boolean;
     @Input() group: string;
     @Input() raw_list: string[];
     @Output() rm: EventEmitter<string>;
+    private inreg: boolean;
     private previews: {[id: string]: string[]};
     private asked: {[id: string]: boolean};
     private resets: {[id: string]: EventEmitter<any>}
+    private rstCsv: EventEmitter<any>;
 
     /**
      * Creates the component.
@@ -63,7 +66,10 @@ export class GenericBlock implements OnInit {
         this.sincefrom = {};
         this.foranew = {};
         this.changing = false;
+        this.inreg = false;
+        this.toview = '[]';
         this.rm = new EventEmitter<string>();
+        this.rstCsv = new EventEmitter<any>();
     }
 
     /**
@@ -75,20 +81,7 @@ export class GenericBlock implements OnInit {
         var self = this;
         this.dataservice.filterKnown(this.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
             self.data_list = now.map(function(el) { return el[0]; });
-            for(var i = 0; i < self.data_list.length; i++) {
-                self.new_datas[self.data_list[i]] = {};
-                if(!self.resets[self.data_list[i]])
-                    self.resets[self.data_list[i]] = new EventEmitter();
-                if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].instantiable) {
-                    if(self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_keys_only) {
-                        self.ass_name[self.data_list[i]] = self.backend.generics[self.data_list[i]][self.backend.generics[self.data_list[i]].length - 1].new_key[0].substr(4);
-                    }
-                    var names = self.dataNames(self.data_list[i], 3);
-                    for(var j = 0; j < names.length; j++)
-                        if(!self.resets[self.data_list[i] + '/' + names[j]])
-                            self.resets[self.data_list[i] + '/' + names[j]] = new EventEmitter();
-                }
-            }
+            self.popList();
             if(self.iclose) {
                 window.$('#apsablegen' + self.dataservice.sanit(self.group)).ready(function() {
                     window.$('#apsablegen' + self.dataservice.sanit(self.group)).css('display', 'none');
@@ -97,6 +90,28 @@ export class GenericBlock implements OnInit {
                 });
             }
         });
+    }
+
+    /**
+     * Populates reste lists.
+     * @function popList
+     * @private
+     */
+    private popList() {
+        for(var i = 0; i < this.data_list.length; i++) {
+            this.new_datas[this.data_list[i]] = {};
+            if(!this.resets[this.data_list[i]])
+                this.resets[this.data_list[i]] = new EventEmitter();
+            if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].instantiable) {
+                if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_keys_only) {
+                    this.ass_name[this.data_list[i]] = this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key[0].substr(4);
+                }
+                var names = this.dataNames(this.data_list[i], 3);
+                for(var j = 0; j < names.length; j++)
+                    if(!this.resets[this.data_list[i] + '/' + names[j]])
+                        this.resets[this.data_list[i] + '/' + names[j]] = new EventEmitter();
+            }
+        }
     }
 
     /**
@@ -133,53 +148,89 @@ export class GenericBlock implements OnInit {
      * @return {Boolean} Doable.
      */
     registerAll(perf: boolean): boolean {
-        var checks = window.$('.input-holder-' + this.dataservice.sanit(this.group));
-        //If in edit mode, say we can save
-        if(!!window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').length && window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').length != 0) {
+        var self = this, objs;
+        function complete(single: boolean) {
+            function end() {
+                //Can redo things
+                self.inreg = false;
+                objs = window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit');
+                //If in edit mode, say we can save
+                if(!!objs.length) {
+                    if(perf == false) {
+                        return false;
+                    } else {
+                        objs.attr('disabled', false);
+                        window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit.to-click').click();
+                        return;
+                    }
+                }
+                //For adding data
+                var checks = window.$('.input-holder-' + self.dataservice.sanit(self.group));
+                for(var i = 0; i < checks.length; i++) {
+                    var g = window.$(checks[i]).attr('data-g');
+                    if(self.backend.generics[g][self.backend.generics[g].length - 1].instantiable) {
+                        if(!!self.ass_name[g] && self.ass_name[g] != '') {
+                            if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g])) {
+                                if(!perf) {
+                                    return false;
+                                } else {
+                                    self.register(g, true, self.ass_name[g]);
+                                }
+                            } else if(((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g])) {
+                                if(!perf) {
+                                    return false;
+                                } else {
+                                    self.register(g, false, self.ass_name[g]);
+                                }
+                            }
+                        }
+                    } else {
+                        if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g)) {
+                            if(!perf) {
+                                return false;
+                            } else {
+                                self.register(g, true);
+                            }
+                        } else if(((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g)) {
+                            if(!perf) {
+                                return false;
+                            } else {
+                                self.register(g, false);
+                            }
+                        }
+                    }
+                }
+                return true;
+            };
+            if(single)
+                return end();
+            else
+                setTimeout(end, 200);
+        }
+
+        if(this.inreg)
+            return false;
+        this.inreg = true;
+        //If some names are on, do them as well first
+        objs = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.btn-renamer.green');
+        if(!!objs.length) {
             if(perf == false) {
+                this.inreg = false;
                 return false;
             } else {
-                window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false);
-                window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click').click();
-                return;
-            }
-        }
-        //For adding data
-        for(var i = 0; i < checks.length; i++) {
-            var g = window.$(checks[i]).attr('data-g');
-            if(this.backend.generics[g][this.backend.generics[g].length - 1].instantiable) {
-                if(!!this.ass_name[g] && this.ass_name[g] != '') {
-                    if((this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') && this.notOrEdit(g + '/' + this.ass_name[g])) {
-                        if(!perf) {
-                            return false;
-                        } else {
-                            this.register(g, true, this.ass_name[g]);
-                        }
-                    } else if(((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) && this.notOrEdit(g + '/' + this.ass_name[g])) {
-                        if(!perf) {
-                            return false;
-                        } else {
-                            this.register(g, false, this.ass_name[g]);
-                        }
-                    }
-                }
-            } else {
-                if((this.backend.generics[g][this.backend.generics[g].length - 1].mode == 'file' && !!this.new_data_file[g] && this.new_data_file[g] != '') && this.notOrEdit(g)) {
-                    if(!perf) {
-                        return false;
-                    } else {
-                        this.register(g, true);
-                    }
-                } else if(((!!this.new_data[g] && this.new_data[g] != '') || Object.getOwnPropertyNames(this.new_datas[g]).length > 0) && this.notOrEdit(g)) {
-                    if(!perf) {
-                        return false;
-                    } else {
-                        this.register(g, false);
-                    }
+                var done = 0;
+                for(var i = 0; i < objs.length; i++) {
+                    this.tgName(window.$(objs[i]).attr('data-g'), window.$(objs[i]).attr('data-d'), true).then(function() {
+                        done++;
+                        console.log(window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit'));
+                        if(done >= objs.length)
+                            complete(false);
+                    });
                 }
             }
+        } else {
+            return complete(true);
         }
-        return true;
     }
 
     /**
@@ -256,13 +307,21 @@ export class GenericBlock implements OnInit {
     }
 
     /**
-     * Navigate to details panel.
+     * Show full.
      * @function select
      * @public
+     * @param {String} gen Generic name.
      * @param {String} name Name of data.
      */
-    select(name: string) {
-        this.router.navigate(['/data', window.encodeURIComponent(name), {backuri: JSON.stringify(this.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))}]);
+    select(gen: string, name: string) {
+        if(this.backend.generics[gen][this.backend.generics[gen].length - 1].is_dated) {
+            var idx = this.sincefrom[name].act;
+            this.toview = this.dataservice.strToObj(this.cached[name].decr_data)[idx].value;
+        } else {
+            this.toview = this.cached[name].decr_data;
+        }
+        this.rstCsv.emit();
+        window.$('#fp' + this.dataservice.sanit(name)).modal();
     }
 
     /**
@@ -420,37 +479,57 @@ export class GenericBlock implements OnInit {
      * @public
      * @param {String} folder Generic folder.
      * @param {String} efix Previous name.
+     * @param {Boolean} force Force do.
+     * @return {Promise} When done.
      */
-    tgName(folder: string, efix: string) {
-        var self = this;
-        if(!window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
-            window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');
-            window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', false);
-        } else {
-            var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val();
-            if(!window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() || window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).val() == '') {
-                window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
-                window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
-                return;
-            }
-            if(after in this.backend.profile.data) {
-                window.$('#tgname' + this.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
-                window.$('#chgname' + this.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
-                return;
-            }
-            this.backend.rename(before, after).then(function() {
-                window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
-                window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
-                self.dataservice.listData(false).then(function() {
-                    self.previews = {};
-                    self.asked = {};
-                    self.resets[after] = self.resets[before];
-                    self.ngOnInit();
+    tgName(folder: string, efix: string, force?: boolean): Promise {
+        var self = this; 
+        return new Promise(function(resolve, reject) {
+            if(force === true || window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
+                var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).val();
+                if(!window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).val() || window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).val() == '') {
+                    window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
+                    window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
+                    resolve();
+                }
+                if(after in self.backend.profile.data) {
+                    window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
+                    window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
+                    reject();
+                }
+                self.backend.rename(before, after).then(function() {
+                    window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
+                    window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
+                    self.dataservice.listData(false).then(function() {
+                        self.previews[after] = self.previews[before];
+                        self.asked[after] = self.asked[before];
+                        self.cached[after] = self.cached[before];
+                        self.sincefrom[after] = self.sincefrom[before];
+                        self.foranew[after] = self.foranew[before];
+                        self.resets[after] = self.resets[before];
+                        //jQuery
+                        var a1 = window.$('#tgdata' + self.dataservice.sanit(before)).hasClass('in-edit');
+                        var a2 = window.$('#tgch2' + self.dataservice.sanit(before)).hasClass('in-edit');
+                        var b1 = window.$('#sincefrom' + self.dataservice.sanit(before)).datetimepicker('date');
+                        setTimeout(function() {
+                            if(a1)
+                                window.$('#tgdata' + self.dataservice.sanit(after)).addClass('green in-edit');
+                            if(a2)
+                                window.$('#tgch2' + self.dataservice.sanit(after)).addClass('green in-edit');
+                            window.$('#sincefrom' + self.dataservice.sanit(after)).datetimepicker().datetimepicker('date', b1);
+                        }, 100);
+                        resolve();
+                    });
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    reject();
                 });
-            }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-            });
-        }
+            } else {
+                window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');
+                window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', false);
+                resolve();
+            }
+        });
     }
 
     /**

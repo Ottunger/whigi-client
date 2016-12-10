@@ -230,6 +230,7 @@
    "generics.deleteOne": "Supprimer cette valeur",
    "generics.addOne": "Ajouter une valeur délimitée",
    "generics.changeOne": "Changer de début",
+   "generics.preview": "Aperçu complet",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",

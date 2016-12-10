@@ -230,6 +230,7 @@
    "generics.deleteOne": "Suppress this value",
    "generics.addOne": "Add a delimited value",
    "generics.changeOne": "Change beginning",
+   "generics.preview": "Full preview",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",

@@ -69,6 +69,12 @@
                                     </div>
                                 </div>
                                 <div class="col-md-1 btn-may btn-may-lefter" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
+                                    <!-- BEGIN CACHED PREVIEW -->
+                                    <div id="fp{{ dataservice.sanit(g) }}" style="display:none;" class="modal" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'">
+                                        <h3>{{ 'generics.preview' | translate }}</h3>
+                                        <clear-single-view [jsoned]="true" [data]="toview" [gen]="g" [version]="backend.profile.data[g].version" [rst]="rstCsv"></clear-single-view>
+                                    </div>
+                                    <!-- END CACHED PREVIEW -->
                                     <div class="btn-group btn-group-justified" role="group">
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -80,7 +86,7 @@
                                                         <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
                                                 </li>
                                                 <li>
-                                                    <button type="button" class="btn btn-link" (click)="select(g)">
+                                                    <button type="button" class="btn btn-link" (click)="select(g, g)" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'">
                                                         <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
                                                 </li>
                                                 <li>
@@ -104,16 +110,16 @@
                             <div class="row" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated && !!backend.profile.data[g] && backend.profile.data[g].id.indexOf('datafragment') == 0
                                 && !backend.generics[g][backend.generics[g].length - 1].instantiable" style="margin: 0 0;">
                                 <div class="col-md-6 text-right" style="padding-top: 4px;">
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, -1, 0, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, -1, 0, false, g)">
                                         <i class="fa fa-angle-double-left"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].max == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, 1, 0, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].max == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, 1, 0, false, g)">
                                         <i class="fa fa-angle-double-right"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].max || addDisabled(g)" (click)="dateModifs(g, 0, -1, false, g)">
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].max || addDisabled(g)" (click)="dateModifs(g, 0, -1, false, g)">
                                         <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || addDisabled(g)" id="tgch2{{ dataservice.sanit(g) }}"
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || addDisabled(g)" id="tgch2{{ dataservice.sanit(g) }}"
                                         (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g), 'green in-edit');foranew[g] = 'tgch2' + dataservice.sanit(g);tgData(g, g);">
                                         <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 5px;" [disabled]="changing || addDisabled(g)" (click)="dateModifs(g, 0, 0, true, g)">
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || addDisabled(g)" (click)="dateModifs(g, 0, 0, true, g)">
                                         <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
                                 </div>
                                 <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g) }}">
@@ -172,94 +178,104 @@
                             <!-- BEGIN ACTIONS -->
                             <div class="table" style="margin-bottom: 0px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                 <table style="width: 100%">
-                                    <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
-                                        <td style="padding-top: 5px;padding-bottom: 0px;">
-                                            <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
-                                                <input type="text" style="margin-left: -4px; box-shadow: 1px 1px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
-                                                    placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"
-                                                    (keyup)="dataservice.clickOnEnter($event, '#tgname' + dataservice.sanit(g + '/' + d))"/>
-                                                <!-- json labels -->
-                                                <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                                    <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                                        {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                    <div *ngFor="let d of dataNames(g, 3); let l = last;">
+                                        <!-- BEGIN CACHED PREVIEW -->
+                                        <div id="fp{{ dataservice.sanit(g + '/' + d) }}" style="display:none;" class="modal" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
+                                            <h3>{{ 'generics.preview' | translate }}</h3>
+                                            <clear-single-view [jsoned]="true" [data]="toview" [gen]="g" [version]="backend.profile.data[g + '/' + d].version" [rst]="rstCsv"></clear-single-view>
+                                        </div>
+                                        <!-- END CACHED PREVIEW -->
+                                        <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                                            <td style="padding-top: 5px;padding-bottom: 0px;">
+                                                <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
+                                                    <input type="text" style="margin-left: -4px; box-shadow: 1px 1px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
+                                                        placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"
+                                                        (keyup)="dataservice.clickOnEnter($event, '#tgname' + dataservice.sanit(g + '/' + d))"/>
+                                                    <!-- json labels -->
+                                                    <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
+                                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                        </div>
+                                                    </div>
+                                                    <!-- end json labels -->
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="row">
+                                                        <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" style="margin-right: 1px;"
+                                                            *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
+                                                            <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g)" />
+                                                        </div>
+                                                        <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
+                                                            {{ 'nothing' | translate }}
+                                                        </div>
+                                                        <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;margin-right: 1px;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
+                                                            <input_block [prefill]="'/' + d" [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <!-- end json labels -->
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="row">
-                                                    <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" style="margin-right: 1px;"
-                                                        *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
-                                                        <input type="text" readonly="readonly" class="form-control" name="preview" [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g)" />
-                                                    </div>
-                                                    <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
-                                                        {{ 'nothing' | translate }}
-                                                    </div>
-                                                    <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;margin-right: 1px;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
-                                                        <input_block [prefill]="'/' + d" [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-1 btn-may">
-                                                <div class="btn-group btn-group-justified" role="group">
-                                                    <div class="btn-group" role="group">
-                                                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                            <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
-                                                        </button>
-                                                        <ul class="dropdown-menu" style="min-width: 0px;">
-                                                            <li *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
-                                                                <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link to-click" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
-                                                                    <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="btn btn-link" (click)="select(g + '/' + d)">
-                                                                    <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link" (click)="tgName(g, d)">
-                                                                    <i class="fa fa-wrench" title="{{ 'rename' | translate }}"></i></button>
-                                                            </li>
-                                                            <li>
-                                                                <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
-                                                                    <i class="fa fa-trash" title="{{ 'remove' | translate }}"></i> </button>
-                                                            </li>
-                                                            <li>
-                                                                <tooltip [mode]="'sharesLink'" [uri]="g + '/' + d"></tooltip>
-                                                            </li>
-                                                        </ul>
+                                                <div class="col-md-1 btn-may">
+                                                    <div class="btn-group btn-group-justified" role="group">
+                                                        <div class="btn-group" role="group">
+                                                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                                <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
+                                                            </button>
+                                                            <ul class="dropdown-menu" style="min-width: 0px;">
+                                                                <li *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
+                                                                    <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link to-click" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
+                                                                        <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="btn btn-link" (click)="select(g, g + '/' + d)"
+                                                                        *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
+                                                                        <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link btn-renamer"[attr.data-g]="g"
+                                                                        *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0" [attr.data-d]="d" (click)="tgName(g, d)">
+                                                                        <i class="fa fa-wrench" title="{{ 'rename' | translate }}"></i></button>
+                                                                </li>
+                                                                <li>
+                                                                    <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
+                                                                        <i class="fa fa-trash" title="{{ 'remove' | translate }}"></i> </button>
+                                                                </li>
+                                                                <li>
+                                                                    <tooltip [mode]="'sharesLink'" [uri]="g + '/' + d"></tooltip>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;" *ngFor="let d of dataNames(g, 3); let l = last;">
-                                        <td style="padding-top: 5px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" [style.padding-bottom]="l? '5px' : '0px'">
-                                            <div class="col-md-6 text-right" style="padding-top: 4px;">
-                                                <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
-                                                    (click)="dateModifs(g + '/' + d, -1, 0, false, g)">
-                                                    <i class="fa fa-angle-double-left"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].max == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
-                                                    (click)="dateModifs(g + '/' + d, 1, 0, false, g)">
-                                                    <i class="fa fa-angle-double-right"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0
-                                                    || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].max || addDisabled(g + '/' + d)" (click)="dateModifs(g + '/' + d, 0, -1, false, g)">
-                                                    <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
-                                                    id="tgch2{{ dataservice.sanit(g + '/' + d) }}" (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g + '/' + d), 'green in-edit');
-                                                    foranew[g + '/' + d] = 'tgch2' + dataservice.sanit(g + '/' + d);tgData(g + '/' + d, g);">
-                                                    <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
-                                                <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
-                                                    (click)="dateModifs(g + '/' + d, 0, 0, true, g)">
-                                                    <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
-                                            </div>
-                                            <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g + '/' + d) }}">
-                                                <input type='text' class="form-control" [(ngModel)]="sincefrom[g + '/' + d]" name="sincefrom{{ g + '/' + d }}"/>
-                                                <span class="input-group-addon">
-                                                    <span class="glyphicon glyphicon-calendar"></span>
-                                                </span>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                            </td>
+                                        </tr>
+                                        <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
+                                            <td style="padding-top: 5px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" [style.padding-bottom]="l? '5px' : '0px'">
+                                                <div class="col-md-6 text-right" style="padding-top: 4px;">
+                                                    <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
+                                                        (click)="dateModifs(g + '/' + d, -1, 0, false, g)">
+                                                        <i class="fa fa-angle-double-left"></i></button>
+                                                    <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].max == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
+                                                        (click)="dateModifs(g + '/' + d, 1, 0, false, g)">
+                                                        <i class="fa fa-angle-double-right"></i></button>
+                                                    <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0
+                                                        || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].max || addDisabled(g + '/' + d)" (click)="dateModifs(g + '/' + d, 0, -1, false, g)">
+                                                        <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
+                                                    <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
+                                                        id="tgch2{{ dataservice.sanit(g + '/' + d) }}" (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g + '/' + d), 'green in-edit');
+                                                        foranew[g + '/' + d] = 'tgch2' + dataservice.sanit(g + '/' + d);tgData(g + '/' + d, g);">
+                                                        <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
+                                                    <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
+                                                        (click)="dateModifs(g + '/' + d, 0, 0, true, g)">
+                                                        <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
+                                                </div>
+                                                <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g + '/' + d) }}">
+                                                    <input type='text' class="form-control"/>
+                                                    <span class="input-group-addon">
+                                                        <span class="glyphicon glyphicon-calendar"></span>
+                                                    </span>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </div>
                                 </table>
                             </div>
                             <!-- END ACTIONS -->
