@@ -148,21 +148,14 @@ export class GenericBlock implements OnInit {
      * @return {Boolean} Doable.
      */
     registerAll(perf: boolean): boolean {
-        var self = this, objs;
+        var self = this, objs, toclick: any[] = [];
         function complete(single: boolean) {
             function end() {
                 //Can redo things
                 self.inreg = false;
-                objs = window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit');
-                //If in edit mode, say we can save
-                if(!!objs.length) {
-                    if(perf == false) {
-                        return false;
-                    } else {
-                        objs.attr('disabled', false);
-                        window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit.to-click').click();
-                        return;
-                    }
+                window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit').attr('disabled', false);
+                for(var i = 0; i < toclick.length; i++) {
+                    window.$('#' + toclick[i]).addClass('in-edit').click();
                 }
                 //For adding data
                 var checks = window.$('.input-holder-' + self.dataservice.sanit(self.group));
@@ -218,17 +211,33 @@ export class GenericBlock implements OnInit {
                 this.inreg = false;
                 return false;
             } else {
+                //Save who to click on
+                var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
+                for(var i = 0; i < dt.length; i++)
+                    toclick.push(dt[0].id);
+                //Name then click
                 var done = 0;
                 for(var i = 0; i < objs.length; i++) {
-                    this.tgName(window.$(objs[i]).attr('data-g'), window.$(objs[i]).attr('data-d'), true).then(function() {
+                    var g = window.$(objs[i]).attr('data-g'), d = window.$(objs[i]).attr('data-d');
+                    var idx = toclick.indexOf('tgdata' + this.dataservice.sanit(g + '/' + d));
+                    if(idx != -1)
+                        toclick.splice(idx, 1, 'tgdata' + this.dataservice.sanit(g + '/' + window.$('#chgname' + this.dataservice.sanit(g + '/' + d)).val()));
+                    this.tgName(g, d, true).then(function() {
                         done++;
-                        console.log(window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit'));
                         if(done >= objs.length)
                             complete(false);
                     });
                 }
             }
         } else {
+            if(!perf && !!window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').length) {
+                this.inreg = false;
+                return false;
+            }
+            //Save who to click on
+            var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
+            for(var i = 0; i < dt.length; i++)
+                toclick.push(dt[0].id);
             return complete(true);
         }
     }
@@ -486,20 +495,23 @@ export class GenericBlock implements OnInit {
         var self = this; 
         return new Promise(function(resolve, reject) {
             if(force === true || window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
-                var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).val();
-                if(!window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).val() || window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).val() == '') {
-                    window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
-                    window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
+                var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + self.dataservice.sanit(before)).val();
+                if(!window.$('#chgname' + self.dataservice.sanit(before)).val() || window.$('#chgname' + self.dataservice.sanit(before)).val() == '') {
+                    window.$('#tgname' + self.dataservice.sanit(before)).removeClass('green').addClass('btn-link');
+                    window.$('#chgname' + self.dataservice.sanit(before)).attr('readonly', true).val(efix);
                     resolve();
                 }
                 if(after in self.backend.profile.data) {
-                    window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
-                    window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true).val(efix);
+                    window.$('#tgname' + self.dataservice.sanit(before)).removeClass('green').addClass('btn-link');
+                    window.$('#chgname' + self.dataservice.sanit(before)).attr('readonly', true).val(efix);
                     reject();
                 }
                 self.backend.rename(before, after).then(function() {
-                    window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).removeClass('green').addClass('btn-link');
-                    window.$('#chgname' + self.dataservice.sanit(folder + '/' + efix)).attr('readonly', true);
+                    window.$('#tgname' + self.dataservice.sanit(before)).removeClass('green').addClass('btn-link');
+                    window.$('#chgname' + self.dataservice.sanit(before)).attr('readonly', true);
+                    if(self.backend.generics[folder][self.backend.generics[folder].length - 1].is_dated) {
+                        var date = window.$('#sincefrom' + self.dataservice.sanit(before)).datetimepicker('date');
+                    }
                     self.dataservice.listData(false).then(function() {
                         self.previews[after] = self.previews[before];
                         self.asked[after] = self.asked[before];
@@ -507,17 +519,13 @@ export class GenericBlock implements OnInit {
                         self.sincefrom[after] = self.sincefrom[before];
                         self.foranew[after] = self.foranew[before];
                         self.resets[after] = self.resets[before];
-                        //jQuery
-                        var a1 = window.$('#tgdata' + self.dataservice.sanit(before)).hasClass('in-edit');
-                        var a2 = window.$('#tgch2' + self.dataservice.sanit(before)).hasClass('in-edit');
-                        var b1 = window.$('#sincefrom' + self.dataservice.sanit(before)).datetimepicker('date');
-                        setTimeout(function() {
-                            if(a1)
-                                window.$('#tgdata' + self.dataservice.sanit(after)).addClass('green in-edit');
-                            if(a2)
-                                window.$('#tgch2' + self.dataservice.sanit(after)).addClass('green in-edit');
-                            window.$('#sincefrom' + self.dataservice.sanit(after)).datetimepicker().datetimepicker('date', b1);
-                        }, 100);
+                        //Tick all modifs
+                        self.check.tick();
+                        if(self.backend.generics[folder][self.backend.generics[folder].length - 1].is_dated) {
+                            setTimeout(function() {
+                                window.$('#sincefrom' + self.dataservice.sanit(after)).datetimepicker().datetimepicker('date', date);
+                            }, 100);
+                        }
                         resolve();
                     });
                 }, function(e) {

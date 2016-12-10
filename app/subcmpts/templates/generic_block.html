@@ -181,7 +181,7 @@
                             <!-- BEGIN ACTIONS -->
                             <div class="table" style="margin-bottom: 0px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                 <table style="width: 100%">
-                                    <div *ngFor="let d of dataNames(g, 3); let f = first; let l = last;">
+                                    <tbody *ngFor="let d of dataNames(g, 3); let f = first; let l = last;">
                                         <!-- BEGIN CACHED PREVIEW -->
                                         <div id="fp{{ dataservice.sanit(g + '/' + d) }}" style="display:none;" class="modal" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
                                             <h3>{{ 'generics.preview' | translate }}</h3>
@@ -280,7 +280,7 @@
                                             </td>
                                         </tr>
                                         <div *ngIf="!l" style="width: 100%;border-bottom: 1px solid #77777a;padding-top: 3px;"></div>
-                                    </div>
+                                    </tbody>
                                 </table>
                             </div>
                             <!-- END ACTIONS -->
