@@ -49,6 +49,13 @@
                 </li>
                 -->
                 <!-- END INBOX DROPDOWN -->
+                <!-- BEGIN HELP LINK -->
+                <li class="dropdown dropdown-extended">
+                    <a href="javascript:;" class="dropdown-toggle" title="{{ 'header.help' | translate }}" (click)="showIntro()">
+                        <i class="icon-support"></i>
+                    </a>
+                </li>
+                <!-- END HELP LINK -->
                 <!-- BEGIN SAVE LINK -->
                 <!--
                 <li class="dropdown dropdown-extended">
@@ -65,7 +72,7 @@
                     </a>
                     <ul class="dropdown-menu extended tasks">
                         <li class="external">
-                            <h3><a href="{{ backend.GWP_URL }}" target="_blank">Wissl: WordPress Free!</a></h3>
+                            <h3><a href="{{ backend.GWP_URL }}" target="_blank">WiSSL: WordPress &amp; Zenbership Free!</a></h3>
                         </li>
                         <li class="external">
                             <h3><a href="{{ backend.MAIL }}" target="_blank">{{ 'contact' | translate }}</a></h3>

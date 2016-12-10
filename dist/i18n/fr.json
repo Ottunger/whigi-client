@@ -37,6 +37,16 @@
    "rename": "Renommer",
    "Yes": "Oui",
    "No": "Non",
+   "next": "Suivant",
+   "prev": "Préc.",
+   "skip": "Passer",
+   "done": "Fin",
+   "hint": "Compris",
+
+   "intro.regGen": "Sauvegardez tout ce que vous avez fait dans ce bloc. Vous le pourrez dès que il y aura des changements à valider.",
+   "intro.canGen": "Supprimez toute modification indésirable de ce bloc.",
+   "intro.actions": "Cliquez ici pour gérer votre donnée. Vous pouvez le modifier, la voir complètement, la renommer, la supprimer si elle n'est pas partagée et gérer ses partages.",
+   "intro.datings": "Vous pouvez gérer ici les champs datés: naviguez entre les valeurs, supprimez en une ou créez en une, ou encore modifiez le début de la valeur actuellement affichée.",
 
    "login.title": "Connectez-vous",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
@@ -78,6 +88,7 @@
    "header.running": "Opérations en cours",
    "header.operation": "Opération courrante",
    "header.save": "Sauvegarder les favoris",
+   "header.help": "Lancer l'aide",
 
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Tout déconnecter",

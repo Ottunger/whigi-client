@@ -97,4 +97,21 @@ export class Header implements OnInit {
         window.$('#divSidebar').toggleClass('in');
     }
 
+    /**
+     * Show help.
+     * @function showIntro
+     * @public
+     */
+    showIntro() {
+        window.introJs.introJs().setOptions({
+            nextLabel: this.translate.instant('next'),
+            prevLabel: this.translate.instant('prev'),
+            skipLabel: this.translate.instant('skip'),
+            doneLabel: this.translate.instant('done'),
+            hintButtonLabel: this.translate.instant('hint'),
+            exitOnOverlayClick: false,
+            disableInteraction: true
+        }).start();
+    }
+
 }

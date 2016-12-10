@@ -75,7 +75,7 @@
                                         <clear-single-view [jsoned]="true" [data]="toview" [gen]="g" [version]="backend.profile.data[g].version" [rst]="rstCsv"></clear-single-view>
                                     </div>
                                     <!-- END CACHED PREVIEW -->
-                                    <div class="btn-group btn-group-justified" role="group">
+                                    <div class="btn-group btn-group-justified" role="group" attr.data-intro="{{ 'intro.actions' | translate }}" data-step="1">
                                         <div class="btn-group" role="group">
                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
@@ -109,7 +109,7 @@
                             </div>
                             <div class="row" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated && !!backend.profile.data[g] && backend.profile.data[g].id.indexOf('datafragment') == 0
                                 && !backend.generics[g][backend.generics[g].length - 1].instantiable" style="margin: 0 0;">
-                                <div class="col-md-6 text-right" style="padding-top: 4px;">
+                                <div class="col-md-6 text-right" style="padding-top: 4px;" attr.data-intro="{{ 'intro.datings' | translate }}" data-step="2">
                                     <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, -1, 0, false, g)">
                                         <i class="fa fa-angle-double-left"></i></button>
                                     <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].max == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, 1, 0, false, g)">
@@ -214,7 +214,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-1 btn-may">
-                                                    <div class="btn-group btn-group-justified" role="group">
+                                                    <div class="btn-group btn-group-justified" role="group" attr.data-intro="{{ 'intro.actions' | translate }}" data-step="1">
                                                         <div class="btn-group" role="group">
                                                             <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
@@ -249,7 +249,7 @@
                                         </tr>
                                         <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                                             <td style="padding-top: 5px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" [style.padding-bottom]="l? '5px' : '0px'">
-                                                <div class="col-md-6 text-right" style="padding-top: 4px;">
+                                                <div class="col-md-6 text-right" style="padding-top: 4px;" attr.data-intro="{{ 'intro.datings' | translate }}" data-step="2">
                                                     <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"
                                                         (click)="dateModifs(g + '/' + d, -1, 0, false, g)">
                                                         <i class="fa fa-angle-double-left"></i></button>
@@ -285,10 +285,10 @@
                 </div>
                 <div class="form-actions">
                     <div class="row text-center">
-                        <div class="col-md-4">
+                        <div class="col-md-4" attr.data-intro="{{ 'intro.regGen' | translate }}" data-step="3">
                             <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" [disabled]="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-4" attr.data-intro="{{ 'intro.canGen' | translate }}" data-step="4">
                             <button type="button" class="btn default" (click)="cancel()">{{ 'cancel' | translate }}</button>
                         </div>
                     </div>

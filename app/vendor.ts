@@ -25,6 +25,7 @@ require('../js/bootstrap-datetimepicker.min.js');
 require('../js/bootstrap.min.js');
 require('../js/jquery.blockUI.js');
 require('../js/jquery.modal.js');
+window.introJs = require('../js/intro.js');
 
 require('../fonts/Lato-Regular.ttf');
 import '../css/fonts.css';
@@ -39,3 +40,4 @@ import '../css/login.css';
 import '../css/whigi.css';
 import '../css/font-awesome.min.css';
 import '../css/jquery.modal.css';
+import '../css/introjs.css';
