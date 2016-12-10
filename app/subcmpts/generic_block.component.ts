@@ -358,12 +358,14 @@ export class GenericBlock implements OnInit {
         //Move cursor
         if(dir != 0) {
             this.sincefrom[fname].act += dir;
-            window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date', window.moment(ret[this.sincefrom[fname].act].from));
+            window.$('#sincefrom' + this.dataservice.sanit(fname)).datetimepicker('date', window.moment(ret[this.sincefrom[fname].act].from));
         }
         //Remove or add values.
         if(place < 0) {
             ret.splice(this.sincefrom[fname].act, place);
-            self.sincefrom[fname].max += place;
+            this.sincefrom[fname].max += place;
+            if(this.sincefrom[fname].act > this.sincefrom[fname].max)
+                this.sincefrom[fname].act = this.sincefrom[fname].max;
         } else if(place > 0) {
             //Cannot add values, do this with tgData...
         }
@@ -377,6 +379,7 @@ export class GenericBlock implements OnInit {
             var send = JSON.stringify(ret);
             this.dataservice.modifyData(fname, send, true, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
                 self.changing = false;
+                window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date', window.moment(ret[self.sincefrom[fname].act].from));
                 complete(send);
             }, function(e) {
                 self.changing = false;
@@ -603,6 +606,9 @@ export class GenericBlock implements OnInit {
                 } else {
                     replacement[this.sincefrom[fname].act] = {from: from, value: sd};
                 }
+                replacement = replacement.sort(function(a, b): number {
+                    return (a.from < b.from)? - 1 : 1;
+                });
                 send = JSON.stringify(replacement);
             }
             //Create it
@@ -625,6 +631,7 @@ export class GenericBlock implements OnInit {
                 //If this was dated, some more modifs...
                 if(!!self.foranew[fname]) {
                     self.sincefrom[fname].max++;
+                    window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date', window.moment(replacement[self.sincefrom[fname].act].from));
                     window.$('#' + self.foranew[fname]).removeClass('green in-edit');
                     delete self.foranew[fname];
                 }
