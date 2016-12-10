@@ -102,7 +102,7 @@
    "profile.noMatch": "Mots de passe ne correspondent pas",
    "profile.noChange": "Mauvais mot de passe actuel",
    "profile.changed": "Mise à jour effectuée",
-   "profile.revoke": "Supprimer accès à toutes les valises",
+   "profile.revoke": "Supprimer l'accès à toutes les valises",
    "profile.revokeID": "ID à bannir",
    "profile.oauth": "Permissions OAuth",
    "profile.warnChange": "Mot de passe changé, mais récupération devenue impossible",
@@ -115,10 +115,12 @@
    "profile.chUname": "Nom de compte mis à jour",
    "profile.doChange": "Pensez à changer votre nom de compte et mot de passe à votre convenance",
    "profile.noOauth": "Aucune permission OAuth",
-   "profile.explain": "Ce formulaire vous permet de supprimer les accès que vous avez donné à un utilisteur en une seule opération. Vous ne pouvez supprimer les accès donnés à Whigi.",
+   "profile.explain": "Ce formulaire vous permet de supprimer les accès que vous avez donné à un utilisateur en une seule opération. Vous ne pouvez supprimer les accès donnés à WiSSL.",
    "profile.confirm": "Êtes-vous certain de vouloir supprimer tous les accès de l'utilisateur suivant?: ",
    "profile.happenings": "Changements standards",
-
+   "profile.changeExplain": "Changez de mot de passe ici. Si vous avez reçu vorte compte par une tirce partie, vous pouvez aussi changer de nom de compte, mais attention, vous ne le pourrez plus ensuite!",
+   "profile.noShare": "Vous n'avez actuellement personne à bannir! Pourquoi ne pas commencer à partager des données?",
+   
    "happenings.move": "Je déménage",
    "happenings.partners": "Je change de partenaire",
    "happenings.children": "Ajouter un enfant",
@@ -227,6 +229,7 @@
    "merge.relog": "Vous devez vous reconnecter",
    "merge.explain": "Quand vous fusionnez deux comptes, vous citez un compte ici et copiez ses données dans l'actuel. Les données qu'il possède, ainsi que la façon dont il les partage, sont parfaitement transférées. Cependant, les données qui lui sont partagées ne peuvent être directement transférées, même si de nouveaux changement se récupercuteront dorénavant sur votre compte principal. Entre temps, vous n'y aurez plus accès. Ainsi, si vous possédez des clés de récupération de mot de passe, nous vous encourageons à demander aux tierces parties de les mettre à jour.",
    "merge.confirm": "Êtes-vous sûr de vouloir incorporer le compte suivant?: ",
+   "merge.noSelf": "Vous êtes bien entendu déjà fusionné avec vous-même",
 
    "generics.silent": "Vous n'avez pas rempli tous les champs obligatoires",
    "generics.regexp": "Votre entrée ne valide pas le format attendu",

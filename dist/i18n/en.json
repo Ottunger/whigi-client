@@ -118,7 +118,9 @@
    "profile.explain": "This wizard allows you to revoke all the vaults you may have given to a user with one single action. You cannot revoke shares made to Whigi instances.",
    "profile.confirm": "Are you sure you want to remove all access to the next user?: ",
    "profile.happenings": "Life events",
-
+   "profile.changeExplain": "Change your password here if you think you need to. If you have received your account through a third party, you'll be able to select a new username as well. Be careful! Once selected, you won't be able to change username again.",
+   "profile.noShare": "You currently have no one to ban! Why not start sharing some data?",
+   
    "happenings.move": "I'm moving places",
    "happenings.partners": "I change partner",
    "happenings.children": "Add a new child",
@@ -227,6 +229,7 @@
    "merge.relog": "Your account needs to relog now",
    "merge.explain": "When merging accounts, you enter here an account and copy all of its contents to your profile. The data this account had and how it shared it is perfetcly transferred, however, the data shared to it cannot be directly redirected. Updates on the shared data will be done to this account, but you will not have access to it in the mean time. Therefore, if your to-be-merged account has password recovery keys, we encourage you to ask the sharer to update them.",
    "merge.confirm": "Are you sure you want to incorporate the next account?: ",
+   "merge.noSelf": "You are already merged with yourself, dear",
 
    "generics.silent": "Your input lacks required fields",
    "generics.regexp": "Your input does not match expected format",

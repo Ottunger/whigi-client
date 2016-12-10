@@ -54,8 +54,12 @@ export class Merge {
         this.sub = this.routed.params.subscribe(function(params) {
             if(!!params['mergeu'])
                 self.login = params['mergeu'];
+            else
+                self.login = '';
             if(!!params['mergep'])
                 self.password = params['mergep'];
+            else
+                self.password = '';
             if(!!params['mergeu'] && !!params['mergep'] && self.login != self.backend.profile._id) {
                 if(window.confirm(this.translate.instant('merge.confirm') + self.login)) {
                     self.merge().then(function() {
@@ -100,6 +104,7 @@ export class Merge {
             if(self.backend.profile._id.toLowerCase() == self.login.toLowerCase()) {
                 self.login = '';
                 self.password = '';
+                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noSelf'));
                 resolve();
                 return;
             }

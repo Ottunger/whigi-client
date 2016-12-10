@@ -32,14 +32,14 @@
                                             <!-- BEGIN FORM-->
                                             <form class="form-horizontal" role="form">
                                                 <div class="form-body">
-                                                    <h4 class="form-section">{{ 'profile.change' | translate }}</h4>
+                                                    <p>{{ 'profile.changeExplain' | translate }}</p>
                                                     <div class="row">
-                                                        <div class="col-md-4">
+                                                        <div class="col-md-4" *ngIf="backend.profile._id.indexOf('wiuser') == 0">
                                                             <div class="row" style="padding-left: 15px;">
                                                                 <div class="form-group" id="inewname">
                                                                     <label class="control-label">{{ 'profile.uname' | translate }}:</label><br />
                                                                     <div class="col-md-8">
-                                                                        <input type="text" class="form-control" [(ngModel)]="new_name" name="new_name" [disabled]="backend.profile._id.indexOf('wiuser') != 0"/>
+                                                                        <input type="text" class="form-control" [(ngModel)]="new_name" name="new_name"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
@@ -47,12 +47,13 @@
                                                                 <div class="form-group" id="inewname">
                                                                     <label class="control-label">{{ 'profile.uname' | translate }}:</label><br />
                                                                     <div class="col-md-8">
-                                                                        <input type="text" class="form-control" [(ngModel)]="new_name2" name="new_name2" [disabled]="backend.profile._id.indexOf('wiuser') != 0"/>
+                                                                        <input type="text" class="form-control" [(ngModel)]="new_name2" name="new_name2"/>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div [class.col-md-4]="backend.profile._id.indexOf('wiuser') == 0" [class.col-md-6]="backend.profile._id.indexOf('wiuser') != 0"
+                                                            [style.padding-left]="backend.profile._id.indexOf('wiuser') != 0? '40px' : '15px'">
                                                             <div class="row">
                                                                 <div class="form-group">
                                                                     <label class="control-label"><h4>{{ 'profile.current' | translate }}:</h4></label><br />
@@ -67,7 +68,7 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-4">
+                                                        <div [class.col-md-4]="backend.profile._id.indexOf('wiuser') == 0" [class.col-md-6]="backend.profile._id.indexOf('wiuser') != 0">
                                                             <div class="row">
                                                                 <div class="form-group inewpass">
                                                                     <label class="control-label">{{ 'profile.new' | translate }}:</label><br />
@@ -99,7 +100,8 @@
                                                 <div class="form-actions">
                                                     <div class="row text-center">
                                                         <div class="col-md-6">
-                                                            <button type="submit" class="btn green" (click)="changeUname()" [disabled]="backend.profile._id.indexOf('wiuser') != 0 || !new_name || new_name == '' || !new_name2 || new_name2 == '' || !current_pwd || current_pwd == ''">
+                                                            <button type="submit" class="btn green" (click)="changeUname()" *ngIf="backend.profile._id.indexOf('wiuser') == 0"
+                                                                [disabled]="!new_name || new_name == '' || !new_name2 || new_name2 == '' || !current_pwd || current_pwd == ''">
                                                                 <i class="fa fa-pencil"></i> {{ 'profile.uname' | translate }}</button>
                                                         </div>
                                                         <div class="col-md-6 text-right" style="margin-left: -45px;">
@@ -137,11 +139,12 @@
                                                     <h4 class="form-section">{{ 'profile.revoke' | translate }}</h4>
                                                     <div class="row">
                                                         <p>{{ 'profile.explain' | translate }}</p>
+                                                        <p *ngIf="regables().length == 0">{{ 'profile.noShare' | translate }}</p>
                                                         <div class="col-md-6">
                                                             <div class="form-group">
                                                                 <label class="control-label col-md-4">{{ 'profile.revokeID' | translate }}:</label>
                                                                 <div class="col-md-8">
-                                                                    <select class="form-control" [(ngModel)]="revoke_id" name="revoke_id">
+                                                                    <select class="form-control" [(ngModel)]="revoke_id" name="revoke_id" [disabled]="regables().length == 0">
                                                                         <option *ngFor="let f of regables()" [value]="f">{{ dataservice.forDisplay(f) }}</option>
                                                                     </select>
                                                                 </div>

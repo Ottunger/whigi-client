@@ -40,7 +40,7 @@ exports.m = {
         "generics.family1": {
             "open": true,
             "is_i18n": true,
-            "holds": ["family/mother", "family/father", "family/children"]
+            "holds": ["family/father", "family/mother", "family/children"]
         },
         "generics.family3": {
             "open": true,
