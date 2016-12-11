@@ -56,7 +56,7 @@ export class Savekey implements OnInit, OnDestroy {
                 self.backend.generics[self.key.replace(/\/[^\/]*/, '')][self.backend.generics[self.key.replace(/\/[^\/]*/, '')].length - 1].instantiable))
                 window.location.href = self.return_url;
             //Now try!
-            self.dataservice.newData(true, self.key, self.value, params['is_dated'], 0, false).then(function() {
+            self.dataservice.newData(true, self.key, self.value, params['is_dated'] == 'true', 0, false).then(function() {
                 self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));
                 setTimeout(function() {
                     window.location.href = self.return_url;
@@ -64,7 +64,7 @@ export class Savekey implements OnInit, OnDestroy {
             }, function(err) {
                 if(err[0] == 'exists') {
                     if(window.confirm(self.translate.instant('savekey.erase'))) {
-                        self.dataservice.newData(true, self.key, self.value, params['is_dated'], 0, true).then(function() {
+                        self.dataservice.newData(true, self.key, self.value, params['is_dated'] == 'true', 0, true).then(function() {
                             self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));
                             setTimeout(function() {
                                 window.location.href = self.return_url;
