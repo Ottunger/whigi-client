@@ -2,7 +2,7 @@
     <div class="page-wrapper">
         <header [cur]="dataservice.ee" [run]="dataservice.how"></header>
         <!-- BEGIN HEADER & CONTENT DIVIDER -->
-        <div class="clearfix"> </div>
+        <div class="clearfix" style="background-color: #414142;"></div>
         <!-- END HEADER & CONTENT DIVIDER -->
         <!-- BEGIN CONTAINER -->
         <div class="page-container">
@@ -18,15 +18,15 @@
                         <div class="col-md-12">
                             <!-- TABS -->
                             <ul class="nav nav-tabs" role="tablist">
-                                <li role="presentation" *ngFor="let h of ha" class="active">
+                                <li role="presentation" *ngFor="let h of ha; let f = first;" [class.active]="f" attr.data-intro="{{ 'intro.evtSel' | translate }}" data-step="1">
                                     <a href="#{{ h.sid }}" [attr.aria-controls]="h.sid" role="tab" data-toggle="tab">{{ h.name | translate }}</a>
                                 </li>
                             </ul>
                             <!-- END TABS -->
                             <!-- PANES -->
-                            <div class="tab-content">
+                            <div class="tab-content" attr.data-intro="{{ 'intro.evtNext' | translate }}" data-step="2">
                                 <p style="text-align: center;">{{ 'happenings.explain' | translate }}</p>
-                                <div *ngFor="let h of ha" role="tabpanel" class="tab-pane active" id="{{ h.sid }}">
+                                <div *ngFor="let h of ha; let f = first;" role="tabpanel" class="tab-pane" [class.active]="f" id="{{ h.sid }}">
                                     <div *ngFor="let s of h.steps; let i = index" [style.display]="cstep[h.sid] == i? 'block' : 'none'">
                                         <div [ngSwitch]="s.mode">
                                             <div *ngSwitchCase="'creating'" class="row igen{{ dataservice.sanit(s.gen) }}">

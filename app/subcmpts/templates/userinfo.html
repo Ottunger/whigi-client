@@ -61,7 +61,7 @@
                         </div>
                     </div>
                     <div class="form-group">
-                        <label class="control-label col-md-4">{{ 'userinfo.modifyPict' | translate }}</label>
+                        <label class="control-label col-md-4">{{ 'userinfo.modifyPict' | translate }}: </label>
                         <div class="col-md-8">
                             <button type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs2')">
                                 <i class="fa fa-cloud-upload"></i></button>
@@ -77,9 +77,9 @@
                 <div class="col-md-6">
                     <div class="row">
                         <div class="col-md-12">
-                            <button type="button" class="btn green" (click)="modify()">
+                            <button type="button" class="btn green btn-sm" (click)="modify()">
                                 <i class="fa fa-pencil"></i> {{ 'userinfo.modify' | translate }}</button>
-                            <button type="button" class="btn default" (click)="load()">
+                            <button type="button" class="btn default btn-sm" (click)="load()">
                                 <i class="fa fa-reply"></i> {{ 'userinfo.load' | translate }}</button>
                         </div>
                     </div>
@@ -89,16 +89,16 @@
                         <div class="col-md-12">
                             <input type="hidden" name="username" [value]="backend.profile._id" />
                             <input type="hidden" name="hpwd" [value]="goCompany()" />
-                            <button type="button" class="btn green" (click)="goBCE()" [disabled]="user.is_company != 9">
+                            <button type="button" class="btn green btn-sm" (click)="goBCE()" [disabled]="user.is_company != 9">
                                 <i class="fa fa-reply"></i> {{ 'userinfo.goBCE' | translate }}</button>
-                            <input type="submit" class="btn default" value="{{ 'userinfo.goCompany' | translate }}" onclick="document.getElementById('eidform').submit()" />
+                            <input type="submit" class="btn default btn-sm" value="{{ 'userinfo.goCompany' | translate }}" onclick="document.getElementById('eidform').submit()" />
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row text-center">
                 <div class="col-md-12">
-                    <button type="button" class="btn green" (click)="modifyPict()" [disabled]="!pict || pict == ''">
+                    <button type="button" class="btn green btn-sm" (click)="modifyPict()" [disabled]="!pict || pict == ''">
                             <i class="fa fa-upload"></i> {{ 'userinfo.modifyPict' | translate }}</button>
                 </div>
             </div>

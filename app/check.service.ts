@@ -39,7 +39,7 @@ export class Check {
      * @return {String|Boolean} String containing error or true.
      */
     isEmail(test: string): string | boolean {
-        return /^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/.test(test)? true : 'generics.bademail';
+        return test === undefined || /^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/.test(test)? true : 'generics.bademail';
     }
 
     /**
@@ -50,7 +50,7 @@ export class Check {
      * @return {String|Boolean} String containing error or true.
      */
     isPhone(test: string): string | boolean {
-        return /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(test)? true : 'generics.badphone';
+        return test === undefined || /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(test)? true : 'generics.badphone';
     }
 
     /**
@@ -61,7 +61,7 @@ export class Check {
      * @return {String|Boolean} String containing error or true.
      */
     isDate(test: string): string | boolean {
-        return /^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\d\d\d\d(\s+[012]{0,1}[0-9]:[0-6][0-9])?$/.test(test)? true : 'generics.baddate';
+        return test === undefined || /^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\d\d\d\d(\s+[012]{0,1}[0-9]:[0-6][0-9])?$/.test(test)? true : 'generics.baddate';
     }
 
     /**

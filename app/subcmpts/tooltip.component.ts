@@ -71,7 +71,9 @@ export class Tooltip {
                                     if(!$($('.modal')[$('.modal').length - 1]).find('li').length || $($('.modal')[$('.modal').length - 1]).find('li').length == 0) {
                                         $('.tp-close').click();
                                     }
-                                }, function(e) {});
+                                }, function(e) {
+                                    $('#li__' + lid).find('button').remove();
+                                });
                             }
                         </script>
                         <ul class="list-group">` + shares + `</ul>

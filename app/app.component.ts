@@ -59,7 +59,7 @@ enableProdMode();
     `],
     encapsulation: ViewEncapsulation.None,
     template: `
-        <div id="mainDiv" class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+        <div id="mainDiv">
             <router-outlet></router-outlet>
             <br />
             <div class="MenuContainer">

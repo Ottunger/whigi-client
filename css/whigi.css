@@ -31,7 +31,7 @@
     margin-left: 15px;
   }
   .whigi-md-block {
-    display: none;
+    display: none!important;
   }
   .whigi-ex {
     height: 8ex;
@@ -54,7 +54,7 @@
     margin-left: -12px;
   }
   .whigi-md-block {
-    display: block;
+    display: block!important;
   }
   .whigi-ex {
     height: 5ex;
