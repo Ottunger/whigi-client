@@ -55,16 +55,35 @@ export class Savekey implements OnInit, OnDestroy {
             if(self.key in self.backend.generics || (self.key.replace(/\/[^\/]*/, '') in self.backend.generics &&
                 self.backend.generics[self.key.replace(/\/[^\/]*/, '')][self.backend.generics[self.key.replace(/\/[^\/]*/, '')].length - 1].instantiable))
                 window.location.href = self.return_url;
-            self.dataservice.newData(true, self.key, self.value, params['is_dated'], 0).then(function() {
+            //Now try!
+            self.dataservice.newData(true, self.key, self.value, params['is_dated'], 0, false).then(function() {
                 self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));
                 setTimeout(function() {
                     window.location.href = self.return_url;
                 }, 1500);
             }, function(err) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-                setTimeout(function() {
-                    window.location.href = self.return_url;
-                }, 1500);
+                if(err[0] == 'exists') {
+                    if(window.confirm(self.translate.instant('savekey.erase'))) {
+                        self.dataservice.newData(true, self.key, self.value, params['is_dated'], 0, true).then(function() {
+                            self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));
+                            setTimeout(function() {
+                                window.location.href = self.return_url;
+                            }, 1500);
+                        }, function(err) {
+                            self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                            setTimeout(function() {
+                                window.location.href = self.return_url;
+                            }, 1500);
+                        });
+                    } else {
+                        window.location.href = self.return_url;
+                    }
+                } else {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    setTimeout(function() {
+                        window.location.href = self.return_url;
+                    }, 1500);
+                }
             });
         });
     }

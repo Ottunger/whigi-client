@@ -175,6 +175,7 @@
    "reset.noLink": "Le lien a expiré, essayez d'en demander un nouveau",
 
    "savekey.rec": "Valeur bien importée",
+   "savekey.erase": "Vous avez déjà cette valeur. L'écraser maintenant?",
 
    "oauth.question": "Demande d'authorisation OAuth",
    "oauth.explain": "En acceptant la demande, vous donnez des droits de lecture sur la donnée ou le dossier listé à l'app qui vous a envoyé ici. AFIN DE LIRE, L'APP AURA VOTRE CLE MAITRE! Vous pourrez toujours révoquer ce droit plus tard, mais l'app aura peut être copié vos données entre temps.",

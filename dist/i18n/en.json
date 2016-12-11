@@ -175,6 +175,7 @@
    "reset.noLink": "Link expired, try asking for a new one",
 
    "savekey.rec": "Value imported correctly",
+   "savekey.erase": "You already have such a named value. Erase it for this one?",
 
    "oauth.question": "OAuth authorization request",
    "oauth.explain": "By accepting a request, you provide the app that sent you here permission of reading only to the data or folder listed below. TO  LIST IT, THE APP WILL HAVE YOUR MASTER KEY. You will be able to revoke this access at any time later from your profile, but the app might have copied your data by then.",
