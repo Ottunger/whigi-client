@@ -248,6 +248,7 @@
    "generics.addOne": "Ajouter une valeur délimitée",
    "generics.changeOne": "Changer de début",
    "generics.preview": "Aperçu complet",
+   "generics.select": "--- Choisissez ---",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",
@@ -307,7 +308,8 @@
    "generics.partners": "Partenaire(s)",
    "generics.employers": "Employeurs",
    "generics.employees": "Employés",
-   "generics.lifeIn": "A partie de",
+   "generics.lifeIn": "Connu depuis",
+   "generics.picture": "Photo",
    "generics.lifeOut": "Jusqu'à",
    "generics.email": "Emails",
    "generics.last_name": "Nom de famille",

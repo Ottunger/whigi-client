@@ -248,6 +248,7 @@
    "generics.addOne": "Add a delimited value",
    "generics.changeOne": "Change beginning",
    "generics.preview": "Full preview",
+   "generics.select": "--- Select a value ---",
 
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",
@@ -307,7 +308,8 @@
    "generics.partners": "Partner(s)",
    "generics.employers": "Employers",
    "generics.employees": "Employees",
-   "generics.lifeIn": "Since",
+   "generics.lifeIn": "Known since",
+   "generics.picture": "Portrait",
    "generics.lifeOut": "Until",
    "generics.email": "Emails",
    "generics.last_name": "Last name",

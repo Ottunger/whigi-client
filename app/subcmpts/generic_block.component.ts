@@ -122,6 +122,7 @@ export class GenericBlock implements OnInit {
      * @param {Object[]} Event.
      */
     regData(group: string, event: any[]) {
+        var self = this;
         switch(event[0]) {
             case 1:
                 this.new_data[group] = event[1];
@@ -137,7 +138,9 @@ export class GenericBlock implements OnInit {
             this.ass_name[window.$('#setname' + this.dataservice.sanit(group)).attr('g')] = event[1][window.$('#setname' + this.dataservice.sanit(group)).attr('nwkey')];
             window.$('#setname' + this.dataservice.sanit(group)).val(event[1][window.$('#setname' + this.dataservice.sanit(group)).attr('nwkey')]);
         }
-        this.registerAll(false);
+        setImmediate(function() {
+            self.check.tick();
+        });
     }
 
     /**
@@ -571,7 +574,7 @@ export class GenericBlock implements OnInit {
             //Prefill
             if(!!this.resets[fname] && !!this.foranew[fname])
                 this.resets[fname].emit();
-            else
+            else if(!!this.resets[fname])
                 this.resets[fname].emit(this.previews[fname][1]);
             //Auto expand input_block
             window.$('#igen2' + this.dataservice.sanit(fname)).click();
@@ -582,9 +585,8 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
+                window.$('#tgch2' + this.dataservice.sanit(fname)).removeClass('green in-edit');
                 window.$('#on-edit' + this.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + this.dataservice.sanit(fname));
-                if(skip)
-                    self.resets[fname].emit([]);
                 return;
             }
             //Build and test
@@ -616,6 +618,7 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
+                window.$('#tgch2' + this.dataservice.sanit(fname)).removeClass('green in-edit');
                 window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
                 //Refresh preview
                 delete self.asked[fname];
@@ -688,8 +691,9 @@ export class GenericBlock implements OnInit {
             var g = window.$(this).attr('data-g');
             self.tgData(f, g, true);
         });
-        for(var i = 0; i < this.data_list.length; i++) {
-            this.resets[this.data_list[i]].emit();
+        var keys = Object.getOwnPropertyNames(this.resets);
+        for(var i = 0; i < keys.length; i++) {
+            this.resets[keys[i]].emit(!!this.backend.profile.data[keys[i]]? [] : undefined);
         }
     }
 

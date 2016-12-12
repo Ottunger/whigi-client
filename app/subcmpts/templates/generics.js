@@ -35,7 +35,7 @@ exports.m = {
         "generics.corp1": {
             "open": true,
             "is_i18n": true,
-            "holds": ["corporate"]
+            "holds": ["corporate", "corporate/address"]
         },
         "generics.family1": {
             "open": true,

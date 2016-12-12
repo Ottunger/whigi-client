@@ -298,9 +298,11 @@ export class Check {
         var obj = JSON.parse(test);
         for(var i = 0; i < obj.length; i++) {
             var loc = JSON.parse(obj[i].value);
+            /*Address no more along with company main info.
             if(this.areAddress(loc, true) != true) {
                 return this.areAddress(loc, true);
             }
+            */
             if(!!loc['generics.site_url'] && this.isURL(loc['generics.site_url']) !== true)
                 return 'generics.badurl';
         }

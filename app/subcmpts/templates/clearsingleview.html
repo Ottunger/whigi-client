@@ -4,14 +4,14 @@
 
     <div class ="col-md-6" *ngIf="jsoned">
         <div *ngFor="let k of keys; let e = even;">
-            <label *ngIf="e">{{ k.descr_key | translate }}</label>
-            <input *ngIf="e" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
+            <label *ngIf="e && k.mode != 'file'">{{ k.descr_key | translate }}</label>
+            <input *ngIf="e && k.mode != 'file'" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
         </div>
     </div>
     <div class ="col-md-6" *ngIf="jsoned">
         <div *ngFor="let k of keys; let o = odd;">
-            <label *ngIf="o">{{ k.descr_key | translate }}</label>
-            <input *ngIf="o" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
+            <label *ngIf="o && k.mode != 'file'">{{ k.descr_key | translate }}</label>
+            <input *ngIf="o && k.mode != 'file'" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
         </div>
     </div>
 </div>

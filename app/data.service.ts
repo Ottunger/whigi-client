@@ -404,7 +404,8 @@ export class Data {
                     (data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] === undefined
                     || data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim() == ''))
                     return ['error', this.allEmpty(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys, data_source)? 'generics.silent' : 'generics.regexp'];
-                if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
+                if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].mode != 'file'
+                    && !!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
                     && data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].length > 127)
                     return ['error', 'generics.tooLong'];
                 if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key])
@@ -419,7 +420,7 @@ export class Data {
         if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].is_dated) {
             raw_data = JSON.stringify([{
                 value: as_file? raw_data_file : raw_data,
-                from: this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].from_now? (new Date).getTime() : -2207520000000 //Near 1 Jan 1900
+                from: this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].from_now? (new Date).getTime() : -2208992400000 //Near 1 Jan 1900
             }]);
         } else {
             raw_data = as_file? raw_data_file : raw_data;
