@@ -85,12 +85,12 @@
                                             </button>
                                             <ul class="dropdown-menu" style="min-width: 0px;">
                                                 <li *ngIf="backend.profile.data[g].id.indexOf('datafragment') == 0">
-                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link to-click" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g">
-                                                        <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
+                                                    <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link to-click" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g"
+                                                        data-toggle="tooltip" title="{{ 'generics.iEdit' | translate }}"><i class="fa fa-pencil"></i></button>
                                                 </li>
                                                 <li>
-                                                    <button type="button" class="btn btn-link" (click)="select(g, g)" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'">
-                                                        <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
+                                                    <button type="button" class="btn btn-link" (click)="select(g, g)" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'"
+                                                        data-toggle="tooltip" title="{{ 'generics.goTo' | translate }}"><i class="fa fa-eye-slash"></i></button>
                                                 </li>
                                                 <li>
                                                     <tooltip [mode]="'sharesLink'" [uri]="g"></tooltip>
@@ -117,13 +117,13 @@
                                         <i class="fa fa-angle-double-left"></i></button>
                                     <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].max == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, 1, 0, false, g)">
                                         <i class="fa fa-angle-double-right"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].max || addDisabled(g)" (click)="dateModifs(g, 0, -1, false, g)">
-                                        <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].max || addDisabled(g)"
+                                        (click)="dateModifs(g, 0, -1, false, g)" data-toggle="tooltip" title="{{ 'generics.deleteOne' | translate }}"><i class="fa fa-minus-square-o"></i></button>
                                     <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || addDisabled(g)" id="tgch2{{ dataservice.sanit(g) }}"
-                                        (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g), 'green in-edit');foranew[g] = 'tgch2' + dataservice.sanit(g);tgData(g, g);">
-                                        <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
-                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || addDisabled(g)" (click)="dateModifs(g, 0, 0, true, g)">
-                                        <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
+                                        (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g), 'green in-edit');foranew[g] = 'tgch2' + dataservice.sanit(g);tgData(g, g);"
+                                        data-toggle="tooltip" title="{{ 'generics.addOne' | translate }}"><i class="fa fa-plus-square-o"></i></button>
+                                    <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || addDisabled(g)" (click)="dateModifs(g, 0, 0, true, g)"
+                                        data-toggle="tooltip" title="{{ 'generics.changeOne' | translate }}"><i class="fa fa-check-square-o"></i></button>
                                 </div>
                                 <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g) }}">
                                     <input type='text' class="form-control" [(ngModel)]="sincefrom[g]" name="sincefrom{{ g }}"/>
@@ -225,22 +225,22 @@
                                                             </button>
                                                             <ul class="dropdown-menu" style="min-width: 0px;">
                                                                 <li *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
-                                                                    <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link to-click" (click)="tgData(g + '/' + d, g)" [attr.data-g]="g" [attr.data-f]="g + '/' + d">
-                                                                        <i class="fa fa-pencil" title="{{ 'generics.iEdit' | translate }}"></i></button>
+                                                                    <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link to-click" (click)="tgData(g + '/' + d, g)"
+                                                                    [attr.data-g]="g" [attr.data-f]="g + '/' + d" data-toggle="tooltip" title="{{ 'generics.iEdit' | translate }}"><i class="fa fa-pencil"></i></button>
                                                                 </li>
                                                                 <li>
                                                                     <button type="button" class="btn btn-link" (click)="select(g, g + '/' + d)"
-                                                                        *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
-                                                                        <i class="fa fa-eye-slash" title="{{ 'generics.goTo' | translate }}"></i></button>
+                                                                        *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'"
+                                                                        data-toggle="tooltip" title="{{ 'generics.goTo' | translate }}"><i class="fa fa-eye-slash"></i></button>
                                                                 </li>
                                                                 <li>
                                                                     <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link btn-renamer"[attr.data-g]="g"
-                                                                        *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0" [attr.data-d]="d" (click)="tgName(g, d)">
-                                                                        <i class="fa fa-wrench" title="{{ 'rename' | translate }}"></i></button>
+                                                                        *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0" [attr.data-d]="d" (click)="tgName(g, d)"
+                                                                        data-toggle="tooltip" title="{{ 'rename' | translate }}"><i class="fa fa-wrench"></i></button>
                                                                 </li>
                                                                 <li>
-                                                                    <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)">
-                                                                        <i class="fa fa-trash" title="{{ 'remove' | translate }}"></i> </button>
+                                                                    <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)"
+                                                                        data-toggle="tooltip" title="{{ 'remove' | translate }}"><i class="fa fa-trash"></i> </button>
                                                                 </li>
                                                                 <li>
                                                                     <tooltip [mode]="'sharesLink'" [uri]="g + '/' + d"></tooltip>
@@ -261,15 +261,16 @@
                                                         (click)="dateModifs(g + '/' + d, 1, 0, false, g)">
                                                         <i class="fa fa-angle-double-right"></i></button>
                                                     <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0
-                                                        || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].max || addDisabled(g + '/' + d)" (click)="dateModifs(g + '/' + d, 0, -1, false, g)">
-                                                        <i class="fa fa-minus-square-o" title="{{ 'generics.deleteOne' | translate }}"></i></button>
+                                                        || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].max || addDisabled(g + '/' + d)"
+                                                        (click)="dateModifs(g + '/' + d, 0, -1, false, g)" data-toggle="tooltip" title="{{ 'generics.deleteOne' | translate }}">
+                                                        <i class="fa fa-minus-square-o"></i></button>
                                                     <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
                                                         id="tgch2{{ dataservice.sanit(g + '/' + d) }}" (click)="dataservice.addClasses('tgch2' + dataservice.sanit(g + '/' + d), 'green in-edit');
-                                                        foranew[g + '/' + d] = 'tgch2' + dataservice.sanit(g + '/' + d);tgData(g + '/' + d, g);">
-                                                        <i class="fa fa-plus-square-o" title="{{ 'generics.addOne' | translate }}"></i></button>
+                                                        foranew[g + '/' + d] = 'tgch2' + dataservice.sanit(g + '/' + d);tgData(g + '/' + d, g);" data-toggle="tooltip" title="{{ 'generics.addOne' | translate }}">
+                                                        <i class="fa fa-plus-square-o"></i></button>
                                                     <button class="btn btn-sm" [disabled]="changing || backend.profile.data[g + '/' + d].id.indexOf('datafragment') != 0 || addDisabled(g + '/' + d)"
-                                                        (click)="dateModifs(g + '/' + d, 0, 0, true, g)">
-                                                        <i class="fa fa-check-square-o" title="{{ 'generics.changeOne' | translate }}"></i></button>
+                                                        (click)="dateModifs(g + '/' + d, 0, 0, true, g)" data-toggle="tooltip" title="{{ 'generics.changeOne' | translate }}">
+                                                        <i class="fa fa-check-square-o"></i></button>
                                                 </div>
                                                 <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g + '/' + d) }}">
                                                     <input type='text' class="form-control"/>

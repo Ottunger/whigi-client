@@ -48,7 +48,7 @@
                                         && backend.generics[p[0]][backend.generics[p[0]].length - 1].icon.indexOf('https') != 0" class="{{ backend.generics[p[0]][backend.generics[p[0]].length - 1].icon }}"></i>
                                 </div>
                                 <div *ngIf="p[1].substr(0, 1) == '*'" style="float: left;padding-left: 5px;">
-                                    <button class="btn btn-xs" id="removals{{ dataservice.sanit(p[1]) }}" title="{{ 'account.noShare' | translate }}"
+                                    <button class="btn btn-xs" id="removals{{ dataservice.sanit(p[1]) }}" data-toggle="tooltip" title="{{ 'account.noShare' | translate }}"
                                         onclick="$(this).toggleClass('green');event.preventDefault();event.stopPropagation();"><i class="fa fa-remove"></i></button>
                                 </div>
                                 {{ backend.generics[p[0]][backend.generics[p[0]].length - 1].descr_key | translate }}

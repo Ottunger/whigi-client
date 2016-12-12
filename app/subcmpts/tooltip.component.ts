@@ -55,7 +55,7 @@ export class Tooltip {
                 shares += '<li id="li__' + this.mapping[keys[i]] + '" class="list-group-item"><img id="pict__' + this.mapping[keys[i]] + keys[i] + '" height="20px" alt="" style="float: left;margin-right: 10px;" />'
                    + '<a href="javascript:;" onclick="window.$(\'.tp-close\').click(); window.ngUserMove(\'' + keys[i] + '\')">' + keys[i] + '</a>'
                    + (this.dataservice.isWhigi(keys[i])? '' : ('<button style="float: right; margin-top: -5px;" class="btn btn-link" onclick="delUserShare(\'' + keys[i] + '\', \''
-                   + this.mapping[keys[i]] + '\')"><i class="fa fa-trash" title="' + this.translate.instant('remove') + '"></i></button>'))
+                   + this.mapping[keys[i]] + '\')"><i class="fa fa-trash"></i></button>'))
                    + '</li>';
             }
             shares = (shares == '')? '<li class="list-group-item">' + this.translate.instant('nothing') + '</li>' : shares;

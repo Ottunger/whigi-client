@@ -51,7 +51,7 @@
                 <!-- END INBOX DROPDOWN -->
                 <!-- BEGIN HELP LINK -->
                 <li class="dropdown dropdown-extended whigi-md-block">
-                    <a href="javascript:;" class="dropdown-toggle" title="{{ 'header.help' | translate }}" (click)="showIntro()">
+                    <a href="javascript:;" class="dropdown-toggle" data-toggle="tooltip" data-placement="bottom" title="{{ 'header.help' | translate }}" (click)="showIntro()">
                         <i class="icon-support"></i>
                     </a>
                 </li>
@@ -59,7 +59,7 @@
                 <!-- BEGIN SAVE LINK -->
                 <!--
                 <li class="dropdown dropdown-extended">
-                    <a href="javascript:;" class="dropdown-toggle whigi-save-config" title="{{ 'header.save' | translate }}" (click)="dataservice.saveRows()">
+                    <a href="javascript:;" class="dropdown-toggle whigi-save-config" data-toggle="tooltip" data-placement="bottom" title="{{ 'header.save' | translate }}" (click)="dataservice.saveRows()">
                         <i class="icon-note"></i>
                     </a>
                 </li>

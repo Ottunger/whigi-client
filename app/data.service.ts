@@ -26,6 +26,7 @@ export class Data {
     private marked: {[id: string]: boolean};
     private ee: EventEmitter<number>;
     private how: EventEmitter<number>;
+    private tickee: Function;
 
     /**
      * Creates the service.
@@ -58,6 +59,12 @@ export class Data {
         }
         //Construct a reference to our data service
         window.ngData = this;
+        //Modify tick
+        this.tickee = this.check.tick;
+        this.check.tick = function() {
+            window.$('[data-toggle="tooltip"]').tooltip();
+            self.tickee.call(self.check);
+        }
     }
 
     /**
