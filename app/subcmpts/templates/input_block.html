@@ -1,9 +1,9 @@
 <!-- TEXT -->
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !!backend.generics[g][backend.generics[g].length - 1].placeholder"
-    type="text" class="form-control grant-required" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)"
+    type="text" class="form-control grant-required" [(ngModel)]="new_data" name="new_data" (keyup)="iChange(1)" (change)="iChange(1)"
     [placeholder]="backend.generics[g][backend.generics[g].length - 1].placeholder" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
 <input *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'text' && !backend.generics[g][backend.generics[g].length - 1].placeholder"
-    type="text" class="form-control grant-required" [(ngModel)]="new_data" name="new_data" (change)="iChange(1)" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
+    type="text" class="form-control grant-required" [(ngModel)]="new_data" name="new_data" (keyup)="iChange(1)" (change)="iChange(1)" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
 <!-- FILE -->
 <button id="fsb{{ dataservice.sanit(g) }}" type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs' + dataservice.sanit(g))"
     *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"><i class="fa fa-cloud-upload"></i></button>
@@ -18,9 +18,9 @@
         <!-- SUBTYPES -->
         <!-- text -->
         <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]"
-            name="new_datas" (change)="iChange(3)" [placeholder]="k.placeholder" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
+            name="new_datas" (keyup)="iChange(3)" (change)="iChange(3)" [placeholder]="k.placeholder" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
         <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]"
-            name="new_datas" (change)="iChange(3)" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
+            name="new_datas" (keyup)="iChange(3)" (change)="iChange(3)" [attr.data-forid]="'#accord' + dataservice.sanit(g)"/>
         <!-- file -->
         <button id="fsb{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" type="button" class="btn default" (click)="dataservice.triggerLoad('fs' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))" *ngIf="k.mode == 'file'">
             <i class="fa fa-cloud-upload"></i></button>
@@ -39,7 +39,8 @@
         </label>
         <!-- date -->
         <div class="input-group date pickgen{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" *ngIf="k.mode == 'date'">
-            <input type='text' class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data{{ g + k.descr_key }}" (change)="iChange(3)"/>
+            <input type='text' class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data{{ g + k.descr_key }}"
+                (keyup)="iChange(3)" (change)="iChange(3)"/>
             <span class="input-group-addon">
                 <span class="glyphicon glyphicon-calendar"></span>
             </span>
@@ -58,7 +59,7 @@
 </label>
 <!-- DATE -->
 <div class="input-group date grant-required pickgen{{ dataservice.sanit(g) }}" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
-    <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data{{ g }}" (change)="iChange(1)"/>
+    <input type='text' class="form-control" [(ngModel)]="new_data" name="new_data{{ g }}" (keyup)="iChange(1)" (change)="iChange(1)"/>
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>
     </span>

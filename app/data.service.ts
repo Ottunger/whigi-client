@@ -394,46 +394,40 @@ export class Data {
      * @return {String} Built up data or undefined if cannot pass test.
      */
     recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
-        raw_data = (this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'checkbox')?
+        var thisgen = this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1];
+        raw_data = (thisgen.mode == 'checkbox')?
             (raw_data || false) : (!!raw_data? raw_data.toString().trim() : '');
         if(raw_data.length > 127 && !as_file)
             return ['error', 'generics.tooLong'];
         //Build up the data, keys wrapping and date wrapping
-        if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].mode == 'json_keys') {
+        if(thisgen.mode == 'json_keys') {
             var ret = {};
-            for(var i = 0; i < this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys.length; i++) {
-                if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].mode == 'checkbox') {
-                    ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] 
-                        = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] || false;
+            for(var i = 0; i < thisgen.json_keys.length; i++) {
+                if(thisgen.json_keys[i].mode == 'checkbox') {
+                    ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key] || false;
                     continue;
                 }
-                if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].required && 
-                    (data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] === undefined
-                    || data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim() == ''))
-                    return ['error', this.allEmpty(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys, data_source)? 'generics.silent' : 'generics.regexp'];
-                if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].mode != 'file'
-                    && !!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key]
-                    && data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].length > 127)
+                if(thisgen.json_keys[i].required && (data_source[thisgen.json_keys[i].descr_key] === undefined || data_source[thisgen.json_keys[i].descr_key].trim() == ''))
+                    return ['error', this.allEmpty(thisgen.json_keys, data_source)? 'generics.silent' : 'generics.regexp'];
+                if(thisgen.json_keys[i].mode != 'file' && !!data_source[thisgen.json_keys[i].descr_key] && data_source[thisgen.json_keys[i].descr_key].length > 127)
                     return ['error', 'generics.tooLong'];
-                if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key])
-                    ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] 
-                        = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key].trim();
-                else if(!!data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key])
-                    ret[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] 
-                        = data_source[this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].json_keys[i].descr_key] || false;
+                if(!!data_source[thisgen.json_keys[i].descr_key])
+                    ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key].trim();
+                else if(!!data_source[thisgen.json_keys[i].descr_key])
+                    ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key] || false;
             }
             raw_data = JSON.stringify(ret);
         }
-        if(this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].is_dated) {
+        if(thisgen.is_dated) {
             raw_data = JSON.stringify([{
                 value: as_file? raw_data_file : raw_data,
-                from: this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].from_now? (new Date).getTime() : -2208992400000 //Near 1 Jan 1900
+                from: thisgen.from_now? (new Date).getTime() : -2208992400000 //Near 1 Jan 1900
             }]);
         } else {
             raw_data = as_file? raw_data_file : raw_data;
         }
         //Test if the data passes the associated test
-        var res = window.eval.call(window, '(function(test) {' + this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1].validate + '})')(raw_data);
+        var res = window.eval.call(window, '(function(test) {' + thisgen.validate + '})')(raw_data);
         if(res !== true) {
             return ['error', res];
         }

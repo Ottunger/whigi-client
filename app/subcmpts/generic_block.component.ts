@@ -31,6 +31,7 @@ export class GenericBlock implements OnInit {
     public new_data_file: {[id: string]: string};
     public data_list: string[];
     public toview: string;
+    public offsets: {[id: string]: number};
     @Input() tsl: boolean;
     @Input() iclose: boolean;
     @Input() group: string;
@@ -65,6 +66,7 @@ export class GenericBlock implements OnInit {
         this.cached = {};
         this.sincefrom = {};
         this.foranew = {};
+        this.offsets = {};
         this.changing = false;
         this.inreg = false;
         this.toview = '[]';
@@ -93,7 +95,7 @@ export class GenericBlock implements OnInit {
     }
 
     /**
-     * Populates reste lists.
+     * Populates our lists.
      * @function popList
      * @private
      */
@@ -300,18 +302,41 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Offset modif.
+     * @function modOffset
+     * @public
+     * @param {String} folder to list.
+     * @param {Number} nn Max values to return.
+     */
+    modOffset(folder: string, nn: number) {
+        var max = this.backend.data_trie.suggestions(folder + '/', '/').length;
+        this.offsets[folder] = this.offsets[folder] || 0;
+        this.offsets[folder] += nn;
+        if(this.offsets[folder] < 0)
+            this.offsets[folder] = 0;
+        if(this.offsets[folder] > max - Math.abs(nn))
+            this.offsets[folder] = max - Math.abs(nn);
+    }
+
+    /**
      * Keys of data names known.
      * @function dataNames
      * @public
      * @param {String} folder to list.
      * @param {Number} nn Max values to return.
+     * @param {Number} off Offset.
      * @return {Array} Known fields.
      */
-    dataNames(folder: string, nn: number): string[] {
+    dataNames(folder: string, nn: number, off?: number): string[] {
         var i = 0;
-        return this.backend.data_trie.suggestions(folder + '/', '/').reverse().filter(function(el: string): boolean {
-            if(el.charAt(el.length - 1) != '/' && i++ < nn)
+        off = off || 0;
+        return this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
+            if(el.charAt(el.length - 1) != '/' && i >= off && i < (nn + off)) {
+                i++;
                 return true;
+            } else if(el.charAt(el.length - 1) != '/') {
+                i++;
+            }
             return false;
         }).map(function(el: string): string {
             return el.replace(/.+\//, '');
@@ -378,6 +403,9 @@ export class GenericBlock implements OnInit {
         }
         //Save?
         if(mod || place < 0) {
+            //Those are too sticky...
+            window.$('.tooltip').remove();
+            //One at a time
             this.changing = true;
             var send = JSON.stringify(ret);
             this.dataservice.modifyData(fname, send, true, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
@@ -694,6 +722,10 @@ export class GenericBlock implements OnInit {
             var g = window.$(this).attr('data-g');
             self.tgData(f, g, true);
         });
+        //Reset the names
+        this.ass_name = {};
+        this.popList();
+        //Reset the input blocks
         var keys = Object.getOwnPropertyNames(this.resets);
         for(var i = 0; i < keys.length; i++) {
             this.resets[keys[i]].emit(!!this.backend.profile.data[keys[i]]? [] : undefined);

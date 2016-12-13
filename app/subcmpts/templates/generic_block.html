@@ -27,6 +27,12 @@
                                             <span *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'
                                                 && ((backend.generics[g][backend.generics[g].length - 1].instantiable && dataNames(g, 1).length == 0)
                                                     || (!backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.profile.data[g]))">...</span>
+                                            <button class="btn btn-sm" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && dataNames(g, 4, 0).length == 4" 
+                                                (click)="modOffset(g, -3);" [disabled]="!offsets[g] || offsets[g] == 0">
+                                                <i class="fa fa-angle-double-left"></i></button>
+                                            <button class="btn btn-sm" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && dataNames(g, 4, 0).length == 4"
+                                                (click)="modOffset(g, 3);" [disabled]="offsets[g] >= dataNames(g, 100, 0).length - 3">
+                                                <i class="fa fa-angle-double-right"></i></button>
                                         </div>
                                         <div class="col-md-1" style="padding: 0; margin-left: -3px;">
                                             <!-- personal pages insert/remove -->
@@ -181,7 +187,7 @@
                             <!-- BEGIN ACTIONS -->
                             <div class="table" style="margin-bottom: 0px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable">
                                 <table style="width: 100%">
-                                    <tbody *ngFor="let d of dataNames(g, 3); let f = first; let l = last;">
+                                    <tbody *ngFor="let d of dataNames(g, 3, offsets[g]); let f = first; let l = last;">
                                         <!-- BEGIN CACHED PREVIEW -->
                                         <div id="fp{{ dataservice.sanit(g + '/' + d) }}" style="display:none;" class="modal" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'">
                                             <h3>{{ 'generics.preview' | translate }}</h3>
@@ -191,7 +197,8 @@
                                         <div *ngIf="f" style="width: 100%;border-bottom: 1px solid #77777a;padding-top: 3px;"></div>
                                         <tr style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                                             <td style="padding-top: 2px;padding-bottom: 0px;">
-                                                <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;">
+                                                <div class="col-md-5 whigi-sm-name" style="padding-left: 9px;"
+                                                    [style.padding-bottom]="(l && !backend.generics[g][backend.generics[g].length - 1].is_dated)? '2px' : 'inherit'">
                                                     <input type="text" style="margin-left: -4px; box-shadow: 1px 1px 1px #FF5000!important;" id="chgname{{ dataservice.sanit(g + '/' + d) }}"
                                                         placeholder="{{ 'generics.label' | translate }}" class="form-control" value="{{ d }}" readonly="readonly"
                                                         (keyup)="dataservice.clickOnEnter($event, '#tgname' + dataservice.sanit(g + '/' + d))"/>
