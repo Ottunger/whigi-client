@@ -66,6 +66,8 @@ export class InputBlock implements OnInit {
             this.reset.subscribe(function(params) {
                 if(!!params && params.constructor === Array) {
                     self.collapse(true);
+                    if(params.length > 0)
+                        self.def();
                 } else {
                     if(!!params)
                         self.within = params;
@@ -137,6 +139,8 @@ export class InputBlock implements OnInit {
             (this.isClosed? 'none' : 'block'));
         window.$('.keys' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).css('display',
             (this.isClosed || window.innerWidth <= 991? 'none' : 'block'));
+        //Those are too sticky...
+        window.$('.tooltip').remove();
     }
 
     /**

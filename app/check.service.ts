@@ -61,7 +61,7 @@ export class Check {
      * @return {String|Boolean} String containing error or true.
      */
     isDate(test: string): string | boolean {
-        return test === undefined || /^([1-9]|([012][0-9])|(3[01]))\/([0]{0,1}[1-9]|1[012])\/\d\d\d\d(\s+[012]{0,1}[0-9]:[0-6][0-9])?$/.test(test)? true : 'generics.baddate';
+        return test === undefined || /^([1-9]|([012][0-9])|(3[01]))\/([0]?[1-9]|1[012])\/\d\d\d\d(\s+[012]?[0-9]:[0-6][0-9])?$/.test(test)? true : 'generics.baddate';
     }
 
     /**

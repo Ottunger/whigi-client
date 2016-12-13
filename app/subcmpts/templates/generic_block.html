@@ -90,7 +90,7 @@
                                                 </li>
                                                 <li>
                                                     <button type="button" class="btn btn-link" (click)="select(g, g)" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'"
-                                                        data-toggle="tooltip" title="{{ 'generics.goTo' | translate }}"><i class="fa fa-eye-slash"></i></button>
+                                                        data-toggle="tooltip" title="{{ 'generics.preview' | translate }}"><i class="fa fa-eye-slash"></i></button>
                                                 </li>
                                                 <li>
                                                     <tooltip [mode]="'sharesLink'" [uri]="g"></tooltip>
@@ -231,7 +231,7 @@
                                                                 <li>
                                                                     <button type="button" class="btn btn-link" (click)="select(g, g + '/' + d)"
                                                                         *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'"
-                                                                        data-toggle="tooltip" title="{{ 'generics.goTo' | translate }}"><i class="fa fa-eye-slash"></i></button>
+                                                                        data-toggle="tooltip" title="{{ 'generics.preview' | translate }}"><i class="fa fa-eye-slash"></i></button>
                                                                 </li>
                                                                 <li>
                                                                     <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link btn-renamer"[attr.data-g]="g"

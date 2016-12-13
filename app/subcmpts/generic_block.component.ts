@@ -255,7 +255,7 @@ export class GenericBlock implements OnInit {
     private notOrEdit(name: string): boolean {
         if(!(name in this.backend.profile.data))
             return true;
-        return window.$('#tgdata' + this.dataservice.sanit(name)).hasClass('in-edit');
+        return !window.$('#tgdata' + this.dataservice.sanit(name)).length || !window.$('#tgdata' + this.dataservice.sanit(name)).hasClass('in-edit');
     }
 
     /**
@@ -285,7 +285,7 @@ export class GenericBlock implements OnInit {
         //Create it
         this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
-            self.resets[name].emit([]);
+            self.resets[name].emit([0]);
             self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
                 self.data_list = now.map(function(el) { return el[0]; });
             });
@@ -365,7 +365,7 @@ export class GenericBlock implements OnInit {
         }
         //Remove or add values.
         if(place < 0) {
-            ret.splice(this.sincefrom[fname].act, place);
+            ret.splice(this.sincefrom[fname].act, -place);
             this.sincefrom[fname].max += place;
             if(this.sincefrom[fname].act > this.sincefrom[fname].max)
                 this.sincefrom[fname].act = this.sincefrom[fname].max;
@@ -587,6 +587,8 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
                 window.$('#tgch2' + this.dataservice.sanit(fname)).removeClass('green in-edit');
                 window.$('#on-edit' + this.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + this.dataservice.sanit(fname));
+                if(!!this.resets[fname])
+                    this.resets[fname].emit([]);
                 return;
             }
             //Build and test
@@ -618,7 +620,7 @@ export class GenericBlock implements OnInit {
                 window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                 window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
-                window.$('#tgch2' + this.dataservice.sanit(fname)).removeClass('green in-edit');
+                window.$('#tgch2' + self.dataservice.sanit(fname)).removeClass('green in-edit');
                 window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
                 //Refresh preview
                 delete self.asked[fname];
@@ -686,6 +688,7 @@ export class GenericBlock implements OnInit {
      */
     cancel() {
         var self = this;
+        window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.has-error').removeClass('has-error');
         window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false).each(function() {
             var f = window.$(this).attr('data-f');
             var g = window.$(this).attr('data-g');
