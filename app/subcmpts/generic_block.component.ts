@@ -287,6 +287,9 @@ export class GenericBlock implements OnInit {
         //Create it
         this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
             self.ass_name[name] = '';
+            //Maybe create an emitter for a newly generated data.
+            if(new_name != '')
+                self.resets[name + new_name] = new EventEmitter();
             self.resets[name].emit([0]);
             self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
                 self.data_list = now.map(function(el) { return el[0]; });
