@@ -152,6 +152,7 @@
    "filesystem.newFolder": "Create folder",
    "filesystem.dated": "Dated field",
    "filesystem.generics": "This data is a generic one, use the dedicated interface",
+   "filesystem.notView": "File not an image or not uploaded",
 
    "dataview.noData": "Cannot fetch data details",
    "dataview.long": "Too long for decrypting in preview",

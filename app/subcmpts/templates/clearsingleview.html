@@ -4,14 +4,22 @@
 
     <div class ="col-md-6" *ngIf="jsoned">
         <div *ngFor="let k of keys; let e = even;">
-            <label *ngIf="e && k.mode != 'file'">{{ k.descr_key | translate }}</label>
+            <label *ngIf="e">{{ k.descr_key | translate }}</label>
             <input *ngIf="e && k.mode != 'file'" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
+            <div *ngIf="e && k.mode == 'file' && recover(k.descr_key, data, fr) && recover(k.descr_key, data, fr).substr(0, 10) == 'data:image'">
+                <img height="34px;" [src]="recover(k.descr_key, data, fr)"/></div>
+            <input *ngIf="e && k.mode == 'file' && (!recover(k.descr_key, data, fr) || recover(k.descr_key, data, fr).substr(0, 10) != 'data:image')"
+                type="text" value="{{ 'filesystem.notView' | translate }}" name="decr" class="form-control" readonly>
         </div>
     </div>
     <div class ="col-md-6" *ngIf="jsoned">
         <div *ngFor="let k of keys; let o = odd;">
-            <label *ngIf="o && k.mode != 'file'">{{ k.descr_key | translate }}</label>
+            <label *ngIf="o">{{ k.descr_key | translate }}</label>
             <input *ngIf="o && k.mode != 'file'" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
+            <div *ngIf="o && k.mode == 'file' && recover(k.descr_key, data, fr) && recover(k.descr_key, data, fr).substr(0, 10) == 'data:image'">
+                <img height="34px;" [src]="recover(k.descr_key, data, fr)"/></div>
+            <input *ngIf="o && k.mode == 'file' && (!recover(k.descr_key, data, fr) || recover(k.descr_key, data, fr).substr(0, 10) != 'data:image')"
+                type="text" value="{{ 'filesystem.notView' | translate }}" name="decr" class="form-control" readonly>
         </div>
     </div>
 </div>

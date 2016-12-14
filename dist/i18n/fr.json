@@ -152,6 +152,7 @@
    "filesystem.newFolder": "Créer un dossier",
    "filesystem.dated": "Champ daté",
    "filesystem.generics": "Cette donnée est générique, utilisez l'interface dédiée",
+   "filesystem.notView": "Fichier non image ou non envoyé",
 
    "dataview.noData": "Impossible d'avoir les détails de la donnée",
    "dataview.long": "Trop long pour récupérer en prévisualisation",
