@@ -40,7 +40,7 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let d of ongs">
-                                                            <td>{{ dataservice.forDisplay(d) }}</td>
+                                                            <td>{{ dataservice.forDisplay(d) }}<span *ngIf="!!usernames[d]"> ({{ usernames[d] }})</span></td>
                                                             <td><button type="button" class="btn green" (click)="loginas(d)">{{ 'profile.loginas' | translate }}</button></td>
                                                         </tr>
                                                     </tbody>
@@ -67,7 +67,10 @@
                                             <!-- BEGIN FORM-->
                                             <div class="row">
                                                 <div class="col-md-12">
-                                                    <p>{{ 'profile.createExplain' | translate }}</p>
+                                                    <p *ngIf="!!backend.profile && !!backend.profile.company_info && !!backend.profile.company_info.is_company">
+                                                        {{ 'profile.createExplainCom' | translate }}</p>
+                                                    <p *ngIf="!backend.profile || !backend.profile.company_info || !backend.profile.company_info.is_company">
+                                                        {{ 'profile.createExplainAll' | translate }}</p>
                                                     <div class="row">
                                                         <div class="col-md-3">
                                                             <div class="form-group">
@@ -78,7 +81,9 @@
                                                         <div class="col-md-3">
                                                             <div class="form-group">
                                                                 <label class="control-label">{{ 'oauth.prefix' | translate }}</label><br />
-                                                                <input type="text" class="form-control" [(ngModel)]="prefix" name="prefix"/>
+                                                                <select class="form-control" [(ngModel)]="prefix" name="prefix">
+                                                                    <option *ngFor="let c of choices()" [value]="c + '/'">{{ c }}</option>
+                                                                </select>
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
