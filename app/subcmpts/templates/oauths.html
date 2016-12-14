@@ -1,0 +1,158 @@
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [cur]="dataservice.ee" [run]="dataservice.how"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix" style="background-color: #414142;"></div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="30"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ 'profile.oauths' | translate }}</h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'profile.mines' | translate }}</div>
+                                            <div class="tools">
+                                                <a *ngIf="ongs.length > 0" href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable')"> </a>
+                                                <span *ngIf="ongs.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="ongs.length > 0" class="portlet-body form" id="apsable">
+                                            <!-- BEGIN FORM-->
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ 'oauth.for_id' | translate }}</th>
+                                                            <th>{{ 'action' | translate }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let d of ongs">
+                                                            <td>{{ dataservice.forDisplay(d) }}</td>
+                                                            <td><button type="button" class="btn green" (click)="loginas(d)">{{ 'profile.loginas' | translate }}</button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'profile.createo' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable2')"> </a>
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable2">
+                                            <!-- BEGIN FORM-->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>{{ 'profile.createExplain' | translate }}</p>
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">{{ 'profile.auth' | translate }}:</label><br />
+                                                                <input type="text" class="form-control" [(ngModel)]="auth" name="auth"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <div class="form-group">
+                                                                <label class="control-label">{{ 'oauth.prefix' | translate }}</label><br />
+                                                                <input type="text" class="form-control" [(ngModel)]="prefix" name="prefix"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <label class="rememberme mt-checkbox mt-checkbox-outline">
+                                                                <input type="checkbox" name="admin" [(ngModel)]="admin" /> {{ 'oauth.is_admin' | translate }}
+                                                                <span></span>
+                                                            </label>
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <button class="btn green" (click)="grant()" [disabled]="!auth || auth == '' || !prefix || prefix == ''">
+                                                                <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'profile.oauth' | translate }}</div>
+                                            <div class="tools">
+                                                <a *ngIf="!!backend.profile && !!backend.profile.oauth && backend.profile.oauth.length > 0" href="javascript:;" class="tl-link expand"
+                                                    (click)="dataservice.collapse('apsable3')"> </a>
+                                                <span *ngIf="!backend.profile || !backend.profile.oauth || backend.profile.oauth.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="!!backend.profile && !!backend.profile.oauth && backend.profile.oauth.length > 0" class="portlet-body form" id="apsable3">
+                                            <!-- BEGIN FORM-->
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ 'oauth.for_id' | translate }}</th>
+                                                            <th>{{ 'oauth.prefix' | translate }}</th>
+                                                            <th>{{ 'action' | translate }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let d of backend.profile.oauth">
+                                                            <td *ngIf="!!d">{{ dataservice.forDisplay(d.for_id) }}</td>
+                                                            <td *ngIf="!!d">{{ d.prefix }}</td>
+                                                            <td><button type="button" class="btn green" (click)="remove(d.id, d.for_id)">{{ 'remove' | translate }}</button></td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+    </div>
+</div>

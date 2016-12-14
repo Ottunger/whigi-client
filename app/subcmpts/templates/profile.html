@@ -174,45 +174,6 @@
                                 </div>
                             </div>
                             <!-- END BLOCK -->
-                            <!-- BEGIN BLOCK -->
-                            <div class="tab-content">
-                                <div class="tab-pane active">
-                                    <div class="portlet box blue-madison">
-                                        <div class="portlet-title">
-                                            <div class="caption">
-                                                <i class="fa fa-user"></i>{{ 'profile.oauth' | translate }}</div>
-                                            <div class="tools">
-                                                <a *ngIf="!!backend.profile.oauth && backend.profile.oauth.length > 0" href="javascript:;" class="tl-link expand"
-                                                    (click)="dataservice.collapse('apsable3')"> </a>
-                                                <span *ngIf="!backend.profile.oauth || backend.profile.oauth.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
-                                            </div>
-                                        </div>
-                                        <div *ngIf="!!backend.profile.oauth && backend.profile.oauth.length > 0" class="portlet-body form" id="apsable3">
-                                            <!-- BEGIN FORM-->
-                                            <div class="table-responsive">
-                                                <table class="table table-hover">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>{{ 'oauth.for_id' | translate }}</th>
-                                                            <th>{{ 'oauth.prefix' | translate }}</th>
-                                                            <th>{{ 'action' | translate }}</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody *ngIf="!!backend.profile">
-                                                        <tr *ngFor="let d of backend.profile.oauth">
-                                                            <td>{{ dataservice.forDisplay(d.for_id) }}</td>
-                                                            <td>{{ d.prefix }}</td>
-                                                            <td><button type="button" class="btn green" (click)="remove(d.id)">{{ 'remove' | translate }}</button></td>
-                                                        </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                            <!-- END FORM-->
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <!-- END BLOCK -->
                         </div>
                     </div>
                 </div>

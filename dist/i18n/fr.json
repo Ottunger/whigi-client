@@ -51,6 +51,7 @@
    "intro.evtNext": "Naviguez vers une prochaine étape si plusieurs changements arrivent en même temps. Vous ne sauvegarderez tout qu'une fois, à la fin, dont les créations et rédirections de données.",
 
    "login.title": "Connectez-vous",
+   "login.is_company": "Créer un compte entreprise",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
    "login.remember": "Gardez moi connecté",
    "login.register": "Pas encore de compte ?",
@@ -92,6 +93,7 @@
    "header.save": "Sauvegarder les favoris",
    "header.help": "Lancer l'aide",
 
+   "profile.oauths": "Permissions",
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Tout déconnecter",
    "profile.noLogout": "Impossible de quitter avec précautions",
@@ -106,7 +108,8 @@
    "profile.changed": "Mise à jour effectuée",
    "profile.revoke": "Supprimer l'accès à toutes les valises",
    "profile.revokeID": "ID à bannir",
-   "profile.oauth": "Permissions OAuth",
+   "profile.oauth": "Permissions OAuth données",
+   "profile.mines": "Mes permissions OAuth",
    "profile.warnChange": "Mot de passe changé, mais récupération devenue impossible",
    "profile.generics": "Données génériques",
    "profile.eidRead": "Profil importé depuis l'eID",
@@ -122,6 +125,12 @@
    "profile.happenings": "Changements standards",
    "profile.changeExplain": "Changez de mot de passe ici. Si vous avez reçu vorte compte par une tirce partie, vous pouvez aussi changer de nom de compte, mais attention, vous ne le pourrez plus ensuite!",
    "profile.noShare": "Vous n'avez actuellement personne à bannir! Pourquoi ne pas commencer à partager des données?",
+   "profile.loginas": "Connection",
+   "profile.loginassure": "Êtes-vous certain de vouloir changer de compte? Vous devrez vous déconnecter avant de pouvoir réutiliser celui-ci.",
+   "profile.noGet": "Impossible de récupérer le ticket, le partage est-il supprimé?",
+   "profile.createo": "Créer un nouveau ticket",
+   "profile.auth": "Compte à créditer",
+   "profile.createExplain": "Choisissez ici un compte Whigi à qui octroyer une permission OAuth, et son dossier de travail. Ce dernier ne peut être le dossier principal. Si votre entreprise nécéssite une validation en deux étapes, ce formulaire ne vous permettra pas de créer une autorisation.",
    
    "happenings.move": "Je déménage",
    "happenings.partners": "Je change de partenaire",
@@ -185,6 +194,9 @@
    "oauth.prefix": "Accès demandé à: ",
    "oauth.ok": "Donner accès",
    "oauth.nok": "Refuser l'accès",
+   "oauth.is_admin": "Compte admin",
+   "oauth.noGrant": "Impossible de donner l'accès",
+   "oauth.granted": "Ticket OAuth donné",
 
    "account.question": "Demande une création d'accès",
    "account.explain": "En acceptant la requête, vous créez automatiquement une valise sécurisée pour chacune des données suivantes vers l'ID donné, de la même façon que vous le feriez manuellement. L'utilisateur distant n'AURA PAS accès à vos clés.",
@@ -263,7 +275,7 @@
 
    "generics.any": "Tous les modules",
    "generics.profile": "Mes données personnelles",
-   "generics.corporate": "Mes entreprises",
+   "generics.corporate": "Entreprises",
    "generics.family": "Mes relations",
 
    "generics.perso1": "Infos de base",
@@ -272,7 +284,8 @@
    "generics.family1": "Membres de la famille",
    "generics.family2": "Conjoints",
    "generics.family3": "Relations de travail",
-   "generics.corp1": "Entreprises",
+   "generics.corp1": "Dénominations",
+   "generics.corp2": "Implantations",
 
    "generics.mother": "Mère",
    "generics.father": "Père",

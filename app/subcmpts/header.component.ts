@@ -74,15 +74,23 @@ export class Header implements OnInit {
      */
     logout(all: boolean) {
         var self = this;
-        this.backend.removeTokens(all).then(function() {
+        function complete() {
             localStorage.removeItem('token');
             localStorage.removeItem('key_decryption');
             localStorage.removeItem('psha');
             self.backend.forceReload();
             delete self.backend.profile;
             self.router.navigate(['/']);
+        }
+        this.backend.removeTokens(all).then(function() {
+            complete();
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
+            if(e.status == 403) {
+                //We were OAuthing...
+                complete();
+            } else {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
+            }
         });
     }
 

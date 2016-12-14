@@ -108,13 +108,13 @@
                         <i class="fa fa-lock"></i>
                         <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
                 </div>
-                <div class="form-group ifname">
+                <div class="form-group ifname" *ngIf="!is_company">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'generics.first_name' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-graduation-cap"></i>
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="fname" autocomplete="off" placeholder="{{ 'generics.first_name' | translate }}" name="fname" /> </div>
                 </div>
-                <div class="form-group ilname">
+                <div class="form-group ilname" *ngIf="!is_company">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'generics.last_name' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-graduation-cap"></i>
@@ -127,6 +127,10 @@
                         <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="email" autocomplete="off" placeholder="{{ 'login.email' | translate }}" name="email" /> </div>
                 </div>
                 <div class="form-group irecupid">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="is_company" [(ngModel)]="is_company" /> {{ 'login.is_company' | translate }}
+                        <span></span>
+                    </label>
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
                         <input type="checkbox" name="recuperable" [(ngModel)]="recuperable" id="recupcheck" /> {{ 'login.recuperable' | translate }}
                         <span></span>

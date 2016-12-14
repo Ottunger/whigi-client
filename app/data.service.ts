@@ -14,6 +14,7 @@ import {Backend} from './app.service';
 import {Check} from './check.service';
 import {Trie} from '../utils/Trie';
 import * as modules from './subcmpts/templates/generics';
+import * as modules_corpos from './subcmpts/templates/generics_corpos';
 
 @Injectable()
 export class Data {
@@ -68,6 +69,24 @@ export class Data {
     }
 
     /**
+     * Select which template to use.
+     * @function mPublic
+     * @public
+     * @return {Promise} When done.
+     */
+    mPublic(): Promise {
+        var self = this;
+        return new Promise(function(resolve, reject) {
+            self.backend.getProfile().then(function(p) {
+                self.m = (!!p.company_info && !!p.company_info.is_company)? modules_corpos.m : modules.m;
+                resolve(p);
+            }, function(e) {
+                reject(e);
+            });
+        });
+    }
+
+    /**
      * Unique out an array in n^2 time.
      * @function unique
      * @private
@@ -93,7 +112,7 @@ export class Data {
         var self = this;
         if(!!this.backend.profile.company_info && !!this.backend.profile.company_info.lang)
             this.setLang(this.backend.profile.company_info.lang, true);
-        this.m = Object.assign({}, modules.m);
+        this.m = Object.assign({}, (!!this.backend.profile.company_info && !!this.backend.profile.company_info.is_company)? modules_corpos.m : modules.m);
         this.getData('keys/display', false, undefined, true).then(function(data) {
             var perso = {kkeys: [], keys: {}, modules: [], holds: {}};
             self.maes = data.decr_aes || self.backend.newAES();

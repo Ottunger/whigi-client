@@ -114,7 +114,7 @@ export class Merge {
             self.backend.createToken(self.login, self.password, false).then(function(ticket) {
                 newToken = ticket._id;
                 localStorage.setItem('token', newToken);
-                self.backend.getProfile().then(function(profile) {
+                self.dataservice.mPublic().then(function(profile) {
                     self.backend.profile = profile;
                     newKey = window.sha256(self.password + profile.salt);
                     localStorage.setItem('key_decryption', newKey);
@@ -282,7 +282,7 @@ export class Merge {
         localStorage.setItem('key_decryption', ck);
         this.backend.forceReload();
 
-        this.backend.getProfile().then(function(profile) {
+        this.dataservice.mPublic().then(function(profile) {
             self.backend.profile = profile;
             self.check.tick();
             self.dataservice.listData(true).then(resolve, reject);

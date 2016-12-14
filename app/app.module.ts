@@ -46,6 +46,7 @@ import {Tooltip} from './subcmpts/tooltip.component';
 import {Breadcrump} from './subcmpts/breadcrump.component';
 import {ClearSingleview} from './subcmpts/clearsingleview.component';
 import {Happenings} from './subcmpts/happenings.component';
+import {Oauths} from './subcmpts/oauths.component';
 import {Notfound} from './subcmpts/notfound.component';
 
 export function createTranslateLoader(http: Http) {
@@ -94,6 +95,7 @@ export function createTranslateLoader(http: Http) {
         Breadcrump,
         ClearSingleview,
         Happenings,
+        Oauths,
         Notfound
     ],
     providers: [

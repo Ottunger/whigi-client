@@ -31,6 +31,7 @@ export class Logging implements OnInit {
     public recuperable: boolean;
     public safe: boolean;
     public use_file: boolean;
+    public is_company: boolean;
     private onEnd: boolean;
 
     /**
@@ -49,6 +50,7 @@ export class Logging implements OnInit {
         this.safe = false;
         this.use_file = false;
         this.onEnd = true;
+        this.is_company = false;
         window.whigiLogin = this.ngOnInit.bind(this, false);
     }
 
@@ -81,7 +83,7 @@ export class Logging implements OnInit {
             }
         }
         if('token' in localStorage) {
-            this.backend.getProfile().then(function(profile) {
+            this.dataservice.mPublic().then(function(profile) {
                 //Router.go...
                 self.backend.profile = profile;
                 self.dataservice.wentLogin = true;
@@ -235,10 +237,10 @@ export class Logging implements OnInit {
             });
         }
         function complete() {
-            self.backend.createUser(self.username, self.password).then(function() {
+            self.backend.createUser(self.username, self.password, undefined, undefined, self.is_company).then(function() {
                 self.backend.createToken(self.username, self.password, false).then(function(token) {
                     localStorage.setItem('token', token._id);
-                    self.backend.getProfile().then(function(user) {
+                    self.dataservice.mPublic().then(function(user) {
                         self.backend.profile = user;
                         localStorage.setItem('key_decryption', window.sha256(self.password + user.salt));
                         localStorage.setItem('psha', window.sha256(self.password));
@@ -294,12 +296,12 @@ export class Logging implements OnInit {
         }
 
         window.$('.iuname,.ipass,.imail,.irecupid,.ifname,.ilname').removeClass('has-error');
-        if(!this.fname || this.fname == '') {
+        if(!this.is_company && (!this.fname || this.fname == '')) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.names'));
             window.$('.ifname').addClass('has-error');
             return;
         }
-        if(!this.lname || this.lname == '') {
+        if(!this.is_company && (!this.lname || this.lname == '')) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.names'));
             window.$('.ilname').addClass('has-error');
             return;

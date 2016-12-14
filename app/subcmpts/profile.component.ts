@@ -57,7 +57,7 @@ export class Profile implements OnInit {
             //Back from eID
             this.onEid = false;
             this.notif.success(this.translate.instant('success'), this.translate.instant('profile.eidRead'));
-            this.backend.getProfile().then(function(profile) {
+            this.dataservice.mPublic().then(function(profile) {
                 self.backend.profile = profile;
                 self.dataservice.newData(true, 'profile/address/eid', self.backend.profile.company_info.address, false, 0).then(function() {
                     self.dataservice.newData(true, 'profile/rrn', self.backend.profile.company_info.rrn, false, 0);
@@ -82,26 +82,6 @@ export class Profile implements OnInit {
                 sessionStorage.removeItem('return_url');
                 self.router.navigate(ret);
             }
-        });
-    }
-
-    /**
-     * Remove a granted OAuth token.
-     * @function remove
-     * @public
-     * @param {String} id Token id.
-     */
-    remove(id: string) {
-        var self = this;
-        this.backend.removeOAuth(id).then(function() {
-            for(var i = 0; i < self.backend.profile.oauth.length; i++) {
-                if(self.backend.profile.oauth[i].id == id) {
-                    delete self.backend.profile.oauth[i];
-                    break;
-                }
-            }
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noRevoke'));
         });
     }
 

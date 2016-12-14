@@ -41,7 +41,7 @@ export class Loginas implements OnInit {
             var user = param['user'], pwd = atob(decodeURIComponent(param['pwd']));
             self.backend.createToken(user, pwd, false).then(function(ticket) {
                 localStorage.setItem('token', ticket._id);
-                self.backend.getProfile().then(function(profile) {
+                self.dataservice.mPublic().then(function(profile) {
                     //Router.go...
                     self.backend.profile = profile;
                     self.dataservice.extendModules();

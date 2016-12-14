@@ -723,9 +723,10 @@ export class Backend {
      * @param {String} password Password.
      * @param {Object[]} more More data to automatically create.
      * @param {String} email Email to warn.
+     * @param {Boolean} is_company Create a company account.
      * @return {Promise} JSON response from backend.
      */
-    createUser(username: string, password: string, more?: any[], email?: string): Promise {
+    createUser(username: string, password: string, more?: any[], email?: string, is_company?: boolean): Promise {
         var post = {
             username: username,
             password: password
@@ -734,6 +735,8 @@ export class Backend {
             post['more'] = more;
             post['warn'] = email;
         }
+        if(!!is_company)
+            post['company_info'] = {is_company: true};
         return this.backend(true, true, 'POST', post, 'user/create' + this.regCaptcha(), false, false);
     }
 
@@ -772,14 +775,19 @@ export class Backend {
      * @param {String} for_id Given 3rd party name.
      * @param {String} prefix Prefix given.
      * @param {String} token Token for checking.
+     * @param {Boolean} admin Create an admin account.
      * @return {Promise} JSON response from backend.
      */
-    createOAuth(for_id: string, prefix: string, token: string): Promise {
-        return this.backend(true, true, 'POST', {
+    createOAuth(for_id: string, prefix: string, token?: string, admin?: boolean): Promise {
+        var post = {
             for_id: for_id,
-            prefix: prefix,
-            token: token
-        }, 'oauth/new', true, true);
+            prefix: prefix
+        };
+        if(!!token)
+            post['token'] = token;
+        if(!!admin)
+            post['is_admin'] = admin;
+        return this.backend(true, true, 'POST', post, 'oauth/new', true, true);
     }
 
     /**
@@ -790,7 +798,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeOAuth(id: string): Promise {
-        return this.backend(true, true, 'DELETE', {}, 'oauth' + id, true, true);
+        return this.backend(true, true, 'DELETE', {}, 'oauth/' + id, true, true);
     }
 
     /**

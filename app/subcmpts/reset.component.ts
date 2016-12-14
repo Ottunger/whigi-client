@@ -96,7 +96,7 @@ export class Reset implements OnInit, OnDestroy {
         if(this.password == this.password2) {
             this.backend.createToken(this.id, this.pwd, false).then(function(token) {
                 localStorage.setItem('token', token._id);
-                self.backend.getProfile().then(function(user) {
+                self.dataservice.mPublic().then(function(user) {
                     //Router.go...
                     self.backend.profile = user;
                     self.dataservice.wentLogin = true;

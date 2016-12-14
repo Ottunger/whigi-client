@@ -51,6 +51,7 @@
    "intro.evtNext": "Go to one of the next wizards if several changes are occuring together. Everything will be validated only when you submit the whole form, applying changes and redirections if any.",
 
    "login.title": "Login to your account",
+   "login.is_company": "Create a company account",
    "login.alert": "Enter any username and password.",
    "login.remember": "Remember me",
    "login.register": "Don't have an account yet ?",
@@ -92,6 +93,7 @@
    "header.save": "Save custom favorites",
    "header.help": "Launch help",
 
+   "profile.oauths": "Authorizations",
    "profile.logout": "Log out",
    "profile.logoutAll": "Log out all",
    "profile.noLogout": "Cannot log out safely",
@@ -106,7 +108,8 @@
    "profile.changed": "Profile updated",
    "profile.revoke": "Revoke accesses to all granted vaults",
    "profile.revokeID": "ID to ban",
-   "profile.oauth": "OAuth permissions",
+   "profile.oauth": "OAuth given permissions",
+   "profile.mines": "My OAuth permissions",
    "profile.warnChange": "Password changed, but recovery options not",
    "profile.generics": "Generic data fields",
    "profile.eidRead": "Data imported from eID",
@@ -122,6 +125,12 @@
    "profile.happenings": "Life events",
    "profile.changeExplain": "Change your password here if you think you need to. If you have received your account through a third party, you'll be able to select a new username as well. Be careful! Once selected, you won't be able to change username again.",
    "profile.noShare": "You currently have no one to ban! Why not start sharing some data?",
+   "profile.loginas": "Connect as",
+   "profile.loginassure": "Are you sure you want to switch account? You will have to log out before being able to use this account again.",
+   "profile.noGet": "Cannot get ticket, is the share revoked?",
+   "profile.createo": "Create a new token",
+   "profile.auth": "Username to grant",
+   "profile.createExplain": "Choose here a Whigi account to grant a ticket to, and type the prefix for which you'd like the user to get access. This cannot be your root folder. If your company requires a two-step validation process, this wizard will not be able to issue new permissions.",
    
    "happenings.move": "I'm moving places",
    "happenings.partners": "I change partner",
@@ -185,6 +194,9 @@
    "oauth.prefix": "Desired access to: ",
    "oauth.ok": "Give access",
    "oauth.nok": "Deny access",
+   "oauth.is_admin": "Admin account",
+   "oauth.noGrant": "Cannot grant access for this user...",
+   "oauth.granted": "OAuth ticket given",
 
    "account.question": "Requests for access creation",
    "account.explain": "By accepting the request, you do the same as creating manually a vault of the listed data below towards the given ID. The remote user WILL NOT receive your keys.",
@@ -263,7 +275,7 @@
 
    "generics.any": "Any module",
    "generics.profile": "My personal data",
-   "generics.corporate": "My companies",
+   "generics.corporate": "Companies",
    "generics.family": "My relations",
 
    "generics.perso1": "Basic info",
@@ -272,7 +284,8 @@
    "generics.family1": "Family members",
    "generics.family2": "Partners",
    "generics.family3": "Work relations",
-   "generics.corp1": "Corporates",
+   "generics.corp1": "Denominations",
+   "generics.corp2": "Locations",
 
    "generics.mother": "Mother",
    "generics.father": "Father",

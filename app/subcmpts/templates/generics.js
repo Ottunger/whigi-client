@@ -5,11 +5,6 @@ exports.m = {
             "left_num": 1000,
             "holds": ["generics.perso1", "generics.perso2", "generics.perso3"]
         },
-        "generics.corporate": {
-            "is_i18n": true,
-            "left_num": 1001,
-            "holds": ["generics.corp1"]
-        },
         "generics.family": {
             "is_i18n": true,
             "left_num": 1002,
@@ -31,11 +26,6 @@ exports.m = {
             "open": false,
             "is_i18n": true,
             "holds": ["profile/identity", "profile/bank"]
-        },
-        "generics.corp1": {
-            "open": true,
-            "is_i18n": true,
-            "holds": ["corporate", "corporate/address"]
         },
         "generics.family1": {
             "open": true,
