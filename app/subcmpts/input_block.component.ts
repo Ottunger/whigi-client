@@ -69,6 +69,7 @@ export class InputBlock implements OnInit {
                     if(params.length > 0)
                         self.def();
                 } else {
+                    delete self.within;
                     if(!!params)
                         self.within = params;
                     self.def();

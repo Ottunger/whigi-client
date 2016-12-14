@@ -675,7 +675,20 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Check if a row is in edit.
+     * @function rowInEdit
+     * @public
+     * @param {String} id Who to check.
+     * @return {Boolean} In edit.
+     */
+    rowInEdit(id: string): boolean {
+        return !!window.$('#' + id).closest('.input-holder-' + this.dataservice.sanit(this.group)).find('.in-edit').length;
+    }
+
+    /**
      * Returns if in edit.
+     * @function addDisabled
+     * @public
      * @param {String} who Full name.
      * @return {Boolean} In edit.
      */
@@ -722,6 +735,8 @@ export class GenericBlock implements OnInit {
             var g = window.$(this).attr('data-g');
             self.tgData(f, g, true);
         });
+        //Reset which will be added
+        this.foranew = {};
         //Reset the names
         this.ass_name = {};
         this.popList();
