@@ -122,7 +122,9 @@
                     <ul class="dropdown-menu dropdown-menu-default">
                         <li *ngIf="!!backend.profile" (click)="router.navigate(backend.userLink())">
                             <a href="javascript:;">
-                                <i class="icon-user"></i> {{ dataservice.forDisplay(backend.profile._id) | translate }} </a>
+                                <i class="icon-user"></i> {{ dataservice.forDisplay(backend.profile._id) | translate }}
+                                <span style="float: right;" class="badge badge-success" *ngIf="!!backend.data_trie">{{ backend.data_trie.count() }}</span>
+                            </a>
                         </li>
                         <li (click)="router.navigate(['/profile'])">
                             <a href="javascript:;">
