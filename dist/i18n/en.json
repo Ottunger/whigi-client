@@ -218,7 +218,7 @@
 
    "userinfo.title": "Information about the user",
    "userinfo.public": "Publicly advertised and checked information: ",
-   "userinfo.name": "Organization name: ",
+   "userinfo.name": "Public name: ",
    "userinfo.set": "Set your public data: ",
    "userinfo.modify": "Validate changes (resets confidence)",
    "userinfo.load": "Load from generics (resets confidence)",
@@ -231,6 +231,10 @@
    "userinfo.modifyPict": "Upload profile picture",
    "userinfo.hid": "Hidden ID",
    "userinfo.request": "Request sentence (contact us to have a translatable one): ",
+   "userinfo.choose": "Modifications upon eID reading",
+   "userinfo.chExplain": "Upon reading of data from eID, choose if the gathered data has to be converted into a new instance, erase an existing one, or not be converted at all.",
+   "userinfo.noerase": "<<Do not erase existing data>>",
+   "userinfo.erase": "<<Replace existing data>>",
    "requests.unspecified": "The user did not specify the purpose of these shares",
    "requests.restoreLine": "Data required by paswword recovery subsystem",
    "requests.gwpLine": "Data required by free WordPress granter subsystem",
@@ -278,7 +282,7 @@
    "generics.any": "Any Module",
    "generics.profile": "My Personal Data",
    "generics.corporate": "Companies",
-   "generics.family": "My Eelations",
+   "generics.family": "My Relations",
 
    "generics.perso1": "Basic info",
    "generics.perso2": "Communication",

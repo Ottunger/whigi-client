@@ -31,6 +31,7 @@ export class Happenings {
     public cstep: {[id :string]: number};
     private resets: {[id: string]: EventEmitter<any>};
     private works: {[id: string]: any[]};
+    private onEid: boolean;
 
     /**
      * Creates the component.
@@ -53,6 +54,7 @@ export class Happenings {
         this.works = {};
         this.resets = {};
         this.cstep = {};
+        this.onEid = true;
 
         this.ha = happenings.h;
         for(var i = 0; i < this.ha.length; i++) {
@@ -70,10 +72,46 @@ export class Happenings {
      * @public
      */
     ngOnInit() {
+        var self = this;
         //Auto expand input_block
         window.$('.wigen2').ready(function() {
             window.$('.wigen2').click();
         });
+        if(this.onEid && /eidok/.test(window.location.href)) {
+            //Back from eID
+            this.onEid = false;
+            this.notif.success(this.translate.instant('success'), this.translate.instant('profile.eidRead'));
+            try {
+                var toreturn = JSON.parse(location.search.replace(/^.*=/, ''));
+                if(toreturn.erase_name) {
+                    self.dataservice.getData('profile/name', false, undefined, true).then(function(data) {
+                        self.dataservice.newData(true, 'profile/name', JSON.stringify({
+                            'generics.first_name': self.backend.profile.company_info.first_name,
+                            'generics.last_name': self.backend.profile.company_info.last_name
+                        }), false, 0, true, data.decr_aes).then(function() {
+                            if(toreturn.erase_addr.substr(0, 2) != '<<') {
+                                function complete(naes?: number[]) {
+                                    naes = naes || self.backend.newAES();
+                                    self.dataservice.newData(true, 'profile/address/' + toreturn.erase_addr, self.backend.profile.company_info.address, false, 0, true, naes).then(function() {}, function() {});
+                                }
+                                //Check if we have this address suitable
+                                if(!!self.backend.profile.data['profile/address/' + toreturn.erase_addr]) {
+                                    if(self.backend.profile.data['profile/address/' + toreturn.erase_addr].id.indexOf('datafragment') == 0) {
+                                        self.dataservice.getData(self.backend.profile.data['profile/address/' + toreturn.erase_addr].id, false).then(function(data) {
+                                            complete(data.decr_aes);
+                                        }, function(e) {});
+                                    } else {
+                                        complete();
+                                    }
+                                }
+                            }
+                        }, function(e) {});
+                    }, function(e) {});
+                }
+            } catch(e) {
+                console.log(e);
+            }
+        }
     }
 
     /**

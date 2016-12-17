@@ -23,6 +23,8 @@ export class Userinfo implements OnInit {
     @Input() user: any;
     @Input() ready: EventEmitter<any>;
     public bce: string;
+    public erase_name: string;
+    public erase_addr: string;
     private pict: string;
 
     /**
@@ -37,7 +39,8 @@ export class Userinfo implements OnInit {
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
         private dataservice: Data, private check: ApplicationRef) {
-
+        this.erase_addr = this.translate.instant('__no');
+        this.erase_name = this.translate.instant('__no');
     }
 
     /**
@@ -50,6 +53,9 @@ export class Userinfo implements OnInit {
         window.$('#eidform').ready(function() {
             window.$('#eidform').attr('method', 'get');
         });
+        setTimeout(function() {
+            window.$("input[name='erase_addr']").attr('list', 'dtladdr');
+        }, 500);
         if(!!this.ready) {
             this.ready.subscribe(function(user) {
                 self.user = user;
@@ -63,6 +69,35 @@ export class Userinfo implements OnInit {
                 self.dataservice.picts(self.user, 'pict-user');
             }, 30);
         }
+    }
+
+    /**
+     * Datas we have.
+     * @function datasAt
+     * @public
+     * @param {String} Path.
+     * @return {String[]} Names we have.
+     */
+    datasAt(path: string): string[] {
+        return this.backend.data_trie.suggestions(path + '/', '/').sort().filter(function(el) {
+            return el.charAt(el.length - 1) != '/';
+        }).map(function(el) {
+            return el.replace(/.+\//, '');
+        });
+    }
+
+    /**
+     * Prepares to save data.
+     * @function toReturn
+     * @public
+     */
+    toReturn() {
+        var val = JSON.stringify({
+           erase_name: this.erase_name.charAt(2) == 'R',
+           erase_addr: this.erase_addr 
+        });
+        window.$("input[name='toreturn']").val(val);
+        window.$('#eidform').submit();
     }
 
     /**

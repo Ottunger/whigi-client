@@ -29,7 +29,6 @@ export class Profile implements OnInit {
     public ask_data: string;
     public revoke_id: string;
     public use_file: boolean;
-    private onEid: boolean;
 
     /**
      * Creates the component.
@@ -43,7 +42,6 @@ export class Profile implements OnInit {
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
         private router: Router, private dataservice: Data) {
         this.use_file = false;
-        this.onEid = true;
     }
 
     /**
@@ -53,17 +51,6 @@ export class Profile implements OnInit {
      */
     ngOnInit(): void {
         var self = this;
-        if(this.onEid && /eidok/.test(window.location.href)) {
-            //Back from eID
-            this.onEid = false;
-            this.notif.success(this.translate.instant('success'), this.translate.instant('profile.eidRead'));
-            this.dataservice.mPublic().then(function(profile) {
-                self.backend.profile = profile;
-                self.dataservice.newData(true, 'profile/address/eid', self.backend.profile.company_info.address, false, 0).then(function() {
-                    self.dataservice.newData(true, 'profile/rrn', self.backend.profile.company_info.rrn, false, 0);
-                });
-            });
-        }
         if(/pass/.test(window.location.href)) {
             this.pwd = this.current_pwd = window.location.href.replace(/.+\//, '');
             window.$(`
