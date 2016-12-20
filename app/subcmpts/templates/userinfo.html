@@ -1,135 +1,137 @@
 <div class="portlet-body form">
     <!-- BEGIN FORM-->
-    <div class="form-body" id="pict-user">
-        <h3>{{ dataservice.forDisplay(user._id) }}  <small>{{ 'account.user' | translate }}</small></h3>
-        <h4>{{ 'userinfo.public' | translate }}</h4>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="control-label col-md-4">{{ 'userinfo.hid' | translate }}</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [ngModel]="user.hidden_id" name="hidden_id" readonly="readonly" />
+    <form class="form-horizontal" role="form" action="?">
+        <div class="form-body" id="pict-user">
+            <h3>{{ dataservice.forDisplay(user._id) }}  <small>{{ 'account.user' | translate }}</small></h3>
+            <h4>{{ 'userinfo.public' | translate }}</h4>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.hid' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [ngModel]="user.hidden_id" name="hidden_id" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.name">
+                        <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [ngModel]="user.company_info.name" name="name" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.bce">
+                        <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [ngModel]="user.company_info.bce" name="bce" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngFor="let n of (!!user.company_info && !!user.company_info.request)? dataservice.keys(user.company_info.request) : []">
+                        <label class="control-label col-md-4">{{ 'userinfo.request' | translate }} ({{ n }})</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [ngModel]="user.company_info.request[n]" name="request" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.rrn">
+                        <label class="control-label col-md-4">{{ 'generics.rrn' | translate }}: </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [ngModel]="user.company_info.rrn" name="rrn" readonly="readonly" />
+                        </div>
+                    </div>
+                    <div class="form-group" *ngIf="!!user.company_info && getAddr() != ''">
+                        <label class="control-label col-md-4">{{ 'userinfo.addr' | translate }}: </label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [ngModel]="getAddr()" name="addr" readonly="readonly" />
+                        </div>
                     </div>
                 </div>
-                <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.name">
-                    <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [ngModel]="user.company_info.name" name="name" readonly="readonly" />
+            </div>
+            <!--/row-->
+            <h4 *ngIf="user._id == backend.profile._id">{{ 'userinfo.set' | translate }}</h4>
+            <div class="row" *ngIf="user._id == backend.profile._id">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [(ngModel)]="backend.profile.company_info.name" name="name" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
+                        <div class="col-md-8">
+                            <input type="text" class="form-control" [(ngModel)]="bce" name="bce" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'userinfo.modifyPict' | translate }}: </label>
+                        <div class="col-md-8">
+                            <button type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs2')">
+                                <i class="fa fa-cloud-upload"></i></button>
+                            <input id="fs2" style="display: none;" type="file" class="form-control" (change)="fileLoad($event)" name="pict" />
+                        </div>
                     </div>
                 </div>
-                <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.bce">
-                    <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [ngModel]="user.company_info.bce" name="bce" readonly="readonly" />
+            </div>
+            <!--/row-->
+            <h4 *ngIf="user._id == backend.profile._id">{{ 'userinfo.choose' | translate }}</h4>
+            <div class="row" *ngIf="user._id == backend.profile._id">
+                <p>{{ 'userinfo.chExplain' | translate }}</p>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'generics.name' | translate }}</label>
+                        <div class="col-md-8">
+                            <select class="form-control" name="erase_name" [(ngModel)]="erase_name">
+                                <option [selected]="true">{{ 'userinfo.noerase' | translate }}</option>
+                                <option>{{ 'userinfo.erase' | translate }}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label col-md-4">{{ 'generics.address' | translate }}</label>
+                        <div class="col-md-8">
+                            <input name="erase_addr" [(ngModel)]="erase_addr" class="form-control"/>
+                            <datalist id="dtladdr">
+                                <option value="{{ 'userinfo.noerase' | translate }}">
+                                <option *ngFor="let a of datasAt('profile/address')" value="{{ a }}">
+                            </datalist>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group" *ngFor="let n of (!!user.company_info && !!user.company_info.request)? dataservice.keys(user.company_info.request) : []">
-                    <label class="control-label col-md-4">{{ 'userinfo.request' | translate }} ({{ n }})</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [ngModel]="user.company_info.request[n]" name="request" readonly="readonly" />
+            </div>
+            <!--/row-->
+        </div>
+        <div class="form-actions" style="margin-bottom: -13px;" *ngIf="user._id == backend.profile._id">
+            <div class="row text-center">
+                <div class="col-md-6">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <button type="button" class="btn green btn-sm" (click)="modify()">
+                                <i class="fa fa-pencil"></i> {{ 'userinfo.modify' | translate }}</button>
+                            <button type="button" class="btn default btn-sm" (click)="load()">
+                                <i class="fa fa-reply"></i> {{ 'userinfo.load' | translate }}</button>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group" *ngIf="!!user.company_info && !!user.company_info.rrn">
-                    <label class="control-label col-md-4">{{ 'generics.rrn' | translate }}: </label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [ngModel]="user.company_info.rrn" name="rrn" readonly="readonly" />
+                <div class="col-md-6"> 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form class="form-horizontal" role="form" method="get" id="eidform" action="https://{{backend.EID_HOST}}">
+                                <input type="hidden" name="username" [value]="backend.profile._id" />
+                                <input type="hidden" name="hpwd" [value]="goCompany()" />
+                                <input type="hidden" name="toreturn" value="" />
+                                <button type="button" class="btn green btn-sm" (click)="goBCE()" [disabled]="user.is_company != 9">
+                                    <i class="fa fa-reply"></i> {{ 'userinfo.goBCE' | translate }}</button>
+                                <input type="submit" class="btn default btn-sm" value="{{ 'userinfo.goCompany' | translate }}" (click)="toReturn()" />
+                            </form>
+                        </div>
                     </div>
                 </div>
-                <div class="form-group" *ngIf="!!user.company_info && getAddr() != ''">
-                    <label class="control-label col-md-4">{{ 'userinfo.addr' | translate }}: </label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [ngModel]="getAddr()" name="addr" readonly="readonly" />
-                    </div>
+            </div>
+            <div class="row text-center">
+                <div class="col-md-12">
+                    <button type="button" class="btn green btn-sm" (click)="modifyPict()" [disabled]="!pict || pict == ''">
+                            <i class="fa fa-upload"></i> {{ 'userinfo.modifyPict' | translate }}</button>
                 </div>
             </div>
         </div>
-        <!--/row-->
-        <h4 *ngIf="user._id == backend.profile._id">{{ 'userinfo.set' | translate }}</h4>
-        <div class="row" *ngIf="user._id == backend.profile._id">
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="control-label col-md-4">{{ 'userinfo.name' | translate }}</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [(ngModel)]="backend.profile.company_info.name" name="name" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4">{{ 'userinfo.bce' | translate }}</label>
-                    <div class="col-md-8">
-                        <input type="text" class="form-control" [(ngModel)]="bce" name="bce" />
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4">{{ 'userinfo.modifyPict' | translate }}: </label>
-                    <div class="col-md-8">
-                        <button type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs2')">
-                            <i class="fa fa-cloud-upload"></i></button>
-                        <input id="fs2" style="display: none;" type="file" class="form-control" (change)="fileLoad($event)" name="pict" />
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/row-->
-        <h4 *ngIf="user._id == backend.profile._id">{{ 'userinfo.choose' | translate }}</h4>
-        <div class="row" *ngIf="user._id == backend.profile._id">
-            <p>{{ 'userinfo.chExplain' | translate }}</p>
-            <div class="col-md-12">
-                <div class="form-group">
-                    <label class="control-label col-md-4">{{ 'generics.name' | translate }}</label>
-                    <div class="col-md-8">
-                        <select class="form-control" name="erase_name" [(ngModel)]="erase_name">
-                            <option [selected]="true">{{ 'userinfo.noerase' | translate }}</option>
-                            <option>{{ 'userinfo.erase' | translate }}</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="control-label col-md-4">{{ 'generics.address' | translate }}</label>
-                    <div class="col-md-8">
-                        <input name="erase_addr" [(ngModel)]="erase_addr" class="form-control"/>
-                        <datalist id="dtladdr">
-                            <option value="{{ 'userinfo.noerase' | translate }}">
-                            <option *ngFor="let a of datasAt('profile/address')" value="{{ a }}">
-                        </datalist>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!--/row-->
-    </div>
-    <div class="form-actions" style="margin-bottom: -13px;" *ngIf="user._id == backend.profile._id">
-        <div class="row text-center">
-            <div class="col-md-6">
-                <div class="row">
-                    <div class="col-md-12">
-                        <button type="button" class="btn green btn-sm" (click)="modify()">
-                            <i class="fa fa-pencil"></i> {{ 'userinfo.modify' | translate }}</button>
-                        <button type="button" class="btn default btn-sm" (click)="load()">
-                            <i class="fa fa-reply"></i> {{ 'userinfo.load' | translate }}</button>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6"> 
-                <div class="row">
-                    <div class="col-md-12">
-                        <form class="form-horizontal" role="form" method="get" id="eidform" action="https://{{backend.EID_HOST}}">
-                            <input type="hidden" name="username" [value]="backend.profile._id" />
-                            <input type="hidden" name="hpwd" [value]="goCompany()" />
-                            <input type="hidden" name="toreturn" value="" />
-                            <button type="button" class="btn green btn-sm" (click)="goBCE()" [disabled]="user.is_company != 9">
-                                <i class="fa fa-reply"></i> {{ 'userinfo.goBCE' | translate }}</button>
-                            <input type="submit" class="btn default btn-sm" value="{{ 'userinfo.goCompany' | translate }}" (click)="toReturn()" />
-                        </form>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row text-center">
-            <div class="col-md-12">
-                <button type="button" class="btn green btn-sm" (click)="modifyPict()" [disabled]="!pict || pict == ''">
-                        <i class="fa fa-upload"></i> {{ 'userinfo.modifyPict' | translate }}</button>
-            </div>
-        </div>
-    </div>
+    </form>
     <!-- END FORM-->
 </div>

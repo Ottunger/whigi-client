@@ -15,7 +15,7 @@ exports.m = {
         "generics.perso1": {
             "open": true,
             "is_i18n": true,
-            "holds": ["profile/name", "profile/email", "profile/lang", "profile/country", "profile/birthdata"]
+            "holds": ["profile/name", "profile/email", "profile/lang", "profile/nationalities"]
         },
         "generics.perso2": {
             "open": true,
@@ -25,7 +25,7 @@ exports.m = {
         "generics.perso3": {
             "open": false,
             "is_i18n": true,
-            "holds": ["profile/identity", "profile/bank"]
+            "holds": ["profile/birthdata", "profile/identity", "profile/bank"]
         },
         "generics.family1": {
             "open": true,
