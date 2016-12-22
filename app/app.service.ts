@@ -83,10 +83,10 @@ export class Backend {
                 self.generics_trie.addMilestones(keys[i], '/');
                 self.generics_trie.add(keys[i], undefined);
             }
-        });
+        }, function(e) {});
         this.backend(true, false, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
             self.generics_paths = response;
-        });
+        }, function(e) {});
         window.WHIGI_URL = this.BASE_URL;
     }
 
