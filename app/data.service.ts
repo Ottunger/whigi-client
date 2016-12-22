@@ -457,10 +457,10 @@ export class Data {
      * Store the user data's. Build the trie's for data and whared_with_me.
      * @function listData
      * @public
-     * @param {Boolean} resolve Whether to perform heavy computations.
+     * @param {Boolean} reso Whether to perform heavy computations.
      * @return {Promise} Promise.
      */
-    listData(resolve: boolean): Promise {
+    listData(reso: boolean): Promise {
         var self = this;
 
         return new Promise(function(resolve, reject) {
@@ -479,7 +479,7 @@ export class Data {
                     self.backend.data_trie.addMilestones(keys[i], '/');
                     self.backend.data_trie.add(keys[i], self.backend.profile.data[keys[i]]);
                     //If heavy is on, check for version discordance
-                    if(resolve) {
+                    if(reso) {
                         var gen_name = undefined;
                         if(!!self.backend.generics[keys[i]]) {
                             gen_name = keys[i];
@@ -511,7 +511,7 @@ export class Data {
                         self.backend.shared_with_me_trie.addMilestones(keys[i] + '/' + insides[j], '/');
                         self.backend.shared_with_me_trie.add(keys[i] + '/' + insides[j], self.backend.profile.shared_with_me[keys[i]][insides[j]]);
                         //If heavy is on, check if storable data
-                        if(resolve) {
+                        if(reso) {
                             if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
                                 var k = keys[i], kkstr = insides[j];
                                 self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {

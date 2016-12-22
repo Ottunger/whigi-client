@@ -75,7 +75,7 @@ export class Backend {
         this.forceMove = false;
         this.data_loaded = false;
         this.rsa_key = [];
-        self.generics_trie = new Trie();
+        this.generics_trie = new Trie();
         this.backend(true, false, 'GET', {}, 'generics.json', false, false).then(function(response) {
             self.generics = response;
             var keys = Object.getOwnPropertyNames(response);
