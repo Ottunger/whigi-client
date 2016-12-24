@@ -68,7 +68,7 @@ export class Oauths implements OnInit {
             return el.substr(0, el.length - 1);
         });
         this.ongs.forEach(function(ong) {
-            this.backend.getUser(ong).then(function(user) {
+            self.backend.getUser(ong).then(function(user) {
                 if(!!user.company_info && !!user.company_info.name)
                     self.usernames[ong] = user.company_info.name;
             }, function(e) {});
@@ -162,7 +162,7 @@ export class Oauths implements OnInit {
                     self.dataservice.extendModules();
                     localStorage.setItem('key_decryption', obj.key_decryption);
                     localStorage.setItem('psha', obj.psha);
-                    self.router.navigate(['/filesystem', 'data']);
+                    profile.company_info.is_company? self.router.navigate(['/filesystem', 'data']) : self.router.navigate(['/generics']);
                 }, function(e) {
                     localStorage.removeItem('token');
                     self.router.navigate(['/llight']);

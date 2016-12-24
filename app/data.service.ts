@@ -438,7 +438,9 @@ export class Data {
                     ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key] || false;
             }
             if('json_from_ask' in data_source)
-                since = data_source['json_from_ask'];
+                since = window.parseInt(new window.moment(data_source['json_from_ask'], 'DD/MM/YYYY').format('x'));
+            if(!!thisgen.json_from_key)
+                since = window.parseInt(new window.moment(ret[thisgen.json_from_key], 'DD/MM/YYYY').format('x'));
             raw_data = JSON.stringify(ret);
         }
         if(thisgen.is_dated) {
@@ -1076,7 +1078,7 @@ export class Data {
         sessionStorage.setItem('lang', lang);
         this.translate.use(lang);
         if(this.backend.data_loaded && skip !== true)
-            this.backend.remLang(lang);
+            this.backend.remLang(lang).then(function() {}, function(e) {});
     }
 
 }

@@ -100,7 +100,7 @@ export class InputBlock implements OnInit {
             window.$('.pickgen' + self.dataservice.sanit(self.g) + 'json_from_ask').ready(function() {
                 window.$('.pickgen' + self.dataservice.sanit(self.g) + 'json_from_ask').datetimepicker()
                     .datetimepicker('options', {format: 'DD/MM/YYYY'}).on('dp.change', function(e) {
-                        self.new_datas[self.backend.generics[self.g]['json_from_ask']] = e.date.format('x');
+                        self.new_datas['json_from_ask'] = e.date.format('DD/MM/YYYY');
                 });
             });
         }

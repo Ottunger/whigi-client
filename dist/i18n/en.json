@@ -124,7 +124,7 @@
 
    "profile.oauths": "Authorizations",
    "profile.logout": "Log out",
-   "profile.logoutAll": "Log out all",
+   "profile.logoutAll": "Log all sessions out",
    "profile.noLogout": "Cannot log out safely",
    "profile.mine": "Browse my data",
    "profile.shared": "Shared with me",
@@ -311,7 +311,7 @@
 
    "_comment": "HERE START TRANSLATIONS FOR GENERICS",
 
-   "generics.any": "Any Module",
+   "generics.any": "Whole Dataset",
    "generics.profile": "My Personal Data",
    "generics.corporate": "Companies",
    "generics.family": "My Relations",
@@ -368,8 +368,8 @@
    "generics.corporate_name": "Corporate names",
    "generics.address": "Addresses",
    "generics.street": "Street",
-   "generics.num": "House number",
-   "generics.letterbox": "Box number",
+   "generics.num": "House/Building number",
+   "generics.letterbox": "Box number/Postal box",
    "generics.more": "Place name",
    "generics.careof": "Care of name",
    "generics.postcode": "Postcode",
@@ -401,6 +401,7 @@
    "generics.passports": "Passports",
    "generics.issuer": "Issuer",
    "generics.docNo": "Document number",
+   "generics.deathdate": "Death date",
 
    "generics.badurl": "Wrong URL format",
    "generics.badtwitter": "Wrong twitter account format",

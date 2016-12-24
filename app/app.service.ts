@@ -43,7 +43,8 @@ export class Backend {
         requires?: string,
         modes?: string[][],
         share_as_folder?: boolean,
-        json_from_ask?: true
+        json_from_ask?: true,
+        json_from_key?: string
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {

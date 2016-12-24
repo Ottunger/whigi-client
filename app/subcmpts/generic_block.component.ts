@@ -146,6 +146,19 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Background of date pickers.
+     * @function bkDaters
+     * @public
+     * @param {String} fname Who to check.
+     * @return {String} Style.
+     */
+    bkDaters(fname: string): string {
+        var div = window.$('#sincefrom' + this.dataservice.sanit(fname));
+        var val = div.find('input').val();
+        return val == '01/01/1900 00:00'? '#ff5' : '#fff';
+    }
+
+    /**
      * Registers all entered inputs.
      * @function registerAll
      * @public

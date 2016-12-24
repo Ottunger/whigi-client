@@ -122,7 +122,7 @@
 
    "profile.oauths": "Permissions",
    "profile.logout": "Déconnecter",
-   "profile.logoutAll": "Tout déconnecter",
+   "profile.logoutAll": "Fermer toute session",
    "profile.noLogout": "Impossible de quitter avec précautions",
    "profile.mine": "Naviguer dans mes · données",
    "profile.shared": "Partagé avec moi",
@@ -308,7 +308,7 @@
 
    "_comment": "HERE START TRANSLATIONS FOR GENERICS",
 
-   "generics.any": "Tous les Modules",
+   "generics.any": "Entièreté des Données",
    "generics.profile": "Mes Données Personnelles",
    "generics.corporate": "Entreprises",
    "generics.family": "Mes Relations",
@@ -366,7 +366,7 @@
    "generics.address": "Adresses",
    "generics.street": "Rue",
    "generics.num": "Numéro",
-   "generics.letterbox": "Boîte",
+   "generics.letterbox": "Boîte/Boîte postale",
    "generics.more": "Lieu-dit",
    "generics.careof": "A l'attention de",
    "generics.postcode": "Code postal",
@@ -398,6 +398,7 @@
    "generics.passports": "Passeports",
    "generics.issuer": "Délivreur",
    "generics.docNo": "Numéro du document",
+   "generics.deathdate": "Date de décès",
 
    "generics.badurl": "Mauvais format d'URL",
    "generics.badtwitter": "Mauvais format de compte twitter",
