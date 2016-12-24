@@ -186,7 +186,7 @@ export class Filesystem implements OnInit {
             return el.charAt(el.length - 1) != '/';
         }).map(function(el: string): string {
             return el.replace(/.+\//, '');
-        });;
+        });
     }
 
     /**
@@ -200,7 +200,7 @@ export class Filesystem implements OnInit {
             return el.charAt(el.length - 1) == '/';
         }).map(function(el: string): string {
             return el.slice(0, -1).replace(/.+\//, '');
-        });;
+        });
     }
 
     /**

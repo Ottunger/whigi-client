@@ -79,6 +79,8 @@ export class Data {
         return new Promise(function(resolve, reject) {
             self.backend.getProfile().then(function(p) {
                 self.m = (!!p.company_info && !!p.company_info.is_company)? modules_corpos.m : modules.m;
+                if(!!p.company_info && !!p.company_info.lang)
+                    self.setLang(p.company_info.lang, true);
                 resolve(p);
             }, function(e) {
                 reject(e);

@@ -42,6 +42,33 @@
    "skip": "Skip",
    "done": "End",
    "hint": "Got it",
+   "warning": "Warning",
+   "value": "Value",
+
+   "menus.contacts": "Contacts",
+   "menus.mine": "Shared To Me",
+   "menus.got": "Shared By Me",
+
+   "settings.title": "Settings",
+   "settings.language": "Language",
+   "settings.logout": "Logout from other devices",
+   "settings.endpoint": "Endpoint",
+   "settings.encrypt": "Encrypt here",
+
+   "contacts.title": "Contacts Synchronization",
+   "contacts.noContacts": "Cannot read your contacts!",
+   "contacts.manage": "Manage this contact",
+   "contacts.unbind": "Unbind this contact",
+   "contacts.bind": "Bind to:",
+   "contacts.noAction": "Cannot use this contact. Verify that at least have one email.",
+   "contacts.saved": "Configuration saved",
+   "contacts.noSave": "Configuration could not be saved",
+   "contacts.didBefore": "You already sent a mail to this person to ask for a share, would you like to re-issue the mail?",
+   "contacts.sent": "Request sent.",
+   "contacts.temped": "Configuration written. Save it now?",
+   "contacts.sync": "Synchronize now",
+   "contacts.started": "Synchronization started",
+   "contacts.none": "No contact or cannot read them...",
 
    "intro.regGen": "Save all you have done in this block by clicking here. You will be able once there are changes to acknowledge.",
    "intro.canGen": "Discard any modifications in this block if you've made mistakes.",
@@ -60,6 +87,8 @@
    "login.resetSent": "You will receive a reset link when all key parts are available from different sources!",
    "login.username": "Username",
    "login.pass": "Password",
+   "login.login": "Log in",
+   "login.logout": "Log out",
    "login.password": "Password (8characters min)",
    "login.password2": "Re-type your password",
    "login.email": "Email",
@@ -267,15 +296,16 @@
    "generics.preview": "Full preview",
    "generics.select": "--- Select a value ---",
 
+   "whoishare.title": "Data Shared By Me",
    "whoishare.dname": "ID",
    "whoishare.generic": "Shared field",
    "whoishare.dunno": "Non standardized field",
 
-   "error.notfound": "Introuvable",
-
    "sidebar.add": "Add",
    "sidebar.saved": "Configuration saved",
    "sidebar.noSave": "Configuration could not be saved",
+
+   "error.notfound": "Cannot be found",
 
    "_comment": "HERE START TRANSLATIONS FOR GENERICS",
 
