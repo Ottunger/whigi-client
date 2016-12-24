@@ -26,6 +26,7 @@ export class InputBlock implements OnInit {
     @Input() standalone: boolean;
     @Input() g: string;
     @Input() writeDesc: boolean;
+    @Input() json_from_ask: boolean;
     @Input() prefill: string;
     @Input() reset: EventEmitter<any>;
     @Output() out: EventEmitter<any[]>;
@@ -94,6 +95,14 @@ export class InputBlock implements OnInit {
                     }.bind(i));
                 }
             }
+        }
+        if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_from_ask) {
+            window.$('.pickgen' + self.dataservice.sanit(self.g) + 'json_from_ask').ready(function() {
+                window.$('.pickgen' + self.dataservice.sanit(self.g) + 'json_from_ask').datetimepicker()
+                    .datetimepicker('options', {format: 'DD/MM/YYYY'}).on('dp.change', function(e) {
+                        self.new_datas[self.backend.generics[self.g]['json_from_ask']] = e.date.format('x');
+                });
+            });
         }
     }
 

@@ -174,13 +174,17 @@
                                         <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
                                             {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                         </div>
+                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="!!backend.generics[g][backend.generics[g].length - 1].json_from_ask">
+                                            {{ 'generics.since' | translate }}<span>*</span>:<br />
+                                        </div>
                                     </div>
                                     <!-- end json labels -->
                                 </div>
                                 <!-- input -->
                                 <div class="col-md-6 whigi-sm-pad" *ngIf="(!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')
                                     || backend.generics[g][backend.generics[g].length - 1].instantiable">
-                                    <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                    <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [json_from_ask]="!!backend.generics[g][backend.generics[g].length - 1].json_from_ask"
+                                        [writeDesc]="false"></input_block>
                                 </div>
                             </div>
                             <!-- END SELECT -->

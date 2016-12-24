@@ -3,7 +3,7 @@ exports.m = {
         "generics.profile": {
             "is_i18n": true,
             "left_num": 1000,
-            "holds": ["generics.perso1", "generics.perso2", "generics.perso3"]
+            "holds": ["generics.perso1", "generics.perso2", "generics.perso3", "generics.perso4"]
         },
         "generics.family": {
             "is_i18n": true,
@@ -25,7 +25,12 @@ exports.m = {
         "generics.perso3": {
             "open": false,
             "is_i18n": true,
-            "holds": ["profile/birthdata", "profile/identity", "profile/bank"]
+            "holds": ["profile/birthdata", "profile/identity", "profile/passport"]
+        },
+        "generics.perso4": {
+            "open": false,
+            "is_i18n": true,
+            "holds": ["profile/bank"]
         },
         "generics.family1": {
             "open": true,

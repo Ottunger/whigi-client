@@ -177,7 +177,7 @@ export class Check {
                     }
                     break;
                 case 'France':
-                    if(!/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
+                    if(!/^[0-9a-zA-Z]{12,13}$/.test(loc['generics.eidNo'])) {
                         return 'generics.badeidno';
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(loc['generics.driving'])) {

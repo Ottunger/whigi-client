@@ -46,6 +46,16 @@
             </span>
         </div>
     </div>
+    <div class="json{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" style="display: none;" *ngIf="json_from_ask">
+        <!-- date -->
+        <div class="input-group date pickgen{{ dataservice.sanit(g) }}json_from_ask">
+            <input type='text' class="form-control" [class.grant-required]="true" [(ngModel)]="new_datas['json_from_ask']" name="new_data{{ g + 'json_from_ask' }}"
+                (keyup)="iChange(3)" (change)="iChange(3)"/>
+            <span class="input-group-addon">
+                <span class="glyphicon glyphicon-calendar"></span>
+            </span>
+        </div>
+    </div>
 </div>
 <!-- SELECT -->
 <select class="form-control grant-required" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="regChange(1)" [attr.data-forid]="'#accord' + dataservice.sanit(g)">

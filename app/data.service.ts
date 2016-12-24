@@ -415,7 +415,7 @@ export class Data {
      * @return {String} Built up data or undefined if cannot pass test.
      */
     recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
-        var thisgen = this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1];
+        var thisgen = this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1], since;
         raw_data = (thisgen.mode == 'checkbox')?
             (raw_data || false) : (!!raw_data? raw_data.toString().trim() : '');
         if(raw_data.length > 127 && !as_file)
@@ -437,12 +437,14 @@ export class Data {
                 else if(!!data_source[thisgen.json_keys[i].descr_key])
                     ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key] || false;
             }
+            if('json_from_ask' in data_source)
+                since = data_source['json_from_ask'];
             raw_data = JSON.stringify(ret);
         }
         if(thisgen.is_dated) {
             raw_data = JSON.stringify([{
                 value: as_file? raw_data_file : raw_data,
-                from: thisgen.from_now? (new Date).getTime() : -2208992400000 //Near 1 Jan 1900
+                from: !!since? since : -2208992400000 //Near 1 Jan 1900
             }]);
         } else {
             raw_data = as_file? raw_data_file : raw_data;
