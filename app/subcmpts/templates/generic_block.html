@@ -96,7 +96,7 @@
                                                 </li>
                                                 <li>
                                                     <button type="button" class="btn btn-link" (click)="select(g, g)" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'"
-                                                        data-toggle="tooltip" title="{{ 'generics.preview' | translate }}"><i class="fa fa-eye-slash"></i></button>
+                                                        data-toggle="tooltip" title="{{ 'generics.preview' | translate }}" [disabled]="!cached[g] && cached[g] !== false"><i class="fa fa-eye-slash"></i></button>
                                                 </li>
                                                 <li>
                                                     <tooltip [mode]="'sharesLink'" [uri]="g"></tooltip>
@@ -240,7 +240,7 @@
                                                                     [attr.data-g]="g" [attr.data-f]="g + '/' + d" data-toggle="tooltip" title="{{ 'generics.iEdit' | translate }}"><i class="fa fa-pencil"></i></button>
                                                                 </li>
                                                                 <li>
-                                                                    <button type="button" class="btn btn-link" (click)="select(g, g + '/' + d)"
+                                                                    <button type="button" class="btn btn-link" (click)="select(g, g + '/' + d)" [disabled]="!cached[g + '/' + d] && cached[g + '/' + d] !== false"
                                                                         *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys'"
                                                                         data-toggle="tooltip" title="{{ 'generics.preview' | translate }}"><i class="fa fa-eye-slash"></i></button>
                                                                 </li>

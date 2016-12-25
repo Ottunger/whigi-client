@@ -120,7 +120,18 @@ export class Merge {
                     localStorage.setItem('key_decryption', newKey);
                     
                     self.dataservice.listData(false).then(function() {
-                        var array: any[] = [], index = 0, mapping = {};
+                        var array: {
+                            mode: string,
+                            name: string,
+                            index: number,
+                            is_dated: boolean,
+                            shared_to: {[id: string]: string | {sa: string, ee: Date, trigger: string}},
+                            version?: number,
+                            decr_data?: string,
+                            decr_aes?: number[],
+                            is_bound?: boolean,
+                            is_folder?: boolean
+                        }[] = [], index = 0, mapping = {};
                         var datakeys = Object.getOwnPropertyNames(self.backend.profile.data);
                         for(var i = 0; i < datakeys.length; i++) {
                             if(datakeys[i].indexOf('keys/pwd/') != 0) {
@@ -133,6 +144,8 @@ export class Merge {
                                 });
                             }
                         }
+                        //Manage UI
+                        self.manageUI(true);
                         
                         function next() {
                             if(index < array.length) {
@@ -140,7 +153,7 @@ export class Merge {
                                 index++;
                                 switch(work.mode) {
                                     case 'get':
-                                        self.dataservice.getData(self.backend.profile.data[work.name].id).then(function(data) {
+                                        self.dataservice.getData(self.backend.profile.data[work.name].id, false).then(function(data) {
                                             work.mode = 'getVault',
                                             work.version = data.version;
                                             work.decr_data = data.decr_data;
@@ -150,6 +163,7 @@ export class Merge {
                                             array.push(work);
                                             next();
                                         }, function(e) {
+                                            self.manageUI(false);
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                             self.reloadProfile(currentToken, currentKey, resolve, resolve);
                                         });
@@ -158,9 +172,10 @@ export class Merge {
                                         var keys = Object.getOwnPropertyNames(work.shared_to);
                                         if(keys.length > work.index) {
                                             var key = keys[work.index];
-                                            self.backend.getAccessVault(work.shared_to[key]).then(function(got) {
+                                            self.backend.getAccessVault(<string>work.shared_to[key]).then(function(got) {
                                                 function aget() {
                                                     work.shared_to[key] = {
+                                                        sa: got.shared_as,
                                                         ee: new Date(got.expire_epoch),
                                                         trigger: got.trigger
                                                     };
@@ -168,13 +183,14 @@ export class Merge {
                                                     index--;
                                                     next();
                                                 }
-                                                self.backend.revokeVault(work.shared_to[key]).then(aget, aget);
+                                                self.backend.revokeVault(<string>work.shared_to[key]).then(aget, aget);
                                             }, function(e) {
                                                 if(e.status == 417) {
                                                     work.index++;
                                                     index--;
                                                     next();
                                                 } else {
+                                                    self.manageUI(false);
                                                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                                     self.reloadProfile(currentToken, currentKey, resolve, resolve);
                                                 }
@@ -187,7 +203,7 @@ export class Merge {
                                         break;
                                     case 'new':
                                         function nnew() {
-                                            self.dataservice.newData(work.is_bound, work.name, work.decr_data, work.is_dated, work.version, self.erase).then(function(naes: number[]) {
+                                            self.dataservice.newData(work.is_bound, work.name, work.decr_data, work.is_dated, work.version, self.erase, undefined, false).then(function(naes: number[]) {
                                                 work.mode = 'giveVault',
                                                 work.index = 0;
                                                 work.decr_aes = naes;
@@ -205,9 +221,11 @@ export class Merge {
                                                         array.push(work);
                                                         next();
                                                     }, function(e) {
+                                                        self.manageUI(false);
                                                         self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                                     });
                                                 } else {
+                                                    self.manageUI(false);
                                                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                                 }
                                             });
@@ -217,6 +235,7 @@ export class Merge {
                                             self.backend.closeTo(my_id, my_master).then(function() {
                                                 self.reloadProfile(currentToken, currentKey, nnew, resolve);
                                             }, function(e) {
+                                                self.manageUI(false);
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                                 self.reloadProfile(currentToken, currentKey, resolve, resolve);
                                             });
@@ -228,11 +247,13 @@ export class Merge {
                                         var keys = Object.getOwnPropertyNames(work.shared_to);
                                         if(keys.length > work.index) {
                                             var key = keys[work.index];
-                                            self.dataservice.grantVault(key, work.is_folder? work.name.replace(/\/[^\/]*$/, '') : work.name, work.name, work.decr_data, work.version, work.shared_to[key].ee, work.shared_to[key].trigger, false, work.decr_aes).then(function() {
+                                            self.dataservice.grantVault(key, (<any>work.shared_to[key]).sa, work.name, work.decr_data, work.version, (<any>work.shared_to[key]).ee,
+                                                (<any>work.shared_to[key]).trigger, false, work.decr_aes, false).then(function() {
                                                 work.index++;
                                                 index--;
                                                 next();
                                             }, function(e) {
+                                                self.manageUI(false);
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                                             });
                                         } else {
@@ -243,6 +264,7 @@ export class Merge {
                                         break;
                                 }
                             } else {
+                                self.manageUI(false);
                                 self.notif.success(self.translate.instant('success'), self.translate.instant('merge.merged'));
                                 self.login = '';
                                 self.password = '';
@@ -250,16 +272,19 @@ export class Merge {
                         }
                         next();
                     }, function(e) {
+                        self.manageUI(false);
                         self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                         self.reloadProfile(currentToken, currentKey, resolve, resolve);
                         window.$('.imerging').addClass('has-error');
                     });
                 }, function(e) {
+                    self.manageUI(false);
                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                     self.reloadProfile(currentToken, currentKey, resolve, resolve);
                     window.$('.imerging').addClass('has-error');
                 });
             }, function(e) {
+                self.manageUI(false);
                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
                 self.reloadProfile(currentToken, currentKey, resolve, resolve);
                 window.$('.imerging').addClass('has-error');
@@ -291,6 +316,17 @@ export class Merge {
             self.notif.success(self.translate.instant('success'), self.translate.instant('merge.relog'));
             reject(e);
         });
+    }
+
+    /**
+     * Block UI.
+     * @function manageUI
+     * @private
+     * @param {Boolean} on Toggle.
+     */
+    private manageUI(on: boolean) {
+        this.backend.block_mask = !on;
+        this.backend.block(on);
     }
 
 }

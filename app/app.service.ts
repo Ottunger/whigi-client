@@ -17,6 +17,7 @@ import {Trie} from '../utils/Trie';
 @Injectable()
 export class Backend {
 
+    public block_mask: boolean;
     public forceMove: boolean;
     public profile: any;
     public data_trie: Trie;
@@ -73,6 +74,7 @@ export class Backend {
      */
     constructor(private http: Http, private notif: NotificationsService, private translate: TranslateService, private router: Router) {
         var self = this;
+        this.block_mask = true;
         this.forceMove = false;
         this.data_loaded = false;
         this.rsa_key = [];
@@ -353,6 +355,33 @@ export class Backend {
     }
 
     /**
+     * Block UI.
+     * @function block
+     * @public
+     * @param {Boolean} on Toggle.
+     */
+    block(on: boolean) {
+        if(on) {
+            window.$.blockUI({
+                message: '<img src="img/loading-spinner-blue.gif" />',
+                baseZ: 1e3,
+                css: {
+                    border: '0',
+                    padding: '0',
+                    backgroundColor: 'none'
+                },
+                overlayCSS: {
+                    backgroundColor: '#222',
+                    opacity: .1,
+                    cursor: 'wait'
+                }
+            });
+        } else {
+            window.$.unblockUI();
+        }
+    }
+
+    /**
      * Returns the result of a call to the backend.
      * @function backend
      * @private
@@ -374,27 +403,16 @@ export class Backend {
         var call, puzzle = puzzle || false, self = this, dest;
         var headers: Headers = new Headers();
         num = num || 0;
-        window.$.blockUI({
-            message: '<img src="img/loading-spinner-blue.gif" />',
-            baseZ: 1e3,
-            css: {
-                border: '0',
-                padding: '0',
-                backgroundColor: 'none'
-            },
-            overlayCSS: {
-                backgroundColor: '#222',
-                opacity: .1,
-                cursor: 'wait'
-            }
-        });
+        if(block && this.block_mask)
+            this.block(true);
 
         function accept(resolve, response) {
             var res = response.json();
             if('puzzle' in res) {
                 localStorage.setItem('puzzle', res.puzzle);
             }
-            window.$.unblockUI();
+            if(block && self.block_mask)
+                self.block(false);
             resolve(res);
         }
         function retry(e, resolve, reject) {
@@ -402,7 +420,8 @@ export class Backend {
             if(e.status == 412 && num < 4) {
                 self.backend(whigi, block, method, data, url, auth, token, puzzle, resolve, reject, num + 1);
             } else {
-                window.$.unblockUI();
+                if(block && self.block_mask)
+                    self.block(false);
                 if(e.status == 418 && token) {
                     self.forceReload();
                     //Session has expired; we need to reach login page!
@@ -428,7 +447,7 @@ export class Backend {
                 if(!!ok && !!nok) {
                     self.http.post(dest, JSON.stringify(data), {headers: headers}).toPromise().then(function(response) {
                         accept(ok, response);
-                    }).catch(function(e) {
+                    }, function(e) {
                         retry(e, ok, nok);
                     });
                     return;
@@ -436,7 +455,7 @@ export class Backend {
                 return new Promise(function(resolve, reject) {
                     self.http.post(dest, JSON.stringify(data), {headers: headers}).toPromise().then(function(response) {
                         accept(resolve, response);
-                    }).catch(function(e) {
+                    }, function(e) {
                         retry(e, resolve, reject);
                     });
                 });
@@ -445,7 +464,7 @@ export class Backend {
                 if(!!ok && !!nok) {
                     self.http.delete(dest, {headers: headers}).toPromise().then(function(response) {
                         accept(ok, response);
-                    }).catch(function(e) {
+                    }, function(e) {
                         retry(e, ok, nok);
                     });
                     return;
@@ -453,7 +472,7 @@ export class Backend {
                return new Promise(function(resolve, reject) {
                     self.http.delete(dest, {headers: headers}).toPromise().then(function(response) {
                         accept(resolve, response);
-                    }).catch(function(e) {
+                    }, function(e) {
                         retry(e, resolve, reject);
                     });
                 });
@@ -463,7 +482,7 @@ export class Backend {
                 if(!!ok && !!nok) {
                     self.http.get(dest, {headers: headers}).toPromise().then(function(response) {
                         accept(ok, response);
-                    }).catch(function(e) {
+                    }, function(e) {
                         retry(e, ok, nok);
                     });
                     return;
@@ -471,7 +490,7 @@ export class Backend {
                 return new Promise(function(resolve, reject) {
                     self.http.get(dest, {headers: headers}).toPromise().then(function(response) {
                         accept(resolve, response);
-                    }).catch(function(e) {
+                    }, function(e) {
                         retry(e, resolve, reject);
                     });
                 });

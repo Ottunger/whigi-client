@@ -555,9 +555,10 @@ export class Data {
      * @param {Number} version Data version.
      * @param {Boolean} ignore Ignore existing data, wiping it.
      * @param {Number[]} naes Allows specifying which key to use.
+     * @param {Boolean} front Allows to run in background.
      * @return {Promise} Whether it went OK.
      */
-    newData(is_bound: boolean, name: string, value: string, is_dated: boolean, version: number, ignore?: boolean, naes?: number[]): Promise {
+    newData(is_bound: boolean, name: string, value: string, is_dated: boolean, version: number, ignore?: boolean, naes?: number[], front?: boolean): Promise {
         var self = this, enc_key: number[];
         ignore = ignore || false;
 
@@ -610,7 +611,7 @@ export class Data {
                 }, function(e) {
                     reject(['server', e]);
                 });
-            }), naes);
+            }, front), naes);
         });
     }
 
@@ -749,9 +750,10 @@ export class Data {
      * @param {String} new_trigger URL to trigger.
      * @param {Boolean} is_storable Create a storable vault.
      * @param {Number[]} enc_key Key for bound vaults.
+     * @param {Boolean} front Allows to un in background.
      * @return {Promise} Whether went OK with remote profile and newly created vault.
      */
-    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string, is_storable: boolean, enc_key: number[]): Promise {
+    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string, is_storable: boolean, enc_key: number[], front?: boolean): Promise {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getUser(id).then(function(user) {
@@ -781,7 +783,7 @@ export class Data {
                 if(!is_bound) {
                     self.backend.encryptAES(decr_data, self.workerMgt(true, function(got) {
                         complete(got);
-                    }), aesKey);
+                    }, front), aesKey);
                 } else {
                     complete(self.backend.str2arr(self.backend.profile.data[real_name].id));
                 }
@@ -1036,7 +1038,7 @@ export class Data {
      */
     providerCSS(uri: string) {
         var todo: string;
-        if(uri.match(/(whigi)|(wissl)/))
+        if(uri.match(/(envict)/))
             todo = 'envicts';
         /*
         else if(uri.match(/^$/))
