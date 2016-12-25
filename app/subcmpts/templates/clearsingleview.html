@@ -2,8 +2,8 @@
     <input id="decrypted" *ngIf="!jsoned && data.length < 150" type="text" [ngModel]="show()" class="form-control" name="decr" readonly>
     <span *ngIf="!jsoned && data.length >= 150"><i class="fa fa-warning"></i> {{ 'dataview.tooLong' | translate }}</span>
 
-    <div class ="col-md-6" *ngIf="jsoned">
-        <div *ngFor="let k of keys; let e = even;">
+    <div class ="col-md-6" *ngIf="!!gen && jsoned">
+        <div *ngFor="let k of backend.generics[gen][version].json_keys; let e = even;">
             <label *ngIf="e">{{ k.descr_key | translate }}</label>
             <input *ngIf="e && k.mode != 'file'" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
             <div *ngIf="e && k.mode == 'file' && recover(k.descr_key, data, fr) && recover(k.descr_key, data, fr).substr(0, 10) == 'data:image'">
@@ -12,8 +12,8 @@
                 type="text" value="{{ 'filesystem.notView' | translate }}" name="decr" class="form-control" readonly>
         </div>
     </div>
-    <div class ="col-md-6" *ngIf="jsoned">
-        <div *ngFor="let k of keys; let o = odd;">
+    <div class ="col-md-6" *ngIf="!!gen && jsoned">
+        <div *ngFor="let k of backend.generics[gen][version].json_keys; let o = odd;">
             <label *ngIf="o">{{ k.descr_key | translate }}</label>
             <input *ngIf="o && k.mode != 'file'" type="text" value="{{ recover(k.descr_key, data, fr) }}" name="decr" class="form-control" readonly>
             <div *ngIf="o && k.mode == 'file' && recover(k.descr_key, data, fr) && recover(k.descr_key, data, fr).substr(0, 10) == 'data:image'">

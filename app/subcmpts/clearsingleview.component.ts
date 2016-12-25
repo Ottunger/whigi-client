@@ -26,7 +26,6 @@ export class ClearSingleview {
     @Input() gen: string;
     @Input() version: number;
     @Input() rst: EventEmitter<any>;
-    public keys: {descr_key: string, mode: string, enum: string, required: boolean, placeholder?: string}[];
     private cpt: {[id: string]: string};
 
     /**
@@ -52,16 +51,10 @@ export class ClearSingleview {
         var self = this;
         this.fr = !!this.fr? this.fr.toString() : '';
         this.cpt = {};
-        if(!!this.gen && this.jsoned) {
-            this.keys = this.backend.generics[this.gen][this.version].json_keys;
-        }
         if(!!this.rst) {
             this.rst.subscribe(function(params) {
                 self.fr = !!self.fr? self.fr.toString() : '';
                 self.cpt = {};
-                if(!!self.gen && self.jsoned) {
-                    self.keys = self.backend.generics[self.gen][self.version].json_keys;
-                }
             });
         }
     }
@@ -95,15 +88,16 @@ export class ClearSingleview {
             return this.cpt[key + '___' + from];
         var idx = 0;
         var ret = JSON.parse(json), bk;
-        for(var i = 0; i < this.keys.length; i++) {
-            if(this.keys[i].descr_key == key) {
+        var keys = this.backend.generics[this.gen][this.version].json_keys;
+        for(var i = 0; i < keys.length; i++) {
+            if(keys[i].descr_key == key) {
                 idx = i;
                 break;
             }
         }
-        if(this.keys[idx].mode == 'select')
+        if(keys[idx].mode == 'select')
             try { bk = this.translate.instant(ret[key] + ''); } catch(e) { bk = ret[key]; }
-        else if(this.keys[idx].mode == 'checkbox')
+        else if(keys[idx].mode == 'checkbox')
             bk = this.translate.instant(ret[key]? 'Yes' : 'No');
         else
             bk = ret[key];

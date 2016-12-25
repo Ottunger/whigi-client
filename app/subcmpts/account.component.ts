@@ -352,7 +352,7 @@ export class Account implements OnInit, OnDestroy {
                         mode: 'grant',
                         data: send,
                         to: this.id_to,
-                        name: adata[1],
+                        name: adata[1].replace('*', ''),
                         real_name: name,
                         until: this.expire_epoch,
                         version: this.backend.generics[adata[0]].length - 1,
