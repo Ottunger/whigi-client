@@ -52,7 +52,7 @@
                                         onclick="$(this).toggleClass('green');event.preventDefault();event.stopPropagation();"><i class="fa fa-remove"></i></button>
                                 </div>
                                 {{ backend.generics[p[0]][backend.generics[p[0]].length - 1].descr_key | translate }}
-                                <span *ngIf="p[0] != p[1].replace('*', '')"> ({{ lightName(p[1].replace('*', '')) }})</span>
+                                <span *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && p[0] != p[1].replace('*', '')"> ({{ lightName(p[1].replace('*', '')) }})</span>
                                 <div style="padding-left:50px;float:right;">
                                     <i class="fa fa-chevron-down"></i>
                                 </div>
