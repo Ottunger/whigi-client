@@ -27,6 +27,7 @@ export class Vaultview implements OnInit, OnDestroy {
     public is_dated: boolean;
     public is_generic: boolean;
     public version: number;
+    public gen_name: string;
     private route_back: string;
     private sub: Subscription;
 
@@ -43,7 +44,7 @@ export class Vaultview implements OnInit, OnDestroy {
      */
     constructor(private translate: TranslateService, private router: Router, private backend: Backend,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
-        this.vault = {data_name: ''};
+        this.vault = {data_name: '', real_name: ''};
         this.decr_data = '';
         this.is_generic = false;
         this.version = 0;
@@ -63,9 +64,14 @@ export class Vaultview implements OnInit, OnDestroy {
                 self.vault = vault;
                 self.decr_data = vault.decr_data;
                 self.is_dated = vault.is_dated;
-                if(!!self.backend.generics[vault.data_name]) {
+                if(!!self.backend.generics[vault.real_name] && !self.backend.generics[vault.real_name][self.backend.generics[vault.real_name].length - 1].share_as_folder) {
                     self.is_generic = true;
                     self.version = vault.version;
+                    self.gen_name = vault.real_name;
+                } else if(!!self.backend.generics[vault.real_name.replace(/\/[^\/]+$/, '')]) {
+                    self.is_generic = true;
+                    self.version = vault.version;
+                    self.gen_name = vault.real_name.replace(/\/[^\/]+$/, '');
                 }
                 //Breadcrump
                 window.$('#breadcrump').ready(function() {

@@ -108,9 +108,7 @@ export class Happenings {
                         }, function(e) {});
                     }, function(e) {});
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            } catch(e) {}
         }
     }
 

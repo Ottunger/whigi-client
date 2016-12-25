@@ -20,8 +20,8 @@
                         <div class="col-md-12">
                             <!-- BEGIN BLOCK -->
                             <clear-view [decr_data]="decr_data" [is_dated]="is_dated" [data_name]="vault.data_name" [change]="false" [version]="version"
-                                [is_folder]="is_generic && !!backend.generics[vault.data_name] && backend.generics[vault.data_name][version].mode == 'json_keys'
-                                && !backend.generics[vault.data_name][version].share_as_folder" [gen_name]="vault.data_name" [is_generic]="is_generic"></clear-view>
+                                [is_folder]="is_generic && !!backend.generics[gen_name] && backend.generics[gen_name][version].mode == 'json_keys'
+                                && !backend.generics[gen_name][version].share_as_folder" [gen_name]="gen_name" [is_generic]="is_generic"></clear-view>
                             <!-- END BLOCK -->
                         </div>
                     </div>

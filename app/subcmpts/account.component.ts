@@ -307,7 +307,6 @@ export class Account implements OnInit, OnDestroy {
             }
             for(var i = 0; i < this.data_list_shared_as.length; i++) {
                 var adata = this.data_list_shared_as[i];
-                console.log(adata[1], adata[1].substr(0, 1) == '*', '#removals' + this.dataservice.sanit(adata[1]), window.$('#removals' + this.dataservice.sanit(adata[1])).hasClass('green'))
                 if(adata[1].substr(0, 1) == '*' && window.$('#removals' + this.dataservice.sanit(adata[1])).hasClass('green')) {
                     //Make sure that flagged out ones are not tested
                     continue;

@@ -357,7 +357,6 @@ export class Data {
                         window.$('.page-content').unblock();
                     self.how.emit(0);
                     self.notif.error(self.translate.instant(encrypt? 'encrypting' : 'decrypting'), self.translate.instant('corruption'));
-                    console.log(JSON.parse(msg.data[1]));
                     self.check.tick();
                     callback('[]');
                     break;

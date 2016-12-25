@@ -284,7 +284,7 @@ export class GenericBlock implements OnInit {
     register(name: string, as_file: boolean, new_name?: string) {
         var self = this, send;
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
-        new_name = new_name.substr(0, 63);
+        new_name = new_name.substr(0, 63).replace(/\./g, '_');
         //Build and test
         window.$('.igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
         window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', '');
