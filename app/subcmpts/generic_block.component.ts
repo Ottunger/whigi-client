@@ -373,7 +373,7 @@ export class GenericBlock implements OnInit {
         } else {
             this.toview = this.cached[name].decr_data;
         }
-        this.rstCsv.emit();
+        this.rstCsv.emit(this.toview);
         window.$('#fp' + this.dataservice.sanit(name)).modal();
     }
 

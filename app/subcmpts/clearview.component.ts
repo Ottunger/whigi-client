@@ -35,6 +35,7 @@ export class Clearview {
     @Output() notify: EventEmitter<string>;
     private values: {from: number | Date, value: string}[];
     private reset: EventEmitter<any>;
+    private cvRst: EventEmitter<any>;
 
     /**
      * Creates the component.
@@ -50,6 +51,7 @@ export class Clearview {
         this.values = undefined;
         this.notify = new EventEmitter<string>();
         this.reset = new EventEmitter<any>();
+        this.cvRst = new EventEmitter<any>();
         new window.Clipboard('.btn-copier');
     }
 
@@ -71,6 +73,7 @@ export class Clearview {
                 self.decr_data = nw_val;
                 delete self.values;
                 self.reset.emit();
+                self.cvRst.emit(nw_val);
                 window.$('.wlimore').removeClass('active');
                 window.$('.fi-listable').addClass('active');
             });

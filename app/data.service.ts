@@ -23,7 +23,7 @@ export class Data {
     public m : {keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
     public ev: EventEmitter<[string, boolean]>;
     private maes: number[];
-    private selects: {[id: string]: string[]};
+    private selects: {[id: string]: {values: string[], more?: {[id: string]: string[]}}};
     private marked: {[id: string]: boolean};
     private ee: EventEmitter<number>;
     private how: EventEmitter<number>;
@@ -918,23 +918,42 @@ export class Data {
      * @function getSelect
      * @public
      * @param {String} e Enum name.
+     * @param {String} moreKey Key to add.
      * @return {String[]} Values.
      */
-    getSelect(e: string): string[] {
+    getSelect(e: string, moreKey?: string): string[] {
         var self = this;
-        if(e in this.selects)
-            return this.selects[e];
+        if(e in this.selects && !moreKey)
+            return this.selects[e].values;
+        else if(!!moreKey)
+            return this.selects[e].values.concat(this.selects[e].more[moreKey]);
         if(e in this.marked)
             return [];
         this.marked[e] = true;
         this.backend.selectValues(e).then(function(vals) {
             if(!(e in self.selects)) {
-                self.selects[e] = vals.values;
+                self.selects[e] = vals;
                 delete self.marked[e];
                 self.check.tick();
             }
         });
         return [];
+    }
+
+    /**
+     * Validates if a key should be shown.
+     * @function keyCheck
+     * @public
+     * @param {Object} datas Currently held datas.
+     * @param {Object} json_keys Key object.
+     * @return {Boolean} Whether show.
+     */
+    keyCheck(datas: {[id: string]: string}, json_keys: any): boolean {
+        if(!json_keys.ifKey)
+            return true;
+        if(!datas)
+            return false;
+        return window.eval.call(window, '(function(test) {' + json_keys.ifCheck + '})')(datas[json_keys.ifKey]);
     }
 
     /**

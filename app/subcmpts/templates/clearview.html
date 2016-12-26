@@ -28,7 +28,7 @@
                             <!-- begin show undated -->
                             <div role="tabpanel" *ngIf="!is_dated" class="fi-listable tab-pane active" id="whigi-undated">
                                 <p>{{ 'actual' | translate }}</p>
-                                <clear-single-view [jsoned]="is_folder" [data]="decr_data" [gen]="gen_name" [version]="version" [rst]="changed"></clear-single-view>
+                                <clear-single-view [jsoned]="is_folder" [data]="decr_data" [gen]="gen_name" [version]="version" [rst]="cvRst"></clear-single-view>
 
                                 <div style="margin-top: 10px;" class="form-actions">
                                     <div class="row text-center">
@@ -54,7 +54,7 @@
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
                                 </div>
-                                <clear-single-view [jsoned]="is_folder" [data]="p.value" [fr]="p.from" [gen]="gen_name" [version]="version" [rst]="changed"></clear-single-view>
+                                <clear-single-view [jsoned]="is_folder" [data]="p.value" [fr]="p.from" [gen]="gen_name" [version]="version" [rst]="cvRst"></clear-single-view>
 
                                 <div style="margin-top: 10px;" class="form-actions">
                                     <div class="row text-center">

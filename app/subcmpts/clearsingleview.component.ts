@@ -18,7 +18,7 @@ import * as template from './templates/clearsingleview.html';
     selector: 'clear-single-view',
     template: template
 })
-export class ClearSingleview {
+export class ClearSingleview implements OnInit {
 
     @Input() data: string;
     @Input() fr: Date | string;
@@ -26,7 +26,7 @@ export class ClearSingleview {
     @Input() gen: string;
     @Input() version: number;
     @Input() rst: EventEmitter<any>;
-    private cpt: {[id: string]: string};
+    private asjson: any;
 
     /**
      * Creates the component.
@@ -50,11 +50,11 @@ export class ClearSingleview {
     ngOnInit(): void {
         var self = this;
         this.fr = !!this.fr? this.fr.toString() : '';
-        this.cpt = {};
+        this.asjson = JSON.parse(this.data);
         if(!!this.rst) {
             this.rst.subscribe(function(params) {
                 self.fr = !!self.fr? self.fr.toString() : '';
-                self.cpt = {};
+                self.asjson = JSON.parse(params);
             });
         }
     }
@@ -78,33 +78,39 @@ export class ClearSingleview {
     /**
      * Spreads a part of a folder generic content.
      * @function recover
-     * @param {String} key Key.
-     * @param {String} json JSON.
-     * @param {Date} from Desinbiguifier. 
+     * @param {Object} key Key.
      * @return {String} Associated value.
      */
-    recover(key: string, json: string, from: Date): string {
-        if(key + '___' + from in this.cpt)
-            return this.cpt[key + '___' + from];
-        var idx = 0;
-        var ret = JSON.parse(json), bk;
-        var keys = this.backend.generics[this.gen][this.version].json_keys;
-        for(var i = 0; i < keys.length; i++) {
-            if(keys[i].descr_key == key) {
-                idx = i;
-                break;
+    recover(key: any): string {
+        if(!this.asjson)
+            return '';
+        var bk;
+        if(key.mode == 'select')
+            try { bk = this.translate.instant(this.asjson[key.descr_key] + ''); } catch(e) { bk = this.asjson[key.descr_key]; }
+        else if(key.mode == 'checkbox')
+            bk = this.translate.instant(this.asjson[key.descr_key]? 'Yes' : 'No');
+        else
+            bk = this.asjson[key.descr_key];
+        if(!bk || bk.trim() == '')
+            bk = this.asjson[key.descr_key];
+        return bk;
+    }
+
+    /**
+     * Get columns.
+     * @function columns
+     * @public
+     * @param {Boolean} right Right column.
+     * @return {Object[]} Values. 
+     */
+    columns(right: boolean): any[] {
+        var vals = this.backend.generics[this.gen][this.version].json_keys, ret = [];
+        for(var i = 0; i < vals.length; i++) {
+            if(this.dataservice.keyCheck(this.asjson, vals[i])) {
+                ret.push(vals[i]);
             }
         }
-        if(keys[idx].mode == 'select')
-            try { bk = this.translate.instant(ret[key] + ''); } catch(e) { bk = ret[key]; }
-        else if(keys[idx].mode == 'checkbox')
-            bk = this.translate.instant(ret[key]? 'Yes' : 'No');
-        else
-            bk = ret[key];
-        if(!bk || bk.trim() == '')
-            bk = ret[key];
-        this.cpt[key + '___' + from] = bk;
-        return bk;
+        return right? ret.slice(ret.length / 2) : ret.slice(0, ret.length / 2);
     }
 
 }

@@ -63,8 +63,10 @@
                                     <!-- json labels -->
                                     <div style="padding-top: 34px;display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'
                                         && !backend.generics[g][backend.generics[g].length - 1].instantiable && !!backend.profile.data[g]">
-                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                        <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g], k)">
+                                                {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                            </div>
                                         </div>
                                     </div>
                                     <!-- end json labels -->
@@ -171,8 +173,10 @@
                                     <!-- end padding non instantiable json keys -->
                                     <!-- json labels -->
                                     <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                        <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g], k)">
+                                                {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                            </div>
                                         </div>
                                         <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="!!backend.generics[g][backend.generics[g].length - 1].json_from_ask">
                                             {{ 'generics.since' | translate }}<span>*</span>:<br />
@@ -208,8 +212,10 @@
                                                         (keyup)="dataservice.clickOnEnter($event, '#tgname' + dataservice.sanit(g + '/' + d))"/>
                                                     <!-- json labels -->
                                                     <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
-                                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
-                                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                        <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+                                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g + '/' + d], k)">
+                                                                {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <!-- end json labels -->

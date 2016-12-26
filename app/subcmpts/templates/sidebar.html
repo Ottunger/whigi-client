@@ -16,7 +16,7 @@
                     <span class="title">{{ 'profile.oauths' | translate }}</span>
                 </a>
             </li>
-            <li class="nav-item linkbars" id="linkbars40">
+            <li class="nav-item linkbars" *ngIf="!!backend.profile && (!backend.profile.company_info || !backend.profile.company_info.is_company)" id="linkbars40">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/happenings'])">
                     <i class="icon-settings"></i>
                     <span class="title">{{ 'profile.happenings' | translate }}</span>
