@@ -199,12 +199,17 @@ export class Account implements OnInit, OnDestroy {
                 }
                 self.data_list_shared_as.forEach(function(req: string[]) {
                     //A data to check...
-                    if(req[0] in self.backend.generics && (!(req[0] in self.backend.profile.data) || !(self.id_to in self.backend.profile.data[req[0]].shared_to))) {
+                    if(req[0] in self.backend.generics) {
+                        var ret = [];
                         if(self.backend.generics[req[0]][0].instantiable) {
                             //Instances we have
-                            var ret = self.backend.data_trie.suggestions(req[0] + '/', '/').filter(function(el: string): boolean {
+                            ret = self.backend.data_trie.suggestions(req[0] + '/', '/').filter(function(el: string): boolean {
                                 return el.charAt(el.length - 1) != '/';
                             });
+                        } else if(req[0] in self.backend.profile.data) {
+                            ret = [req[0]];
+                        }
+                        if(ret.length > 0) {
                             //Check each one, is it shared to the person, and under the correct name?
                             var nice = false, did = 0, todo = ret.length, answ = false;
                             function completeRound() {
@@ -227,7 +232,7 @@ export class Account implements OnInit, OnDestroy {
                                         completeRound();
                                     } else {
                                         self.backend.getAccessVault(self.backend.profile.data[record].shared_to[self.id_to]).then(function(info) {
-                                            if(info.shared_as == req[1].replace('*', '')) {
+                                            if(info.shared_as == req[1].replace('*', '') || info.links.indexOf(req[1].replace('*', '')) != -1) {
                                                 nice = true;
                                             }
                                             completeRound();
@@ -242,7 +247,7 @@ export class Account implements OnInit, OnDestroy {
                             if(todo == 0)
                                 completeRound();
                         } else {
-                            //Not instantiable, but we do not have it...
+                            //We do not have any instance or the not instantiable data...
                             fallback();
                         }
                     } else {
@@ -280,7 +285,7 @@ export class Account implements OnInit, OnDestroy {
      * @param {Boolean} ok True if create account.
      */
     finish(ok: boolean) {
-        var self = this, saves: any[] = [], used = {}, key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
+        var self = this, saves: any[] = [], key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
         if(ok) {
             if(!this.allFilled()) {
                 this.notif.error(this.translate.instant('error'), this.translate.instant('account.fill'));
@@ -332,13 +337,6 @@ export class Account implements OnInit, OnDestroy {
                     if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
                         name += '/' + this.new_name[adata[1].replace('*', '')];
                     }
-                    //Once only
-                    if(name in used) {
-                        this.notif.error(this.translate.instant('error'), this.translate.instant('account.twice'));
-                        window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('has-error');
-                        return;
-                    }
-                    used[name] = true;
                     //Create
                     saves.push({
                         mode: 'new',
@@ -364,13 +362,6 @@ export class Account implements OnInit, OnDestroy {
                     if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
                         name += '/' + this.filter[adata[1].replace('*', '')];
                     }
-                    //Once only
-                    if(name in used) {
-                        this.notif.error(this.translate.instant('error'), this.translate.instant('account.twice'));
-                        window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('has-error');
-                        return;
-                    }
-                    used[name] = true;
                     //Get and grant
                     saves.push({
                         mode: 'get-and-grant',
@@ -420,8 +411,16 @@ export class Account implements OnInit, OnDestroy {
                             });
                             break;
                         case 'grant':
-                            self.dataservice.grantVault(work.to, work.name, work.real_name, work.data, work.version, work.until, work.trigger, false, work.decr_aes).then(function() {
-                                next();
+                            self.dataservice.grantVault(work.to, work.name, work.real_name, work.data, work.version, work.until, work.trigger, false, work.decr_aes).then(function(res) {
+                                if(res[2] == 201) {
+                                    next();
+                                } else {
+                                    self.backend.linkVault(res[1], work.name).then(function() {
+                                        next();
+                                    }, function(e) {
+                                        reject(e);
+                                    });
+                                }
                             }, function(e) {
                                 reject(e);
                             });

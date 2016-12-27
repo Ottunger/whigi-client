@@ -408,6 +408,7 @@ export class Backend {
 
         function accept(resolve, response) {
             var res = response.json();
+            res._status = response.status;
             if('puzzle' in res) {
                 localStorage.setItem('puzzle', res.puzzle);
             }
@@ -878,10 +879,26 @@ export class Backend {
     }
 
     /**
+     * Links a vault.
+     * @function linkVault
+     * @public
+     * @param {String} vault_id Vault ID to act upon.
+     * @param {String} link_name New name.
+     * @return {Promise} JSON response from backend.
+     */
+    linkVault(vault_id: string, link_name: string): Promise {
+        return this.backend(true, false, 'POST', {
+            vault_id: vault_id,
+            data_name: link_name
+        }, 'vault/link', true, true, true);
+    }
+
+    /**
      * Shares a data between users.
      * @function createVault
      * @public
      * @param {String} data_name Data name.
+     * @param {String[]} links Links to add.
      * @param {String} real_name Real data name.
      * @param {String} shared_to_id Id of person with who to share.
      * @param {Bytes} data_crypted_aes Locally crypted data using a freshly generated AES key.
@@ -892,10 +909,11 @@ export class Backend {
      * @param {Boolean} storable Create a storable vault.
      * @return {Promise} JSON response from backend.
      */
-    createVault(data_name: string, real_name: string, shared_to_id: string, data_crypted_aes: number[], aes_crypted_shared_pub: string,
+    createVault(data_name: string, links: string[], real_name: string, shared_to_id: string, data_crypted_aes: number[], aes_crypted_shared_pub: string,
         version: number, expire_epoch?: number, trigger?: string, storable?: boolean): Promise {
         var post = {
             data_name: data_name,
+            links: links,
             shared_to_id: shared_to_id,
             data_crypted_aes: this.arr2str(data_crypted_aes),
             aes_crypted_shared_pub: aes_crypted_shared_pub,

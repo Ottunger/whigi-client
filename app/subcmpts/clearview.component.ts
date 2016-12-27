@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, enableProdMode, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
@@ -18,7 +18,7 @@ import * as template from './templates/clearview.html';
     selector: 'clear-view',
     template: template
 })
-export class Clearview {
+export class Clearview implements OnInit, OnChanges {
 
     public new_datas: {[id: string]: string};
     public new_data: string;
@@ -78,6 +78,16 @@ export class Clearview {
                 window.$('.fi-listable').addClass('active');
             });
         }
+    }
+
+    /**
+     * Usage for vaultview.
+     * @function ngOnChanges
+     * @public
+     * @param {Object} now Changes.
+     */
+    ngOnChanges(now: any) {
+        this.cvRst.emit(now.decr_data.currentValue);
     }
 
     /**

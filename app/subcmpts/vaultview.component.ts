@@ -75,7 +75,10 @@ export class Vaultview implements OnInit, OnDestroy {
                 }
                 //Breadcrump
                 window.$('#breadcrump').ready(function() {
-                    self.dataservice.ev.emit([self.sharer_id + '/' + self.vault.data_name, false]);
+                    if(!!params['data_name'])
+                        self.dataservice.ev.emit([params['data_name'], false]);
+                    else
+                        self.dataservice.ev.emit([self.sharer_id + '/' + self.vault.data_name, false]);
                 });
             }, function(e) {
                 if(e.status == 417)

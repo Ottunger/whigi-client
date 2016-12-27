@@ -125,7 +125,7 @@ export class Merge {
                             name: string,
                             index: number,
                             is_dated: boolean,
-                            shared_to: {[id: string]: string | {sa: string, ee: Date, trigger: string}},
+                            shared_to: {[id: string]: string | {sa: string, ee: Date, trigger: string, links: string[]}},
                             version?: number,
                             decr_data?: string,
                             decr_aes?: number[],
@@ -177,7 +177,8 @@ export class Merge {
                                                     work.shared_to[key] = {
                                                         sa: got.shared_as,
                                                         ee: new Date(got.expire_epoch),
-                                                        trigger: got.trigger
+                                                        trigger: got.trigger,
+                                                        links: got.links
                                                     };
                                                     work.index++;
                                                     index--;
@@ -248,7 +249,7 @@ export class Merge {
                                         if(keys.length > work.index) {
                                             var key = keys[work.index];
                                             self.dataservice.grantVault(key, (<any>work.shared_to[key]).sa, work.name, work.decr_data, work.version, (<any>work.shared_to[key]).ee,
-                                                (<any>work.shared_to[key]).trigger, false, work.decr_aes, false).then(function() {
+                                                (<any>work.shared_to[key]).trigger, false, work.decr_aes, false, (<any>work.shared_to[key]).links).then(function() {
                                                 work.index++;
                                                 index--;
                                                 next();

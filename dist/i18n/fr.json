@@ -241,7 +241,6 @@
    "account.user": "Utilisateur Whigi",
    "account.fill": "Merci de renseigner tous les champs avant de valider",
    "account.folderShared": "Toutes les instances seront partagées",
-   "account.twice": "N'utilisez pas la même source deux fois pour des données différentes",
    "account.noShare": "Ne pas partager cette donnée ici",
 
    "userinfo.title": "Informations à propos de l'utilisateur",

@@ -750,9 +750,10 @@ export class Data {
      * @param {Boolean} is_storable Create a storable vault.
      * @param {Number[]} enc_key Key for bound vaults.
      * @param {Boolean} front Allows to un in background.
+     * @param {String[]} links Links to add.
      * @return {Promise} Whether went OK with remote profile and newly created vault.
      */
-    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string, is_storable: boolean, enc_key: number[], front?: boolean): Promise {
+    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string, is_storable: boolean, enc_key: number[], front?: boolean, links?: string[]): Promise {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getUser(id).then(function(user) {
@@ -768,13 +769,13 @@ export class Data {
                 var aes_crypted_shared_pub: string = self.backend.encryptRSA(aesKey, user.rsa_pub_key);
 
                 function complete(got: number[]) {
-                    self.backend.createVault(name, real_name, user._id, got, aes_crypted_shared_pub, version,
+                    self.backend.createVault(name, links || [], real_name, user._id, got, aes_crypted_shared_pub, version,
                         (max_date.getTime() < (new Date).getTime())? 0 : max_date.getTime(), new_trigger, is_storable).then(function(res) {
                         self.backend.profile.data[real_name].shared_to[user._id] = res._id;
                         self.backend.my_shares[id] = self.backend.my_shares[id] || [];
                         if(self.backend.my_shares[id].indexOf(real_name) == -1)
                             self.backend.my_shares[id].push(real_name);
-                        resolve([user, res._id]);
+                        resolve([user, res._id, res._status]);
                     }, function(e) {
                         reject(e);
                     });

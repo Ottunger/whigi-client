@@ -243,7 +243,6 @@
    "account.user": "Whigi User",
    "account.fill": "Please fill all required data before submitting",
    "account.folderShared": "All instances will be shared",
-   "account.twice": "Please do not use same data twice for sharing with different purposes",
    "account.noShare": "Make this data not part of the share",
 
    "userinfo.title": "Information about the user",

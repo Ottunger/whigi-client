@@ -101,9 +101,9 @@
                     </div>
                 </div>
                 <div class="clearfix" style="padding-top:10px;text-align:right">
-                    <button *ngIf="strangeEmail==''" type="button" class="btn green-meadow" (click)="finish(true)">{{ 'account.ok' | translate }}</button>
+                    <button *ngIf="strangeEmail==''" type="button" class="btn green" (click)="finish(true)">{{ 'account.ok' | translate }}</button>
                     <button *ngIf="strangeEmail==''" type="button" class="btn grey" (click)="finish(false)">{{ 'account.nok' | translate }}</button>
-                    <button *ngIf="strangeEmail!=''" type="button" class="btn green-meadow" (click)="finish(true)">{{ 'login.signUp' | translate }}</button>
+                    <button *ngIf="strangeEmail!=''" type="button" class="btn green" (click)="finish(true)">{{ 'login.signUp' | translate }}</button>
                     <button *ngIf="strangeEmail!=''" type="button" class="btn grey" (click)="finish(false)">{{ 'back' | translate }}</button>
                 </div>
             </div>
