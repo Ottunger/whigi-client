@@ -50,13 +50,11 @@ export class ClearSingleview implements OnInit {
     ngOnInit(): void {
         var self = this;
         this.fr = !!this.fr? this.fr.toString() : '';
-        if(this.jsoned)
-            try { this.asjson = JSON.parse(this.data); } catch(e) { this.asjson = {}; }
+        try { this.asjson = JSON.parse(this.data); } catch(e) { this.asjson = {}; }
         if(!!this.rst) {
             this.rst.subscribe(function(params) {
                 self.fr = !!self.fr? self.fr.toString() : '';
-                if(self.jsoned)
-                    try { self.asjson = JSON.parse(params); } catch(e) { self.asjson = {}; }
+                try { self.asjson = JSON.parse(params); } catch(e) { self.asjson = {}; }
             });
         }
     }
