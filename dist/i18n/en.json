@@ -69,6 +69,8 @@
    "contacts.sync": "Synchronize now",
    "contacts.started": "Synchronization started",
    "contacts.none": "No contact or cannot read them...",
+   "contacts.bindAll": "Bind selected contacts",
+   "contacts.unBindAll": "Unbind selected contacts",
 
    "intro.regGen": "Save all you have done in this block by clicking here. You will be able once there are changes to acknowledge.",
    "intro.canGen": "Discard any modifications in this block if you've made mistakes.",

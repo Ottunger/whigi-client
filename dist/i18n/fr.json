@@ -69,6 +69,8 @@
    "contacts.sync": "Synchoniser maintenant",
    "contacts.started": "Synchronisation en cours",
    "contacts.none": "Aucun contact ou interdiction de les lire...",
+   "contacts.bindAll": "Lier les contacts sélectionnés",
+   "contacts.unBindAll": "Délier les contacts sélectionnés",
 
    "intro.regGen": "Sauvegardez tout ce que vous avez fait dans ce bloc. Vous le pourrez dès que il y aura des changements à valider.",
    "intro.canGen": "Supprimez toute modification indésirable de ce bloc.",
