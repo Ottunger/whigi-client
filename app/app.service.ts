@@ -973,6 +973,27 @@ export class Backend {
     }
 
     /**
+     * Ask for a share.
+     * @function askShare
+     * @public
+     * @param {String[]} data_list Share formatted data list.
+     * @param {String} towards Email to target.
+     * @param {Number} expire_epoch Time for expiration.
+     * @param {String} trigger URL that frontend should trigger upon change.
+     * @param {String} lang Language code.
+     * @return {Promise} JSON response from backend.
+     */
+    askShare(data_list: string[], towards: string, expire_epoch: number, trigger: string, lang: string): Promise {
+        return this.backend(true, false, 'POST', {
+            list: data_list,
+            towards: towards,
+            expire: expire_epoch,
+            trigger: trigger,
+            lang: lang
+        }, 'ask', true, true, true);
+    }
+
+    /**
      * Asks for a AES key.
      * @function getRestore
      * @public
