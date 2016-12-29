@@ -579,8 +579,9 @@ export class GenericBlock implements OnInit {
                         resolve();
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-                    reject();
+                    //Must have been the same name!
+                    //self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    resolve();
                 });
             } else {
                 window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');

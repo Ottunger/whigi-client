@@ -96,17 +96,7 @@ export class Tooltip {
                 });
             });
         } else if(this.mode == 'info') {
-            //Help for anything, mostly for longest generic definition
-            this.backend.tooltip(this.uri).then(function(vals) {
-                window.$(`
-                    <div class="modal">
-                        <h3>` + self.translate.instant('help') + `</h3>
-                        <p>` + vals[self.translate.currentLang] + `</p>
-                    </div>
-                `).appendTo('body').modal();
-            }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('help.noHelp'));
-            });
+            this.dataservice.tryHelp(this.uri);
         }
     }
 

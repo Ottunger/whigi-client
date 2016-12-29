@@ -44,6 +44,7 @@
    "hint": "Got it",
    "warning": "Warning",
    "value": "Value",
+   "search": "Search",
 
    "menus.contacts": "Contacts",
    "menus.mine": "Shared To Me",
@@ -51,9 +52,11 @@
 
    "settings.title": "Settings",
    "settings.language": "Language",
-   "settings.logout": "Logout from other devices",
+   "settings.logout": "Logout other devices",
    "settings.endpoint": "Endpoint",
    "settings.encrypt": "Encrypt here",
+   "settings.whoami": "Who am I?",
+   "settings.whoamiExplain": "Use this contact to automatically fill in your WiSSL account's profile information? We won't override any different data you might have already inputted.",
 
    "contacts.title": "Contacts Synchronization",
    "contacts.noContacts": "Cannot read your contacts!",
@@ -71,6 +74,7 @@
    "contacts.none": "No contact or cannot read them...",
    "contacts.bindAll": "Bind selected contacts",
    "contacts.unBindAll": "Unbind selected contacts",
+   "contacts.explain": "Welcome to WiSSL-Contacts! In the next screen, you will get a list of your contacts. For all those for which you have at least an email, you will be able to bind the contact to this email, so that it can be remotely synchronized by the owner himself. Once you are OK with your bindings, just click the Record button and you're ready to go!",
 
    "intro.regGen": "Save all you have done in this block by clicking here. You will be able once there are changes to acknowledge.",
    "intro.canGen": "Discard any modifications in this block if you've made mistakes.",
@@ -78,6 +82,8 @@
    "intro.datings": "Here you can manage a dated data: switch from one instance to the other, remove an instance, add a new one, or change the current's beginning.",
    "intro.evtSel": "Select the event which will guide how you modify your data.",
    "intro.evtNext": "Go to one of the next wizards if several changes are occuring together. Everything will be validated only when you submit the whole form, applying changes and redirections if any.",
+   "intro.helps": "Double click a label to get more information about the expected content, when such a help is provided",
+   "intro.edit": "Jump to edit mode by double clicking the values",
 
    "login.title": "Login to your account",
    "login.is_company": "Create a company account",
@@ -162,7 +168,7 @@
    "profile.noGet": "Cannot get ticket, is the share revoked?",
    "profile.createo": "Give a new access",
    "profile.auth": "Username to grant",
-   "profile.createExplainAll": "Choose a Whigi account that you want to make able to administer your account, only for the folder you specify.",
+   "profile.createExplainAll": "Choose a Whigi account that you want to make able to administer your account, only for the folder you specify. Check the admin box to enable read and write access. Careful, this feature is not intended for sharing data between accounts, but really to make one account able to act upon another!",
    "profile.createExplainCom": "Choose here a Whigi account to grant an access to, and type the prefix for which you'd like the user to get access. This cannot be your root folder. If your company requires a two-step validation process, this wizard will not be able to issue new permissions.",
    
    "happenings.move": "I'm moving places",
@@ -230,7 +236,7 @@
    "oauth.nok": "Deny access",
    "oauth.is_admin": "Admin account",
    "oauth.noGrant": "Cannot grant access for this user...",
-   "oauth.granted": "OAuth ticket given",
+   "oauth.granted": "Permission granted",
 
    "account.question": "Requests for access creation",
    "account.explain": "By accepting the request, you do the same as creating manually a vault of the listed data below towards the given ID. The remote user WILL NOT receive your keys.",
@@ -290,7 +296,7 @@
    "generics.lessData": "Hide inputs...",
    "generics.shared": "Shared to...",
    "generics.tooLong": "Your input is too long to be accepted",
-   "generics.label": "Name the data...",
+   "generics.label": "Type of the data...",
    "generics.iEdit": "Inline edit",
    "generics.deleteOne": "Suppress this value",
    "generics.addOne": "Add a delimited value",

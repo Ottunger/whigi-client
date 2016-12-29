@@ -24,7 +24,7 @@ export class Filesystem implements OnInit {
     public data_value_file: string;
     public folders: string;
     private mode: string;
-    private lighted: EventEmitter<number>;
+    private lighted: number;
     private sub: Subscription;
 
     /**
@@ -43,7 +43,7 @@ export class Filesystem implements OnInit {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private routed: ActivatedRoute,
         private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef) {
         this.folders = '';
-        this.lighted = new EventEmitter<number>();
+        this.lighted = 1;
     }
 
     /**
@@ -295,7 +295,7 @@ export class Filesystem implements OnInit {
     regUpdate() {
         var self = this;
         setImmediate(function() {
-            self.lighted.emit(self.getLight())
+            self.lighted = self.getLight();
         });
     }
     

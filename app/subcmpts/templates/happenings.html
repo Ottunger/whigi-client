@@ -34,7 +34,7 @@
                                                     <!-- select name any -->
                                                     <input *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only
                                                         && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" type="text" [(ngModel)]="new_names[h.sid + i + s.gen]" name="new_name{{ dataservice.sanit(s.gen) }}"
-                                                        class="form-control" [attr.list]="'suggestions' + dataservice.sanit(s.gen)" style="box-shadow: 1px 1px 1px #FF5000!important;" placeholder="{{ 'generics.label' | translate }}">
+                                                        class="form-control whigi-namer" [attr.list]="'suggestions' + dataservice.sanit(s.gen)" placeholder="{{ 'generics.label' | translate }}">
                                                     <datalist *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only"
                                                         id="suggestions{{ dataservice.sanit(s.gen) }}">
                                                         <option *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key" value="{{ k | translate }}">
@@ -43,19 +43,21 @@
                                                     <!-- select name force -->
                                                     <select *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only
                                                         && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" [(ngModel)]="new_names[h.sid + i + s.gen]"
-                                                        name="new_name{{ dataservice.sanit(s.gen) }}" class="form-control" style="box-shadow: 1px 1px 1px #FF5000!important;">
+                                                        name="new_name{{ dataservice.sanit(s.gen) }}" class="form-control whigi-namer">
                                                         <option *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
                                                     </select>
                                                     <!-- end select name force -->
                                                     <!-- force name -->
                                                     <input type="text" *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !!backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is"
-                                                        style="box-shadow: 1px 1px 1px #FF5000!important;" [(ngModel)]="new_names[h.sid + i + s.gen]" class="form-control" id="setname{{ h.sid}}{{ i }}{{ dataservice.sanit(s.gen) }}" [attr.g]="g"
+                                                        [(ngModel)]="new_names[h.sid + i + s.gen]" class="form-control whigi-namer" id="setname{{ h.sid}}{{ i }}{{ dataservice.sanit(s.gen) }}" [attr.g]="g"
                                                         [attr.nwkey]="backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" readonly="readonly" name="new_name{{ dataservice.sanit(s.gen) }}"/>
                                                     <!-- end force name -->
                                                     <!-- labels -->
                                                     <div style="padding-top: 1em;display: none;" class="keysprofile_address text-right">
-                                                        <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].json_keys">
-                                                            {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                        <div *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].json_keys" (dblclick)="dataservice.tryHelp(k.help_url)">
+                                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[h.sid + i + s.gen], k)" attr.data-intro="{{ 'intro.helps' | translate }}" data-step="3">
+                                                                {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
+                                                            </div>
                                                         </div>
                                                     </div>
                                                     <!-- end labels -->

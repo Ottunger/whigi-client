@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnInit, EventEmitter} from '@angular/core';
+import {Component, enableProdMode, Input, OnChanges} from '@angular/core';
 import {Router} from '@angular/router';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -17,10 +17,10 @@ import * as template from './templates/sidebar.html';
     selector: 'sidebar',
     template: template
 })
-export class Sidebar implements OnInit {
+export class Sidebar implements OnChanges {
 
     public new_name: string;
-    @Input() lighted: EventEmitter<number> | number;
+    @Input() lighted: number;
 
     /**
      * Creates the component.
@@ -36,19 +36,17 @@ export class Sidebar implements OnInit {
 
     /**
      * Called upon display.
-     * @function ngOnInit
+     * @function ngOnChanges
      * @public
      */
-    ngOnInit(): void {
-        if(typeof this.lighted === 'number') {
+    ngOnChanges(now: any): void {
+        var self = this, vals = now.lighted.currentValue;
+        window.$('.linkbars').removeClass('start active').remove('.selected');
+        window.$('#linkbars' + vals).addClass('start active').find('a').append('<span class="selected"></span>');
+        setTimeout(function() {
             window.$('.linkbars').removeClass('start active').remove('.selected');
-            window.$('#linkbars' + this.lighted).addClass('start active').find('a').append('<span class="selected"></span>');
-        } else if(typeof this.lighted !== 'undefined') {
-            this.lighted.asObservable().subscribe(function(vals) {
-                window.$('.linkbars').removeClass('start active').remove('.selected');
-                window.$('#linkbars' + vals).addClass('start active').find('a').append('<span class="selected"></span>');
-            });
-        }
+            window.$('#linkbars' + vals).addClass('start active').find('a').append('<span class="selected"></span>');
+        }, 150);
     }
 
     /**

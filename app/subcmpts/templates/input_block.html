@@ -14,8 +14,8 @@
     <button *ngIf="!writeDesc" type="button" id="igen2{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" class="btn btn-link wigen2" (click)="collapse()">{{ getMyText() | translate }}</button>
     <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
         <div class="json{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" [class.whigi-topped]="dataservice.keyCheck(new_datas, k) !== true" style="display: none;">
-            <div *ngIf="writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
-            <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
+            <div *ngIf="writeDesc" (dblclick)="dataservice.tryHelp(k.help_url)">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
+            <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc" (dblclick)="dataservice.tryHelp(k.help_url)">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
             <!-- SUBTYPES -->
             <!-- text -->
             <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]"

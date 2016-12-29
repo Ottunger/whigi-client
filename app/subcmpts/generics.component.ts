@@ -23,7 +23,7 @@ export class Generics implements OnInit {
 
     public filter: string;
     public new_name: string;
-    private lighted: EventEmitter<number>;
+    private lighted: number;
     private sub: Subscription;
     private lists: {[id: string]: any};
 
@@ -40,7 +40,7 @@ export class Generics implements OnInit {
     constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
         private routed: ActivatedRoute, private dataservice: Data) {
         this.filter = 'generics.any';
-        this.lighted = new EventEmitter<number>();
+        this.lighted = 1;
         this.lists = {}
     }
 
@@ -111,7 +111,7 @@ export class Generics implements OnInit {
     regUpdate() {
         var self = this;
         setImmediate(function() {
-            self.lighted.emit(self.getLight())
+            self.lighted = self.getLight();
         });
     }
 

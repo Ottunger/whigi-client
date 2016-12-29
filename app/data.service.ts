@@ -1084,7 +1084,7 @@ export class Data {
      * @param {String} id Where to click.
      */
     clickOnEnter(e: any, id: string) {
-        if(e.keyCode == 13)
+        if(e === true || e.keyCode == 13)
             window.$(id).click();
     }
 
@@ -1100,6 +1100,29 @@ export class Data {
         this.translate.use(lang);
         if(this.backend.data_loaded && skip !== true)
             this.backend.remLang(lang).then(function() {}, function(e) {});
+    }
+
+    /**
+     * Show a help for a string.
+     * @function tryHelp
+     * @public
+     * @param {String} help Type of help.
+     */
+    tryHelp(help: string) {
+        var self = this;
+        if(!help)
+            return;
+        //Help for anything, mostly for longest generic definition
+        this.backend.tooltip(help).then(function(vals) {
+            window.$(`
+                <div class="modal">
+                    <h3>` + self.translate.instant('help') + `</h3>
+                    <p>` + vals[self.translate.currentLang] + `</p>
+                </div>
+            `).appendTo('body').modal();
+        }, function(e) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('help.noHelp'));
+        });
     }
 
 }

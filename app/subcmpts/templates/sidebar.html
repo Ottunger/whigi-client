@@ -4,24 +4,6 @@
         <!-- BEGIN SIDEBAR MENU -->
         <ul id="mainSidebar" class="page-sidebar-menu  page-header-fixed" data-keep-expanded="false" data-auto-scroll="true" data-slide-speed="200" style="padding-top: 20px">
             <li class="nav-item linkbars" id="linkbars-1" style="display: none;"></li>
-            <li class="nav-item linkbars" id="linkbars0">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/profile'])">
-                    <i class="icon-settings"></i>
-                    <span class="title">{{ 'profile.home' | translate }}</span>
-                </a>
-            </li>
-            <li class="nav-item linkbars" id="linkbars30">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/oauths'])">
-                    <i class="icon-settings"></i>
-                    <span class="title">{{ 'profile.oauths' | translate }}</span>
-                </a>
-            </li>
-            <li class="nav-item linkbars" *ngIf="!!backend.profile && (!backend.profile.company_info || !backend.profile.company_info.is_company)" id="linkbars40">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/happenings'])">
-                    <i class="icon-settings"></i>
-                    <span class="title">{{ 'profile.happenings' | translate }}</span>
-                </a>
-            </li>
             <li class="heading">
                 <h3 class="uppercase">{{ 'profile.generics' | translate }}</h3>
             </li>
@@ -45,6 +27,12 @@
             <li class="heading">
                 <h3 class="uppercase">{{ 'profile.datas' | translate }}</h3>
             </li>
+            <li class="nav-item linkbars" *ngIf="!!backend.profile && (!backend.profile.company_info || !backend.profile.company_info.is_company)" id="linkbars40">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/happenings'])">
+                    <i class="icon-settings"></i>
+                    <span class="title">{{ 'profile.happenings' | translate }}</span>
+                </a>
+            </li>
             <!--
             <li class="nav-item linkbars" id="linkbars3">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'data'])">
@@ -65,6 +53,21 @@
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/whoishare'])">
                     <i class="icon-share"></i>
                     <span class="title">{{ 'profile.whoishare' | translate }}</span>
+                </a>
+            </li>
+            <li class="heading">
+                <h3 class="uppercase">{{ 'settings.title' | translate }}</h3>
+            </li>
+            <li class="nav-item linkbars" id="linkbars0">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/profile'])">
+                    <i class="icon-settings"></i>
+                    <span class="title">{{ 'profile.home' | translate }}</span>
+                </a>
+            </li>
+            <li class="nav-item linkbars" id="linkbars30">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/oauths'])">
+                    <i class="icon-settings"></i>
+                    <span class="title">{{ 'profile.oauths' | translate }}</span>
                 </a>
             </li>
         </ul>

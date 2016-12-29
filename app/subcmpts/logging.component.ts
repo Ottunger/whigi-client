@@ -62,8 +62,8 @@ export class Logging implements OnInit {
      */
     ngOnInit(set: boolean): void {
         var self = this;
-        window.$('#wlogin-pass').ready(function() {
-            window.$('#wlogin-pass').keyup(function(e) {
+        window.$('#wlogin-pass,#wlogin-login').ready(function() {
+            window.$('#wlogin-pass,#wlogin-login').keyup(function(e) {
                 if(e.keyCode == 13)
                     window.$('#wlogin-btn').click();
             });

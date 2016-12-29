@@ -13,6 +13,10 @@
   border-radius: 7px;
 }
 
+.whigi-namer:read-only {
+  background-color: #FFECBB!important;
+}
+
 ::-webkit-scrollbar {
     width: 8px;
 }
