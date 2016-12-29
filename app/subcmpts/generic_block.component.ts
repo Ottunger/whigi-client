@@ -306,6 +306,36 @@ export class GenericBlock implements OnInit {
             self.resets[name].emit([0]);
             self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
                 self.data_list = now.map(function(el) { return el[0]; });
+                //Maybe you wanted acount creation?
+                if(self.backend.generics[name][self.backend.generics[name].length - 1].can_trigger_account) {
+                    window.$(`
+                        <div class="modal">
+                            <h3>` + self.translate.instant('generics.create') + `</h3>
+                            <div class="row text-center">
+                                <script type="text/javascript">
+                                    window.addUser = function(user, pwd, pwd2, mail) {
+                                        window.ngData.addUser(user, pwd, pwd2, ` + self.new_datas[name]['generics.first_name'] + `, ` + self.new_datas[name]['generics.last_name'] + `, mail).then(function(close) {
+                                            if(close !== false) {
+                                                $('.tp-close').click();
+                                            }
+                                        });
+                                    };
+                                </script>
+                                <p>` + self.translate.instant('generics.createExplain') + `</p>
+                                <label for="useracc">` + self.translate.instant('login.username') + `</label>
+                                <input type="text" id="useracc" class="form-control"/><br />
+                                <label for="pwd1acc">` + self.translate.instant('profile.new') + `</label>
+                                <input type="password" id="pwd1acc" class="form-control"/><br />
+                                <label for="pwd2acc">` + self.translate.instant('profile.new2') + `</label>
+                                <input type="password" id="pwd2acc" class="form-control"/><br />
+                                <label for="emailacc">` + self.translate.instant('login.email') + `</label>
+                                <input type="text" id="emailacc" class="form-control"/><br />
+                                <button class="btn default" onclick="$('.tp-close').click()">` + self.translate.instant('cancel') + `</button>
+                                <button class="btn green" onclick="addUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val(), $('#emailacc').val())">` + self.translate.instant('goOn') + `</button>
+                            </div>
+                        </div>
+                    `).appendTo('body').modal({closeClass: 'tp-close'});
+                }
             });
         }, function(err) {
             if(err[0] == 'server') {

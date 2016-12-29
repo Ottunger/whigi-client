@@ -1125,4 +1125,257 @@ export class Data {
         });
     }
 
+    /**
+     * Reload my profile.
+     * @function reloadProfile
+     * @public
+     * @param {String} ct Current token.
+     * @param {String} ck Current key.
+     * @param {Function} resolve Callback.
+     * @param {function} reject Callback.
+     * @param {String} psha Current SHA.
+     * @param {Object} okbind Bind for success.
+     * @param {badbind} badbind Bind for failure.
+     */
+    public reloadProfile(ct: string, ck: string, resolve: Function, reject: Function, psha?: string, okbind?: any, badbind?: any) {
+        var self = this;
+        localStorage.setItem('token', ct);
+        localStorage.setItem('key_decryption', ck);
+        if(!!psha)
+            localStorage.setItem('psha', psha);
+        this.backend.forceReload();
+
+        this.mPublic().then(function(profile) {
+            self.backend.profile = profile;
+            self.check.tick();
+            self.listData(true).then(function() {
+                resolve(okbind);
+            }, function(e) {
+                reject(badbind);
+            });
+        }, function(e) {
+            delete self.backend.profile;
+            self.notif.success(self.translate.instant('success'), self.translate.instant('merge.relog'));
+            reject(badbind);
+        });
+    }
+
+    /**
+     * Grant a new ticket.
+     * @function grant
+     * @public
+     * @static
+     * @param {Object} me Oauths-like.
+     * @return {Promise} When done.
+     */
+    static grant(me: {backend: Backend, dataservice: Data, auth: string, prefix: string, notif: NotificationsService, translate: TranslateService, admin: boolean}): Promise {
+        return new Promise(function(resolve, reject) {
+            for(var i = 0; i < me.backend.profile.oauth.length; i++) {
+                if(me.backend.profile.oauth[i].for_id == me.auth.toLowerCase()) {
+                    me.auth = '';
+                    me.prefix = '';
+                    me.notif.success(me.translate.instant('success'), me.translate.instant('oauth.granted'));
+                    resolve();
+                    return;
+                }
+            }
+            me.backend.peekUser(me.auth).then(function() {
+                me.auth = me.auth.toLowerCase();
+                if(!/\/$/.test(me.prefix))
+                    me.prefix += '/';
+                me.backend.createOAuth(me.auth, me.prefix, undefined, me.admin).then(function(ticket) {
+                    me.backend.profile.oauth.push({id: ticket._id, for_id: me.auth.toLowerCase(), prefix: me.prefix})
+                    var obj = JSON.stringify({
+                        token: ticket._id,
+                        key_decryption: localStorage.getItem('key_decryption'),
+                        psha: localStorage.getItem('psha')
+                    });
+                    function complete(naes: number[], toGrant: boolean) {
+                        me.dataservice.newData(true, 'oauths/' + me.auth, obj, false, 0, true, naes).then(function() {
+                            if(toGrant) {
+                                me.dataservice.grantVault(me.auth, 'oauth', 'oauths/' + me.auth, obj, 0, new Date(0), '', false, naes).then(function() {
+                                    me.auth = '';
+                                    me.prefix = '';
+                                    me.notif.success(me.translate.instant('success'), me.translate.instant('oauth.granted'));
+                                    resolve();
+                                }, function(e) {
+                                    me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                                    reject(e);
+                                });
+                            } else {
+                                me.auth = '';
+                                me.prefix = '';
+                                me.notif.success(me.translate.instant('success'), me.translate.instant('oauth.granted'));
+                                resolve();
+                            }
+                        }, function(e) {
+                            me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                            reject(e);
+                        });
+                    }
+
+                    //Check if object existed
+                    if(('oauths/' + me.auth) in me.backend.profile.data) {
+                        me.dataservice.getData('oauths/' + me.auth, false, undefined, true).then(function(data) {
+                            complete(data.decr_aes, false);
+                        }, function(e) {
+                            me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                            reject(e);
+                        });
+                    } else {
+                        complete(me.backend.newAES(), true);
+                    }
+                }, function(e) {
+                    me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                    reject(e);
+                });
+            }, function(e) {
+                me.notif.error(me.translate.instant('error'), me.translate.instant('filesystem.noUser'));
+                reject(e);
+            });
+        });
+    }
+
+    /**
+     * Adds a user from data.
+     * @function addUser
+     * @public
+     * @param {String} uname Username.
+     * @param {String} pwd New password.
+     * @param {String} pwd2 Re password.
+     * @param {String} fname First name.
+     * @param {String} lname Last name.
+     * @param {String} email Email.
+     * @return {Promise} Whether should close.
+     */
+    addUser(uname: string, pwd: string, pwd2: string, fname: string, lname: string, mail: string): Promise {
+        var self = this, ct = localStorage.getItem('token'), ckd = localStorage.getItem('key_decryption'), cpsha = localStorage.getItem('psha');
+        var naming = JSON.stringify({'generics.last_name': fname, 'generics.first_name': lname});
+        var my_id = self.backend.profile._id;
+        //Now try
+        return new Promise(function(resolve) {
+            //Handler
+            function end(recup: number[], towards: string) {
+                self.grantVault('whigi-restore', 'profile/recup_id', 'profile/recup_id', towards, 0, new Date(0), '', false, recup).then(function() {
+                    self.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', pwd.slice(4), 0, new Date(0), '', false, undefined).then(function() {
+                        self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                        Data.grant({
+                            backend: self.backend,
+                            dataservice: self,
+                            auth: my_id,
+                            prefix: 'profile/',
+                            notif: self.notif,
+                            translate: self.translate,
+                            admin: true
+                        }).then(function() {
+                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                        }, function(e) {
+                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                        });
+                    }, function(e) {
+                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                    });
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                });
+            }
+            function safe(recup: number[]) {
+                self.newData(false, 'keys/pwd/mine1', pwd.slice(0, 4), false, 0).then(function() {
+                    self.newData(false, 'keys/pwd/mine2', pwd.slice(4), false, 0).then(function() {
+                        self.grantVault('whigi-restore', 'keys/pwd/mine1', 'keys/pwd/mine1', pwd.slice(0, 4), 0, new Date(0), '', false, undefined).then(function() {
+                            end(recup, my_id);
+                        }, function(e) {
+                            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                        });
+                    }, function(e) {
+                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                    });
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                });
+            }
+            function complete() {
+                self.backend.forceReload();
+                self.backend.createUser(uname, pwd, undefined, undefined, false).then(function() {
+                    self.backend.createToken(uname, pwd, false).then(function(token) {
+                        localStorage.setItem('token', token._id);
+                        self.mPublic().then(function(user) {
+                            self.backend.profile = user;
+                            localStorage.setItem('key_decryption', window.sha256(pwd + user.salt));
+                            localStorage.setItem('psha', window.sha256(pwd));
+                            self.listData(false).then(function() {
+                                self.newData(true, 'profile/email/restore', mail, false, 0, true).then(function(email: number[]) {
+                                    self.newData(true, 'profile/recup_id', my_id, false, 0, true).then(function(recup: number[]) {
+                                        self.newData(true, 'profile/name', naming, false, 0, true).then(function(fname: number[]) {
+                                            self.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
+                                                self.grantVault('whigi-wissl', 'profile/name', 'profile/name', naming, 0, new Date(0), '', false, fname).then(function() {
+                                                    self.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
+                                                        safe(recup);
+                                                    }, function() {
+                                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                                    });
+                                                }, function(e) {
+                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                                });
+                                            }, function(e) {
+                                                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                            });
+                                        }, function(e) {
+                                            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                        });
+                                    }, function(e) {
+                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                    });
+                                }, function() {
+                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                });
+                            });
+                        }, function(e) {
+                            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                        });
+                    }, function(e) {
+                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                    });
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                });
+            }
+            if(self.isWhigi(uname)) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+                resolve(false);
+            }
+            if(/[^a-zA-Z0-9\-\_]/.test(uname)) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
+                resolve(false);
+            }
+            if(pwd.length < 8) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+                resolve(false);
+            }
+            if(pwd == pwd2) {
+                if(!/^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/i.test(mail)) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.badEmail'));
+                    resolve(false);
+                    return;
+                }
+                complete();
+            } else {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+                resolve(false);
+            }
+        });
+    }
+
 }

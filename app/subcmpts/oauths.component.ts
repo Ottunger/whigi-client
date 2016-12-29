@@ -81,62 +81,7 @@ export class Oauths implements OnInit {
      * @public
      */
     grant() {
-        var self = this;
-        for(var i = 0; i < self.backend.profile.oauth.length; i++) {
-            if(self.backend.profile.oauth[i].for_id == this.auth.toLowerCase()) {
-                this.auth = '';
-                this.prefix = '';
-                this.notif.success(this.translate.instant('success'), this.translate.instant('oauth.granted'));
-                return;
-            }
-        }
-        this.backend.peekUser(this.auth).then(function() {
-            self.auth = self.auth.toLowerCase();
-            if(!/\/$/.test(self.prefix))
-                self.prefix += '/';
-            self.backend.createOAuth(self.auth, self.prefix, undefined, self.admin).then(function(ticket) {
-                self.backend.profile.oauth.push({id: ticket._id, for_id: self.auth.toLowerCase(), prefix: self.prefix})
-                var obj = JSON.stringify({
-                    token: ticket._id,
-                    key_decryption: localStorage.getItem('key_decryption'),
-                    psha: localStorage.getItem('psha')
-                });
-                function complete(naes: number[], toGrant: boolean) {
-                    self.dataservice.newData(true, 'oauths/' + self.auth, obj, false, 0, true, naes).then(function() {
-                        if(toGrant) {
-                            self.dataservice.grantVault(self.auth, 'oauth', 'oauths/' + self.auth, obj, 0, new Date(0), '', false, naes).then(function() {
-                                self.auth = '';
-                                self.prefix = '';
-                                self.notif.success(self.translate.instant('success'), self.translate.instant('oauth.granted'));
-                            }, function(e) {
-                                self.notif.error(self.translate.instant('error'), self.translate.instant('oauth.noGrant'));
-                            });
-                        } else {
-                            self.auth = '';
-                            self.prefix = '';
-                            self.notif.success(self.translate.instant('success'), self.translate.instant('oauth.granted'));
-                        }
-                    }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('oauth.noGrant'));
-                    });
-                }
-
-                //Check if object existed
-                if(('oauths/' + self.auth) in self.backend.profile.data) {
-                    self.dataservice.getData('oauths/' + self.auth, false, undefined, true).then(function(data) {
-                        complete(data.decr_aes, false);
-                    }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('oauth.noGrant'));
-                    });
-                } else {
-                    complete(self.backend.newAES(), true);
-                }
-            }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('oauth.noGrant'));
-            });
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.noUser'));
-        });
+        Data.grant(<any>this);
     }
 
     /**

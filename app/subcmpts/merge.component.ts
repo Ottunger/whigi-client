@@ -165,7 +165,7 @@ export class Merge {
                                         }, function(e) {
                                             self.manageUI(false);
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                            self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                                            self.dataservice.reloadProfile(currentToken, currentKey, resolve, resolve);
                                         });
                                         break;
                                     case 'getVault':
@@ -193,7 +193,7 @@ export class Merge {
                                                 } else {
                                                     self.manageUI(false);
                                                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                                    self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                                                    self.dataservice.reloadProfile(currentToken, currentKey, resolve, resolve);
                                                 }
                                             });
                                         } else {
@@ -224,21 +224,23 @@ export class Merge {
                                                     }, function(e) {
                                                         self.manageUI(false);
                                                         self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                        resolve();
                                                     });
                                                 } else {
                                                     self.manageUI(false);
                                                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                    resolve();
                                                 }
                                             });
                                         }
                                         if(fnew) {
                                             fnew = false;
                                             self.backend.closeTo(my_id, my_master).then(function() {
-                                                self.reloadProfile(currentToken, currentKey, nnew, resolve);
+                                                self.dataservice.reloadProfile(currentToken, currentKey, nnew, resolve);
                                             }, function(e) {
                                                 self.manageUI(false);
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                                                self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                                                self.dataservice.reloadProfile(currentToken, currentKey, resolve, resolve);
                                             });
                                         } else {
                                             nnew();
@@ -256,6 +258,7 @@ export class Merge {
                                             }, function(e) {
                                                 self.manageUI(false);
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                resolve();
                                             });
                                         } else {
                                             next();
@@ -269,53 +272,28 @@ export class Merge {
                                 self.notif.success(self.translate.instant('success'), self.translate.instant('merge.merged'));
                                 self.login = '';
                                 self.password = '';
+                                resolve();
                             }
                         }
                         next();
                     }, function(e) {
                         self.manageUI(false);
                         self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                        self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                        self.dataservice.reloadProfile(currentToken, currentKey, resolve, resolve);
                         window.$('.imerging').addClass('has-error');
                     });
                 }, function(e) {
                     self.manageUI(false);
                     self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                    self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                    self.dataservice.reloadProfile(currentToken, currentKey, resolve, resolve);
                     window.$('.imerging').addClass('has-error');
                 });
             }, function(e) {
                 self.manageUI(false);
                 self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
-                self.reloadProfile(currentToken, currentKey, resolve, resolve);
+                self.dataservice.reloadProfile(currentToken, currentKey, resolve, resolve);
                 window.$('.imerging').addClass('has-error');
             });
-        });
-    }
-
-    /**
-     * Reload my profile.
-     * @function reloadProfile
-     * @private
-     * @param {String} ct Current token.
-     * @param {String} ck Current key.
-     * @param {Function} resolve Callback.
-     * @param {function} reject Callback.
-     */
-    private reloadProfile(ct: string, ck: string, resolve: Function, reject: Function) {
-        var self = this;
-        localStorage.setItem('token', ct);
-        localStorage.setItem('key_decryption', ck);
-        this.backend.forceReload();
-
-        this.dataservice.mPublic().then(function(profile) {
-            self.backend.profile = profile;
-            self.check.tick();
-            self.dataservice.listData(true).then(resolve, reject);
-        }, function(e) {
-            delete self.backend.profile;
-            self.notif.success(self.translate.instant('success'), self.translate.instant('merge.relog'));
-            reject(e);
         });
     }
 

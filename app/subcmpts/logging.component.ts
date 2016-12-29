@@ -170,7 +170,8 @@ export class Logging implements OnInit {
     signUp() {
         var self = this, asEmail = false, towards: string;
         var bl: number = (!!this.password)? Math.floor(this.password.length / 2) : 0;
-
+        var naming = JSON.stringify({'generics.last_name': this.lname, 'generics.first_name': this.fname});
+        //Handlers
         function end(recup: number[], towards: string) {
             self.dataservice.grantVault('whigi-restore', 'profile/recup_id', 'profile/recup_id', towards, 0, new Date(0), '', false, recup).then(function() {
                 self.dataservice.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', self.password.slice(4), 0, new Date(0), '', false, undefined).then(function() {
@@ -248,9 +249,9 @@ export class Logging implements OnInit {
                             towards = 'wiuser-' + self.backend.generateRandomString(10);
                             self.dataservice.newData(true, 'profile/email/restore', self.email, false, 0, true).then(function(email: number[]) {
                                 self.dataservice.newData(true, 'profile/recup_id', asEmail? towards : self.recup_id, false, 0, true).then(function(recup: number[]) {
-                                    self.dataservice.newData(true, 'profile/name', JSON.stringify({'generics.last_name': self.lname, 'generics.first_name': self.fname}), false, 0, true).then(function(fname: number[]) {
+                                    self.dataservice.newData(true, 'profile/name', naming, false, 0, true).then(function(fname: number[]) {
                                         self.dataservice.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
-                                            self.dataservice.grantVault('whigi-wissl', 'profile/name', 'profile/name', self.fname, 0, new Date(0), '', false, fname).then(function() {
+                                            self.dataservice.grantVault('whigi-wissl', 'profile/name', 'profile/name', naming, 0, new Date(0), '', false, fname).then(function() {
                                                 if(self.recuperable) {
                                                     self.dataservice.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
                                                         safe(recup);
