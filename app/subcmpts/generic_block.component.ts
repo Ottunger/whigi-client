@@ -446,6 +446,10 @@ export class GenericBlock implements OnInit {
         //Modify current timestamp
         if(mod) {
             ret[this.sincefrom[fname].act].from = window.$('#sincefrom' + this.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
+            if(new Set(ret.map(function(el) {return el.from})).size != ret.length) {
+                this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
+                return;
+            }
         }
         //Save?
         if(mod || place < 0) {
@@ -682,6 +686,11 @@ export class GenericBlock implements OnInit {
                 var replacement = this.dataservice.strToObj(this.cached[fname].decr_data) || [];
                 if(!!this.foranew[fname]) {
                     replacement.push({from: from, value: sd});
+                    if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
+                        this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
+                        window.$('.iinput' + this.dataservice.sanit(fname)).addClass('has-error');
+                        return;
+                    }
                 } else {
                     replacement[this.sincefrom[fname].act] = {from: from, value: sd};
                 }

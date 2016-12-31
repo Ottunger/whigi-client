@@ -66,8 +66,12 @@ enableProdMode();
                 <ul id="navigation">
                     <span style="overflow-x: hidden; max-width: 25vw; position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
                     <li class="first"><button type="button" class="btn btn-xs green" style="margin-right: 30px;" (click)="sendFeedback()">{{ 'feedback' | translate }}</button></li>
-                    <li><button type="button" class="btn btn-xs green" (click)="dataservice.setLang('en')">EN</button></li>
-                    <li class="last"><button type="button" class="btn btn-xs green" (click)="dataservice.setLang('fr')">FR</button></li>
+                    <li class="last">
+                        <select [(ngModel)]="dlang" (change)="regLang()" style="background-color: #ff5000;color: #fff;border: 1px solid #ff5000;border-radius: 3px;font-size: 12px;padding-top: 2px; padding-bottom: 1px;">
+                            <option value="en">English</option>
+                            <option value="fr">Français</option>
+                        </select>
+                    </li>
                 </ul>
             </div>
             <simple-notifications [options]="options"></simple-notifications>
@@ -90,6 +94,7 @@ export class Application {
         animate: "scale",
         position: ["right", "bottom"]
     };
+    public dlang: string;
 
     /**
      * Creates the component.
@@ -103,11 +108,25 @@ export class Application {
         var self = this;
         translate.setDefaultLang('en');
         if('lang' in sessionStorage) {
+            this.dlang = sessionStorage.getItem('lang');
             translate.use(sessionStorage.getItem('lang'));
         } else {
             var browserLang = translate.getBrowserLang();
+            this.dlang = browserLang.match(/en|fr/) ? browserLang : 'en';
             translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
         }
+    }
+
+    /**
+     * Planifies language.
+     * @function regLang
+     * @public
+     */
+    regLang() {
+        var self = this;
+        setImmediate(function() {
+            self.dataservice.setLang(self.dlang);
+        });
     }
 
     /**

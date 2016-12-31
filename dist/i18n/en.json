@@ -291,6 +291,7 @@
 
    "generics.silent": "Your input lacks required fields",
    "generics.regexp": "Your input does not match expected format",
+   "generics.twicedate": "Please do not add a delimited value from and already existing landmark",
    "generics.descr": "Description",
    "generics.moreData": "See more...",
    "generics.lessData": "Hide inputs...",
@@ -388,7 +389,7 @@
    "generics.tel": "Phone number",
    "generics.tellong": "All international phone numbers accepted",
    "generics.rrn": "National number",
-   "generics.langs": "Lang",
+   "generics.langs": "Language",
    "generics.langslong": "Communication language",
    "generics.religion": "Religion",
    "generics.disability": "Disability",

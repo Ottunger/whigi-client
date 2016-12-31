@@ -167,6 +167,12 @@ export class Clearview implements OnInit, OnChanges {
                     value: (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data
                 });
             }
+            if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
+                this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
+                window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('has-error');
+                window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', 'red');
+                return;
+            }
             replacement = JSON.stringify(replacement);
         } else {
             replacement = (!!this.new_data_file && this.new_data_file != '')? this.new_data_file : this.new_data.trim();

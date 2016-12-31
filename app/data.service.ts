@@ -451,6 +451,9 @@ export class Data {
             raw_data = as_file? raw_data_file : raw_data;
         }
         //Test if the data passes the associated test
+        if(!!thisgen.transform) {
+            raw_data = window.eval.call(window, '(function(test) {' + thisgen.transform + '})')(raw_data);
+        }
         var res = window.eval.call(window, '(function(test) {' + thisgen.validate + '})')(raw_data);
         if(res !== true) {
             return ['error', res];

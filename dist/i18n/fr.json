@@ -291,6 +291,7 @@
 
    "generics.silent": "Vous n'avez pas rempli tous les champs obligatoires",
    "generics.regexp": "Votre entrée ne valide pas le format attendu",
+   "generics.twicedate": "Merci de ne pas ajouter une nouvelle entrée à partir d'un délimitateur déjà existant",
    "generics.descr": "Description",
    "generics.moreData": "En voir plus...",
    "generics.lessData": "Replier...",

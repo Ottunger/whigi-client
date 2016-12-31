@@ -46,7 +46,8 @@ export class Backend {
         share_as_folder?: boolean,
         json_from_ask?: true,
         json_from_key?: string,
-        can_trigger_account?: boolean
+        can_trigger_account?: boolean,
+        transform?: string
     }]};
     public generics_trie: Trie;
     public generics_paths: {[id: string]: {
