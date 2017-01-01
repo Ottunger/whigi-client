@@ -87,7 +87,8 @@ export class Clearview implements OnInit, OnChanges {
      * @param {Object} now Changes.
      */
     ngOnChanges(now: any) {
-        this.cvRst.emit(now.decr_data.currentValue);
+        if(!!now.decr_data)
+            this.cvRst.emit(now.decr_data.currentValue);
     }
 
     /**

@@ -70,6 +70,10 @@ export class Dataview implements OnInit, OnDestroy {
         this.sub = this.routed.params.subscribe(function(params) {
             //Use params.name as key
             self.data_name = window.decodeURIComponent(params['name']);
+            if(!(self.data_name in self.backend.profile.data)) {
+                self.back(true);
+                return;
+            }
             self.to_filesystem = params['to_filesystem'];
             self.is_dated = self.backend.profile.data[self.data_name].is_dated;
             self.backuri = (!!params['backuri'])? params['backuri'] : JSON.stringify(['/generics']);
