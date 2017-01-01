@@ -105,7 +105,7 @@
                                                             </td>
                                                             <td *ngIf="!!timings[d] && !timings[d].ends">{{ 'dataview.forever' | translate }}</td>
                                                             <td *ngIf="!timings[d]"></td>
-                                                            <td *ngIf="!!timings[d]">{{ timings[d].trigger }}</td>
+                                                            <td *ngIf="!!timings[d]" style="max-width: 100px;overflow-x: auto;">{{ timings[d].trigger }}</td>
                                                             <td *ngIf="!timings[d]"></td>
 
                                                             <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>

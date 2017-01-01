@@ -28,12 +28,12 @@
                                             <td style="padding: 1px;"><button type="button" class="btn default" (click)="getUp()">{{ 'filesystem.getUp' | translate }}</button></td>
                                         </tr>
                                         <tr *ngFor="let d of folderNames()"  class="info">
-                                            <td style="padding: 1px;">{{ d }}</td>
+                                            <td style="padding: 1px;max-width: 200px;overflow-x: auto;">{{ d }}</td>
                                             <td style="padding: 1px;">{{ 'filesystem.folder' | translate }}</td>
                                             <td style="padding: 1px;"><button type="button" class="btn default" (click)="select(d)">{{ 'filesystem.goTo' | translate }}</button></td>
                                         </tr>
                                         <tr *ngFor="let d of dataNames()">
-                                            <td style="padding: 1px;">{{ d }}</td>
+                                            <td style="padding: 1px;max-width: 200px;overflow-x: auto;">{{ d }}</td>
                                             <td style="padding: 1px;"><i>{{ 'filesystem.mix' | translate }}</i></td>
                                             <td style="padding: 1px;"><button type="button" class="btn default" (click)="view(d)">{{ 'filesystem.goTo' | translate }}</button></td>
                                         </tr>
