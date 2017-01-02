@@ -75,6 +75,7 @@
    "contacts.bindAll": "Lier les contacts sélectionnés",
    "contacts.unBindAll": "Délier les contacts sélectionnés",
    "contacts.explain": "Dans l'écran suivant, vous verrez une liste de vos contacts. Vous pourrez ensuite lier chacun d'entre eux à une adresse email, pour peu que vous connaissez au moins une de ces dernières. Quand vous serez satisfait par les liens que vous avez créés, cliquez sur le bouton Sauvegarder, et tout est prêt!",
+   "contacts.reading": "Lecture de vos contacts. Selon leur nombre, cela peut prendre assez longtemps.",
 
    "intro.regGen": "Sauvegardez tout ce que vous avez fait dans ce bloc. Vous le pourrez dès que il y aura des changements à valider.",
    "intro.canGen": "Supprimez toute modification indésirable de ce bloc.",

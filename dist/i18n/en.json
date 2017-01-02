@@ -75,6 +75,7 @@
    "contacts.bindAll": "Bind selected contacts",
    "contacts.unBindAll": "Unbind selected contacts",
    "contacts.explain": "Welcome to WiSSL-Contacts! In the next screen, you will get a list of your contacts. For all those for which you have at least an email, you will be able to bind the contact to this email, so that it can be remotely synchronized by the owner himself. Once you are OK with your bindings, just click the Record button and you're ready to go!",
+   "contacts.reading": "Reading your contacts. Depending on how many you have, this may take quite a while.",
 
    "intro.regGen": "Save all you have done in this block by clicking here. You will be able once there are changes to acknowledge.",
    "intro.canGen": "Discard any modifications in this block if you've made mistakes.",
