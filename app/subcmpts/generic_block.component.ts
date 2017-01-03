@@ -472,6 +472,19 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Edit mode for a block.
+     * @function editAll
+     * @public
+     */
+    editAll() {
+        var prevs = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find("[name='preview']");
+        for(var i = 0; i < prevs.length; i++) {
+            var g = window.$(prevs[i]).attr('data-g');
+            this.dataservice.clickOnEnter(true, '#tgdata' + this.dataservice.sanit(g));
+        }
+    }
+
+    /**
      * Preview a non instatiable held data.
      * @function preview
      * @public
@@ -668,6 +681,9 @@ export class GenericBlock implements OnInit {
                 window.$('#on-edit' + this.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + this.dataservice.sanit(fname));
                 if(!!this.resets[fname])
                     this.resets[fname].emit([]);
+                delete self.new_data[gname];
+                delete self.new_data_file[gname];
+                self.new_datas[gname] = {};
                 return;
             }
             //Build and test
@@ -724,6 +740,13 @@ export class GenericBlock implements OnInit {
                     window.$('#' + self.foranew[fname]).removeClass('green in-edit');
                     delete self.foranew[fname];
                 }
+                //Reset what we'll enter
+                setImmediate(function() {
+                    delete self.new_data[gname];
+                    delete self.new_data_file[gname];
+                    self.new_datas[gname] = {};
+                    self.check.tick();
+                }, 100);
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             });

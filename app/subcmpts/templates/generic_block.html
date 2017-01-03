@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="col-md-6 whigi-sm-pad" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <div id="tgdisp{{ dataservice.sanit(g) }}">
-                                        <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g))"
+                                        <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g))" [attr.data-g]="g"
                                             [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g)" attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
                                     </div>
                                     <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;" class="iinput{{ dataservice.sanit(g) }}">
@@ -225,7 +225,7 @@
                                                     <div class="row">
                                                         <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" style="margin-right: 1px;"
                                                             *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
-                                                            <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g + '/' + d))"
+                                                            <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g + '/' + d))" [attr.data-g]="g + '/' + d"
                                                                 [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g)" attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
                                                         </div>
                                                         <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
@@ -311,7 +311,8 @@
                 <div class="form-actions">
                     <div class="row text-center">
                         <div class="col-md-4" attr.data-intro="{{ 'intro.regGen' | translate }}" data-step="3">
-                            <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" [disabled]="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
+                            <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" *ngIf="!registerAll(false)"><i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
+                            <button type="button" class="btn green" (click)="editAll()" *ngIf="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'edit' | translate }}</button>
                         </div>
                         <div class="col-md-4" attr.data-intro="{{ 'intro.canGen' | translate }}" data-step="4">
                             <button type="button" class="btn default" (click)="cancel()">{{ 'cancel' | translate }}</button>

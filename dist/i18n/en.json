@@ -45,6 +45,7 @@
    "warning": "Warning",
    "value": "Value",
    "search": "Search",
+   "edit": "Edit",
 
    "menus.contacts": "Contacts",
    "menus.mine": "Shared To Me",
@@ -294,7 +295,7 @@
    "generics.regexp": "Your input does not match expected format",
    "generics.twicedate": "Please do not add a delimited value from and already existing landmark",
    "generics.descr": "Description",
-   "generics.moreData": "See more...",
+   "generics.moreData": "Show inputs...",
    "generics.lessData": "Hide inputs...",
    "generics.shared": "Shared to...",
    "generics.tooLong": "Your input is too long to be accepted",

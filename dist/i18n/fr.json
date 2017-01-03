@@ -45,6 +45,7 @@
    "warning": "Attention",
    "value": "Valeur",
    "search": "Rechercher",
+   "edit": "Modifier",
    
    "menus.contacts": "Contacts",
    "menus.mine": "Données Reçues",
@@ -294,7 +295,7 @@
    "generics.regexp": "Votre entrée ne valide pas le format attendu",
    "generics.twicedate": "Merci de ne pas ajouter une nouvelle entrée à partir d'un délimitateur déjà existant",
    "generics.descr": "Description",
-   "generics.moreData": "En voir plus...",
+   "generics.moreData": "Déplier...",
    "generics.lessData": "Replier...",
    "generics.shared": "Partagé à...",
    "generics.tooLong": "Votre entrée est trop longue",
