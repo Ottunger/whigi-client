@@ -64,10 +64,23 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <button class="btn green" (click)="grant()" [disabled]="!topics || topics == '' || !url || !!!dataservice.checking.isURL(url)">
+                                                            <button class="btn green" (click)="grant()" [disabled]="!credited || !topics || topics == '' || !url || !!!dataservice.checking.isURL(url)">
                                                                 <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                                                         </div>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <!-- END FORM-->
+                                            <!-- BEGIN FORM-->
+                                            <div class="row">
+                                                <div class="col-md-9">
+                                                    <p>{{ 'advert.load' | translate }}</p>
+                                                </div>
+                                                <div class="col-md-3" *ngIf="!credited">
+                                                    <div id="paypal-btn"></div>
+                                                </div>
+                                                <div class="col-md-3" [style.display]="credited? 'block' : 'none'">
+                                                    <p>{{ 'advert.credited' | translate }}</p>
                                                 </div>
                                             </div>
                                             <!-- END FORM-->

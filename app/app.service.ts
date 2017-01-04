@@ -63,7 +63,6 @@ export class Backend {
     public ADVERT_BEL_URL = 'https://localhost:446/api/v1/';
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
-    public NOMINATIM_URL = 'https://open.mapquestapi.com/nominatim/v1/search.php?key=2K6TBGZx4CJCyoW7WARDUr7uII0PU4JA&format=json&limit=1&q=';
     public MAIL = 'mailto://whigi@envict.com';
     private cpt: string;
     private rsa_key: string[];
@@ -84,7 +83,7 @@ export class Backend {
         this.data_loaded = false;
         this.rsa_key = [];
         this.generics_trie = new Trie();
-        this.backend(true, false, 'GET', {}, 'generics.json', false, false).then(function(response) {
+        this.backend('whigi', false, 'GET', {}, 'generics.json', false, false).then(function(response) {
             self.generics = response;
             var keys = Object.getOwnPropertyNames(response);
             for(var i = 0; i < keys.length; i++) {
@@ -92,7 +91,7 @@ export class Backend {
                 self.generics_trie.add(keys[i], undefined);
             }
         }, function(e) {});
-        this.backend(true, false, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
+        this.backend('whigi', false, 'GET', {}, 'generics_paths.json', false, false).then(function(response) {
             self.generics_paths = response;
         }, function(e) {});
         window.WHIGI_URL = this.BASE_URL;
@@ -450,9 +449,6 @@ export class Backend {
                 break;
             case 'whigi-restore':
                 dest = this.RESTORE_URL;
-                break;
-            case 'nominatim':
-                dest = this.NOMINATIM_URL;
                 break;
             case 'whigi-advert-WORLD':
                 dest = this.ADVERT_WORLD_URL;
@@ -1060,7 +1056,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     nominatim(query: string): Promise {
-        return this.backend('nominatim', false, 'GET', {}, query, false, false);
+        return this.backend('whigi', false, 'POST', {}, 'nominatim/search.php?format=json&limit=1&q=' + query, true, true);
     }
 
     /**

@@ -19,6 +19,7 @@ import * as template from './templates/makeadvert.html';
 })
 export class Makeadvert implements OnInit {
 
+    public credited: boolean;
     public radius: number;
     public address: string;
     public topics: string;
@@ -84,6 +85,32 @@ export class Makeadvert implements OnInit {
                     }
                 }
             });
+        });
+        if(!!this.backend.profile.shared_with_me['whigi-wissl'] && !!this.backend.profile.shared_with_me['whigi-wissl']['payments/adverts'])
+            this.credited = true;
+        window.$('paypal-btn').ready(function() {
+            window.paypal.Button.render({
+                env: 'sandbox',
+                client: {
+                    sandbox: 'Ab1nQtpjUsjHLacxp12lcTHwJte7Eo4mu90KnGskaqeV3dSdJuaVKNtulPH0bVvvNYmggghGmW4qkjUB',
+                    production: 'AZRFFe5p-BPGJAOumTbKn236C4TXj0soTWJutS1uhqAZiQpfI-jF2GGgE4-l8l-o4-QPkQGls3g0AfJr'
+                },
+                payment: function() {
+                    var env = this.props.env;
+                    var client = this.props.client;
+                    return window.paypal.rest.payment.create(env, client, {
+                        transactions: [{
+                            amount: {total: '10.00', currency: 'EUR'}
+                        }]
+                    });
+                },
+                onAuthorize: function(data, actions) {
+                    return actions.payment.execute().then(function() {
+                        self.credited = true;
+                        self.check.tick();
+                    });
+                }
+            }, '#paypal-btn');
         });
     }
 
@@ -164,6 +191,9 @@ export class Makeadvert implements OnInit {
         this.dataservice.newData(true, 'corporate/campaigns/' + cid, send, false, 0, true, naes).then(function(data) {
             self.dataservice.grantVault(self.campaigns[cid].target, cid, 'corporate/campaigns/' + cid, send, 0, new Date((new Date).getTime() + 30*24*60*60*1000), '', false, naes).then(function() {
                 self.campaigns[cid].until = new Date((new Date).getTime() + 30*24*60*60*1000).toLocaleString(self.translate.currentLang);
+                self.credited = false;
+                if(!!self.backend.profile.shared_with_me['whigi-wissl'] && !!self.backend.profile.shared_with_me['whigi-wissl']['payments/adverts'])
+                    delete self.backend.profile.shared_with_me['whigi-wissl']['payments/adverts'];
                 self.notif.success(self.translate.instant('success'), self.translate.instant('advert.made'));
                 if(rem === true)
                     self.check.tick();
