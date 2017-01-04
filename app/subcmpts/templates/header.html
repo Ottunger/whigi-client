@@ -9,11 +9,7 @@
             </div>
         </div>
         <!-- END LOGO -->
-        <!-- BEGIN RESPONSIVE MENU TOGGLER -->
-        <a href="javascript:;" class="menu-toggler responsive-toggler" style="padding-top: 15px;" (click)="toggleMenu()">
-            <span></span>
-        </a>
-        <!-- END RESPONSIVE MENU TOGGLER -->
+        <p style="padding-top: 10px; color: #ff5000; float: left;" *ngIf="!!backend.profile && !!backend.profile.impersonated_prefix">{{ 'header.oauthing' | translate }}</p>
         <!-- BEGIN TOP NAVIGATION MENU -->
         <div class="top-menu">
             <ul class="nav navbar-nav pull-right">

@@ -16,8 +16,8 @@
                             <li role="presentation" *ngIf="!is_dated" class="fi-listable active">
                                 <a href="#whigi-undated" aria-controls="whigi-undated" role="tab" data-toggle="tab">{{ 'actual' | translate }}</a></li>
                             <li role="presentation" *ngFor="let p of is_dated? computeValues() : []; let i = index" [class.active]="i == 0" [class.fi-listable]="i == 0">
-                                <a href="#{{ dataservice.sanit(p.from.toLocaleString()) }}" [attr.aria-controls]="dataservice.sanit(p.from.toLocaleString())"
-                                role="tab" data-toggle="tab">{{ p.from.toLocaleString() }}</a></li>
+                                <a href="#{{ dataservice.sanit(p.from.toLocaleString(translate.currentLang)) }}" [attr.aria-controls]="dataservice.sanit(p.from.toLocaleString(translate.currentLang))"
+                                role="tab" data-toggle="tab">{{ p.from.toLocaleString(translate.currentLang) }}</a></li>
                             <li role="presentation" class="wlimore" *ngIf="change">
                                 <a href="#whigi-more-val" *ngIf="is_dated" aria-controls="whigi-more-val" role="tab" data-toggle="tab">{{ 'add' | translate }}</a>
                                 <a href="#whigi-more-val" *ngIf="!is_dated" aria-controls="whigi-more-val" role="tab" data-toggle="tab">{{ 'modify' | translate }}</a>
@@ -46,9 +46,9 @@
                             <!-- end show undated -->
                             <!-- begin show dated -->
                             <div role="tabpanel" *ngFor="let p of is_dated? computeValues() : []; let i = index" class="tab-pane" [class.active]="i == 0" [class.fi-listable]="i == 0"
-                                id="{{ dataservice.sanit(p.from.toLocaleString()) }}">
+                                id="{{ dataservice.sanit(p.from.toLocaleString(translate.currentLang)) }}">
                                 <p>{{ 'actualFrom' | translate }}</p>
-                                <div class='input-group date' id='pick-chg{{ dataservice.sanit(p.from.toLocaleString()) }}'>
+                                <div class='input-group date' id='pick-chg{{ dataservice.sanit(p.from.toLocaleString(translate.currentLang)) }}'>
                                     <input type='text' class="form-control" />
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
@@ -63,7 +63,7 @@
                                                 <i class="fa fa-cloud-download"></i> {{ 'download' | translate }}</button>
                                         </div>
                                         <div *ngIf="change" class="col-md-2">
-                                            <button type="button" class="btn green" (click)="recFrom('pick-chg' + dataservice.sanit(p.from.toLocaleString()), i)">
+                                            <button type="button" class="btn green" (click)="recFrom('pick-chg' + dataservice.sanit(p.from.toLocaleString(translate.currentLang)), i)">
                                                 <i class="fa fa-save"></i> {{ 'modify' | translate }}</button>
                                         </div>
                                         <div *ngIf="change" class="col-md-2">

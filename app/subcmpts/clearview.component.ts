@@ -102,9 +102,9 @@ export class Clearview implements OnInit, OnChanges {
             this.values = this.dataservice.strToObj(this.decr_data);
             for(var i = 0; i < this.values.length; i++) {
                 this.values[i].from = new Date(this.values[i].from);
-                window.$('#pick-chg' + this.dataservice.sanit(this.values[i].from.toLocaleString())).ready(function() {
-                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString())).datetimepicker();
-                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString())).datetimepicker('date', window.moment(self.values[this].from));
+                window.$('#pick-chg' + this.dataservice.sanit(this.values[i].from.toLocaleString(this.translate.currentLang))).ready(function() {
+                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.translate.currentLang))).datetimepicker();
+                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.translate.currentLang))).datetimepicker('date', window.moment(self.values[this].from));
                 }.bind(i));
             }
             if(this.values.length == 0)

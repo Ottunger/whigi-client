@@ -62,6 +62,7 @@ export class Backend {
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public MAIL = 'mailto://whigi.com@gmail.com';
     public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
+    public NOMINATIM_URL = 'https://open.mapquestapi.com/nominatim/v1/search.php?key=2K6TBGZx4CJCyoW7WARDUr7uII0PU4JA&format=json&limit=1&q=';
     private cpt: string;
     private rsa_key: string[];
 

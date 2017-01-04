@@ -34,6 +34,7 @@ export class Oauths implements OnInit {
      * @param notif Notification service.
      * @param backend Backend service.
      * @param router Router service.
+     * @param dataservice Data service.
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
         private router: Router, private dataservice: Data) {
