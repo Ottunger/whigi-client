@@ -64,6 +64,12 @@
                     <span class="title">{{ 'advert.title' | translate }}</span>
                 </a>
             </li>
+            <li class="nav-item linkbars" id="linkbars70" *ngIf="!!backend.profile && (!backend.profile.company_info || !backend.profile.company_info.is_company)">
+                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/getadv'])">
+                    <i class="icon-settings"></i>
+                    <span class="title">{{ 'advert.title' | translate }}</span>
+                </a>
+            </li>
             <li class="nav-item linkbars" id="linkbars0">
                 <a href="javascript:;" class="nav-link" (click)="router.navigate(['/profile'])">
                     <i class="icon-settings"></i>

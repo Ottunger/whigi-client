@@ -59,10 +59,11 @@ export class Backend {
     public EID_HOST = 'localhost/api/v1/eid';
     public BASE_URL = 'https://localhost/api/v1/';
     public RESTORE_URL = 'https://localhost:444/api/v1/';
+    public ADVERT_URL = 'https://localhost:445/api/v1/';
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
-    public MAIL = 'mailto://whigi.com@gmail.com';
     public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
     public NOMINATIM_URL = 'https://open.mapquestapi.com/nominatim/v1/search.php?key=2K6TBGZx4CJCyoW7WARDUr7uII0PU4JA&format=json&limit=1&q=';
+    public MAIL = 'mailto://whigi@envict.com';
     private cpt: string;
     private rsa_key: string[];
 
@@ -388,7 +389,7 @@ export class Backend {
      * Returns the result of a call to the backend.
      * @function backend
      * @private
-     * @param {Boolean} whigi True to come from Whigi base. Otherwise, use Whigi-restore.
+     * @param {String} whigi 'whigi' to come from Whigi base. Otherwise, see endpoints.
      * @param {Boolean} block Whether to block UI while requesting.
      * @param {String} method Method to use.
      * @param {Object} data JSON body.
@@ -401,7 +402,7 @@ export class Backend {
      * @param {Number} num Number of retries.
      * @return {Promise} The result. On error, a description can be found in e.msg.
      */
-    private backend(whigi: boolean, block: boolean, method: string, data: any, url: string, auth: boolean, token: boolean, puzzle?: boolean,
+    private backend(whigi: string, block: boolean, method: string, data: any, url: string, auth: boolean, token: boolean, puzzle?: boolean,
         ok?: Function, nok?: Function, num?: number): Promise {
         var call, puzzle = puzzle || false, self = this, dest;
         var headers: Headers = new Headers();
@@ -442,7 +443,24 @@ export class Backend {
             headers.append('X-Whigi-Authorization', 'Basic ' + btoa(data.username + ':' + data.password));
         }
         headers.append('Accept-Language', (('lang' in localStorage)? localStorage.getItem('lang') : 'en') + ';q=1');
-        dest = (whigi? this.BASE_URL : this.RESTORE_URL) + url + (puzzle? this.regPuzzle() : '');
+        switch(whigi) {
+            case 'whigi':
+                dest = this.BASE_URL;
+                break;
+            case 'whigi-restore':
+                dest = this.RESTORE_URL;
+                break;
+            case 'nominatim':
+                dest = this.NOMINATIM_URL;
+                break;
+            case 'whigi-advert':
+                dest = this.ADVERT_URL;
+                break;
+            default:
+                dest = this.BASE_URL;
+                break;
+        }
+        dest += url + (puzzle? this.regPuzzle() : '');
 
         switch(method) {
             case 'post':
@@ -546,7 +564,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     selectValues(known: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'selects/' + known, false, false);
+        return this.backend('whigi', false, 'GET', {}, 'selects/' + known, false, false);
     }
 
     /**
@@ -559,7 +577,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     transitionSchema(name: string, as: number, to: number): Promise {
-        return this.backend(true, false, 'GET', {}, 'schemas/' + name + '/' + as + '/' + to, false, false);
+        return this.backend('whigi', false, 'GET', {}, 'schemas/' + name + '/' + as + '/' + to, false, false);
     }
 
     /**
@@ -570,7 +588,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     tooltip(name: string): Promise {
-        return this.backend(true, true, 'GET', {}, 'helps/' + name, false, false);
+        return this.backend('whigi', true, 'GET', {}, 'helps/' + name, false, false);
     }
 
     /**
@@ -581,7 +599,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     peekUser(known: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'peek/' + known, false, false);
+        return this.backend('whigi', false, 'GET', {}, 'peek/' + known, false, false);
     }
 
     /**
@@ -592,7 +610,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getUser(known: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'user/' + known, true, true);
+        return this.backend('whigi', false, 'GET', {}, 'user/' + known, true, true);
     }
 
     /**
@@ -602,7 +620,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getProfile(): Promise {
-        return this.backend(true, false, 'GET', {}, 'profile', true, true);
+        return this.backend('whigi', false, 'GET', {}, 'profile', true, true);
     }
 
     /**
@@ -619,7 +637,7 @@ export class Backend {
             nk.push(Array.from(new window.aesjs.ModeOfOperation.ctr(new_master, new window.aesjs.Counter(0))
                 .encrypt(window.aesjs.util.convertStringToBytes(this.rsa_key[i]))));
         }
-        return this.backend(true, true, 'POST', {
+        return this.backend('whigi', true, 'POST', {
             new_keys: nk
         }, 'close/' + to, true, true, true);
     }
@@ -632,7 +650,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     goCompany(info: any): Promise {
-        return this.backend(true, true, 'POST', info, 'profile/info', true, true);
+        return this.backend('whigi', true, 'POST', info, 'profile/info', true, true);
     }
 
     /**
@@ -643,7 +661,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     remLang(code: string): Promise {
-        return this.backend(true, false, 'POST', {lang: code}, 'profile/info3', true, true);
+        return this.backend('whigi', false, 'POST', {lang: code}, 'profile/info3', true, true);
     }
 
     /**
@@ -654,7 +672,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     goBCE(bce: string): Promise {
-        return this.backend(true, true, 'GET', {}, 'eid/bce/' + bce, true, true);
+        return this.backend('whigi', true, 'GET', {}, 'eid/bce/' + bce, true, true);
     }
 
     /**
@@ -664,7 +682,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     listData(): Promise {
-        return this.backend(true, false, 'GET', {}, 'profile/data', true, true);
+        return this.backend('whigi', false, 'GET', {}, 'profile/data', true, true);
     }
 
     /**
@@ -680,7 +698,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     postData(name: string, encr_data: number[], version: number, is_dated: boolean, is_bound: boolean, encr_aes: number[]): Promise {
-        return this.backend(true, true, 'POST', {
+        return this.backend('whigi', true, 'POST', {
             name: name,
             encr_data: this.arr2str(encr_data),
             is_dated: (!!is_dated)? is_dated : false,
@@ -699,7 +717,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     updateProfile(new_password: string, password: string): Promise {
-        return this.backend(true, true, 'POST', {
+        return this.backend('whigi', true, 'POST', {
             new_password: window.sha256(new_password),
             encr_master_key: this.encryptMasterAESAsNumber(new_password),
             sha_master: window.sha256(window.sha256(this.arr2str(this.master_key))),
@@ -717,7 +735,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     changeUsername(uname: string, password: string): Promise {
-        return this.backend(true, true, 'POST', {
+        return this.backend('whigi', true, 'POST', {
             new_username: uname,
             username: this.profile._id,
             password: window.sha256(password)
@@ -733,7 +751,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     updateProfileForReset(new_password: string, encr_master_key: string): Promise {
-        return this.backend(true, true, 'POST', {
+        return this.backend('whigi', true, 'POST', {
             new_password: window.sha256(new_password),
             encr_master_key: encr_master_key
         }, 'profile/update', true, true);
@@ -761,7 +779,7 @@ export class Backend {
         }
         if(!!is_company)
             post['company_info'] = {is_company: true};
-        return this.backend(true, true, 'POST', post, 'user/create' + this.regCaptcha(), false, false);
+        return this.backend('whigi', true, 'POST', post, 'user/create' + this.regCaptcha(), false, false);
     }
 
     /**
@@ -774,7 +792,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     createToken(username: string, password: string, is_eternal: boolean): Promise {
-        return this.backend(true, true, 'POST', {
+        return this.backend('whigi', true, 'POST', {
             username: username,
             password: window.sha256(password),
             is_eternal: is_eternal
@@ -789,7 +807,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeTokens(all: boolean): Promise {
-        return this.backend(true, false, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + localStorage.getItem('token'))), true, true);
+        return this.backend('whigi', false, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + localStorage.getItem('token'))), true, true);
     }
 
     /**
@@ -811,7 +829,7 @@ export class Backend {
             post['token'] = token;
         if(!!admin)
             post['is_admin'] = admin;
-        return this.backend(true, true, 'POST', post, 'oauth/new', true, true);
+        return this.backend('whigi', true, 'POST', post, 'oauth/new', true, true);
     }
 
     /**
@@ -822,7 +840,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeOAuth(id: string): Promise {
-        return this.backend(true, true, 'DELETE', {}, 'oauth/' + id, true, true);
+        return this.backend('whigi', true, 'DELETE', {}, 'oauth/' + id, true, true);
     }
 
     /**
@@ -833,7 +851,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getData(dataid: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'data/' + dataid, true, true);
+        return this.backend('whigi', false, 'GET', {}, 'data/' + dataid, true, true);
     }
 
     /**
@@ -844,7 +862,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getDataByName(name: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'data/byname/' + window.encodeURIComponent(name), true, true);
+        return this.backend('whigi', false, 'GET', {}, 'data/byname/' + window.encodeURIComponent(name), true, true);
     }
 
     /**
@@ -856,7 +874,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     rename(old: string, now: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'data/' + window.encodeURIComponent(old) + '/to/' + window.encodeURIComponent(now), true, true, true);
+        return this.backend('whigi', false, 'GET', {}, 'data/' + window.encodeURIComponent(old) + '/to/' + window.encodeURIComponent(now), true, true, true);
     }
 
     /**
@@ -867,7 +885,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     triggerVaults(name: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'data/trigger/' + window.encodeURIComponent(name), true, true);
+        return this.backend('whigi', false, 'GET', {}, 'data/trigger/' + window.encodeURIComponent(name), true, true);
     }
 
     /**
@@ -878,7 +896,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeData(name: string): Promise {
-        return this.backend(true, true, 'DELETE', {}, 'data/' + window.encodeURIComponent(name), true, true);
+        return this.backend('whigi', true, 'DELETE', {}, 'data/' + window.encodeURIComponent(name), true, true);
     }
 
     /**
@@ -890,7 +908,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     linkVault(vault_id: string, link_name: string): Promise {
-        return this.backend(true, false, 'POST', {
+        return this.backend('whigi', false, 'POST', {
             vault_id: vault_id,
             data_name: link_name
         }, 'vault/link', true, true, true);
@@ -928,7 +946,7 @@ export class Backend {
         if(typeof storable !== undefined && storable) {
             post['storable'] = true;
         }
-        return this.backend(true, post.data_crypted_aes.length > 1000, 'POST', post, 'vault/new', true, true, true);
+        return this.backend('whigi', post.data_crypted_aes.length > 1000, 'POST', post, 'vault/new', true, true, true);
     }
 
     /**
@@ -939,7 +957,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     revokeVault(vault_id: string): Promise {
-        return this.backend(true, true, 'DELETE', {}, 'vault/' + vault_id, true, true);
+        return this.backend('whigi', true, 'DELETE', {}, 'vault/' + vault_id, true, true);
     }
 
     /**
@@ -950,7 +968,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     revokeVaultFromGrantee(vault_id: string): Promise {
-        return this.backend(true, false, 'DELETE', {}, 'vault/forother/' + vault_id, true, true);
+        return this.backend('whigi', false, 'DELETE', {}, 'vault/forother/' + vault_id, true, true);
     }
 
     /**
@@ -961,7 +979,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getVault(vault_id: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'vault/' + vault_id, true, true);
+        return this.backend('whigi', false, 'GET', {}, 'vault/' + vault_id, true, true);
     }
 
     /**
@@ -972,7 +990,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getAccessVault(vault_id: string): Promise {
-        return this.backend(true, false, 'GET', {}, 'vault/time/' + vault_id, true, true);
+        return this.backend('whigi', false, 'GET', {}, 'vault/time/' + vault_id, true, true);
     }
 
     /**
@@ -987,7 +1005,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     askShare(data_list: string[], towards: string, expire_epoch: number, trigger: string, lang: string): Promise {
-        return this.backend(true, false, 'POST', {
+        return this.backend('whigi', false, 'POST', {
             list: data_list,
             towards: towards,
             expire: expire_epoch,
@@ -1004,7 +1022,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     getRestore(k: string): Promise {
-        return this.backend(false, false, 'GET', {}, 'get/' + k, false, false);
+        return this.backend('whigi-restore', false, 'GET', {}, 'get/' + k, false, false);
     }
 
     /**
@@ -1015,7 +1033,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     requestRestore(id: string): Promise {
-        return this.backend(false, true, 'GET', {}, 'request/' + id, false, false);
+        return this.backend('whigi-restore', true, 'GET', {}, 'request/' + id, false, false);
     }
 
     /**
@@ -1027,7 +1045,29 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     mixRestore(id: string, half: string): Promise {
-        return this.backend(false, false, 'GET', {}, 'mix/' + id + '/' + window.encodeURIComponent(half), false, false);
+        return this.backend('whigi-restore', false, 'GET', {}, 'mix/' + id + '/' + window.encodeURIComponent(half), false, false);
+    }
+
+    /**
+     * Goes on nominatim.
+     * @function nominatim
+     * @public
+     * @param {String} query Query.
+     * @return {Promise} JSON response from backend.
+     */
+    nominatim(query: string): Promise {
+        return this.backend('nominatim', false, 'GET', {}, query, false, false);
+    }
+
+    /**
+     * Searches for ads.
+     * @function searchAds
+     * @public
+     * @param {Object[]} points Points.
+     * @return {Promise} JSON response from backend.
+     */
+    searchAds(points: {lat: number, lon: number}[]): Promise {
+        return this.backend('whigi-advert', false, 'POST', points, 'search', false, false);
     }
 
 }

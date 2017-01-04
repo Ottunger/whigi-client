@@ -22,6 +22,7 @@ export class Makeadvert implements OnInit {
     public radius: number;
     public address: string;
     public topics: string;
+    public url: string;
     public campaigns: {[id: string]: {
         radius: number,
         lat: number,
@@ -29,6 +30,7 @@ export class Makeadvert implements OnInit {
         topics: string,
         until: string,
         target: string
+        url: string
     }};
 
     /**
@@ -66,7 +68,8 @@ export class Makeadvert implements OnInit {
                     lon: cp.lon,
                     topics: cp.topics,
                     until: '',
-                    target: ''
+                    target: '',
+                    url: cp.url
                 }
                 var keys = Object.getOwnPropertyNames(self.backend.profile.data['corporate/campaigns/' + cid].shared_to);
                 for(var j = 0; j < keys.length; j++) {
@@ -111,35 +114,21 @@ export class Makeadvert implements OnInit {
                 var addr = JSON.parse(data.decr_data);
                 addr = JSON.parse(addr[addr.length - 1].value);
                 var country = addr['generics.country'];
-                addr = window.encodeURIComponent(addr['generics.postcode'] + ' ' + addr['generics.city'] + ' ' + self.translate.instant(country));
-                var http = new XMLHttpRequest();
-                http.open('POST', self.backend.NOMINATIM_URL + addr, true);
-                http.setRequestHeader('Content-type', 'application/json');
-                http.onreadystatechange = function() {
-                    if(http.readyState == 4 && Math.floor(http.status/10) == 20) {
-                        //End here and now
-                        var res = JSON.parse(http.responseText);
-                        if(res.length == 0) {
-                            delete self.campaigns[cid];
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('advert.errAddr'));
-                            return;
-                        }
-                        self.campaigns[cid] = {
-                            radius: self.radius,
-                            lat: res[0].lat,
-                            lon: res[0].lon,
-                            topics: self.topics,
-                            until: '',
-                            target: self.radius == 100000? 'whigi-advert-WORLD' : 'whigi-advert-' + country
-                        };
-                        self.check.tick();
-                        self.redo(cid, true);
-                    } else if(http.readyState == 4) {
-                        delete self.campaigns[cid];
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
-                    }
-                }
-                http.send();
+                self.dataservice.nominatim(addr, function(res) {
+                    self.campaigns[cid] = {
+                        radius: self.radius,
+                        lat: res[0].lat,
+                        lon: res[0].lon,
+                        topics: self.topics,
+                        until: '',
+                        target: self.radius == 100000? 'whigi-advert-WORLD' : 'whigi-advert-' + country,
+                        url: self.url
+                    };
+                    self.redo(cid, true);
+                }, function() {
+                    delete self.campaigns[cid];
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
+                });
             }, function(e) {
                 delete self.campaigns[cid];
                 self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
@@ -160,12 +149,14 @@ export class Makeadvert implements OnInit {
             radius: this.campaigns[cid].radius,
             lat: this.campaigns[cid].lat,
             lon: this.campaigns[cid].lon,
-            topics: this.campaigns[cid].topics
+            topics: this.campaigns[cid].topics,
+            url: this.campaigns[cid].url
         });
         //Current restrictions
         if(['whigi-advert-WORLD', 'whigi-advert-BEL'].indexOf(self.campaigns[cid].target) == -1) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('advert.limits'));
-            self.check.tick();
+            if(rem === true)
+                self.check.tick();
             return;
         }
         var naes = self.backend.newAES();
@@ -173,18 +164,21 @@ export class Makeadvert implements OnInit {
             self.dataservice.grantVault(self.campaigns[cid].target, cid, 'corporate/campaigns/' + cid, send, 0, new Date((new Date).getTime() + 30*24*60*60*1000), '', false, naes).then(function() {
                 self.campaigns[cid].until = new Date((new Date).getTime() + 30*24*60*60*1000).toLocaleString(self.translate.currentLang);
                 self.notif.success(self.translate.instant('success'), self.translate.instant('advert.made'));
-                self.check.tick();
+                if(rem === true)
+                    self.check.tick();
             }, function(e) {
                 if(rem === true)
                     delete self.campaigns[cid];
                 self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
-                self.check.tick();
+                if(rem === true)
+                    self.check.tick();
             });
         }, function(e) {
             if(rem === true)
                 delete self.campaigns[cid];
             self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
-            self.check.tick();
+            if(rem === true)
+                self.check.tick();
         });
     }
 

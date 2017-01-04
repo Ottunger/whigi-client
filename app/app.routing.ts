@@ -24,7 +24,8 @@ import {Loginas} from './subcmpts/loginas.component';
 import {WhoIShare} from './subcmpts/whoishare.component';
 import {Happenings} from './subcmpts/happenings.component';
 import {Oauths} from './subcmpts/oauths.component';
-import {Makeadvert} from './subcmpts/makeadvert.component'; 
+import {Makeadvert} from './subcmpts/makeadvert.component';
+import {Getadvert} from './subcmpts/getadvert.component';
 import {Notfound} from './subcmpts/notfound.component';
 import {Profileguard, Fullguard, Genguard, CSSguard} from './guards.service';
 
@@ -58,7 +59,8 @@ const appRoutes: Routes = [
     {path: 'generics', component: Generics, canActivate: [Fullguard], canDeactivate: [Genguard]},
     {path: 'generics/:filter', component: Generics, canActivate: [Fullguard], canDeactivate: [Genguard]},
     {path: 'merge/:mergeu/:mergep', component: Merge, canActivate: [Profileguard]},
-    {path: 'makeadv', component: Makeadvert, canActivate: [Fullguard]}
+    {path: 'getadv', component: Getadvert, canActivate: [Fullguard]},
+    {path: 'makeadv', component: Makeadvert, canActivate: [Fullguard]},
     {path: '**', component: Notfound}
 ];
 export const appRoutingProviders: any[] = [

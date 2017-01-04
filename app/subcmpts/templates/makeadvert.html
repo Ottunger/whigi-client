@@ -30,7 +30,7 @@
                                                 <div class="col-md-12">
                                                     <p>{{ 'advert.explainCom' | translate }}</p>
                                                     <div class="row">
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label class="control-label">{{ 'advert.address' | translate }}</label><br />
                                                                 <select class="form-control" [(ngModel)]="address">
@@ -38,7 +38,7 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-2">
                                                             <div class="form-group">
                                                                 <label class="control-label">{{ 'advert.radius' | translate }}:</label><br />
                                                                 <select class="form-control" [(ngModel)]="radius">
@@ -58,7 +58,13 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <button class="btn green" (click)="grant()" [disabled]="!topics || topics == ''">
+                                                            <div class="form-group">
+                                                                <label class="control-label">{{ 'advert.url' | translate }}:</label><br />
+                                                                <input type="text" class="form-control" [(ngModel)]="url"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button class="btn green" (click)="grant()" [disabled]="!topics || topics == '' || !url || !!!dataservice.checking.isURL(url)">
                                                                 <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                                                         </div>
                                                     </div>

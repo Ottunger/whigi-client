@@ -1,0 +1,107 @@
+<div class="page-header-fixed page-sidebar-closed-hide-logo page-content-white">
+    <div class="page-wrapper">
+        <header [cur]="dataservice.ee" [run]="dataservice.how"></header>
+        <!-- BEGIN HEADER & CONTENT DIVIDER -->
+        <div class="clearfix" style="background-color: #414142;"></div>
+        <!-- END HEADER & CONTENT DIVIDER -->
+        <!-- BEGIN CONTAINER -->
+        <div class="page-container">
+            <sidebar [lighted]="60"></sidebar>
+            <!-- BEGIN CONTENT -->
+            <div class="page-content-wrapper">
+                <!-- BEGIN CONTENT BODY -->
+                <div class="page-content" style="min-height:800px">
+                    <!-- BEGIN PAGE TITLE-->
+                    <h1 class="page-title"> {{ 'advert.title' | translate }}</h1>
+                    <!-- END PAGE TITLE-->
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-bookmark"></i>{{ 'advert.interests' | translate }}</div>
+                                        </div>
+                                        <div class="portlet-body form">
+                                            <!-- BEGIN FORM-->
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <p>{{ 'advert.explainPerson' | translate }}</p>
+                                                    <div class="row">
+                                                        <div class="col-md-10">
+                                                            <div class="form-group">
+                                                                <label class="control-label">{{ 'advert.query' | translate }}:</label><br />
+                                                                <input type="text" class="form-control" [(ngModel)]="query"/>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-md-2">
+                                                            <button class="btn green" (click)="search()" [disabled]="!query || query == ''">
+                                                                <i class="fa fa-pencil"></i> {{ 'search' | translate }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-bookmark"></i>{{ 'advert.results' | translate }}</div>
+                                            <div class="tools">
+                                                <a *ngIf="results.length > 0" href="javascript:;" class="tl-link expand"
+                                                    (click)="dataservice.collapse('apsable3')"> </a>
+                                                <span *ngIf="results.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
+                                            </div>
+                                        </div>
+                                        <div *ngIf="results.length > 0" class="portlet-body form" id="apsable3">
+                                            <!-- BEGIN FORM-->
+                                            <div class="table-responsive">
+                                                <table class="table table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>{{ 'advert.who' | translate }}</th>
+                                                            <th>{{ 'action' | translate }}</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr *ngFor="let d of results">
+                                                            <td>{{ d.who }}</td>
+                                                            <td>
+                                                                <button type="button" class="btn green" (click)="follow(d)">{{ 'advert.follow' | translate }}</button>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <!-- END FORM-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END CONTENT BODY -->
+        </div>
+        <!-- END CONTENT -->
+        <!-- END CONTAINER -->
+        <!-- BEGIN FOOTER -->
+        <div class="page-footer">
+            <div class="scroll-to-top" style="display: block;" (click)="dataservice.top()">
+                <i class="icon-arrow-up"></i>
+            </div>
+        </div>
+        <!-- END FOOTER -->
+    </div>
+</div>

@@ -1381,4 +1381,26 @@ export class Data {
         });
     }
 
+    /**
+     * Nominatim over ajax.
+     * @function nominatim
+     * @public
+     * @param {Object} addr Address object.
+     * @param {Function} ok Called if ok.
+     * @param {Fucntion} err Called if erred out.
+     */
+    nominatim(addr: any, ok: Function, err: Function) {
+        var self = this;
+        addr = window.encodeURIComponent(addr['generics.postcode'] + ' ' + addr['generics.city'] + ' ' + self.translate.instant(addr['generics.country']));
+        this.backend.nominatim(addr).then(function(res) {
+            if(res.length == 0) {
+                err();
+                return;
+            }
+            ok(res);
+        }, function(e) {
+            err();
+        });
+    }
+
 }

@@ -48,6 +48,7 @@ import {ClearSingleview} from './subcmpts/clearsingleview.component';
 import {Happenings} from './subcmpts/happenings.component';
 import {Oauths} from './subcmpts/oauths.component';
 import {Makeadvert} from './subcmpts/makeadvert.component';
+import {Getadvert} from './subcmpts/getadvert.component';
 import {Notfound} from './subcmpts/notfound.component';
 
 export function createTranslateLoader(http: Http) {
@@ -98,6 +99,7 @@ export function createTranslateLoader(http: Http) {
         Happenings,
         Oauths,
         Makeadvert,
+        Getadvert,
         Notfound
     ],
     providers: [
