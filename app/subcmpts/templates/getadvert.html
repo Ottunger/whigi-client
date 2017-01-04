@@ -57,12 +57,12 @@
                                             <div class="caption">
                                                 <i class="fa fa-bookmark"></i>{{ 'advert.results' | translate }}</div>
                                             <div class="tools">
-                                                <a *ngIf="results.length > 0" href="javascript:;" class="tl-link expand"
+                                                <a *ngIf="results.size > 0" href="javascript:;" class="tl-link expand"
                                                     (click)="dataservice.collapse('apsable3')"> </a>
-                                                <span *ngIf="results.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
+                                                <span *ngIf="results.size == 0"><i class="fa fa-exclamation-triangle"></i> </span>
                                             </div>
                                         </div>
-                                        <div *ngIf="results.length > 0" class="portlet-body form" id="apsable3">
+                                        <div *ngIf="results.size > 0" class="portlet-body form" id="apsable3">
                                             <!-- BEGIN FORM-->
                                             <div class="table-responsive">
                                                 <table class="table table-hover">

@@ -59,7 +59,8 @@ export class Backend {
     public EID_HOST = 'localhost/api/v1/eid';
     public BASE_URL = 'https://localhost/api/v1/';
     public RESTORE_URL = 'https://localhost:444/api/v1/';
-    public ADVERT_URL = 'https://localhost:445/api/v1/';
+    public ADVERT_WORLD_URL = 'https://localhost:445/api/v1/';
+    public ADVERT_BEL_URL = 'https://localhost:446/api/v1/';
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
     public NOMINATIM_URL = 'https://open.mapquestapi.com/nominatim/v1/search.php?key=2K6TBGZx4CJCyoW7WARDUr7uII0PU4JA&format=json&limit=1&q=';
@@ -453,8 +454,11 @@ export class Backend {
             case 'nominatim':
                 dest = this.NOMINATIM_URL;
                 break;
-            case 'whigi-advert':
-                dest = this.ADVERT_URL;
+            case 'whigi-advert-WORLD':
+                dest = this.ADVERT_WORLD_URL;
+                break;
+            case 'whigi-advert-BEL':
+                dest = this.ADVERT_BEL_URL;
                 break;
             default:
                 dest = this.BASE_URL;
@@ -1063,11 +1067,13 @@ export class Backend {
      * Searches for ads.
      * @function searchAds
      * @public
+     * @param {String} ccode Country code.
      * @param {Object[]} points Points.
+     * @param {String} query Query.
      * @return {Promise} JSON response from backend.
      */
-    searchAds(points: {lat: number, lon: number}[]): Promise {
-        return this.backend('whigi-advert', false, 'POST', points, 'search', false, false);
+    searchAds(ccode: string, points: {lat: number, lon: number}[], query: string): Promise {
+        return this.backend('whigi-advert-' + ccode, false, 'POST', {points: points, terms: query.split(/[\s,]/).map(function(el) {return el.trim()})}, 'search', false, false);
     }
 
 }

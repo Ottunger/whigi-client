@@ -20,8 +20,8 @@ import * as template from './templates/getadvert.html';
 export class Getadvert implements OnInit {
 
     public query: string;
-    public results: {cid: string, who: string, url: string}[];
-    private locations: {lat: number, lon: number}[];
+    public results: Set<{cid: string, who: string, url: string}>;
+    private locations: {lat: number, lon: number, ccode: string}[];
 
     /**
      * Creates the component.
@@ -34,7 +34,7 @@ export class Getadvert implements OnInit {
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         this.locations = [];
-        this.results = [];
+        this.results = new Set();
     }
 
     /**
@@ -50,7 +50,8 @@ export class Getadvert implements OnInit {
                 self.dataservice.nominatim(addr, function(res) {
                     var obj = {
                         lat: Math.floor(res[0].lat * 1000)/1000,
-                        lon: Math.floor(res[0].lon * 1000)/1000
+                        lon: Math.floor(res[0].lon * 1000)/1000,
+                        ccode: addr['generics.country']
                     };
                     if(self.locations.indexOf(obj) == -1)
                         self.locations.push(obj);
@@ -86,7 +87,7 @@ export class Getadvert implements OnInit {
         };
         function complete() {
             var has = /\?/.test(res.url);
-            res.url += (has? '&q=' : '?q=') + this.query + '&user=' + this.backend.profile._id;
+            res.url += (has? '&q=' : '?q=') + self.query + '&user=' + self.backend.profile._id;
             window.location.href = res.url;
         }
         //Now list what we have
@@ -113,7 +114,9 @@ export class Getadvert implements OnInit {
                         self.dataservice.getData(self.backend.profile.data[work.name].id, true).then(function(data) {
                             self.dataservice.grantVault(res.who, work.save, work.name, data.decr_data, 0, new Date((new Date).getTime() + 24*60*60*1000),
                                 '', false, data.decr_aes, true).then(next, next);
-                        }, function(e) {});
+                        }, function(e) {
+                            next();
+                        });
                         break;
                     default:
                         break;
@@ -122,6 +125,7 @@ export class Getadvert implements OnInit {
                 complete();
             }
         }
+        next();
     }
 
     /**
@@ -129,14 +133,15 @@ export class Getadvert implements OnInit {
      * @function search
      */
     search() {
-        var self = this;
-        this.results = [];
-        this.backend.searchAds(this.locations).then(function(got) {
-            self.results = got;
-            if(got.length == 0)
-                self.notif.error(self.translate.instant('error'), self.translate.instant('advert.getNone'));
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('advert.getError'));
+        var self = this, res = [];
+        this.results = new Set();
+        new Set(this.locations.map(function(el) {return el.ccode})).add('WORLD').forEach(function(ccode: string) {
+            self.backend.searchAds(ccode, self.locations, self.query).then(function(got) {
+                res = res.concat(got);
+                self.results = new Set(res);
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('advert.getError'));
+            });
         });
     }
 

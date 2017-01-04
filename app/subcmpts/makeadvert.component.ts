@@ -108,7 +108,7 @@ export class Makeadvert implements OnInit {
      * @public
      */
     grant() {
-        var self = this, cid = this.backend.generateRandomString(12);
+        var self = this, cid = this.backend.generateRandomString(48);
         setImmediate(function() {
             self.dataservice.getData('corporate/address/' + self.address, true, undefined, true).then(function(data) {
                 var addr = JSON.parse(data.decr_data);
@@ -146,6 +146,7 @@ export class Makeadvert implements OnInit {
     redo(cid: string, rem?: boolean) {
         var self = this;
         var send = JSON.stringify({
+            _id: cid,
             radius: this.campaigns[cid].radius,
             lat: this.campaigns[cid].lat,
             lon: this.campaigns[cid].lon,
