@@ -134,7 +134,7 @@
    "header.oauthing": "Connecté en tant que compte géré",
 
    "advert.title": "Publicité Ethique",
-   "advert.explainCom": "Utilisez ce formulaire pour créer une publicité éthique. Une telle publicité nous est d'abord soumise, puis elle sera transmise aux utilisateurs suffisamment proche de vous et qui nous auront marqué leur intérêt dans vos produits.",
+   "advert.explainCom": "Utilisez ce formulaire pour créer une publicité éthique. Une telle publicité nous est d'abord soumise, puis elle sera transmise aux utilisateurs suffisamment proches de vous et qui nous auront marqué leur intérêt pour vos produits.",
    "advert.address": "Choisissez une adresse autour de laquelle publier",
    "advert.radius": "Choisissez une limite de distance",
    "advert.topic": "Entrez vos produits ou services séparés par des virgules; plus vous entrez, moins ils seront importants",
@@ -155,7 +155,7 @@
    "advert.query": "Entrez votre requête ici",
    "advert.results": "Résultats de recherche",
    "advert.who": "Organisateur",
-   "advert.follow": "Voire l'offre",
+   "advert.follow": "Voir l'offre",
    "advert.getError": "Le chargement a échoué",
    "advert.getNone": "Aucune offre ne correspond aux critères",
 
@@ -337,6 +337,7 @@
    "generics.create": "Créer un compte?",
    "generics.createExplain": "Vous venez de rentrer les détails d'une personne, voulez-vous créer un compte WiSSL pour elle, sur lequel vous seriez administrateur? Notez que vous ne devriez répondre oui que pour des comptes que vous allez gérer, comem ceux d'enfants en bas âge par exemple.",
 
+   "whoishare.title": "Données Que je Partage",
    "whoishare.dname": "ID",
    "whoishare.generic": "Champ partagé",
    "whoishare.dunno": "Champ non standardisé",
@@ -571,7 +572,7 @@
    "ln": "Lingála",
    "lg": "Luganda",
    "lu": "Luxemburger",
-   "lb": "Lîtzebuergesch",
+   "lb": "Lëtzebuergesch",
    "hu": "Magyar",
    "mg": "Malagasy fiteny",
    "mt": "Malti",

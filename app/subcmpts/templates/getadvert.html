@@ -74,7 +74,10 @@
                                                     </thead>
                                                     <tbody>
                                                         <tr *ngFor="let d of results">
-                                                            <td>{{ d.who }}</td>
+                                                            <td>
+                                                                <img id="pict__{{ d.who }}" height="20px" alt="" style="float: left;margin-right: 10px;cursor: pointer;" />
+                                                                {{ d.who }}
+                                                            </td>
                                                             <td>
                                                                 <button type="button" class="btn green" (click)="follow(d)">{{ 'advert.follow' | translate }}</button>
                                                             </td>

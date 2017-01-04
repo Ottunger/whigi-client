@@ -21,6 +21,7 @@ export class Getadvert implements OnInit {
 
     public query: string;
     public results: Set<{cid: string, who: string, url: string}>;
+    public users: {[id: string]: any};
     private locations: {lat: number, lon: number, ccode: string}[];
 
     /**
@@ -35,6 +36,7 @@ export class Getadvert implements OnInit {
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         this.locations = [];
         this.results = new Set();
+        this.users = {};
     }
 
     /**
@@ -139,6 +141,21 @@ export class Getadvert implements OnInit {
             self.backend.searchAds(ccode, self.locations, self.query).then(function(got) {
                 res = res.concat(got);
                 self.results = new Set(res);
+                self.results.forEach(function(result) {
+                    if(!(result.who in self.users)) {
+                        self.backend.getUser(result.who).then(function(user) {
+                            self.users[result.who] = user;
+                            window.$('#pict__' + result.who).ready(function() {
+                                if(!!user && !!user.company_info && !!user.company_info.picture)
+                                    window.$('#pict__' + result.who).attr('src', user.company_info.picture);
+                                else
+                                    window.$('#pict__' + result.who).attr('src', 'assets/logo.png');
+                            });
+                        }, function(e) {
+                            window.$('#pict__' + result.who).attr('src', 'assets/logo.png');
+                        });
+                    }
+                });
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('advert.getError'));
             });
