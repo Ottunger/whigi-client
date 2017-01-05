@@ -58,6 +58,7 @@
    "settings.encrypt": "Encrypt here",
    "settings.whoami": "Who am I?",
    "settings.whoamiExplain": "Use this contact to automatically fill in your WiSSL account's profile information? We won't override any different data you might have already inputted.",
+   "settings.nfc": "Broadcast myself",
 
    "contacts.title": "Contacts Synchronization",
    "contacts.noContacts": "Cannot read your contacts!",
