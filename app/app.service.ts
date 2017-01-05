@@ -413,9 +413,13 @@ export class Backend {
 
         function accept(resolve, response) {
             var res = response.json();
-            res._status = response.status;
-            if('puzzle' in res) {
-                localStorage.setItem('puzzle', res.puzzle);
+            if(typeof res === 'string') {
+                res = JSON.parse(res);
+            } else {
+                res._status = response.status;
+                if('puzzle' in res) {
+                    localStorage.setItem('puzzle', res.puzzle);
+                }
             }
             if(block && self.block_mask)
                 self.block(false);
