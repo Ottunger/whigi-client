@@ -64,6 +64,7 @@ export class Backend {
     public GWP_URL = 'https://whigi2-giveaway.envict.com';
     public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
     public MAIL = 'mailto://whigi@envict.com';
+    public ENV: string = 'sandbox';
     private cpt: string;
     private rsa_key: string[];
 
@@ -844,6 +845,41 @@ export class Backend {
     }
 
     /**
+     * Goes on nominatim.
+     * @function nominatim
+     * @public
+     * @param {String} query Query.
+     * @return {Promise} JSON response from backend.
+     */
+    nominatim(query: string): Promise {
+        return this.backend('whigi', false, 'POST', {}, 'nominatim/search.php?format=json&limit=1&q=' + query, true, true);
+    }
+
+    /**
+     * Ask for a execution server side.
+     * @function doPay
+     * @public
+     * @param {String} pathfor Path to be credited.
+     * @param {String} pid Payment ID.
+     * @param {String} payer_id Payer ID.
+     * @return {Promise} JSON response from backend.
+     */
+    doPay(pathfor: string, pid:string, payer_id: string): Promise {
+        return this.backend('whigi', false, 'POST', {payer_id: payer_id}, 'payed/' + window.encodeURIComponent(pathfor) + '/' + pid, true, true);
+    }
+
+    /**
+     * Ask for a payment server side.
+     * @function askPay
+     * @public
+     * @param {String} pathfor Path to be credited.
+     * @return {Promise} JSON response from backend.
+     */
+    askPay(pathfor: string): Promise {
+        return this.backend('whigi', false, 'GET', {}, 'payed/init/begin/' + window.encodeURIComponent(pathfor), true, true);
+    }
+
+    /**
      * Retrieves a piece of data.
      * @function getData
      * @public
@@ -1046,17 +1082,6 @@ export class Backend {
      */
     mixRestore(id: string, half: string): Promise {
         return this.backend('whigi-restore', false, 'GET', {}, 'mix/' + id + '/' + window.encodeURIComponent(half), false, false);
-    }
-
-    /**
-     * Goes on nominatim.
-     * @function nominatim
-     * @public
-     * @param {String} query Query.
-     * @return {Promise} JSON response from backend.
-     */
-    nominatim(query: string): Promise {
-        return this.backend('whigi', false, 'POST', {}, 'nominatim/search.php?format=json&limit=1&q=' + query, true, true);
     }
 
     /**

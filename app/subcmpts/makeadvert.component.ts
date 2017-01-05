@@ -88,27 +88,21 @@ export class Makeadvert implements OnInit {
         });
         if(!!this.backend.profile.shared_with_me['whigi-wissl'] && !!this.backend.profile.shared_with_me['whigi-wissl']['payments/adverts'])
             this.credited = true;
-        window.$('paypal-btn').ready(function() {
+        window.$('#paypal-btn').ready(function() {
             window.paypal.Button.render({
-                env: 'sandbox',
-                client: {
-                    sandbox: 'Ab1nQtpjUsjHLacxp12lcTHwJte7Eo4mu90KnGskaqeV3dSdJuaVKNtulPH0bVvvNYmggghGmW4qkjUB',
-                    production: 'AZRFFe5p-BPGJAOumTbKn236C4TXj0soTWJutS1uhqAZiQpfI-jF2GGgE4-l8l-o4-QPkQGls3g0AfJr'
-                },
-                payment: function() {
-                    var env = this.props.env;
-                    var client = this.props.client;
-                    return window.paypal.rest.payment.create(env, client, {
-                        transactions: [{
-                            amount: {total: '10.00', currency: 'EUR'}
-                        }]
+                env: self.backend.ENV,
+                payment: function(resolve, reject) {
+                    self.backend.askPay('payments/adverts').then(function(res) {
+                        resolve(res.id);
+                    }, function(e) {
+                        reject(e);
                     });
                 },
-                onAuthorize: function(data, actions) {
-                    return actions.payment.execute().then(function() {
+                onAuthorize: function(data) {
+                    self.backend.doPay('payments/adverts', data.paymentID, data.payerID).then(function(res) {
                         self.credited = true;
                         self.check.tick();
-                    });
+                    }, function(e) {});
                 }
             }, '#paypal-btn');
         });

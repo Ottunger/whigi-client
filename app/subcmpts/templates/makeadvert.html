@@ -64,7 +64,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="col-md-2">
-                                                            <button class="btn green" (click)="grant()" [disabled]="!credited || !topics || topics == '' || !url || !!!dataservice.checking.isURL(url)">
+                                                            <button class="btn green" (click)="grant()" [disabled]="!credited || !topics || topics == '' || !url || url == ''">
                                                                 <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                                                         </div>
                                                     </div>
@@ -76,10 +76,10 @@
                                                 <div class="col-md-9">
                                                     <p>{{ 'advert.load' | translate }}</p>
                                                 </div>
-                                                <div class="col-md-3" *ngIf="!credited">
+                                                <div class="col-md-3" [style.display]="credited? 'none' : 'block'">
                                                     <div id="paypal-btn"></div>
                                                 </div>
-                                                <div class="col-md-3" [style.display]="credited? 'block' : 'none'">
+                                                <div class="col-md-3" *ngIf="credited">
                                                     <p>{{ 'advert.credited' | translate }}</p>
                                                 </div>
                                             </div>
