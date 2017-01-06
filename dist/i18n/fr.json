@@ -161,6 +161,7 @@
    "advert.getNone": "Aucune offre ne correspond aux critères",
    "advert.load": "Vous pouvez ici charger du crédit. A chaque recharge, vous pouvez lancer une campagne d'un mois, quelle que soit sa superficie, mais plus cette dernière est faible, plus vous pesez dans les résultats de recherche.",
    "advert.credited": "Crédit disponible",
+   "advert.addi18n": "Ajouter une langue",
 
    "profile.oauths": "Permissions",
    "profile.logout": "Déconnecter",

@@ -51,29 +51,50 @@
                                                                 </select>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-3">
-                                                            <div class="form-group">
-                                                                <label class="control-label">{{ 'advert.topic' | translate }}:</label><br />
-                                                                <input type="text" class="form-control" [(ngModel)]="topics"/>
-                                                            </div>
-                                                        </div>
-                                                        <div class="col-md-3">
+                                                        <div class="col-md-5">
                                                             <div class="form-group">
                                                                 <label class="control-label">{{ 'advert.url' | translate }}:</label><br />
                                                                 <input type="text" class="form-control" [(ngModel)]="url"/>
                                                             </div>
                                                         </div>
-                                                        <div class="col-md-2">
-                                                            <button class="btn green" (click)="grant()" [disabled]="!credited || !topics || topics == '' || !url || url == ''">
+                                                        <div class="col-md-3">
+                                                            <button class="btn green" (click)="grant()" [disabled]="!credited || !suitable(topics) || !url || url == ''">
                                                                 <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                             <!-- END FORM-->
+                                            <div class="row" *ngFor="let ln of dataservice.keys(topics)">
+                                                <div class="col-md-9">
+                                                    <div class="form-group">
+                                                        <label class="control-label">{{ 'advert.topic' | translate }}:</label><br />
+                                                        <input type="text" class="form-control" [(ngModel)]="topics[ln]"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group">
+                                                        <label class="control-label">{{ 'settings.language' | translate }}:</label><br />
+                                                        <input type="text" class="form-control" readonly="readonly" value="{{ ln | translate }}"/>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!-- BEGIN FORM-->
                                             <div class="row">
-                                                <div class="col-md-9">
+                                                <div class="col-md-3">
+                                                    <p>{{ 'advert.addi18n' | translate }}</p>
+                                                    <div class="row">
+                                                        <div class="col-md-6">
+                                                            <select [(ngModel)]="new_lang" class="form-control">
+                                                                <option *ngFor="let f of dataservice.getSelect('languages')" [value]="f">{{ f | translate }}</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <button class="btn green" (click)="add()">{{ 'add' | translate }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
                                                     <p>{{ 'advert.load' | translate }}</p>
                                                 </div>
                                                 <div class="col-md-3" [style.display]="credited? 'none' : 'block'">

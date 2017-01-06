@@ -161,6 +161,7 @@
    "advert.getNone": "No offers match your criteria",
    "advert.load": "You can load credit here. Each time you load credit, you are able to launch a campaign for one month, no matter where you target it. Just know the closest to you, the more you weight  in the search results.",
    "advert.credited": "Credit available",
+   "advert.addi18n": "Add new language",
 
    "profile.oauths": "Authorizations",
    "profile.logout": "Log out",

@@ -19,16 +19,17 @@ import * as template from './templates/makeadvert.html';
 })
 export class Makeadvert implements OnInit {
 
+    public new_lang: string;
     public credited: boolean;
     public radius: number;
     public address: string;
-    public topics: string;
+    public topics: {[ln: string]: string};
     public url: string;
     public campaigns: {[id: string]: {
         radius: number,
         lat: number,
         lon: number,
-        topics: string,
+        topics: {[ln: string]: string},
         until: string,
         target: string
         url: string
@@ -47,6 +48,8 @@ export class Makeadvert implements OnInit {
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, 
         private check: ApplicationRef, private dataservice: Data) {
         this.campaigns = {};
+        this.topics = {};
+        this.topics[this.translate.currentLang] = '';
     }
 
     /**
@@ -106,6 +109,32 @@ export class Makeadvert implements OnInit {
                 }
             }, '#paypal-btn');
         });
+    }
+
+    /**
+     * Add a language.
+     * @function add
+     * @public
+     */
+    add() {
+        this.topics[this.new_lang] = this.topics[this.new_lang] || '';
+    }
+
+    /**
+     * Tells if a string is a good query string.
+     * @function suitable
+     * @param {Object} str Input.
+     * @return {Boolean} Binary response.
+     */
+    suitable(str: {[ln: string]: string}): boolean {
+        var keys = Object.getOwnPropertyNames(str), ok = true;
+        if(keys.length == 0)
+            return false;
+        for(var i = 0; i < keys.length; i++) {
+            if(str[keys[i]].split(' ').filter(function(el) {return el.length > 3}).length == 0)
+                return false;
+        }
+        return true;
     }
 
     /**

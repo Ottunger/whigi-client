@@ -1098,7 +1098,11 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     searchAds(ccode: string, points: {lat: number, lon: number}[], query: string): Promise {
-        return this.backend('whigi-advert-' + ccode, false, 'POST', {points: points, terms: query.split(/[\s,]/).map(function(el) {return el.trim()})}, 'search', false, false);
+        return this.backend('whigi-advert-' + ccode, false, 'POST', {
+            points: points,
+            terms: query.split(/[\s,]/),
+            lang: this.translate.currentLang
+        }, 'search', false, false);
     }
 
 }
