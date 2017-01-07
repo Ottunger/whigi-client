@@ -121,6 +121,33 @@ export class Makeadvert implements OnInit {
     }
 
     /**
+     * Deletes a language.
+     * @function delete
+     * @public
+     * @param {String} ln Language to remove.
+     */
+    delete(ln: string) {
+        delete this.topics[ln];
+    }
+
+    /**
+     * Previews an ad.
+     * @function preview
+     * @public
+     * @param {String} d The CID.
+     * @return {String} The topics.
+     */
+    preview(d: string): {[ln: string]: string} | string {
+        if(typeof this.campaigns[d].topics === 'string')
+            return this.campaigns[d].topics;
+        else if(!!this.campaigns[d].topics[this.translate.currentLang])
+            return this.campaigns[d].topics[this.translate.currentLang];
+        else if(!!this.campaigns[d].topics['en'])
+            return this.campaigns[d].topics['en'];
+        return '[]';
+    }
+
+    /**
      * Tells if a string is a good query string.
      * @function suitable
      * @param {Object} str Input.

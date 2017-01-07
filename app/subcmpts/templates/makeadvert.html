@@ -72,15 +72,18 @@
                                                         <input type="text" class="form-control" [(ngModel)]="topics[ln]"/>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-3">
+                                                <div class="col-md-2">
                                                     <div class="form-group">
                                                         <label class="control-label">{{ 'settings.language' | translate }}:</label><br />
                                                         <input type="text" class="form-control" readonly="readonly" value="{{ ln | translate }}"/>
                                                     </div>
                                                 </div>
+                                                <div class="col-md-1">
+                                                    <button class="btn default" (click)="delete(ln)" style="margin-top: 24px;"><i class="fa fa-trash"></i></button>
+                                                </div>
                                             </div>
                                             <!-- BEGIN FORM-->
-                                            <div class="row">
+                                            <div class="row" style="padding-bottom: 7px;">
                                                 <div class="col-md-3">
                                                     <p>{{ 'advert.addi18n' | translate }}</p>
                                                     <div class="row">
@@ -140,7 +143,7 @@
                                                         <tr *ngFor="let d of dataservice.keys(campaigns)">
                                                             <td>{{ campaigns[d].lat }}/{{ campaigns[d].lon }}</td>
                                                             <td>{{ campaigns[d].radius }} Km</td>
-                                                            <td style="max-width: 150px;overflow-x: auto;">{{ campaigns[d].topics }}</td>
+                                                            <td style="max-width: 150px;overflow-x: auto;">{{ preview(d) }}</td>
                                                             <td>{{ campaigns[d].until }}</td>
                                                             <td>
                                                                 <button type="button" [disabled]="campaigns[d].until != ''"
