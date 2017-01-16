@@ -24,6 +24,7 @@ export class Data {
     public ev: EventEmitter<[string, boolean]>;
     private maes: number[];
     private selects: {[id: string]: {values: string[], more?: {[id: string]: string[]}}};
+    private selectsCache: {[id: string]: any};
     private marked: {[id: string]: boolean};
     private ee: EventEmitter<number>;
     private how: EventEmitter<number>;
@@ -47,6 +48,7 @@ export class Data {
         this.m = modules.m;
         this.ev = new EventEmitter<[string, boolean]>();
         this.selects = {};
+        this.selectsCache = {};
         this.marked = {};
         this.ee = new EventEmitter<number>();
         this.how = new EventEmitter<number>();
@@ -923,14 +925,29 @@ export class Data {
      * @public
      * @param {String} e Enum name.
      * @param {String} moreKey Key to add.
-     * @return {String[]} Values.
+     * @return {String[][]} Values.
      */
-    getSelect(e: string, moreKey?: string): string[] {
+    getSelect(e: string, moreKey?: string): string[][] {
         var self = this;
+        if(e + moreKey + self.translate.currentLang in self.selectsCache)
+            return self.selectsCache[e + moreKey + self.translate.currentLang];
+        function process(vals: string[]): string[][] {
+            self.selectsCache[e + moreKey + self.translate.currentLang] = vals.map(function(el: string): string[] {
+                return [el, self.translate.instant(el)]
+            }).sort(function(a: string[], b: string[]): number {
+                if(a[1] == b[1])
+                    return 0;
+                else if(a[1] < b[1])
+                    return -1;
+                return 1;
+            });
+            return self.selectsCache[e + moreKey + self.translate.currentLang];
+        }
+        //Check
         if(e in this.selects && !moreKey)
-            return this.selects[e].values;
+            return process(this.selects[e].values);
         else if(!!moreKey)
-            return this.selects[e].values.concat(this.selects[e].more[moreKey]);
+            return process(this.selects[e].values.concat(this.selects[e].more[moreKey]));
         if(e in this.marked)
             return [];
         this.marked[e] = true;

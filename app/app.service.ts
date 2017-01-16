@@ -794,10 +794,10 @@ export class Backend {
             username: username,
             password: password
         };
-        if(!!more && !!email) {
+        if(!!more)
             post['more'] = more;
+        if(!!email)
             post['warn'] = email;
-        }
         if(!!is_company)
             post['company_info'] = {is_company: true};
         return this.backend('whigi', true, 'POST', post, 'user/create' + this.regCaptcha(), false, false);

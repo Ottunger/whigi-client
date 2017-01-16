@@ -432,6 +432,7 @@
    "generics.disability": "Disability",
    "generics.olnames": "Maiden name",
    "generics.ofnames": "Other first name(s)",
+   "generics.nationality": "Nationality",
    "generics.nationalities": "Nationalities",
    "generics.since": "Since",
    "generics.owner_name": "Owner name",
@@ -937,5 +938,19 @@
    "ESH": "Western Sahara*",
    "YEM": "Yemen",
    "ZMB": "Zambia",
-   "ZWE": "Zimbabwe"
+   "ZWE": "Zimbabwe",
+
+   "GBD": "British Overseas Territories Citizen (BOTC)",
+   "GBN": "British National (Overseas)",
+   "GBO": "British Overseas Citizen",
+   "GBP": "British Protected Person",
+   "GBS": "British Subject",
+   "UNA": "Specialized agency of the United Nations",
+   "UNK": "Resident of Kosovo to whom a travel document has been issued by the United Nations Interim Administration Mission in Kosovo (UNMIK)",
+   "UNO": "United Nations Organization",
+   "XCC": "Caraibean Order Policy",
+   "XOM": "Sovereign Military Order of Malta",
+   "XXA": "Stateless person, as per the 1954 Convention Relating to the Status of Stateless Persons",
+   "XXB": "Refugee, as per the 1951 Convention Relating to the Status of Refugees",
+   "XXX": "Unspecified nationality"
 }

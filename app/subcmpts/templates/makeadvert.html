@@ -89,7 +89,7 @@
                                                     <div class="row">
                                                         <div class="col-md-6">
                                                             <select [(ngModel)]="new_lang" class="form-control">
-                                                                <option *ngFor="let f of dataservice.getSelect('languages')" [value]="f">{{ f | translate }}</option>
+                                                                <option *ngFor="let f of dataservice.getSelect('languages')" [value]="f[0]">{{ f[1] }}</option>
                                                             </select>
                                                         </div>
                                                         <div class="col-md-6">

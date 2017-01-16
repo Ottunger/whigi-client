@@ -432,6 +432,7 @@
    "generics.disability": "Handicap",
    "generics.olnames": "Nom de jeune fille",
    "generics.ofnames": "Autre(s) prénom(s)",
+   "generics.nationality": "Nationalité",
    "generics.nationalities": "Nationalités",
    "generics.since": "Depuis",
    "generics.owner_name": "Nom du propriétaire",
@@ -937,5 +938,19 @@
     "ESH": "Sahara occidental (le)*",
     "YEM": "Yémen (le)",
     "ZMB": "Zambie (la)",
-    "ZWE": "Zimbabwe (le)"
+    "ZWE": "Zimbabwe (le)",
+
+    "GBD": "Royaume-Uni - Citoyen britannique des territoires d'outre-mer",
+    "GBN": "Royaume-Uni - National britannique (Outre-Mer)",
+    "GBO": "Royaume-Uni - Citoyen britannique d'outre-mer",
+    "GBP": "Royaume-Uni - Personne protégée britannique",
+    "GBS": "Royaume-Uni - Sujet britannique",
+    "UNA": "Agence spécialisée des Nations unies ou un de ses officiels",
+    "UNK": "Résident du Kosovo auquel un document de voyage a été délivré par la Mission d'administration intérimaire des Nations unies au Kosovo (MINUK)",
+    "UNO": "Organisation des Nations unies ou l'un de ses officiels",
+    "XCC": "Secrétariat de la Communauté des Caraïbes ou l'un de ses officiels",
+    "XOM": "Ordre de Malte ou l'un de ses émissaires",
+    "XXA": "Personne apatride, telle que définie à l'article 1 de la Convention relative au statut des apatrides de 1954",
+    "XXB": "Personne réfugiée, telle que définie à l'Article 1 de la Convention relative au statut des réfugiés de 1951 amendée par le Protocole de 1967",
+    "XXX": "Personne de nationalité non spécifiée"
 }

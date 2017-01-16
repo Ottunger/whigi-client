@@ -107,6 +107,15 @@ export class InputBlock implements OnInit {
     }
 
     /**
+     * Disable an option on click.
+     * @function onceOnly
+     * @param {String} id To disable.
+     */
+    onceOnly(id: string) {
+        window.$('#' + id).attr('disabled', true);
+    }
+
+    /**
      * Default values.
      * @function def
      * @public

@@ -248,7 +248,13 @@ export class Logging implements OnInit {
             });
         }
         function complete() {
-            self.backend.createUser(self.username, self.password, undefined, undefined, self.is_company).then(function() {
+            self.backend.createUser(self.username, self.password, [{
+                real_name: 'profile/lang',
+                is_dated: false,
+                decr_data: self.translate.currentLang,
+                version: 0,
+                shared_to: []
+            }], undefined, self.is_company).then(function() {
                 self.backend.createToken(self.username, self.password, false).then(function(token) {
                     localStorage.setItem('token', token._id);
                     self.dataservice.mPublic().then(function(user) {

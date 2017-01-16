@@ -29,9 +29,10 @@
                 class="form-control" (change)="fileLoad($event, k.descr_key)" name="new_datas" [attr.data-forid]="'#accord' + dataservice.sanit(g)" *ngIf="k.mode == 'file'"/>
             <!-- select -->
             <select class="form-control" [(ngModel)]="new_datas[k.descr_key]" name="new_data" *ngIf="k.mode == 'select'" [class.grant-required]="k.required"
-                (change)="regChange(3)" [attr.data-forid]="'#accord' + dataservice.sanit(g)" [disabled]="dataservice.keyCheck(new_datas, k) !== true">
-                <option disabled selected value>{{ 'generics.select' | translate }}</option>
-                <option *ngFor="let f of dataservice.getSelect(k.enum, k.enumMore && new_datas[k.enumMore])" [value]="f">{{ f | translate }}</option>
+                (change)="regChange(3); onceOnly('onlyo' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))" [attr.data-forid]="'#accord' + dataservice.sanit(g)" [disabled]="dataservice.keyCheck(new_datas, k) !== true">
+                <option id="onlyo{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" (click)="onceOnly('onlyo' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))"
+                    selected value>{{ 'generics.select' | translate }}</option>
+                <option *ngFor="let f of dataservice.getSelect(k.enum, k.enumMore && new_datas[k.enumMore])" [value]="f[0]">{{ f[1] }}</option>
             </select>
             <!-- checkbox -->
             <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="k.mode == 'checkbox'" (change)="iChange(3)">
@@ -60,9 +61,10 @@
     </div>
 </div>
 <!-- SELECT -->
-<select class="form-control grant-required" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'" (change)="regChange(1)" [attr.data-forid]="'#accord' + dataservice.sanit(g)">
-    <option disabled selected value>{{ 'generics.select' | translate }}</option>
-    <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f">{{ f | translate }}</option>
+<select class="form-control grant-required" [(ngModel)]="new_data" name="new_data" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'select'"
+    (change)="regChange(1); onceOnly('onlyo' + dataservice.sanit(g))" [attr.data-forid]="'#accord' + dataservice.sanit(g)">
+    <option id="onlyo{{ dataservice.sanit(g) }}" (click)="onceOnly('onlyo' + dataservice.sanit(g))" selected value>{{ 'generics.select' | translate }}</option>
+    <option *ngFor="let f of dataservice.getSelect(backend.generics[g][backend.generics[g].length - 1].enum)" [value]="f[0]">{{ f[1] }}</option>
 </select>
 <!-- CHECKBOX -->
 <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'checkbox'" (change)="iChange(1)">
