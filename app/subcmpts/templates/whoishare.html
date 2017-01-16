@@ -19,15 +19,15 @@
                             <!-- BEGIN BLOCK -->
                             <div class="tab-pane active" *ngFor="let p of regables()">
                                 <div class="portlet box blue-madison">
-                                    <div class="portlet-title">
+                                    <div class="portlet-title" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))">
                                         <div class="caption">
-                                            <a href="javascript:;" style="color: #fff;" (click)="userLink(p)">
+                                            <a href="javascript:;" style="color: #fff;">
                                                 <img id="pict__{{ p }}" height="20px" alt="" style="float: left;margin-right: 10px;cursor: pointer;" />
                                                 {{ dataservice.forDisplay(p) }}
                                             </a>
                                         </div>
                                         <div class="tools">
-                                            <a href="javascript:;" class="tl-link collapse" (click)="dataservice.collapse('apsableshare' + dataservice.sanit(p))"> </a>
+                                            <a href="javascript:;" (click)="userLink(p)"><i style="color: #fff;" class="fa fa-user"></i> </a>
                                         </div>
                                     </div>
                                     <div class="portlet-body form" id="apsableshare{{ dataservice.sanit(p) }}" style="display: none;text-align:center;">

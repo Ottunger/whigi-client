@@ -164,11 +164,11 @@ export class Check {
             var loc = JSON.parse(obj[i].value);
             switch(loc['generics.country']) {
                 case 'BEL':
-                    res = parseInt(loc['generics.eidNo'].replace(/\.-/g, ''));
+                    res = parseInt(loc['generics.eidNo'].replace(/[\.-]/g, ''));
                     if(Math.floor(res / 100) % 97 != res % 100)
                         return 'generics.badeidno';
                     if(!!loc['generics.rrn']) {
-                        res = parseInt(loc['generics.rrn'].replace(/\.-/g, ''));
+                        res = parseInt(loc['generics.rrn'].replace(/[\.-]/g, ''));
                         if(97 - (Math.floor(res / 100) % 97) != res % 100)
                             return 'generics.badrrn';
                     }

@@ -95,7 +95,7 @@
                                         <!-- labels -->
                                         <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(gen_name) }} text-right"
                                             *ngIf="is_generic && backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
-                                            <div class="row" style="height: 5ex;padding-right: 20px;" *ngFor="let k of backend.generics[gen_name][backend.generics[gen_name].length - 1].json_keys">
+                                            <div class="row" style="height: 34px;padding-right: 20px;" *ngFor="let k of backend.generics[gen_name][backend.generics[gen_name].length - 1].json_keys">
                                                 {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                             </div>
                                         </div>

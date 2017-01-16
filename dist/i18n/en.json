@@ -127,6 +127,7 @@
    "login.names": "Please fill first and last names",
    "login.noUserMatch": "Usernames do not match",
    "login.wiuser": "Please change your username as your account will be limited until you do so.",
+   "login.stillDo": "It seems that you already are connected. Are you sure you want to connect anew?",
 
    "header.running": "Running operations",
    "header.operation": "Current operation",
@@ -224,6 +225,8 @@
    "filesystem.dated": "Dated field",
    "filesystem.generics": "This data is a generic one, use the dedicated interface",
    "filesystem.notView": "File not an image or not uploaded",
+   "filesystem.noReg": "Data not registered, you have to name it",
+   "filesystem.name": "Instance name",
 
    "dataview.noData": "Cannot fetch data details",
    "dataview.long": "Too long for decrypting in preview",
@@ -480,9 +483,8 @@
    "2": "Woman",
    "9": "Irrelevant",
    "Partner": "Partner",
-   "Friend": "Friend",
-   "Family member": "Family member",
    "Other": "Other",
+   "PACS": "PACS",
    "Son": "Son",
    "Daughter": "Daughter",
    "Single": "Single",

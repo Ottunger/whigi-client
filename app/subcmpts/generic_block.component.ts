@@ -155,7 +155,7 @@ export class GenericBlock implements OnInit {
     bkDaters(fname: string): string {
         var div = window.$('#sincefrom' + this.dataservice.sanit(fname));
         var val = div.find('input').val();
-        return val == '01/01/1900 00:00'? '#ff5' : '#fff';
+        return (val == '01/01/1900 00:00' || val == '01/01/1900')? '#f3fdc6' : '#fff';
     }
 
     /**
@@ -193,6 +193,13 @@ export class GenericBlock implements OnInit {
                                 } else {
                                     self.register(g, false, self.ass_name[g]);
                                 }
+                            }
+                        } else if(perf) {
+                            if(((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g]))
+                                    || (((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
+                                self.notif.alert(self.translate.instant('warning'), self.translate.instant('filesystem.noReg'));
+                                window.$('.igen' + self.dataservice.sanit(g)).addClass('has-error');
+                                window.$('#igen2' + self.dataservice.sanit(g)).css('color', 'red');
                             }
                         }
                     } else {
@@ -512,6 +519,8 @@ export class GenericBlock implements OnInit {
                     self.sincefrom[name] = {min: 0, max: ret.length - 1, act: ret.length - 1};
                     window.$('#sincefrom' + self.dataservice.sanit(name)).ready(function() {
                         window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker();
+                        if(self.backend.profile.data[name].is_dated_day_only)
+                            window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('options', {format: 'DD/MM/YYYY'});
                         window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('date', window.moment(ret[ret.length - 1].from));
                     });
                 }
@@ -664,9 +673,7 @@ export class GenericBlock implements OnInit {
             window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
             window.$('#on-edit' + this.dataservice.sanit(fname)).addClass('keys' + this.dataservice.sanit(fname));
             //Prefill
-            if(!!this.resets[fname] && !!this.foranew[fname])
-                this.resets[fname].emit();
-            else if(!!this.resets[fname])
+            if(!!this.resets[fname])
                 this.resets[fname].emit(this.previews[fname][1]);
             //Auto expand input_block
             window.$('#igen2' + this.dataservice.sanit(fname)).click();

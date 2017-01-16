@@ -76,15 +76,18 @@
                                 </select><br />
                                 <div *ngIf="filter[p[1].replace('*', '')] == '/new'" id="igen{{ dataservice.sanit(p[1].replace('*', '')) }}">
                                     <!-- free name -->
-                                    <input type="text" [(ngModel)]="new_name[p[1].replace('*', '')]" class="form-control grant-required" [attr.list]="'suggestions' + p[1].replace('*', '')" 
-                                        *ngIf="!backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))">
-                                    <datalist *ngIf="!backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" id="suggestions{{ p[1].replace('*', '') }}">
-                                        <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" value="{{ k | translate }}">
-                                    </datalist>
+                                    <div *ngIf="!backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" class="input-icon">
+                                        <i class="fa fa-star-half-o" data-toggle="tooltip" title="{{ 'filesystem.name' | translate }}"></i>
+                                        <input type="text" [(ngModel)]="new_name[p[1].replace('*', '')]" class="form-control grant-required" [attr.list]="'suggestions' + p[1].replace('*', '')" 
+                                            [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))" style="background-color: #ffecbb!important;">
+                                        <datalist id="suggestions{{ p[1].replace('*', '') }}">
+                                            <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" value="{{ k | translate }}">
+                                        </datalist>
+                                    </div>
                                     <!-- end free name -->
                                     <!-- forced name -->
                                     <select *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" [(ngModel)]="new_name[p[1].replace('*', '')]"
-                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))">
+                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))" style="background-color: #ffecbb!important;">
                                         <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
                                     </select>
                                     <!-- end forced name -->

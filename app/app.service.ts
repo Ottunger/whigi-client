@@ -28,6 +28,7 @@ export class Backend {
     public generics: {[id: string]: [{
         has_requirements?: boolean,
         is_dated: boolean,
+        is_dated_day_only?: boolean,
         instantiable: boolean,
         descr_key: string,
         long_descr_key: string,

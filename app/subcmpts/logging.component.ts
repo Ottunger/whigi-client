@@ -153,13 +153,23 @@ export class Logging implements OnInit {
     enter() {
         var self = this;
         window.$('.ilogging').removeClass('has-error');
-        this.backend.createToken(this.username, this.password, this.persistent).then(function(ticket) {
-            localStorage.setItem('token', ticket._id);
-            self.ngOnInit(true);
-        }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
-            window.$('.ilogging').addClass('has-error');
-        });
+        function complete() {
+            self.backend.createToken(self.username, self.password, self.persistent).then(function(ticket) {
+                localStorage.setItem('token', ticket._id);
+                self.ngOnInit(true);
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
+                window.$('.ilogging').addClass('has-error');
+            });
+        }
+        //Warn if logged in elsewhere
+        if('token' in localStorage) {
+            if(window.confirm(this.translate.instant('login.stillDo'))) {
+                complete();
+            }
+        } else {
+            complete();
+        }
     }
 
     /**

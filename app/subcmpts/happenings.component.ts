@@ -144,13 +144,17 @@ export class Happenings {
      * @function filters
      * @public
      * @param {String} folder to list.
+     * @param {String} uid ID.
      * @return {Array} Known fields.
      */
-    filters(folder: string): string[] {
+    filters(folder: string, uid: string): string[] {
+        var self = this;
         return this.backend.data_trie.suggestions(folder + '/', '/').sort().filter(function(el: string): boolean {
             return el.charAt(el.length - 1) != '/';
         }).map(function(el: string): string {
             return el.replace(/.+\//, '');
+        }).filter(function(el: string): boolean {
+            return el != self.new_names[uid + folder];  
         });
     }
 
@@ -246,40 +250,50 @@ export class Happenings {
                     index++;
                     switch(work.mode) {
                         case 'creating':
-                            self.dataservice.newData(true, work.new_name, work.send, work.is_dated, work.version).then(function(naes: number[]) {
-                                self.new_names[work.fid] = '';
-                                if(work.redir) {
-                                    var keys = Object.getOwnPropertyNames(self.backend.profile.data[work.towards].shared_to), done = 0;
-                                    function complete() {
-                                        self.dataservice.listData(false).then(function() {
-                                            next();
+                            function complete(force: boolean, decr_aes?: number[]) {
+                                self.dataservice.newData(true, work.new_name, work.send, work.is_dated, work.version, force, decr_aes).then(function(naes: number[]) {
+                                    self.new_names[work.fid] = '';
+                                    if(work.redir) {
+                                        var keys = Object.getOwnPropertyNames(self.backend.profile.data[work.towards].shared_to), done = 0;
+                                        function complete() {
+                                            self.dataservice.listData(false).then(function() {
+                                                next();
+                                            });
+                                        }
+                                        keys.forEach(function(key) {
+                                            self.backend.getAccessVault(self.backend.profile.data[work.towards].shared_to[key]).then(function(info) {
+                                                self.dataservice.grantVault(self.backend.profile.data[work.towards].shared_to[key], info.shared_as, work.new_name, work.send, work.version,
+                                                    new Date(info.expire_epoch), info.trigger, true, naes).then(function() {
+                                                        done++;
+                                                        if(done >= keys.length)
+                                                            complete();
+                                                    }, function(e) {
+                                                        done++;
+                                                        if(done >= keys.length)
+                                                            complete();
+                                                    });
+                                            }, function(e) {
+                                                done++;
+                                                if(done >= keys.length)
+                                                    complete();
+                                            });
                                         });
+                                        next();
+                                    } else {
+                                        next();
                                     }
-                                    keys.forEach(function(key) {
-                                        self.backend.getAccessVault(self.backend.profile.data[work.towards].shared_to[key]).then(function(info) {
-                                            self.dataservice.grantVault(self.backend.profile.data[work.towards].shared_to[key], info.shared_as, work.new_name, work.send, work.version,
-                                                new Date(info.expire_epoch), info.trigger, true, naes).then(function() {
-                                                    done++;
-                                                    if(done >= keys.length)
-                                                        complete();
-                                                }, function(e) {
-                                                    done++;
-                                                    if(done >= keys.length)
-                                                        complete();
-                                                });
-                                        }, function(e) {
-                                            done++;
-                                            if(done >= keys.length)
-                                                complete();
-                                        });
-                                    });
-                                    next();
-                                } else {
-                                    next();
-                                }
-                            }, function(e) {
-                                reject(e);
-                            });
+                                }, function(e) {
+                                    reject(e);
+                                });
+                            }
+                            //Existed as bound?
+                            if(!!self.backend.profile.data[work.new_name] && self.backend.profile.data[work.new_name].id.indexOf('datafragment') == 0) {
+                                self.dataservice.getData(self.backend.profile.data[work.new_name].id).then(function(data) {
+                                    complete(true, data.decr_aes);
+                                });
+                            } else {
+                                complete(false);
+                            }
                             break;
                         default:
                             break;

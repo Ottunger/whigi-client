@@ -64,7 +64,7 @@
                                     <div style="padding-top: 34px;display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'
                                         && !backend.generics[g][backend.generics[g].length - 1].instantiable && !!backend.profile.data[g]">
                                         <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys" (dblclick)="dataservice.tryHelp(k.help_url)" attr.data-intro="{{ 'intro.helps' | translate }}" data-step="6">
-                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g], k)">
+                                            <div class="row" style="height: 34px;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g], k)">
                                                 {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                             </div>
                                         </div>
@@ -134,8 +134,10 @@
                                     <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || addDisabled(g)" (click)="dateModifs(g, 0, 0, true, g)"
                                         data-toggle="tooltip" title="{{ 'generics.changeOne' | translate }}"><i class="fa fa-check-square-o"></i></button>
                                 </div>
-                                <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g) }}">
-                                    <input type='text' class="form-control" [style.background-color]="bkDaters(g)"/>
+                                <div class="input-group input-icon date col-md-6" id="sincefrom{{ dataservice.sanit(g) }}">
+                                    <i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'generics.since' | translate }}"></i>
+                                    <input type='text' class="form-control placeholder-no-fix"
+                                        style="border-top-left-radius: 4px;border-bottom-left-radius: 4px;" [style.background-color]="bkDaters(g)"/>
                                     <span class="input-group-addon">
                                         <span class="glyphicon glyphicon-calendar"></span>
                                     </span>
@@ -175,11 +177,11 @@
                                     <!-- json labels -->
                                     <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(g) }} text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                         <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys" (dblclick)="dataservice.tryHelp(k.help_url)" attr.data-intro="{{ 'intro.helps' | translate }}" data-step="6">
-                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g], k)">
+                                            <div class="row" style="height: 34px;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g], k)">
                                                 {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                             </div>
                                         </div>
-                                        <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="!!backend.generics[g][backend.generics[g].length - 1].json_from_ask">
+                                        <div class="row" style="height: 34px;padding-right: 17px;" *ngIf="!!backend.generics[g][backend.generics[g].length - 1].json_from_ask">
                                             {{ 'generics.since' | translate }}<span>*</span>:<br />
                                         </div>
                                     </div>
@@ -214,7 +216,7 @@
                                                     <!-- json labels -->
                                                     <div id="on-edit{{ dataservice.sanit(g + '/' + d) }}" style="padding-top: 1em;display: none;" class="text-right" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
                                                         <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys" (dblclick)="dataservice.tryHelp(k.help_url)" attr.data-intro="{{ 'intro.helps' | translate }}" data-step="6">
-                                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g + '/' + d], k)">
+                                                            <div class="row" style="height: 34px;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[g + '/' + d], k)">
                                                                 {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                                             </div>
                                                         </div>
@@ -291,8 +293,10 @@
                                                         (click)="dateModifs(g + '/' + d, 0, 0, true, g)" data-toggle="tooltip" title="{{ 'generics.changeOne' | translate }}">
                                                         <i class="fa fa-check-square-o"></i></button>
                                                 </div>
-                                                <div class="input-group date col-md-6" id="sincefrom{{ dataservice.sanit(g + '/' + d) }}">
-                                                    <input type='text' class="form-control" [style.background-color]="bkDaters(g + '/' + d)"/>
+                                                <div class="input-group input-icon date col-md-6" id="sincefrom{{ dataservice.sanit(g + '/' + d) }}">
+                                                    <i class="fa fa-clock-o" data-toggle="tooltip" title="{{ 'generics.since' | translate }}"></i>
+                                                    <input type='text' class="form-control placeholder-no-fix"
+                                                        style="border-top-left-radius: 4px;border-bottom-left-radius: 4px;" [style.background-color]="bkDaters(g + '/' + d)"/>
                                                     <span class="input-group-addon">
                                                         <span class="glyphicon glyphicon-calendar"></span>
                                                     </span>

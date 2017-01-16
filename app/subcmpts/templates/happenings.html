@@ -55,7 +55,7 @@
                                                     <!-- labels -->
                                                     <div style="padding-top: 1em;display: none;" class="keysprofile_address text-right">
                                                         <div *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].json_keys" (dblclick)="dataservice.tryHelp(k.help_url)">
-                                                            <div class="row" style="height: 5ex;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[h.sid + i + s.gen], k)" attr.data-intro="{{ 'intro.helps' | translate }}" data-step="3">
+                                                            <div class="row" style="height: 34px;padding-right: 17px;" *ngIf="dataservice.keyCheck(new_datas[h.sid + i + s.gen], k)" attr.data-intro="{{ 'intro.helps' | translate }}" data-step="3">
                                                                 {{ k.descr_key | translate }}<span *ngIf="k.required">*</span>:<br />
                                                             </div>
                                                         </div>
@@ -73,8 +73,8 @@
                                                             <input type="checkbox" [(ngModel)]="doRedir[h.sid + i + s.gen]" /> {{ 'happenings.redir' | translate }}
                                                             <span></span>
                                                         </label>
-                                                        <select style="margin-bottom: 1em;" class="form-control" [(ngModel)]="redir[h.sid + i + s.gen]">
-                                                            <option *ngFor="let f of filters(s.gen)" [value]="f">{{ f }}</option>
+                                                        <select style="margin-bottom: 1em;" [disabled]="!doRedir[h.sid + i + s.gen]" class="form-control" [(ngModel)]="redir[h.sid + i + s.gen]">
+                                                            <option *ngFor="let f of filters(s.gen, h.sid + i)" [value]="f">{{ f }}</option>
                                                         </select>
                                                     </div>
                                                     <div *ngFor="let o of s.outputs">
