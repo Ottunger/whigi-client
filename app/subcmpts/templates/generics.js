@@ -48,4 +48,4 @@ exports.m = {
             "holds": ["family/status", "family/partners"]
         }
     }
-};
+}

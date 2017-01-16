@@ -13,6 +13,7 @@ import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as toPromise from 'rxjs/add/operator/toPromise';
 import {Trie} from '../utils/Trie';
+import * as configs from './configs.js';
 
 @Injectable()
 export class Backend {
@@ -56,16 +57,17 @@ export class Backend {
         long_descr_key: string,
         help_url: string
     }};
-    public MY_URL = 'http://localhost:3000/';
-    public EID_HOST = 'localhost/api/v1/eid';
-    public BASE_URL = 'https://localhost/api/v1/';
-    public RESTORE_URL = 'https://localhost:444/api/v1/';
-    public ADVERT_WORLD_URL = 'https://localhost:445/api/v1/';
-    public ADVERT_BEL_URL = 'https://localhost:446/api/v1/';
-    public GWP_URL = 'https://whigi2-giveaway.envict.com';
+    private INSTANCE: string = 'localhost';
+    public MY_URL = '';
+    public EID_HOST = '';
+    public BASE_URL = '';
+    public RESTORE_URL = '';
+    public ADVERT_WORLD_URL = '';
+    public ADVERT_BEL_URL = '';
+    public GWP_URL = '';
     public FEEDBACK_URL = 'https://whigi2-report.envict.com/api/http.php/tickets.json';
-    public MAIL = 'mailto://whigi@envict.com';
-    public ENV: string = 'sandbox';
+    public MAIL = '';
+    public ENV: string = '';
     private cpt: string;
     private rsa_key: string[];
 
@@ -80,6 +82,19 @@ export class Backend {
      */
     constructor(private http: Http, private notif: NotificationsService, private translate: TranslateService, private router: Router) {
         var self = this;
+        //Try loading info
+        if(!!configs.c[this.INSTANCE]) {
+            this.MY_URL = configs.c[this.INSTANCE].MY_URL;
+            this.EID_HOST = configs.c[this.INSTANCE].EID_HOST;
+            this.BASE_URL = configs.c[this.INSTANCE].BASE_URL;
+            this.RESTORE_URL = configs.c[this.INSTANCE].RESTORE_URL;
+            this.ADVERT_WORLD_URL = configs.c[this.INSTANCE].ADVERT_WORLD_URL;
+            this.ADVERT_BEL_URL = configs.c[this.INSTANCE].ADVERT_BEL_URL;
+            this.GWP_URL = configs.c[this.INSTANCE].GWP_URL;
+            this.MAIL = configs.c[this.INSTANCE].MAIL;
+            this.ENV = configs.c[this.INSTANCE].ENV;
+        }
+        //Other params
         this.block_mask = true;
         this.forceMove = false;
         this.data_loaded = false;
