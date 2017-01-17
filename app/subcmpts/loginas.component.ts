@@ -8,6 +8,7 @@
 declare var window : any
 import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -25,8 +26,9 @@ export class Loginas implements OnInit {
      * @param router Routing service.
      * @param routed Current route.
      * @param dataservice Data service.
+     * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute, private dataservice: Data) {
+    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute, private dataservice: Data, private auth: Auth) {
 
     }
 
@@ -40,13 +42,12 @@ export class Loginas implements OnInit {
         this.routed.params.forEach(function(param) {
             var user = param['user'], pwd = atob(decodeURIComponent(param['pwd']));
             self.backend.createToken(user, pwd, false).then(function(ticket) {
-                localStorage.setItem('token', ticket._id);
+                self.auth.switchLogin(user, ticket._id);
                 self.dataservice.mPublic().then(function(profile) {
                     //Router.go...
                     self.backend.profile = profile;
                     self.dataservice.extendModules();
-                    localStorage.setItem('key_decryption', window.sha256(pwd + profile.salt));
-                    localStorage.setItem('psha', window.sha256(pwd));
+                    self.auth.regPuzzle(undefined, window.sha256(pwd + profile.salt), window.sha256(pwd));
 
                     var ret = param['return'];
                     if(ret.indexOf('http') > -1) {
@@ -56,7 +57,7 @@ export class Loginas implements OnInit {
                         self.router.navigate(['/' + ret]);
                     }
                 }, function(e) {
-                    localStorage.removeItem('token');
+                    self.auth.deleteUid(undefined, false);
                     self.router.navigate(['/']);
                 });
             }, function(e) {

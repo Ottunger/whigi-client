@@ -10,6 +10,7 @@ import {Injectable} from '@angular/core';
 import {CanActivate} from '@angular/router';
 import {Router, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {Auth} from './auth.service';
 import {Backend} from './app.service';
 import {Data} from './data.service';
 import {Filesystem} from './subcmpts/filesystem.component';
@@ -26,8 +27,9 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
      * @param backend App service.
      * @param router Router.
      * @param translate Translation service.
+     * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private translate: TranslateService) {
+    constructor(private backend: Backend, private router: Router, private translate: TranslateService, private auth: Auth) {
 
     }
 
@@ -40,13 +42,13 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
      * @return {Boolean} Can go through.
      */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if(!!localStorage.getItem('token') && !!localStorage.getItem('key_decryption') && !!this.backend.profile)
+        if(this.auth.isLoaded() && !!this.backend.profile)
             return true;
         if(!('return_url' in sessionStorage)) {
             var uri = state.url.replace(/;.*$/, '');
             sessionStorage.setItem('return_url', JSON.stringify(uri.split('/').map(window.decodeURIComponent)));
         }
-        this.router.navigate(['/llight']);
+        this.router.navigate(['/']);
         return false;
     }
 
@@ -83,8 +85,9 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
      * @param backend App service.
      * @param router Router.
      * @param translate Translation service.
+     * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private translate: TranslateService) {
+    constructor(private backend: Backend, private router: Router, private translate: TranslateService, private auth: Auth) {
 
     }
 
@@ -97,8 +100,7 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
      * @return {Boolean} Can go through.
      */
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-        if(!!localStorage.getItem('token') && !!localStorage.getItem('key_decryption') && !!this.backend.profile
-            && !!this.backend.data_loaded)
+        if(this.auth.isLoaded() && !!this.backend.profile && !!this.backend.data_loaded)
             return true;
         if(!('return_url' in sessionStorage)) {
             var uri = state.url.replace(/;.*$/, '');

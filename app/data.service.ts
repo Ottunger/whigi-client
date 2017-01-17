@@ -10,6 +10,7 @@ import {Injectable, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
+import {Auth} from './auth.service';
 import {Backend} from './app.service';
 import {Check} from './check.service';
 import {Trie} from '../utils/Trie';
@@ -40,9 +41,10 @@ export class Data {
      * @param check Check service.
      * @param checking Checks service.
      * @param router Routing service.
+     * @param auth Auth service.
      */
     constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
-        private check: ApplicationRef, public checking: Check, private router: Router) {
+        private check: ApplicationRef, public checking: Check, private router: Router, private auth: Auth) {
         var self = this;
         this.wentLogin = false;
         this.m = modules.m;
@@ -117,6 +119,7 @@ export class Data {
         if(!!this.backend.profile.company_info && !!this.backend.profile.company_info.lang)
             this.setLang(this.backend.profile.company_info.lang, true);
         this.m = Object.assign({}, (!!this.backend.profile.company_info && !!this.backend.profile.company_info.is_company)? modules_corpos.m : modules.m);
+        /*
         this.getData('keys/display', false, undefined, true).then(function(data) {
             var perso = {kkeys: [], keys: {}, modules: [], holds: {}};
             self.maes = data.decr_aes || self.backend.newAES();
@@ -127,6 +130,7 @@ export class Data {
             self.m.keys = Object.assign((perso.keys || {}), self.m.keys);
             self.m.holds = Object.assign((perso.holds || {}), self.m.holds);
         }, function(e) {});
+        */
     }
 
     /**
@@ -1149,7 +1153,7 @@ export class Data {
      * Reload my profile.
      * @function reloadProfile
      * @public
-     * @param {String} ct Current token.
+     * @param {String} uid Current user ID.
      * @param {String} ck Current key.
      * @param {Function} resolve Callback.
      * @param {function} reject Callback.
@@ -1157,12 +1161,9 @@ export class Data {
      * @param {Object} okbind Bind for success.
      * @param {badbind} badbind Bind for failure.
      */
-    public reloadProfile(ct: string, ck: string, resolve: Function, reject: Function, psha?: string, okbind?: any, badbind?: any) {
+    public reloadProfile(uid: string, ck: string, resolve: Function, reject: Function, psha?: string, okbind?: any, badbind?: any) {
         var self = this;
-        localStorage.setItem('token', ct);
-        localStorage.setItem('key_decryption', ck);
-        if(!!psha)
-            localStorage.setItem('psha', psha);
+        this.auth.switchLogin(uid, undefined, undefined, ck, psha);
         this.backend.forceReload();
 
         this.mPublic().then(function(profile) {
@@ -1204,11 +1205,12 @@ export class Data {
                 if(!/\/$/.test(me.prefix))
                     me.prefix += '/';
                 me.backend.createOAuth(me.auth, me.prefix, undefined, me.admin).then(function(ticket) {
-                    me.backend.profile.oauth.push({id: ticket._id, for_id: me.auth.toLowerCase(), prefix: me.prefix})
+                    me.backend.profile.oauth.push({id: ticket._id, for_id: me.auth.toLowerCase(), prefix: me.prefix});
+                    var ct = me.dataservice.auth.getParams();
                     var obj = JSON.stringify({
                         token: ticket._id,
-                        key_decryption: localStorage.getItem('key_decryption'),
-                        psha: localStorage.getItem('psha')
+                        key_decryption: ct[2],
+                        psha: ct[3]
                     });
                     function complete(naes: number[], toGrant: boolean) {
                         me.dataservice.newData(true, 'oauths/' + me.auth, obj, false, 0, true, naes).then(function() {
@@ -1269,7 +1271,7 @@ export class Data {
      * @return {Promise} Whether should close.
      */
     addUser(uname: string, pwd: string, pwd2: string, fname: string, lname: string, mail: string): Promise {
-        var self = this, ct = localStorage.getItem('token'), ckd = localStorage.getItem('key_decryption'), cpsha = localStorage.getItem('psha');
+        var self = this, cnow = this.auth.getParams();
         var naming = JSON.stringify({'generics.last_name': fname, 'generics.first_name': lname});
         var my_id = self.backend.profile._id;
         //Now try
@@ -1288,17 +1290,17 @@ export class Data {
                             translate: self.translate,
                             admin: true
                         }).then(function() {
-                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                         }, function(e) {
-                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                         });
                     }, function(e) {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     });
                 }, function(e) {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                    self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                 });
             }
             function safe(recup: number[]) {
@@ -1308,26 +1310,31 @@ export class Data {
                             end(recup, my_id);
                         }, function(e) {
                             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                         });
                     }, function(e) {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     });
                 }, function(e) {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                    self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                 });
             }
             function complete() {
                 self.backend.forceReload();
-                self.backend.createUser(uname, pwd, undefined, undefined, false).then(function() {
+                    self.backend.createUser(uname, pwd, [{
+                    real_name: 'profile/lang',
+                    is_dated: false,
+                    decr_data: self.translate.currentLang,
+                    version: 0,
+                    shared_to: []
+                }], undefined, false).then(function() {
                     self.backend.createToken(uname, pwd, false).then(function(token) {
-                        localStorage.setItem('token', token._id);
+                        self.auth.switchLogin(uname, token._id);
                         self.mPublic().then(function(user) {
                             self.backend.profile = user;
-                            localStorage.setItem('key_decryption', window.sha256(pwd + user.salt));
-                            localStorage.setItem('psha', window.sha256(pwd));
+                            self.auth.regPuzzle(undefined, window.sha256(pwd + user.salt), window.sha256(pwd));
                             self.listData(false).then(function() {
                                 self.newData(true, 'profile/email/restore', mail, false, 0, true).then(function(email: number[]) {
                                     self.newData(true, 'profile/recup_id', my_id, false, 0, true).then(function(recup: number[]) {
@@ -1338,32 +1345,32 @@ export class Data {
                                                         safe(recup);
                                                     }, function() {
                                                         self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                                     });
                                                 }, function(e) {
                                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                                    self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                                 });
                                             }, function(e) {
                                                 self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                                self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                             });
                                         }, function(e) {
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                         });
                                     }, function(e) {
                                         self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                        self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                     });
                                 }, function() {
                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                    self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                                    self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                 });
                             });
                         }, function(e) {
                             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                            self.reloadProfile(ct, ckd, resolve, resolve, cpsha, true, true);
+                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                         });
                     }, function(e) {
                         self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));

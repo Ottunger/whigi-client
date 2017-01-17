@@ -11,6 +11,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -48,12 +49,13 @@ export class Account implements OnInit, OnDestroy {
      * @param translate Translation service.
      * @param router Routing service.
      * @param notif Notification service.
+     * @param auth Auth service.
      * @param routed Activated route service.
      * @param backend Backend service.
      * @param data Data service.
      * @param check Check service.
      */
-    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService,
+    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService, private auth: Auth,
         private routed: ActivatedRoute, private backend: Backend, private dataservice: Data, private check: ApplicationRef) {
         this.requester = {};
         this.new_data = {};
@@ -550,8 +552,7 @@ export class Account implements OnInit, OnDestroy {
             } catch(e) {}
         }
         if(this.strangeEmail != '') {
-            localStorage.removeItem('token');
-            localStorage.removeItem('key_decryption');
+            this.auth.deleteUid(undefined, true);
             this.backend.forceReload();
             delete this.backend.profile;
         }
@@ -582,8 +583,7 @@ export class Account implements OnInit, OnDestroy {
             } catch(e) {}
         }
         if(this.strangeEmail != '') {
-            localStorage.removeItem('token');
-            localStorage.removeItem('key_decryption');
+            this.auth.deleteUid(undefined, true);
             this.backend.forceReload();
             delete this.backend.profile;
         }

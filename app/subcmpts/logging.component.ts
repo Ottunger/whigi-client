@@ -10,6 +10,7 @@ import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -43,8 +44,10 @@ export class Logging implements OnInit {
      * @param router Routing service.
      * @param notif Notification service.
      * @param dataservice Data service.
+     * @param auth Auth service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService, private dataservice: Data) {
+    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
+        private dataservice: Data, private auth: Auth) {
         this.persistent = false;
         this.recuperable = false;
         this.safe = false;
@@ -72,9 +75,7 @@ export class Logging implements OnInit {
             //Session has expired, now moves will be done normally
             this.onEnd = false;
             this.backend.forceMove = false;
-            localStorage.removeItem('token');
-            localStorage.removeItem('key_decryption');
-            localStorage.removeItem('psha');
+            this.auth.deleteUid(undefined, true);
             if(this.dataservice.wentLogin) {
                 window.setTimeout(function() {
                     self.notif.remove();
@@ -82,7 +83,7 @@ export class Logging implements OnInit {
                 }, 500);
             }
         }
-        if('token' in localStorage) {
+        if(this.auth.isLogged()) {
             this.dataservice.mPublic().then(function(profile) {
                 //Router.go...
                 self.backend.profile = profile;
@@ -96,9 +97,8 @@ export class Logging implements OnInit {
                         </div>
                     `).appendTo('body').modal();
                 }
-                if(!!set && set) {
-                    localStorage.setItem('key_decryption', window.sha256(self.password + profile.salt));
-                    localStorage.setItem('psha', window.sha256(self.password));
+                if(!!set) {
+                    self.auth.regPuzzle(undefined, window.sha256(self.password + profile.salt), window.sha256(self.password));
                 }
                 if(!!sessionStorage.getItem('return_url') && sessionStorage.getItem('return_url').length > 1) {
                     var ret = sessionStorage.getItem('return_url');
@@ -110,7 +110,7 @@ export class Logging implements OnInit {
                     self.router.navigate(['/generics', 'generics.profile']);
                 }
             }, function(e) {
-                localStorage.removeItem('token');
+                self.auth.deleteUid(undefined, false);
                 //Fallback to a request
                 window.$('#ctn-log').ready(function() {
                     window.$('#ctn-log').css('display', 'block');
@@ -153,23 +153,24 @@ export class Logging implements OnInit {
     enter() {
         var self = this;
         window.$('.ilogging').removeClass('has-error');
-        function complete() {
-            self.backend.createToken(self.username, self.password, self.persistent).then(function(ticket) {
-                localStorage.setItem('token', ticket._id);
-                self.ngOnInit(true);
-            }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
-                window.$('.ilogging').addClass('has-error');
-            });
-        }
-        //Warn if logged in elsewhere
-        if('token' in localStorage) {
-            if(window.confirm(this.translate.instant('login.stillDo'))) {
-                complete();
-            }
-        } else {
-            complete();
-        }
+        self.backend.createToken(self.username, self.password, self.persistent).then(function(ticket) {
+            self.auth.switchLogin(self.username, ticket._id);
+            self.ngOnInit(true);
+        }, function(e) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
+            window.$('.ilogging').addClass('has-error');
+        });
+    }
+
+    /**
+     * Use a known mapping.
+     * @function loginas
+     * @public
+     * @param {String} uid User.
+     */
+    loginas(uid: string) {
+        this.auth.switchLogin(uid);
+        this.ngOnInit(false);
     }
 
     /**
@@ -256,11 +257,10 @@ export class Logging implements OnInit {
                 shared_to: []
             }], undefined, self.is_company).then(function() {
                 self.backend.createToken(self.username, self.password, false).then(function(token) {
-                    localStorage.setItem('token', token._id);
+                    self.auth.switchLogin(self.username, token._id);
                     self.dataservice.mPublic().then(function(user) {
                         self.backend.profile = user;
-                        localStorage.setItem('key_decryption', window.sha256(self.password + user.salt));
-                        localStorage.setItem('psha', window.sha256(self.password));
+                        self.auth.regPuzzle(undefined, window.sha256(self.password + user.salt), window.sha256(self.password));
                         self.dataservice.listData(false).then(function() {
                             towards = 'wiuser-' + self.backend.generateRandomString(10);
                             self.dataservice.newData(true, 'profile/email/restore', self.email, false, 0, true).then(function(email: number[]) {
@@ -391,9 +391,7 @@ export class Logging implements OnInit {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.removeTokens(false).then(function() {
-                localStorage.removeItem('token');
-                localStorage.removeItem('key_decryption');
-                localStorage.removeItem('psha');
+                self.auth.deleteUid(undefined, true);
                 self.backend.forceReload();
                 resolve();
             }, function(e) {

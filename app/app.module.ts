@@ -17,6 +17,7 @@ import {routing, appRoutingProviders} from './app.routing';
 import {Backend} from './app.service';
 import {Data} from './data.service';
 import {Check} from './check.service';
+import {Auth} from './auth.service';
 import {Profileguard, Fullguard, Genguard, CSSguard} from './guards.service';
 
 import {Application} from './app.component';
@@ -107,6 +108,7 @@ export function createTranslateLoader(http: Http) {
         Backend,
         Data,
         Check,
+        Auth,
         Profileguard,
         Fullguard,
         Genguard,

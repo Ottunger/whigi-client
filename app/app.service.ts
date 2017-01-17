@@ -12,6 +12,7 @@ import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as toPromise from 'rxjs/add/operator/toPromise';
+import {Auth} from './auth.service';
 import {Trie} from '../utils/Trie';
 import * as configs from './configs.js';
 
@@ -79,8 +80,9 @@ export class Backend {
      * @param notif Notification service.
      * @param translate Translation service.
      * @param router Routing service.
+     * @param auth Auth service.
      */
-    constructor(private http: Http, private notif: NotificationsService, private translate: TranslateService, private router: Router) {
+    constructor(private http: Http, private notif: NotificationsService, private translate: TranslateService, private router: Router, private auth: Auth) {
         var self = this;
         //Try loading info
         if(!!configs.c[this.INSTANCE]) {
@@ -193,7 +195,7 @@ export class Backend {
      */
     decryptMaster() {
         try {
-            var kd = localStorage.getItem('key_decryption');
+            var kd = this.auth.getParams()[2];
             for(var i = 0; window.sha256(window.sha256(this.arr2str(this.master_key || []) || '')) != this.profile.sha_master; i++) {
                 var key = this.toBytes(kd);
                 var decrypter = new window.aesjs.ModeOfOperation.ctr(key, new window.aesjs.Counter(0));
@@ -370,7 +372,7 @@ export class Backend {
             var res = e.json() || {};
             e.msg = res.error || '';
             if('puzzle' in res) {
-                localStorage.setItem('puzzle', res.puzzle);
+                this.auth.regPuzzle(res.puzzle);
             }
         } catch(e) {}
     }
@@ -434,7 +436,7 @@ export class Backend {
             } else {
                 res._status = response.status;
                 if('puzzle' in res) {
-                    localStorage.setItem('puzzle', res.puzzle);
+                    self.auth.regPuzzle(res.puzzle);
                 }
             }
             if(block && self.block_mask)
@@ -459,11 +461,11 @@ export class Backend {
         }
 
         if(auth && token) {
-            headers.append('X-Whigi-Authorization', 'Bearer ' + btoa(localStorage.getItem('token')));
+            headers.append('X-Whigi-Authorization', 'Bearer ' + btoa(self.auth.getParams()[0]));
         } else if(auth) {
             headers.append('X-Whigi-Authorization', 'Basic ' + btoa(data.username + ':' + data.password));
         }
-        headers.append('Accept-Language', (('lang' in localStorage)? localStorage.getItem('lang') : 'en') + ';q=1');
+        headers.append('Accept-Language', this.translate.currentLang + ';q=1');
         switch(whigi) {
             case 'whigi':
                 dest = this.BASE_URL;
@@ -547,11 +549,11 @@ export class Backend {
      * @return {String} Puzzle solution.
      */
     private regPuzzle(): string {
-        var i = 0, complete;
-        if(!('puzzle' in localStorage))
+        var i = 0, complete, puzzle = this.auth.getParams()[1];
+        if(!puzzle)
             return '?puzzle=0'
         do {
-            complete = window.sha256(localStorage.getItem('puzzle') + i);
+            complete = window.sha256(puzzle + i);
             i++;
         } while(complete.charAt(0) != '0' || complete.charAt(1) != '0' || complete.charAt(2) != '0');
         return '?puzzle=' + (i - 1);
@@ -828,7 +830,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     removeTokens(all: boolean): Promise {
-        return this.backend('whigi', false, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + localStorage.getItem('token'))), true, true);
+        return this.backend('whigi', false, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + this.auth.getParams()[0])), true, true);
     }
 
     /**

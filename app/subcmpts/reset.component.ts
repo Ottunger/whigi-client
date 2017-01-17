@@ -11,6 +11,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -35,9 +36,12 @@ export class Reset implements OnInit, OnDestroy {
      * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
+     * @param auth Auth service.
      * @param notif Notification service.
+     * @param routed Current route service.
+     * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router,
+    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private auth: Auth,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
         this.use_file = false;
     }
@@ -95,14 +99,13 @@ export class Reset implements OnInit, OnDestroy {
         }
         if(this.password == this.password2) {
             this.backend.createToken(this.id, this.pwd, false).then(function(token) {
-                localStorage.setItem('token', token._id);
+                self.auth.switchLogin(self.id, token._id);
                 self.dataservice.mPublic().then(function(user) {
                     //Router.go...
                     self.backend.profile = user;
                     self.dataservice.wentLogin = true;
                     self.dataservice.extendModules();
-                    localStorage.setItem('key_decryption', window.sha256(self.pwd + user.salt));
-                    localStorage.setItem('psha', window.sha256(self.password));
+                    self.auth.regPuzzle(undefined, window.sha256(self.pwd + user.salt), window.sha256(self.pwd));
                     self.dataservice.listData(false).then(function() {
                         self.backend.updateProfile(self.password, self.pwd).then(function() {
                             self.dataservice.modifyData('keys/pwd/mine1', self.password.slice(0, 4), false, 0, self.backend.profile.data['keys/pwd/mine1'].shared_to, false, undefined).then(function() {

@@ -10,6 +10,7 @@ import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -35,9 +36,10 @@ export class Oauths implements OnInit {
      * @param backend Backend service.
      * @param router Router service.
      * @param dataservice Data service.
+     * @param authing Auth service.
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
-        private router: Router, private dataservice: Data) {
+        private router: Router, private dataservice: Data, private authing: Auth) {
         this.admin = false;
         this.usernames = {};
     }
@@ -82,7 +84,7 @@ export class Oauths implements OnInit {
      * @public
      */
     grant() {
-        Data.grant(<any>this);
+        Data.grant(this);
     }
 
     /**
@@ -101,17 +103,16 @@ export class Oauths implements OnInit {
                 self.backend.forceReload();
                 delete self.backend.profile;
                 //And login as
-                localStorage.setItem('token', obj.token);
+                self.authing.switchLogin(ong, obj.token);
                 self.dataservice.mPublic().then(function(profile) {
                     //Router.go...
                     self.backend.profile = profile;
                     self.dataservice.extendModules();
-                    localStorage.setItem('key_decryption', obj.key_decryption);
-                    localStorage.setItem('psha', obj.psha);
+                    self.authing.regPuzzle(undefined, obj.key_decryption, obj.psha);
                     profile.company_info.is_company? self.router.navigate(['/filesystem', 'data']) : self.router.navigate(['/generics']);
                 }, function(e) {
-                    localStorage.removeItem('token');
-                    self.router.navigate(['/llight']);
+                    self.authing.deleteUid(undefined, false);
+                    self.router.navigate(['/']);
                     self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noGet'));
                 });
             }, function(e) {

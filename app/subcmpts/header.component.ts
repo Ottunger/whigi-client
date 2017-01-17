@@ -10,6 +10,7 @@ import {Component, enableProdMode, Input, EventEmitter, OnInit} from '@angular/c
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -34,10 +35,11 @@ export class Header implements OnInit {
      * @param backend App service.
      * @param translate Translation service.
      * @param notif Event service.
-     * @param dataservice Data service
+     * @param dataservice Data service.
+     * @param auth Auth service.
      */
     constructor(private router: Router, private backend: Backend, private translate: TranslateService, private notif: NotificationsService,
-        private dataservice: Data) {
+        private dataservice: Data, private auth: Auth) {
         this.run = 0;
         this.cur = 0;
     }
@@ -75,9 +77,7 @@ export class Header implements OnInit {
     logout(all: boolean) {
         var self = this;
         function complete() {
-            localStorage.removeItem('token');
-            localStorage.removeItem('key_decryption');
-            localStorage.removeItem('psha');
+            self.auth.deleteUid(undefined, true);
             self.backend.forceReload();
             delete self.backend.profile;
             self.router.navigate(['/']);
@@ -92,6 +92,18 @@ export class Header implements OnInit {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
             }
         });
+    }
+
+    /**
+     * Allows switching accounts.
+     * @function switch
+     * @public
+     */
+    switch() {
+        this.auth.emptyUid();
+        this.backend.forceReload();
+        delete this.backend.profile;
+        this.router.navigate(['/']);
     }
 
     /**

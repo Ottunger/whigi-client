@@ -99,6 +99,7 @@
    "login.username": "Username",
    "login.pass": "Password",
    "login.login": "Log in",
+   "login.loginas": "Click here to login as ",
    "login.logout": "Log out",
    "login.password": "Password (8 characters min)",
    "login.password2": "Re-type your password",
@@ -128,6 +129,7 @@
    "login.noUserMatch": "Usernames do not match",
    "login.wiuser": "Please change your username as your account will be limited until you do so.",
    "login.stillDo": "It seems that you already are connected. Are you sure you want to connect anew?",
+   "login.switch": "Switch account",
 
    "header.running": "Running operations",
    "header.operation": "Current operation",

@@ -52,6 +52,10 @@
                         <a href="javascript:;" id="register-btn" style="color: #FF5000;"> {{ 'login.create' | translate }} </a>
                     </p>
                 </div>
+                <div class="forget-password" *ngFor="let a of auth.choices()">
+                    <p> {{ 'login.loginas' | translate }}
+                        <a href="javascript:;" style="color: #FF5000;" (click)="loginas(a)">{{ dataservice.forDisplay(a) }}</a></p>
+                </div>
             </form>
             <!-- END LOGIN FORM -->
             <!-- BEGIN FORGOT PASSWORD FORM -->

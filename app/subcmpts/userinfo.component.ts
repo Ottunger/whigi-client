@@ -9,6 +9,7 @@ declare var window : any
 import {Component, enableProdMode, Input, ApplicationRef, OnInit, EventEmitter} from '@angular/core';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -36,9 +37,10 @@ export class Userinfo implements OnInit {
      * @param backend App service.
      * @param dataservice Data service.
      * @param check Check service.
+     * @param auth Auth service.
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
-        private dataservice: Data, private check: ApplicationRef) {
+        private dataservice: Data, private check: ApplicationRef, private auth: Auth) {
         this.erase_addr = this.translate.instant('__no');
         this.erase_name = this.translate.instant('__no');
     }
@@ -227,7 +229,7 @@ export class Userinfo implements OnInit {
      * @return {String} Hash of pass.
      */
     goCompany(): string {
-        return localStorage.getItem('psha');
+        return this.auth.getParams()[3];
     }
 
     /**

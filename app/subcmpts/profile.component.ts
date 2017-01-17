@@ -10,6 +10,7 @@ import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -38,9 +39,10 @@ export class Profile implements OnInit {
      * @param notif Notification service.
      * @param backend Backend service.
      * @param router Router service.
+     * @param auth Auth service.
      */
     constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
-        private router: Router, private dataservice: Data) {
+        private router: Router, private dataservice: Data, private auth: Auth) {
         this.use_file = false;
     }
 
@@ -88,8 +90,7 @@ export class Profile implements OnInit {
                             self.current_pwd = self.pwd;
                             self.password = '';
                             self.password2 = '';
-                            localStorage.setItem('key_decryption', window.sha256(self.password + self.backend.profile.salt));
-                            localStorage.setItem('psha', window.sha256(self.password));
+                            self.auth.regPuzzle(undefined, window.sha256(self.password + self.backend.profile.salt), window.sha256(self.password));
                             self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
                         }, function(e) {
                             self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));
@@ -134,14 +135,16 @@ export class Profile implements OnInit {
             return;
         }
         this.backend.changeUsername(this.new_name, this.current_pwd).then(function() {
+            var now = self.backend.profile._id;
             self.backend.profile._id = self.new_name;
             self.backend.createToken(self.new_name, self.current_pwd, false).then(function(ticket) {
-                localStorage.setItem('token', ticket._id);
+                self.auth.changedUname(now, self.new_name);
+                self.auth.switchLogin(self.new_name, ticket._id);
                 self.notif.success(self.translate.instant('success'), self.translate.instant('profile.chUname'));
             }, function(e) {
-                localStorage.removeItem('token');
+                self.auth.deleteUid(undefined, false);
                 self.backend.forceReload();
-                self.router.navigate(['/llight']);
+                self.router.navigate(['/']);
             });
             self.current_pwd = self.pwd;
             self.new_name = '';

@@ -34,7 +34,6 @@ const appRoutes: Routes = [
     {path: 'loginas/:user/:pwd/:return', component: Loginas},
     {path: 'end', component: Logging},
     {path: 'endPwd', component: Logging},
-    {path: 'llight', component: Logging},
     {path: 'happenings', component: Happenings, canActivate: [Fullguard]},
     {path: 'happenings/eidok', component: Happenings, canActivate: [Fullguard]},
     {path: 'profile', component: Profile, canActivate: [Profileguard]},

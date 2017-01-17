@@ -11,6 +11,7 @@ import {Router, ActivatedRoute} from '@angular/router';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
+import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
@@ -37,12 +38,13 @@ export class Oauth implements OnInit, OnDestroy {
      * @param translate Translation service.
      * @param router Routing service.
      * @param notif Notification service.
+     * @param auth Auth service.
      * @param routed Activated route service.
      * @param backend Data service.
      * @param check Check service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService,
+    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService, private auth: Auth,
         private routed: ActivatedRoute, private backend: Backend, private check: ApplicationRef, private dataservice: Data) {
         this.requester = {};
     }
@@ -111,7 +113,7 @@ export class Oauth implements OnInit, OnDestroy {
         var self = this;
         if(ok) {
             this.backend.createOAuth(this.for_id, this.prefix, this.token).then(function(granted) {
-                window.location.href = self.mixin(self.return_url_ok, ['token=' + granted._id, 'key_decryption=' + localStorage.getItem('key_decryption')]);
+                window.location.href = self.mixin(self.return_url_ok, ['token=' + granted._id, 'key_decryption=' + self.auth.getParams()[2]]);
             }, function(e) {
                 window.location.href = self.mixin(self.return_url_deny, ['reason=api']);
             });
