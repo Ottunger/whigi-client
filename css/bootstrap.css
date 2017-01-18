@@ -3581,14 +3581,18 @@ tbody.collapse.in {
     .nav-tabs > li > a {
       margin-right: 2px;
       line-height: 1.42857;
-      border: 1px solid transparent;
-      border-radius: 4px 4px 0 0; }
+      color: #b4bcc8;
+      border: 1px solid #898373;
+      border-radius: 4px 4px 0 0;
+      background-color: #414142; }
       .nav-tabs > li > a:hover {
-        border-color: #eeeeee #eeeeee #ddd; }
+        color: #b4bcc8;
+        border-color: #eeeeee #eeeeee #ddd;
+        background-color: #342727; }
     .nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
-      color: #555555;
-      background-color: #fff;
-      border: 1px solid #ddd;
+      color: #fff;
+      background-color: #ff5000;
+      border: 1px solid #898373;
       border-bottom-color: transparent;
       cursor: default; }
 

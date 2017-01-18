@@ -25,19 +25,23 @@
                     </div>
                     <!-- END PAGE TITLE-->
                     <div class="row">
-                        <div class="col-md-6">
-                            <!-- BEGIN BLOCK -->
-                            <div class="tab-content" *ngFor="let g of generics(); let e = even">
-                                <generic_block *ngIf="e" [raw_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="g[3]" (rm)="unlink($event)"></generic_block>
+                        <div class="col-md-12">
+                            <!-- TABS -->
+                            <ul class="nav nav-tabs" role="tablist" style="margin-bottom: 0px!important;">
+                                <li role="presentation" *ngFor="let g of generics(); let f = first" [class.active]="f">
+                                    <a href="#thegens{{ dataservice.sanit(g[1]) }}" [attr.aria-controls]="'thegens' + dataservice.sanit(g[1])" role="tab" data-toggle="tab">
+                                        {{ g[1] | translate }}<i *ngIf="!g[2]" (click)="unlink(g[1])" class="fa fa-trash"></i></a>
+                                </li>
+                            </ul>
+                            <!-- END TABS -->
+                            <!-- PANES -->
+                            <div class="tab-content">
+                                <div *ngFor="let g of generics(); let f = first;" role="tabpanel" class="tab-pane" [class.active]="f" id="thegens{{ dataservice.sanit(g[1]) }}"
+                                    style="background-color: #fff">
+                                    <generic_block [raw_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="false" (rm)="unlink($event)"></generic_block>
+                                </div>
                             </div>
-                            <!-- END BLOCK -->
-                        </div>
-                        <div class="col-md-6">
-                            <!-- BEGIN BLOCK -->
-                            <div class="tab-content" *ngFor="let g of generics(); let e = odd">
-                                <generic_block *ngIf="e" [raw_list]="g[0]" [group]="g[1]" [tsl]="g[2]" [iclose]="g[3]" (rm)="unlink($event)"></generic_block>
-                            </div>
-                            <!-- END BLOCK -->
+                            <!-- END PANES -->
                         </div>
                     </div>
                 </div>
