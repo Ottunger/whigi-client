@@ -137,7 +137,8 @@ export class Clearview implements OnInit, OnChanges {
         window.$('.igen' + this.dataservice.sanit(this.gen_name)).removeClass('whigi-error');
         if(this.is_generic && (err = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, this.gen_name, this.backend.generics[this.gen_name][this.version].mode == 'file')).constructor === Array) {
             this.notif.error(this.translate.instant('error'), this.translate.instant(err[1]));
-            window.$('.igenfiner' + this.dataservice.sanit(this.gen_name) + this.dataservice.sanit(err[2])).addClass('whigi-error');
+            for(var i = 2; i < err.length; i++)
+                window.$('.igenfiner' + this.dataservice.sanit(this.gen_name) + this.dataservice.sanit(err[i])).addClass('whigi-error');
             return;
         }
         //Generic data, use what has been returned by recGeneric. If we are dated, discard the date info.

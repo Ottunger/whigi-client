@@ -333,7 +333,8 @@ export class Account implements OnInit, OnDestroy {
                     if(send.constructor === Array) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
                         window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
-                        window.$('.igenfiner' + this.dataservice.sanit(adata[1]) + this.dataservice.sanit(send[2])).addClass('whigi-error');
+                        for(var i = 2; i < send.length; i++)
+                            window.$('.igenfiner' + this.dataservice.sanit(adata[1]) + this.dataservice.sanit(send[i])).addClass('whigi-error');
                         return;
                     }
                     //Build name

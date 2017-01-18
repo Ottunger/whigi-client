@@ -424,7 +424,7 @@ export class Data {
         raw_data = (thisgen.mode == 'checkbox')?
             (raw_data || false) : (!!raw_data? raw_data.toString().trim() : '');
         if(raw_data.length > 127 && !as_file)
-            return ['error', 'generics.tooLong'];
+            return ['error', 'generics.tooLong', ''];
         //Build up the data, keys wrapping and date wrapping
         if(thisgen.mode == 'json_keys') {
             var ret = {};
@@ -434,9 +434,9 @@ export class Data {
                     continue;
                 }
                 if(thisgen.json_keys[i].required && (data_source[thisgen.json_keys[i].descr_key] === undefined || data_source[thisgen.json_keys[i].descr_key].trim() == ''))
-                    return ['error', this.allEmpty(thisgen.json_keys, data_source)? 'generics.silent' : 'generics.regexp'];
+                    return ['error', this.allEmpty(thisgen.json_keys, data_source)? 'generics.silent' : 'generics.regexp', ''];
                 if(thisgen.json_keys[i].mode != 'file' && !!data_source[thisgen.json_keys[i].descr_key] && data_source[thisgen.json_keys[i].descr_key].length > 127)
-                    return ['error', 'generics.tooLong'];
+                    return ['error', 'generics.tooLong', ''];
                 if(!!data_source[thisgen.json_keys[i].descr_key])
                     ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key].trim();
                 else if(!!data_source[thisgen.json_keys[i].descr_key])
@@ -462,7 +462,7 @@ export class Data {
         }
         var res = window.eval.call(window, '(function(test) {' + thisgen.validate + '})')(raw_data);
         if(res !== true) {
-            return ['error', res[0], res[1]];
+            return ['error', ...res];
         }
         return raw_data;
     }

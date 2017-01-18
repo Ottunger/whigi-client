@@ -90,12 +90,15 @@ export class Check {
      * @return {String[]|Boolean} String containing error or true.
      */
     areCommunications(test: string): string[] | boolean {
-        var obj = JSON.parse(test);
+        var obj = JSON.parse(test), ret: string[] = [];
         if(!!obj['generics.site_url'] && this.isURL(obj['generics.site_url']) !== true)
-            return ['generics.badurl', 'generics.site_url'];
+            ret = ['generics.badurl', 'generics.site_url'];
         if(!!obj['generics.twitter'] && !/^@[^@]+$/.test(obj['generics.twitter']))
-            return ['generics.badtwitter', 'generics.twitter'];
-        return true;
+            if(ret.length == 0)
+                ret = ['generics.badtwitter', 'generics.twitter'];
+            else
+                ret.push('generics.twitter');
+        return ret.length == 0? true : ret;
     }
 
     /**
@@ -159,81 +162,106 @@ export class Check {
      * @return {String[]|Boolean} String containing error or true.
      */
     areIdentity(test: string): string[] | boolean {
-        var obj = JSON.parse(test), res;
+        var obj = JSON.parse(test), res, ret: string[] = [];
         for(var i = 0; i < obj.length ; i++) {
             var loc = JSON.parse(obj[i].value);
             switch(loc['generics.country']) {
                 case 'BEL':
                     res = parseInt(loc['generics.eidNo'].replace(/[\.-]/g, ''));
                     if(Math.floor(res / 100) % 97 != res % 100)
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     if(!!loc['generics.rrn']) {
                         res = parseInt(loc['generics.rrn'].replace(/[\.-]/g, ''));
-                        if(97 - (Math.floor(res / 100) % 97) != res % 100)
-                            return ['generics.badrrn', 'generics.rrn'];
+                        if(97 - (Math.floor(res / 100) % 97) != res % 100) {
+                            if(ret.length == 0)
+                                ret = ['generics.badrrn', 'generics.rrn'];
+                            else
+                                ret.push('generics.rrn');
+                        }
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 case 'FRA':
                     if(!/^[0-9a-zA-Z]{12,13}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 case 'DEU':
                     if(!/^T[0-9]{8}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[A-Z][0-9]{3}[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 case 'ITA':
                     if(!/^[0-9]{5}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     break;
                 case 'LUX':
                     if(!/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{6}$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 case 'NLD':
                     if(!/^[A-Z]{7}[0-9]{2}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 case 'ESP':
                     if(!/^[A-Z]{3}[0-9]{6}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{8}-[0-9A-Z]$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 case 'GBR':
                     if(!/^[0-9]{9}$/.test(loc['generics.eidNo'])) {
-                        return ['generics.badeidno', 'generics.eidNo'];
+                        ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[A-Z]+[0-9]{6}[A-Z]{6}$/.test(loc['generics.driving'])) {
-                        return ['generics.baddriving', 'generics.driving'];
+                        if(ret.length == 0)
+                            ret = ['generics.baddriving', 'generics.driving'];
+                        else
+                            ret.push('generics.driving');
                     }
                     break;
                 default:
                     break;
             }
         }
-        return true;
+        return ret.length == 0? true : ret;
     }
 
     /**
@@ -314,21 +342,25 @@ export class Check {
      * @return {String[]|Boolean} String containing error or true.
      */
     keyIs(mode: string, key: string, test: string): string[] | boolean {
-        var obj = JSON.parse(test), res;
+        var obj = JSON.parse(test), res, ret: string[] = [];
         obj = (obj.constructor === Array)? obj : [{value: test}];
         for(var i = 0; i < obj.length; i++) {
             var loc = JSON.parse(obj[i].value);
             switch(mode) {
                 case 'date':
                     res = this.isDate(loc[key]);
-                    if(res !== true)
-                        return [res[0], key];
+                    if(res !== true) {
+                        if(ret.length == 0)
+                            ret = [res[0], key];
+                        else
+                            ret.push(key);
+                    }
                     break;
                 default:
                     break;
             }
         }
-        return true;
+        return ret.length == 0? true : ret;
     }
 
     /**
@@ -341,13 +373,17 @@ export class Check {
      * @return {String[]|Boolean} String containing error or true.
      */
     keysAre(mode: string[], key: string[], test: string): string[] | boolean {
-        var res;
+        var res, ret: string[] = [];
         for(var i = 0; i < mode.length; i++) {
             res = this.keyIs(mode[i], key[i], test);
-            if(res !== true)
-                return res;
+            if(res !== true) {
+                if(ret.length == 0)
+                    ret = res;
+                else
+                    ret.push(...res.slice(1));
+            }
         }
-        return true;
+        return ret.length == 0? true : ret;
     }
 
 }

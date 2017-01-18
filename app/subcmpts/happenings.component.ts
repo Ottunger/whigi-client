@@ -190,7 +190,8 @@ export class Happenings {
         send = this.dataservice.recGeneric(this.new_data[sid + step + folder], this.new_data_file[sid + step + folder], this.new_datas[sid + step + folder], folder, as_file);
         if(send.constructor === Array) {
             this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-            window.$('.igenfiner' + this.dataservice.sanit(sid + step + folder) + this.dataservice.sanit(send[2])).addClass('whigi-error');
+            for(var i = 2; i < send.length; i++)
+                window.$('.igenfiner' + this.dataservice.sanit(sid + step + folder) + this.dataservice.sanit(send[i])).addClass('whigi-error');
             return false;
         }
         this.works[sid].push({

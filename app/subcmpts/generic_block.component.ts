@@ -297,7 +297,8 @@ export class GenericBlock implements OnInit {
         if(send.constructor === Array) {
             if(send[1] != 'generics.silent') {
                 this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                window.$('.igenfiner' + this.dataservice.sanit(name) + this.dataservice.sanit(send[2])).addClass('whigi-error');
+                for(var i = 2; i < send.length; i++)
+                    window.$('.igenfiner' + this.dataservice.sanit(name) + this.dataservice.sanit(send[i])).addClass('whigi-error');
             }
             return;
         }
@@ -694,7 +695,8 @@ export class GenericBlock implements OnInit {
             var send = this.dataservice.recGeneric(this.new_data[fname], this.new_data_file[fname], this.new_datas[fname], gname, this.backend.generics[gname][this.backend.generics[gname].length - 1].mode == 'file');
             if(send.constructor === Array) {
                 this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                window.$('.igenfiner' + this.dataservice.sanit(fname) + this.dataservice.sanit(send[2])).addClass('whigi-error');
+                for(var i = 2; i < send.length; i++)
+                    window.$('.igenfiner' + this.dataservice.sanit(fname) + this.dataservice.sanit(send[i])).addClass('whigi-error');
                 return;
             }
             //If it is dated, some more modifications need to be done
