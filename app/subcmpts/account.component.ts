@@ -327,11 +327,13 @@ export class Account implements OnInit, OnDestroy {
                     });
                 } else if((!(adata[1].replace('*', '') in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1].replace('*', '') in this.filter && this.filter[adata[1].replace('*', '')] == '/new')) {
                     //Build and test
-                    window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).removeClass('has-error');
+                    window.$('#igen' + this.dataservice.sanit(adata[1])).removeClass('has-error');
+                    window.$('.igen' + this.dataservice.sanit(adata[1])).removeClass('whigi-error');
                     var send = this.dataservice.recGeneric(this.new_data[adata[1].replace('*', '')], '', this.new_datas[adata[1].replace('*', '')], adata[0], false);
                     if(send.constructor === Array) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                        window.$('#igen' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('has-error');
+                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
+                        window.$('.igenfiner' + this.dataservice.sanit(adata[1]) + this.dataservice.sanit(send[2])).addClass('whigi-error');
                         return;
                     }
                     //Build name

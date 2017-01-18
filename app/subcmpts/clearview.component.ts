@@ -134,12 +134,10 @@ export class Clearview implements OnInit, OnChanges {
      */
     modify() {
         var replacement, done = false, err;
-        window.$('.igen' + this.dataservice.sanit(this.gen_name)).removeClass('has-error');
-        window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', '');
+        window.$('.igen' + this.dataservice.sanit(this.gen_name)).removeClass('whigi-error');
         if(this.is_generic && (err = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, this.gen_name, this.backend.generics[this.gen_name][this.version].mode == 'file')).constructor === Array) {
             this.notif.error(this.translate.instant('error'), this.translate.instant(err[1]));
-            window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('has-error');
-            window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', 'red');
+            window.$('.igenfiner' + this.dataservice.sanit(this.gen_name) + this.dataservice.sanit(err[2])).addClass('whigi-error');
             return;
         }
         //Generic data, use what has been returned by recGeneric. If we are dated, discard the date info.
@@ -170,8 +168,7 @@ export class Clearview implements OnInit, OnChanges {
             }
             if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
                 this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
-                window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('has-error');
-                window.$('#igen2' + this.dataservice.sanit(this.gen_name)).css('color', 'red');
+                window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('whigi-error');
                 return;
             }
             replacement = JSON.stringify(replacement);

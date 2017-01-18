@@ -38,6 +38,10 @@
   top: -1000;
 }
 
+.whigi-error {
+  border-color:#e73d4a!important;
+}
+
 @media screen and (max-width: 670px) {
 
   .login .page-content {

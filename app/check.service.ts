@@ -25,10 +25,10 @@ export class Check {
      * @function isURL
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    isURL(test: string): string | boolean {
-        return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(test)? true : 'generics.badurl'
+    isURL(test: string): string[] | boolean {
+        return /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i.test(test)? true : ['generics.badurl', '']
     }
 
     /**
@@ -36,10 +36,10 @@ export class Check {
      * @function isEmail
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    isEmail(test: string): string | boolean {
-        return test === undefined || /^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/.test(test)? true : 'generics.bademail';
+    isEmail(test: string): string[] | boolean {
+        return test === undefined || /^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/.test(test)? true : ['generics.bademail', ''];
     }
 
     /**
@@ -47,10 +47,10 @@ export class Check {
      * @function isPhone
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    isPhone(test: string): string | boolean {
-        return test === undefined || /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(test)? true : 'generics.badphone';
+    isPhone(test: string): string[] | boolean {
+        return test === undefined || /\+(9[976]\d|8[987530]\d|6[987]\d|5[90]\d|42\d|3[875]\d|2[98654321]\d|9[8543210]|8[6421]|6[6543210]|5[87654321]|4[987654310]|3[9643210]|2[70]|7|1)\d{1,14}$/.test(test)? true : ['generics.badphone', ''];
     }
 
     /**
@@ -58,10 +58,10 @@ export class Check {
      * @function isDate
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    isDate(test: string): string | boolean {
-        return test === undefined || /^([1-9]|([012][0-9])|(3[01]))\/([0]?[1-9]|1[012])\/\d\d\d\d(\s+[012]?[0-9]:[0-6][0-9])?$/.test(test)? true : 'generics.baddate';
+    isDate(test: string): string[] | boolean {
+        return test === undefined || /^([1-9]|([012][0-9])|(3[01]))\/([0]?[1-9]|1[012])\/\d\d\d\d(\s+[012]?[0-9]:[0-6][0-9])?$/.test(test)? true : ['generics.baddate', ''];
     }
 
     /**
@@ -69,9 +69,9 @@ export class Check {
      * @function isAccount
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    isAccount(test: string): string | boolean {
+    isAccount(test: string): string[] | boolean {
         test = test.replace(/^(.{4})(.*)$/, '$2$1');
         test = test.replace(/[A-Z]/g, function($e) { return $e.charCodeAt(0) - 'A'.charCodeAt(0) + 10 });
         var $sum = 0, $ei = 1;
@@ -79,7 +79,7 @@ export class Check {
             $sum += $ei * parseInt(test.charAt($i),10);
             $ei = ($ei * 10) % 97;
         }; 
-        return $sum % 97 == 1? true : 'generics.badaccount';
+        return $sum % 97 == 1? true : ['generics.badaccount', ''];
     }
 
     /**
@@ -87,14 +87,14 @@ export class Check {
      * @function isCommunications
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    areCommunications(test: string): string | boolean {
+    areCommunications(test: string): string[] | boolean {
         var obj = JSON.parse(test);
         if(!!obj['generics.site_url'] && this.isURL(obj['generics.site_url']) !== true)
-            return 'generics.badurl';
+            return ['generics.badurl', 'generics.site_url'];
         if(!!obj['generics.twitter'] && !/^@[^@]+$/.test(obj['generics.twitter']))
-            return 'generics.badtwitter';
+            return ['generics.badtwitter', 'generics.twitter'];
         return true;
     }
 
@@ -104,46 +104,46 @@ export class Check {
      * @public
      * @param {String} test Input.
      * @param {Boolean} noparse If object is given.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    areAddress(test: string, noparse?: boolean): string | boolean {
+    areAddress(test: string, noparse?: boolean): string[] | boolean {
         var obj = (noparse === true)? test : JSON.parse(test);
         switch(obj['generics.country']) {
             case 'BEL':
                 if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'FRA':
                 if(!/^((0[1-9])|([1-8][0-9])|(9[0-8])|(2A)|(2B))[0-9]{3}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'DEU':
                 if(!/^((?:0[1-46-9]\d{3})|(?:[1-357-9]\d{4})|(?:[4][0-24-9]\d{3})|(?:[6][013-9]\d{3}))$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'ITA':
                 if(!/^(V-|I-)?[0-9]{5}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'LUX':
                 if(!/^L-[1-9][0-9]{3}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'NLD':
                 if(!/^[1-9][0-9]{3}\s?([a-zA-Z]{2})?$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'ESP':
                 if(!/^([1-9]{2}|[0-9][1-9]|[1-9][0-9])[0-9]{3}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             case 'GBR':
                 if(!/^(GIR|[A-Z]\d[A-Z\d]??|[A-Z]{2}\d[A-Z\d]??)[ ]??(\d[A-Z]{2})$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
              case 'USA':
                 if(!/^[1-9][0-9]{3}$/.test(obj['generics.postcode']))
-                    return 'generics.badpostcode';
+                    return ['generics.badpostcode', 'generics.postcode'];
                 break;
             default:
                 break;
@@ -156,9 +156,9 @@ export class Check {
      * @function isIdentity
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    areIdentity(test: string): string | boolean {
+    areIdentity(test: string): string[] | boolean {
         var obj = JSON.parse(test), res;
         for(var i = 0; i < obj.length ; i++) {
             var loc = JSON.parse(obj[i].value);
@@ -166,67 +166,67 @@ export class Check {
                 case 'BEL':
                     res = parseInt(loc['generics.eidNo'].replace(/[\.-]/g, ''));
                     if(Math.floor(res / 100) % 97 != res % 100)
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     if(!!loc['generics.rrn']) {
                         res = parseInt(loc['generics.rrn'].replace(/[\.-]/g, ''));
                         if(97 - (Math.floor(res / 100) % 97) != res % 100)
-                            return 'generics.badrrn';
+                            return ['generics.badrrn', 'generics.rrn'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 case 'FRA':
                     if(!/^[0-9a-zA-Z]{12,13}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 case 'DEU':
                     if(!/^T[0-9]{8}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[A-Z][0-9]{3}[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 case 'ITA':
                     if(!/^[0-9]{5}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     break;
                 case 'LUX':
                     if(!/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{6}$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 case 'NLD':
                     if(!/^[A-Z]{7}[0-9]{2}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 case 'ESP':
                     if(!/^[A-Z]{3}[0-9]{6}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{8}-[0-9A-Z]$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 case 'GBR':
                     if(!/^[0-9]{9}$/.test(loc['generics.eidNo'])) {
-                        return 'generics.badeidno';
+                        return ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[A-Z]+[0-9]{6}[A-Z]{6}$/.test(loc['generics.driving'])) {
-                        return 'generics.baddriving';
+                        return ['generics.baddriving', 'generics.driving'];
                     }
                     break;
                 default:
@@ -241,44 +241,44 @@ export class Check {
      * @function isAccount
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    areAccount(test: string): string | boolean {
+    areAccount(test: string): string[] | boolean {
         var obj = JSON.parse(test), res;
         for(var i = 0; i < obj.length; i++) {
             var loc = JSON.parse(obj[i].value);
             switch(loc['generics.country']) {
                 case 'BEL':
                     if(!/^BE\d{14}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'FRA':
                     if(!/^FR\d{12}[0-9A-Z]{11}\d{2}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'DEU':
                     if(!/^DE\d{20}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'ITA':
                     if(!/^IT\d{2}[A-Z]\d{10}[0-9A-Z]{12}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'LUX':
                     if(!/^LU\d{5}[0-9A-Z]{13}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'NLD':
                     if(!/^NL\d{2}[A-Z]{4}\d{10}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'ESP':
                     if(!/^ES\d{22}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 case 'GBR':
                     if(!/^GB\d{2}[A-Z]{4}\d{14}$/.test(loc['generics.IBAN']) || this.isAccount(loc['generics.IBAN']) !== true)
-                        return 'generics.badaccount';
+                        return ['generics.badaccount', 'generics.IBAN'];
                     break;
                 default:
                     break;
@@ -292,19 +292,14 @@ export class Check {
      * @function isCorporate
      * @public
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    areCorporate(test: string): string | boolean {
+    areCorporate(test: string): string[] | boolean {
         var obj = JSON.parse(test);
         for(var i = 0; i < obj.length; i++) {
             var loc = JSON.parse(obj[i].value);
-            /*Address no more along with company main info.
-            if(this.areAddress(loc, true) != true) {
-                return this.areAddress(loc, true);
-            }
-            */
             if(!!loc['generics.site_url'] && this.isURL(loc['generics.site_url']) !== true)
-                return 'generics.badurl';
+                return ['generics.badurl', 'generics.site_url'];
         }
         return true;
     }
@@ -316,9 +311,9 @@ export class Check {
      * @param {String} mode Mode.
      * @param {String} key Key to test.
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    keyIs(mode: string, key: string, test: string): string | boolean {
+    keyIs(mode: string, key: string, test: string): string[] | boolean {
         var obj = JSON.parse(test), res;
         obj = (obj.constructor === Array)? obj : [{value: test}];
         for(var i = 0; i < obj.length; i++) {
@@ -327,7 +322,7 @@ export class Check {
                 case 'date':
                     res = this.isDate(loc[key]);
                     if(res !== true)
-                        return res;
+                        return [res[0], key];
                     break;
                 default:
                     break;
@@ -343,9 +338,9 @@ export class Check {
      * @param {String[]} mode Modes.
      * @param {String[]} key Keys to test.
      * @param {String} test Input.
-     * @return {String|Boolean} String containing error or true.
+     * @return {String[]|Boolean} String containing error or true.
      */
-    keysAre(mode: string[], key: string[], test: string): string | boolean {
+    keysAre(mode: string[], key: string[], test: string): string[] | boolean {
         var res;
         for(var i = 0; i < mode.length; i++) {
             res = this.keyIs(mode[i], key[i], test);

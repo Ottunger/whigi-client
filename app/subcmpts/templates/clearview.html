@@ -86,11 +86,11 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="col-md-2 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;"
+                                    <div class="col-md-2 text-right" style="padding-right: 20px;"
                                         *ngIf="!is_generic || !backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
                                         {{ 'actual' | translate }}<span>*</span>:
                                     </div>
-                                    <div class="col-md-3 text-right igen{{ dataservice.sanit(gen_name) }}" style="padding-right: 20px;">
+                                    <div class="col-md-3 text-right" style="padding-right: 20px;">
                                         <div class="row" style="height: 34px;" *ngIf="is_generic"></div>
                                         <!-- labels -->
                                         <div style="padding-top: 1em;display: none;" class="keys{{ dataservice.sanit(gen_name) }} text-right"
@@ -100,8 +100,9 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-4 igen{{ dataservice.sanit(gen_name) }}">
-                                        <input_block *ngIf="is_generic" [reset]="reset" [g]="gen_name" (out)="regData($event)" [writeDesc]="false"></input_block>
+                                    <div class="col-md-4">
+                                        <input_block *ngIf="is_generic" [reset]="reset" [g]="gen_name" (out)="regData($event)" [writeDesc]="false"
+                                            [classes]="'igen' + dataservice.sanit(gen_name) + ' igenfiner' + dataservice.sanit(gen_name)"></input_block>
                                         <input *ngIf="!is_generic" type="text" [(ngModel)]="new_data" name="new_data" [disabled]="new_data_file!=''" class="form-control" />
                                         <button *ngIf="!is_generic" type="button" class="btn default load-button" (click)="dataservice.triggerLoad('fs40')">
                                             <i class="fa fa-cloud-upload"></i></button>

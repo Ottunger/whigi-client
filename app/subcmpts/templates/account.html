@@ -68,13 +68,14 @@
                             <!-- BEGIN ITEM SELECT -->
                             <div *ngIf="!backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable" id="igen{{ dataservice.sanit(p[1].replace('*', '')) }}">
                                 <p *ngIf="!!backend.profile && !!backend.profile.data[p[0]]">{{ 'account.shared' | translate }}</p>
-                                <input_block *ngIf="!!backend.profile && !backend.profile.data[p[0]]" [g]="p[0]" (out)="regData(p[1].replace('*', ''), $event)" [writeDesc]="true"></input_block>
+                                <input_block *ngIf="!!backend.profile && !backend.profile.data[p[0]]" [g]="p[0]" (out)="regData(p[1].replace('*', ''), $event)" [writeDesc]="true"
+                                    [classes]="'igen' + dataservice.sanit(p[1]) + ' igenfiner' + dataservice.sanit(p[1])"></input_block>
                             </div>
                             <div *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && !backend.generics[p[0]][backend.generics[p[0]].length - 1].share_as_folder">
                                 <select class="form-control" [(ngModel)]="filter[p[1].replace('*', '')]">
                                     <option *ngFor="let f of filters(p[0], p[1].replace('*', ''))" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select><br />
-                                <div *ngIf="filter[p[1].replace('*', '')] == '/new'" id="igen{{ dataservice.sanit(p[1].replace('*', '')) }}">
+                                <div *ngIf="filter[p[1].replace('*', '')] == '/new'" id="igen{{ dataservice.sanit(p[1]) }}">
                                     <!-- free name -->
                                     <div *ngIf="!backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" class="input-icon">
                                         <i class="fa fa-star-half-o" data-toggle="tooltip" title="{{ 'filesystem.name' | translate }}"></i>

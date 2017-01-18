@@ -199,7 +199,6 @@ export class GenericBlock implements OnInit {
                                     || (((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
                                 self.notif.alert(self.translate.instant('warning'), self.translate.instant('filesystem.noReg'));
                                 window.$('.igen' + self.dataservice.sanit(g)).addClass('has-error');
-                                window.$('#igen2' + self.dataservice.sanit(g)).css('color', 'red');
                             }
                         }
                     } else {
@@ -293,14 +292,12 @@ export class GenericBlock implements OnInit {
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
         new_name = new_name.substr(0, 63).replace(/\./g, '_');
         //Build and test
-        window.$('.igen' + this.dataservice.sanit(name) + ',#iname' + this.dataservice.sanit(name)).removeClass('has-error');
-        window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', '');
+        window.$('.igen' + this.dataservice.sanit(name)).removeClass('has-error whigi-error');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
         if(send.constructor === Array) {
             if(send[1] != 'generics.silent') {
                 this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                window.$('.igen' + this.dataservice.sanit(name)).addClass('has-error');
-                window.$('#igen2' + this.dataservice.sanit(name + new_name)).css('color', 'red');
+                window.$('.igenfiner' + this.dataservice.sanit(name) + this.dataservice.sanit(send[2])).addClass('whigi-error');
             }
             return;
         }
@@ -349,7 +346,6 @@ export class GenericBlock implements OnInit {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
             } else {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
-                window.$('#iname' + self.dataservice.sanit(name)).addClass('has-error');
             }
         });
     }
@@ -694,11 +690,11 @@ export class GenericBlock implements OnInit {
                 return;
             }
             //Build and test
-            window.$('.iinput' + this.dataservice.sanit(fname)).removeClass('has-error');
+            window.$('.iinput' + this.dataservice.sanit(fname)).removeClass('whigi-error');
             var send = this.dataservice.recGeneric(this.new_data[fname], this.new_data_file[fname], this.new_datas[fname], gname, this.backend.generics[gname][this.backend.generics[gname].length - 1].mode == 'file');
             if(send.constructor === Array) {
                 this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                window.$('.iinput' + this.dataservice.sanit(fname)).addClass('has-error');
+                window.$('.igenfiner' + this.dataservice.sanit(fname) + this.dataservice.sanit(send[2])).addClass('whigi-error');
                 return;
             }
             //If it is dated, some more modifications need to be done
@@ -711,7 +707,7 @@ export class GenericBlock implements OnInit {
                     replacement.push({from: from, value: sd});
                     if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
                         this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
-                        window.$('.iinput' + this.dataservice.sanit(fname)).addClass('has-error');
+                        window.$('.igenfiner' + this.dataservice.sanit(fname) + this.dataservice.sanit(send[2])).addClass('whigi-error');
                         return;
                     }
                 } else {
@@ -816,6 +812,7 @@ export class GenericBlock implements OnInit {
     cancel() {
         var self = this;
         window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.has-error').removeClass('has-error');
+        window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.whigi-error').removeClass('whigi-error');
         window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false).each(function() {
             var f = window.$(this).attr('data-f');
             var g = window.$(this).attr('data-g');

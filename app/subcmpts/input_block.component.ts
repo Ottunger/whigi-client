@@ -23,6 +23,7 @@ export class InputBlock implements OnInit {
     private new_data: string;
     private new_data_file: string;
     private new_datas: {[id: string]: string};
+    @Input() classes: string;
     @Input() standalone: boolean;
     @Input() g: string;
     @Input() writeDesc: boolean;
@@ -40,6 +41,7 @@ export class InputBlock implements OnInit {
      */
     constructor(private backend: Backend, private dataservice: Data) {
         this.out = new EventEmitter<any[]>();
+        this.classes = this.classes || '';
     }
 
     /**

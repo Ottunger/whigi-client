@@ -29,7 +29,7 @@
                                 <div *ngFor="let h of ha; let f = first;" role="tabpanel" class="tab-pane" [class.active]="f" id="{{ h.sid }}">
                                     <div *ngFor="let s of h.steps; let i = index" [style.display]="cstep[h.sid] == i? 'block' : 'none'">
                                         <div [ngSwitch]="s.mode">
-                                            <div *ngSwitchCase="'creating'" class="row igen{{ dataservice.sanit(s.gen) }}">
+                                            <div *ngSwitchCase="'creating'" class="row">
                                                 <div class="col-md-4 text-right" style="padding-right: 10px;">
                                                     <!-- select name any -->
                                                     <input *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only
@@ -63,7 +63,8 @@
                                                     <!-- end labels -->
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <input_block [reset]="resets[h.sid + i + s.gen]" [g]="s.gen" (out)="regData(s.gen, $event, h.sid, i)" [writeDesc]="false"></input_block>
+                                                    <input_block [reset]="resets[h.sid + i + s.gen]" [g]="s.gen" (out)="regData(s.gen, $event, h.sid, i)" [writeDesc]="false"
+                                                        [classes]="'igen' + dataservice.sanit(h.sid + i + s.gen) + ' igenfiner' + dataservice.sanit(h.sid + i + s.gen)"></input_block>
                                                 </div>
                                                 <div class="col-md-4 text-center">
                                                     <h4>{{ 'action' | translate }}</h4>

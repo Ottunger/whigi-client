@@ -11,7 +11,7 @@
             <!-- BEGIN FORM -->
             <form class="form-horizontal" role="form">
                 <div class="form-body">
-                    <div *ngFor="let g of data_list; let l = last" id="iname{{ dataservice.sanit(g) }}">
+                    <div *ngFor="let g of data_list; let l = last">
                         <div class="row input-holder-{{ dataservice.sanit(group) }}" [attr.data-g]="g">
                             <div class="row">
                                 <!-- EXPL -->
@@ -76,8 +76,8 @@
                                         <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g))" [attr.data-g]="g"
                                             [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g)" attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
                                     </div>
-                                    <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;" class="iinput{{ dataservice.sanit(g) }}">
-                                        <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)"></input_block>
+                                    <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;">
+                                        <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [classes]="'iinput' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
                                     </div>
                                 </div>
                                 <div class="col-md-1 btn-may btn-may-lefter" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
@@ -108,9 +108,9 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-6 igen{{ dataservice.sanit(g) }} whigi-sm-pad" *ngIf="!backend.profile.data[g]
+                                <div class="col-md-6 whigi-sm-pad" *ngIf="!backend.profile.data[g]
                                     && !backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
-                                    <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false"></input_block>
+                                    <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false" [classes]="'igen' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
                                 </div>
                                 <!-- EXPL -->
                             </div>
@@ -144,7 +144,7 @@
                                 </div>
                             </div>
                             <!-- BEGIN SELECT -->
-                            <div class="row igen{{ dataservice.sanit(g) }}">
+                            <div class="row">
                                 <!-- description -->
                                 <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <!-- select name any -->
@@ -191,7 +191,7 @@
                                 <div class="col-md-6 whigi-sm-pad" *ngIf="(!backend.profile.data[g] && backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')
                                     || backend.generics[g][backend.generics[g].length - 1].instantiable">
                                     <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [json_from_ask]="!!backend.generics[g][backend.generics[g].length - 1].json_from_ask"
-                                        [writeDesc]="false"></input_block>
+                                        [writeDesc]="false" [classes]="'igen' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
                                 </div>
                             </div>
                             <!-- END SELECT -->
@@ -233,8 +233,9 @@
                                                         <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
                                                             {{ 'nothing' | translate }}
                                                         </div>
-                                                        <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;margin-right: 1px;" class="iinput{{ dataservice.sanit(g + '/' + d) }}">
-                                                            <input_block [prefill]="'/' + d" [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"></input_block>
+                                                        <div id="tginput{{ dataservice.sanit(g + '/' + d) }}" style="display: none;margin-right: 1px;">
+                                                            <input_block [prefill]="'/' + d" [standalone]="true" [reset]="resets[g + '/' + d]" [g]="g" (out)="regData(g + '/' + d, $event)"
+                                                                [classes]="'igen' + dataservice.sanit(g + '/' + d) + ' igenfiner' + dataservice.sanit(g + '/' + d)"></input_block>
                                                         </div>
                                                     </div>
                                                 </div>

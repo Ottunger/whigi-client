@@ -186,13 +186,11 @@ export class Happenings {
         var self = this, send;
         var new_name = this.completeName(folder, fname);
         //Build and test
-        window.$('.igen' + this.dataservice.sanit(folder)).removeClass('has-error');
-        window.$('#igen2' + this.dataservice.sanit(folder)).css('color', '');
+        window.$('.igen' + this.dataservice.sanit(sid + step + folder)).removeClass('whigi-error');
         send = this.dataservice.recGeneric(this.new_data[sid + step + folder], this.new_data_file[sid + step + folder], this.new_datas[sid + step + folder], folder, as_file);
         if(send.constructor === Array) {
             this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-            window.$('.igen' + this.dataservice.sanit(folder)).addClass('has-error');
-            window.$('#igen2' + this.dataservice.sanit(folder)).css('color', 'red');
+            window.$('.igenfiner' + this.dataservice.sanit(sid + step + folder) + this.dataservice.sanit(send[2])).addClass('whigi-error');
             return false;
         }
         this.works[sid].push({

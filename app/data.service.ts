@@ -462,7 +462,7 @@ export class Data {
         }
         var res = window.eval.call(window, '(function(test) {' + thisgen.validate + '})')(raw_data);
         if(res !== true) {
-            return ['error', res];
+            return ['error', res[0], res[1]];
         }
         return raw_data;
     }
