@@ -950,8 +950,8 @@ export class Data {
         //Check
         if(e in this.selects && !moreKey)
             return process(this.selects[e].values);
-        else if(!!moreKey)
-            return process(this.selects[e].values.concat(this.selects[e].more[moreKey]));
+        else if(e in this.selects && !!moreKey)
+            return process(this.selects[e].values.concat(this.selects[e].more[moreKey] || []));
         if(e in this.marked)
             return [];
         this.marked[e] = true;
