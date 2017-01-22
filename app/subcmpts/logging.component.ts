@@ -122,6 +122,10 @@ export class Logging implements OnInit {
                 window.$('#ctn-log').css('display', 'block');
             });
         }
+        //Ticking towards a request
+        setTimeout(function() {
+            window.$('#ctn-log').css('display', 'block');
+        }, 1000);
         window.$('#forget-password').click(function() {
             window.$('.login-form').hide();
             window.$('.forget-form').show();

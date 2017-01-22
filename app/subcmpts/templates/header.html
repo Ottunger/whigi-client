@@ -3,7 +3,7 @@
     <div class="page-header-inner">
         <!-- BEGIN LOGO -->
         <div class="page-logo" style="cursor: pointer;">
-            <img src="../../../img/private/logo-top.png" alt="logo" class="logo-default" (click)="router.navigate(['/profile'])">
+            <img src="../../../img/private/logo-top.png" alt="logo" class="logo-default" (click)="dataservice.navigate(router, ['/profile'])">
             <div class="menu-toggler sidebar-toggler" style="padding-top: 15px;" (click)="toggleMenu()">
                 <span></span>
             </div>
@@ -90,7 +90,7 @@
                     <ul class="dropdown-menu extended tasks">
                         <li class="external">
                             <h3><span class="bold">{{ running }}</span> {{ 'header.running' | translate }}</h3>
-                            <a href="javascript:;" (click)="router.navigate(['/filesystem', 'data'])">{{ 'profile.datas' | translate }}</a>
+                            <a href="javascript:;" (click)="dataservice.navigate(router, ['/filesystem', 'data'])">{{ 'profile.datas' | translate }}</a>
                         </li>
                         <li *ngIf="running > 0">
                             <ul class="dropdown-menu-list scroller" style="height: 100px; overflow: hidden; width: auto;">
@@ -121,21 +121,21 @@
                         <i class="fa fa-angle-down"></i>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-default">
-                        <li *ngIf="!!backend.profile" (click)="router.navigate(backend.userLink())">
+                        <li *ngIf="!!backend.profile" (click)="dataservice.navigate(router, backend.userLink())">
                             <a href="javascript:;">
                                 <i class="icon-user"></i> {{ dataservice.forDisplay(backend.profile._id) | translate }}
                                 <span style="float: right;" class="badge badge-success" *ngIf="!!backend.data_trie">{{ backend.data_trie.count() }}</span>
                             </a>
                         </li>
-                        <li (click)="router.navigate(['/profile'])">
+                        <li (click)="dataservice.navigate(router, ['/profile'])">
                             <a href="javascript:;">
                                 <i class="icon-settings"></i> {{ 'profile.home' | translate }} </a>
                         </li>
-                        <li (click)="router.navigate(['/generics'])">
+                        <li (click)="dataservice.navigate(router, ['/generics'])">
                             <a href="javascript:;">
                                 <i class="icon-notebook"></i> {{ 'profile.generics' | translate }} </a>
                         </li>
-                        <li (click)="router.navigate(['/whoishare'])">
+                        <li (click)="dataservice.navigate(router, ['/whoishare'])">
                             <a href="javascript:;">
                                 <i class="icon-share"></i> {{ 'profile.whoishare' | translate }} </a>
                         </li>

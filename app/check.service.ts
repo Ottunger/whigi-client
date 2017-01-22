@@ -386,4 +386,27 @@ export class Check {
         return ret.length == 0? true : ret;
     }
 
+    /**
+     * Check if a times value matches at all stages.
+     * @function allAre
+     * @public
+     * @param {String} mode Mode.
+     * @param {String} test Input.
+     * @return {String[]|Boolean} String containing error or true.
+     */
+    allAre(mode: string, test: string): string[] | boolean {
+        var obj = JSON.parse(test);
+        for(var i = 0; i < obj.length; i++) {
+            switch(mode) {
+                case 'address':
+                    var ret = this.areAddress(obj[i].value);
+                    if(ret !== true)
+                        return ret;
+                    break;
+                default:
+                    break;
+            }
+        }
+        return true;
+    }
 }

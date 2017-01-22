@@ -102,8 +102,10 @@ export class GenericBlock implements OnInit {
     private popList() {
         for(var i = 0; i < this.data_list.length; i++) {
             this.new_datas[this.data_list[i]] = {};
-            if(!this.resets[this.data_list[i]])
+            if(!this.resets[this.data_list[i]]) {
                 this.resets[this.data_list[i]] = new EventEmitter();
+                this.ass_name[this.data_list[i]] = this.translate.instant((this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key || [])[0] || ' ');
+            }
             if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].instantiable) {
                 if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_keys_only) {
                     this.ass_name[this.data_list[i]] = this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key[0].substr(4);

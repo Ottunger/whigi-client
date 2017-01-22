@@ -158,9 +158,8 @@ export class Genguard implements CanDeactivate<Generics> {
         if(this.backend.forceMove)
             return true;
         var btns = window.$('.btn-reg-gen');
-        for(var i = 0; i < btns.length; i++)
-            if(!window.$(btns[i]).is(':disabled'))
-                return component.dialog(this.translate.instant('confirmation'));
+        if(!!btns.length)
+            return component.dialog(this.translate.instant('confirmation'));
         return true;
     }
 

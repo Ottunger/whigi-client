@@ -32,6 +32,7 @@ export class Backend {
         is_dated: boolean,
         is_dated_day_only?: boolean,
         instantiable: boolean,
+        name_placeholder?: string,
         descr_key: string,
         long_descr_key: string,
         help_url: string,
@@ -40,7 +41,7 @@ export class Backend {
         enum?: string,
         validate: string,
         json_keys: {descr_key: string, mode: string, enum?: string, enumMore?: string, required: boolean, placeholder?: string, help_url?: string}[],
-        new_key: string[],
+        new_key?: string[],
         new_key_is?: string
         new_keys_only?: boolean,
         placeholder?: string,

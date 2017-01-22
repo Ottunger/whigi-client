@@ -178,6 +178,8 @@ export class Account implements OnInit, OnDestroy {
                     if(self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].instantiable) {
                         if(self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_keys_only) {
                             self.new_name[self.data_list_shared_as[i][0]] = self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key[0].substr(4);
+                        } else {
+                            self.new_name[self.data_list_shared_as[i][0]] = self.translate.instant((self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key || [])[0] || ' ');
                         }
                     }
                 }

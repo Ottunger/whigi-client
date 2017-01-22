@@ -23,6 +23,7 @@ export class InputBlock implements OnInit {
     private new_data: string;
     private new_data_file: string;
     private new_datas: {[id: string]: string};
+    @Input() fopen: boolean;
     @Input() classes: string;
     @Input() standalone: boolean;
     @Input() g: string;
@@ -77,6 +78,11 @@ export class InputBlock implements OnInit {
                         self.within = params;
                     self.def();
                 }
+            });
+        }
+        if(this.fopen) {
+            window.$('#igen2' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).ready(function() {
+                self.collapse();
             });
         }
         //Prepare the dates

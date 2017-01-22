@@ -8,7 +8,7 @@
                 <h3 class="uppercase">{{ 'profile.generics' | translate }}</h3>
             </li>
             <li *ngFor="let key of dataservice.keys(dataservice.m.keys)" class="nav-item linkbars" id="linkbars{{ dataservice.m.keys[key].left_num }}">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/generics', key])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/generics', key])">
                     <i class="icon-graduation"></i>
                     <span class="title" *ngIf="dataservice.m.keys[key].is_i18n">{{ key | translate }}</span>
                     <span class="title" *ngIf="!dataservice.m.keys[key].is_i18n">{{ key }}</span>
@@ -29,7 +29,7 @@
             </li>
             <!--
             <li class="nav-item linkbars" *ngIf="!!backend.profile && (!backend.profile.company_info || !backend.profile.company_info.is_company)" id="linkbars40">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/happenings'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/happenings'])">
                     <i class="icon-settings"></i>
                     <span class="title">{{ 'profile.happenings' | translate }}</span>
                 </a>
@@ -37,14 +37,14 @@
             -->
             <!--
             <li class="nav-item linkbars" id="linkbars3">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'data'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/filesystem', 'data'])">
                     <i class="icon-share-alt"></i>
                     <span class="title">{{ 'profile.mine' | translate }}</span>
                     <span class="badge badge-danger" *ngIf="!!backend.data_trie">{{ backend.data_trie.count() }}</span>
                 </a>                                
             </li>
             <li class="nav-item linkbars" id="linkbars4">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/filesystem', 'vault'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/filesystem', 'vault'])">
                     <i class="icon-share-alt"></i>
                     <span class="title">{{ 'profile.shared' | translate }}</span>
                     <span class="badge badge-success" *ngIf="!!backend.shared_with_me_trie">{{ backend.shared_with_me_trie.count() }}</span>
@@ -52,7 +52,7 @@
             </li>
             -->
             <li class="nav-item linkbars" id="linkbars5">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/whoishare'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/whoishare'])">
                     <i class="icon-share"></i>
                     <span class="title">{{ 'profile.whoishare' | translate }}</span>
                 </a>
@@ -62,26 +62,26 @@
             </li>
             <!--
             <li class="nav-item linkbars" id="linkbars60" *ngIf="!!backend.profile && !!backend.profile.company_info && backend.profile.company_info.is_company">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/makeadv'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/makeadv'])">
                     <i class="icon-settings"></i>
                     <span class="title">{{ 'advert.title' | translate }}</span>
                 </a>
             </li>
             <li class="nav-item linkbars" id="linkbars70" *ngIf="!!backend.profile && (!backend.profile.company_info || !backend.profile.company_info.is_company)">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/getadv'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/getadv'])">
                     <i class="icon-settings"></i>
                     <span class="title">{{ 'advert.title' | translate }}</span>
                 </a>
             </li>
             -->
             <li class="nav-item linkbars" id="linkbars0">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/profile'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/profile'])">
                     <i class="icon-settings"></i>
                     <span class="title">{{ 'profile.home' | translate }}</span>
                 </a>
             </li>
             <li class="nav-item linkbars" id="linkbars30">
-                <a href="javascript:;" class="nav-link" (click)="router.navigate(['/oauths'])">
+                <a href="javascript:;" class="nav-link" (click)="dataservice.navigate(router, ['/oauths'])">
                     <i class="icon-settings"></i>
                     <span class="title">{{ 'profile.oauths' | translate }}</span>
                 </a>

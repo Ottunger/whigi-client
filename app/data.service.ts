@@ -7,7 +7,7 @@
 'use strict';
 declare var window: any
 import {Injectable, ApplicationRef, EventEmitter} from '@angular/core';
-import {Router} from '@angular/router';
+import {Router, NavigationExtras} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
 import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Auth} from './auth.service';
@@ -60,7 +60,7 @@ export class Data {
         }, 20 * 60 * 1000);
         //Construct a reference to angular router navigate to user
         window.ngUserMove = function(key) {
-            self.router.navigate(['/user', key, JSON.stringify(self.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
+            self.navigate(self.router, ['/user', key, JSON.stringify(self.router.routerState.snapshot.url.split('/').map(window.decodeURIComponent))]);
         }
         //Construct a reference to our data service
         window.ngData = this;
@@ -411,6 +411,24 @@ export class Data {
     }
 
     /**
+     * Navigation wrapper that safes generics.
+     * @function navigate
+     * @public
+     * @param {Router} router Router.
+     * @param {Array} commands Commands.
+     * @param {Object} extras Extras.
+     */
+    navigate(router: Router, commands: any[], extras?: NavigationExtras) {
+        var self = this;
+        router.navigate(commands, extras).then(function(did: boolean) {
+            if(!did && /\/generics/.test(location.href)) {
+                var btns = window.$('.btn-reg-gen');
+                window.$('a[href="#thegens' + self.sanit(window.$(btns[0]).attr('data-group')) + '"]').click();
+            }
+        });
+    }
+
+    /**
      * Build up a generic and test it.
      * @param {String} raw_data Source for data.
      * @param {String} raw_data_file Source for file.
@@ -434,7 +452,8 @@ export class Data {
                     continue;
                 }
                 if(thisgen.json_keys[i].required && (data_source[thisgen.json_keys[i].descr_key] === undefined || data_source[thisgen.json_keys[i].descr_key].trim() == ''))
-                    return ['error', this.allEmpty(thisgen.json_keys, data_source)? 'generics.silent' : 'generics.regexp', ''];
+                    return ['error', this.allEmpty(thisgen.json_keys, data_source)? 'generics.silent' : 'generics.regexp',
+                        ...thisgen.json_keys.filter(function(el) {return el.required}).map(function(el) {return el.descr_key})];
                 if(thisgen.json_keys[i].mode != 'file' && !!data_source[thisgen.json_keys[i].descr_key] && data_source[thisgen.json_keys[i].descr_key].length > 127)
                     return ['error', 'generics.tooLong', ''];
                 if(!!data_source[thisgen.json_keys[i].descr_key])

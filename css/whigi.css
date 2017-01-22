@@ -38,6 +38,10 @@
   top: -1000;
 }
 
+.whigi-important {
+  display: block!important;
+}
+
 .whigi-error {
   border-color:#e73d4a!important;
 }

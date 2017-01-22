@@ -80,7 +80,7 @@ export class Header implements OnInit {
             self.auth.deleteUid(undefined, true);
             self.backend.forceReload();
             delete self.backend.profile;
-            self.router.navigate(['/']);
+            self.dataservice.navigate(self.router, ['/']);
         }
         this.backend.removeTokens(all).then(function() {
             complete();
@@ -103,7 +103,7 @@ export class Header implements OnInit {
         this.auth.emptyUid();
         this.backend.forceReload();
         delete this.backend.profile;
-        this.router.navigate(['/']);
+        this.dataservice.navigate(this.router, ['/']);
     }
 
     /**
