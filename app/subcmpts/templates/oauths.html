@@ -82,7 +82,7 @@
                                                             <div class="form-group">
                                                                 <label class="control-label">{{ 'oauth.prefix' | translate }}</label><br />
                                                                 <select class="form-control" [(ngModel)]="prefix" name="prefix">
-                                                                    <option *ngFor="let c of choices()" [value]="c + '/'">{{ c }}</option>
+                                                                    <option *ngFor="let c of choices()" [value]="c + '/'">{{ (c + '/') | translate }}</option>
                                                                 </select>
                                                             </div>
                                                         </div>

@@ -51,8 +51,9 @@ export class Oauths implements OnInit {
      * @return {String[]} Choices.
      */
     choices(): string[] {
+        var self = this;
         return this.backend.data_trie.suggestions('').filter(function(el: string): boolean {
-            return el.charAt(el.length - 1) == '/';
+            return el.charAt(el.length - 1) == '/' && !(el.substr(0, el.length - 1) in self.backend.generics);
         }).map(function(el: string): string {
             return el.substr(0, el.length - 1); 
         });;

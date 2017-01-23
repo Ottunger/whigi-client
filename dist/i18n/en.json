@@ -482,6 +482,8 @@
    "corporate_long/": "Held or represented corporates lie here",
    "family/": "Relatives folder",
    "family_long/": "All relatives, family members, partners, and colleagues",
+   "keys/": "Keys folder",
+   "keys/pwd/": "Password recovery keys folder",
 
    "_comment2": "HERE START TRANSLATIONS FOR SELECTS",
 

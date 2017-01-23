@@ -482,6 +482,8 @@
    "corporate_long/": "Dossier entreprises, possédées ou représentées",
    "family/": "Dossier relations",
    "family_long/": "Dossier relations familiales, conjuguales, et de travail",
+   "keys/": "Dossier des clés de tout type",
+   "keys/pwd/": "Dossier des clés pour la récupération de mot de passe",
 
    "_comment2": "HERE START TRANSLATIONS FOR SELECTS",
 
