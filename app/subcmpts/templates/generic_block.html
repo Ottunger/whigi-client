@@ -65,7 +65,8 @@
                         <div class="col-md-6 whigi-sm-pad" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                             <div id="tgdisp{{ dataservice.sanit(g) }}">
                                 <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g))" [attr.data-g]="g"
-                                    [value]="preview(g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g)" attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
+                                    [value]="dataservice.preview(cached, previews, asked, g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g, false, sincefrom)"
+                                    attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
                             </div>
                             <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;">
                                 <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [classes]="'iinput' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
@@ -97,7 +98,7 @@
                                         </li>
                                         <li>
                                             <button type="button" class="btn btn-link" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" data-toggle="tooltip" title="{{ 'generics.clock' | translate }}"
-                                                (click)="dataservice.addClasses('showdatum' + dataservice.sanit(g), 'whigi-important')"><i class="fa fa-clock-o"></i> </button>
+                                                (click)="marked[g] = true;firstfrom(g, g);"><i class="fa fa-clock-o"></i> </button>
                                         </li>
                                     </ul>
                                 </div>
@@ -115,7 +116,7 @@
                         <p *ngIf="backend.generics[g][backend.generics[g].length - 1].long_descr_key == ''"></p>
                     </div>
                     <div class="row" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated && !!backend.profile.data[g] && backend.profile.data[g].id.indexOf('datafragment') == 0
-                        && !backend.generics[g][backend.generics[g].length - 1].instantiable" id="showdatum{{ dataservice.sanit(g)}}" style="margin: 0 0;display: none;">
+                        && !backend.generics[g][backend.generics[g].length - 1].instantiable && marked[g]" style="margin: 0 0;">
                         <div class="col-md-6 text-right" style="padding-top: 4px;" attr.data-intro="{{ 'intro.datings' | translate }}" data-step="2">
                             <button class="btn btn-sm" style="margin-right: 2px;" [disabled]="changing || !sincefrom[g] || sincefrom[g].min == sincefrom[g].act || addDisabled(g)" (click)="dateModifs(g, -1, 0, false, g)">
                                 <i class="fa fa-angle-double-left"></i></button>
@@ -170,7 +171,8 @@
                                                 <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" style="margin-right: 1px;"
                                                     *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
                                                     <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g + '/' + d))" [attr.data-g]="g + '/' + d"
-                                                        [value]="preview(g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g)" attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
+                                                        [value]="dataservice.preview(cached, previews, asked, g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g, false, sincefrom)"
+                                                        attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
                                                 </div>
                                                 <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
                                                     {{ 'nothing' | translate }}
@@ -211,7 +213,7 @@
                                                         </li>
                                                         <li>
                                                             <button type="button" class="btn btn-link" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" data-toggle="tooltip" title="{{ 'generics.clock' | translate }}"
-                                                                (click)="dataservice.addClasses('showdatum' + dataservice.sanit(g + '/' + d), 'whigi-important')"><i class="fa fa-clock-o"></i> </button>
+                                                                (click)="marked[g + '/' + d] = true;firstfrom(g + '/' + d, g);"><i class="fa fa-clock-o"></i> </button>
                                                         </li>
                                                     </ul>
                                                 </div>
@@ -219,7 +221,7 @@
                                         </div>
                                     </td>
                                 </tr>
-                                <tr id="showdatum{{ dataservice.sanit(g + '/' + d)}}" style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;display: none;">
+                                <tr *ngIf="marked[g + '/' + d]" style="border: none;text-overflow: ellipsis; white-space: nowrap; overflow: hidden;">
                                     <td style="padding-top: 5px;" *ngIf="backend.generics[g][backend.generics[g].length - 1].is_dated" [style.padding-bottom]="l? '5px' : '0px'">
                                         <div class="col-md-6 text-right" style="padding-top: 4px;" attr.data-intro="{{ 'intro.datings' | translate }}" data-step="2">
                                             <button class="btn btn-sm" [disabled]="changing || !sincefrom[g + '/' + d] || sincefrom[g + '/' + d].min == sincefrom[g + '/' + d].act || addDisabled(g + '/' + d)"

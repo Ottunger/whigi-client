@@ -1446,4 +1446,82 @@ export class Data {
         });
     }
 
+    /**
+     * Preview a non instatiable held data.
+     * @function preview
+     * @public
+     * @param {Object} cached Plain cache store.
+     * @param {Object} previews Previews store.
+     * @param {Object} asked Asked already store.
+     * @param {String} name Data name.
+     * @param {Boolean} keyded Whether JSON keyded.
+     * @param {String} gen_name Original generic.
+     * @param {Boolean} full Full decrypted data.
+     * @param {Object} sincefrom Store for dates.
+     * @return {String} Decrypted data.
+     */
+    preview(cached: {[id: string]: any}, previews: {[id: string]: string[]}, asked: {[id: string]: boolean}, name: string, keyded: boolean, gen_name: string,
+        full?: boolean | number, sincefrom?: {[id: string]: {min: number, max: number, act: number}}): string {
+        var self = this, ret;
+        full = full || false;
+        full = full? 1 : 0;
+        if(name in previews)
+            return previews[name][full];
+        if(name in asked)
+            return '[]';
+        asked[name] = true;
+
+        function complete(data) {
+            if(self.backend.profile.data[name].is_dated) {
+                ret = self.strToObj(data.decr_data);
+                if(!!sincefrom) {
+                    if(!(name in sincefrom)) {
+                        sincefrom[name] = {min: 0, max: ret.length - 1, act: ret.length - 1}
+                    }
+                    previews[name] = [ret[sincefrom[name].act].value, ret[sincefrom[name].act].value];
+                } else {
+                    previews[name] = [ret[ret.length - 1].value, ret[ret.length - 1].value];
+                }
+            } else {
+                previews[name] = [data.decr_data, data.decr_data];
+            }
+            if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].mode == 'select') {
+                try { previews[name][0] = self.translate.instant(previews[name][0]) + ' '; } catch(e) {}
+            } else if(keyded) {
+                var obj = JSON.parse(previews[name][1]);
+                var keys = Object.getOwnPropertyNames(obj);
+                previews[name][0] = '';
+                for(var i = 0; i < keys.length; i++) {
+                    var idx = 0;
+                    for(var j = 0; j < self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys.length; j++) {
+                        if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[j].descr_key == keys[i]) {
+                            idx = j;
+                            break;
+                        }
+                    }
+                    if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select') {
+                        try { previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
+                    } else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
+                        && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
+                        previews[name][0] += obj[keys[i]] + ' ';
+                }
+                previews[name][0].trim();
+            }
+            delete asked[name];
+            self.check.tick();
+        }
+        //Now get the data or do it right away
+        if(name in cached) {
+            complete(cached[name]);
+        } else {
+            this.getData(this.backend.profile.data[name].id, false).then(function(data) {
+                cached[name] = data;
+                complete(data);
+            }, function(e) {
+                previews[name] = ['[]', '[]'];
+                delete asked[name];
+            });
+        }
+    }
+
 }

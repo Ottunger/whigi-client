@@ -32,6 +32,7 @@ export class GenericBlock implements OnInit {
     public data_list: string[];
     public toview: string;
     public offsets: {[id: string]: number};
+    public marked: {[id: string]: boolean};
     @Input() tsl: boolean;
     @Input() iclose: boolean;
     @Input() group: string;
@@ -67,6 +68,7 @@ export class GenericBlock implements OnInit {
         this.sincefrom = {};
         this.foranew = {};
         this.offsets = {};
+        this.marked = {};
         this.changing = false;
         this.inreg = false;
         this.toview = '[]';
@@ -104,7 +106,14 @@ export class GenericBlock implements OnInit {
             this.new_datas[this.data_list[i]] = {};
             if(!this.resets[this.data_list[i]]) {
                 this.resets[this.data_list[i]] = new EventEmitter();
-                this.ass_name[this.data_list[i]] = this.translate.instant((this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key || [])[0] || ' ');
+                var arr = this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key || [];
+                for(var j = 0; j < arr.length; j++) {
+                    var check = this.translate.instant(arr[j]);
+                    if(!this.backend.data_trie.has(this.data_list[i] + '/' + check)) {
+                        this.ass_name[this.data_list[i]] = check;
+                        break;
+                    }
+                }
             }
             if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].instantiable) {
                 if(this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_keys_only) {
@@ -200,7 +209,7 @@ export class GenericBlock implements OnInit {
                             if(((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g]))
                                     || (((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
                                 self.notif.alert(self.translate.instant('warning'), self.translate.instant('filesystem.noReg'));
-                                window.$('.igen' + self.dataservice.sanit(g)).addClass('has-error');
+                                window.$('.igen' + self.dataservice.sanit(g)).addClass('whigi-error');
                             }
                         }
                     } else {
@@ -282,6 +291,27 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Called if first time seen.
+     * @function firstfrom
+     * @public
+     * @param {String} name Name first seen.
+     * @param {String} gen_name Origin generic name.
+     */
+    firstfrom(name: string, gen_name: string) {
+        var self = this;
+        setImmediate(function() {
+            window.$('#sincefrom' + self.dataservice.sanit(name)).ready(function() {
+                window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker();
+                if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated_day_only)
+                    window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('options', {format: 'DD/MM/YYYY'});
+                window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('date',
+                    window.moment(self.dataservice.strToObj(self.cached[name].decr_data)[self.sincefrom[name].act].from));
+                self.check.tick();
+            });
+        });
+    }
+
+    /**
      * Register a new data.
      * @function register
      * @public
@@ -294,7 +324,7 @@ export class GenericBlock implements OnInit {
         new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
         new_name = new_name.substr(0, 63).replace(/\./g, '_');
         //Build and test
-        window.$('.igen' + this.dataservice.sanit(name)).removeClass('has-error whigi-error');
+        window.$('.igen' + this.dataservice.sanit(name)).removeClass('whigi-error');
         send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
         if(send.constructor === Array) {
             if(send[1] != 'generics.silent') {
@@ -430,7 +460,8 @@ export class GenericBlock implements OnInit {
             delete self.previews[fname];
             delete self.asked[fname];
             self.cached[fname].decr_data = res;
-            self.preview(fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys', gname);
+            self.dataservice.preview(self.cached, self.previews, self.asked, name, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys',
+                gname, false, self.sincefrom);
         }
 
         //Parse object
@@ -487,82 +518,6 @@ export class GenericBlock implements OnInit {
         for(var i = 0; i < prevs.length; i++) {
             var g = window.$(prevs[i]).attr('data-g');
             this.dataservice.clickOnEnter(true, '#tgdata' + this.dataservice.sanit(g));
-        }
-    }
-
-    /**
-     * Preview a non instatiable held data.
-     * @function preview
-     * @public
-     * @param {String} name Data name.
-     * @param {Boolean} keyded Whether JSON keyded.
-     * @param {String} gen_name Original generic.
-     * @param {Boolean} full Full decrypted data.
-     * @return {String} Decrypted data.
-     */
-    preview(name: string, keyded: boolean, gen_name: string, full?: boolean | number): string {
-        var self = this, ret;
-        full = full || false;
-        full = full? 1 : 0;
-        if(name in this.previews)
-            return this.previews[name][full];
-        if(name in this.asked)
-            return '[]';
-        this.asked[name] = true;
-
-        function complete(data) {
-            if(self.backend.profile.data[name].is_dated) {
-                ret = self.dataservice.strToObj(data.decr_data);
-                if(!(name in self.sincefrom)) {
-                    //If this is a dated data the first time we go here, init everything. Move will do this afterwards.
-                    self.sincefrom[name] = {min: 0, max: ret.length - 1, act: ret.length - 1};
-                    window.$('#sincefrom' + self.dataservice.sanit(name)).ready(function() {
-                        window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker();
-                        if(self.backend.profile.data[name].is_dated_day_only)
-                            window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('options', {format: 'DD/MM/YYYY'});
-                        window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker('date', window.moment(ret[ret.length - 1].from));
-                    });
-                }
-                self.previews[name] = [ret[self.sincefrom[name].act].value, ret[self.sincefrom[name].act].value];
-            } else {
-                self.previews[name] = [data.decr_data, data.decr_data];
-            }
-            if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].mode == 'select') {
-                try { self.previews[name][0] = self.translate.instant(self.previews[name][0]) + ' '; } catch(e) {}
-            } else if(keyded) {
-                var obj = JSON.parse(self.previews[name][1]);
-                var keys = Object.getOwnPropertyNames(obj);
-                self.previews[name][0] = '';
-                for(var i = 0; i < keys.length; i++) {
-                    var idx = 0;
-                    for(var j = 0; j < self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys.length; j++) {
-                        if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[j].descr_key == keys[i]) {
-                            idx = j;
-                            break;
-                        }
-                    }
-                    if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select') {
-                        try { self.previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { self.previews[name][0] += obj[keys[i]] + ' '; }
-                    } else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
-                        && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
-                        self.previews[name][0] += obj[keys[i]] + ' ';
-                }
-                self.previews[name][0].trim();
-            }
-            delete self.asked[name];
-            self.check.tick();
-        }
-        //Now get the data or do it right away
-        if(name in self.cached) {
-            complete(self.cached[name]);
-        } else {
-            this.dataservice.getData(this.backend.profile.data[name].id, false).then(function(data) {
-                self.cached[name] = data;
-                complete(data);
-            }, function(e) {
-                self.previews[name] = ['[]', '[]'];
-                delete self.asked[name];
-            });
         }
     }
 
@@ -733,7 +688,8 @@ export class GenericBlock implements OnInit {
                 delete self.asked[fname];
                 delete self.previews[fname];
                 self.cached[fname].decr_data = send;
-                self.preview(fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys', gname);
+                self.dataservice.preview(self.cached, self.previews, self.asked, fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys',
+                    gname, false, self.sincefrom);
                 //Reset the input blocks
                 self.resets[fname].emit(send);
                 self.resets[fname].emit([]);
@@ -815,7 +771,6 @@ export class GenericBlock implements OnInit {
      */
     cancel() {
         var self = this;
-        window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.has-error').removeClass('has-error');
         window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.whigi-error').removeClass('whigi-error');
         window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').attr('disabled', false).each(function() {
             var f = window.$(this).attr('data-f');

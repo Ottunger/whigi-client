@@ -38,6 +38,9 @@ export class Account implements OnInit, OnDestroy {
     public trigger: string;
     public with_account: string;
     public strangeEmail: string;
+    public cached: {[id: string]: any};
+    private previews: {[id: string]: string[]};
+    private asked: {[id: string]: boolean};
     private unreqing: boolean;
     private cpar: any;
     private sub: Subscription;
@@ -62,6 +65,9 @@ export class Account implements OnInit, OnDestroy {
         this.new_datas = {};
         this.new_name = {};
         this.filter = {};
+        this.cached = {};
+        this.previews = {};
+        this.asked = {};
         this.strangeEmail = '';
         this.unreqing = false;
     }
@@ -179,7 +185,14 @@ export class Account implements OnInit, OnDestroy {
                         if(self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_keys_only) {
                             self.new_name[self.data_list_shared_as[i][0]] = self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key[0].substr(4);
                         } else {
-                            self.new_name[self.data_list_shared_as[i][0]] = self.translate.instant((self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key || [])[0] || ' ');
+                            var arr = self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key || [];
+                            for(var j = 0; j < arr.length; j++) {
+                                var check = self.translate.instant(arr[j]);
+                                if(!self.backend.data_trie.has(self.data_list_shared_as[i][1].replace('*', '') + '/' + check)) {
+                                    self.new_name[self.data_list_shared_as[i][0]] = check;
+                                    break;
+                                }
+                            }
                         }
                     }
                 }
@@ -329,14 +342,18 @@ export class Account implements OnInit, OnDestroy {
                     });
                 } else if((!(adata[1].replace('*', '') in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1].replace('*', '') in this.filter && this.filter[adata[1].replace('*', '')] == '/new')) {
                     //Build and test
-                    window.$('#igen' + this.dataservice.sanit(adata[1])).removeClass('has-error');
                     window.$('.igen' + this.dataservice.sanit(adata[1])).removeClass('whigi-error');
                     var send = this.dataservice.recGeneric(this.new_data[adata[1].replace('*', '')], '', this.new_datas[adata[1].replace('*', '')], adata[0], false);
                     if(send.constructor === Array) {
+                        if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).hasClass('panel-danger')) {
+                            window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('panel-danger');
+                            //Open the first error
+                            if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).find('.in').length)
+                                window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).find('a').click();
+                        }
                         this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                        window.$('#igen' + this.dataservice.sanit(adata[1])).addClass('has-error');
-                        for(var i = 2; i < send.length; i++)
-                            window.$('.igenfiner' + this.dataservice.sanit(adata[1]) + this.dataservice.sanit(send[i])).addClass('whigi-error');
+                        for(var j = 2; j < send.length; j++)
+                            window.$('.igenfiner' + this.dataservice.sanit(adata[1].replace('*', '')) + this.dataservice.sanit(send[j])).addClass('whigi-error');
                         return;
                     }
                     //Build name
@@ -370,14 +387,28 @@ export class Account implements OnInit, OnDestroy {
                         name += '/' + this.filter[adata[1].replace('*', '')];
                     }
                     //Get and grant
-                    saves.push({
-                        mode: 'get-and-grant',
-                        to: this.id_to,
-                        name: adata[1].replace('*', ''),
-                        real_name: name,
-                        until: this.expire_epoch,
-                        trigger: this.trigger
-                    });
+                    if(!!this.cached[name]) {
+                        saves.push({
+                            mode: 'grant',
+                            data: this.cached[name].decr_data,
+                            to: this.id_to,
+                            name: adata[1].replace('*', ''),
+                            real_name: name,
+                            until: this.expire_epoch,
+                            trigger: this.trigger,
+                            version: this.cached[name].version,
+                            decr_aes: this.cached[name].decr_aes
+                        });
+                    } else {
+                        saves.push({
+                            mode: 'get-and-grant',
+                            to: this.id_to,
+                            name: adata[1].replace('*', ''),
+                            real_name: name,
+                            until: this.expire_epoch,
+                            trigger: this.trigger
+                        });
+                    }
                 }
             }
             //End by calling process
@@ -615,8 +646,7 @@ export class Account implements OnInit, OnDestroy {
         var obj = window.$('.grant-required'), ok = true;
         window.$('.panel-clearable').removeClass('panel-danger');
         for(var i = 0; i < obj.length; i++) {
-            if(!!window.$(obj[i]).closest('.panel').find('button').length && window.$(obj[i]).closest('.panel').find('button').length > 0
-                && window.$(obj[i]).closest('.panel').find('button').hasClass('green'))
+            if(!!window.$(obj[i]).closest('.panel').find('button').length && window.$(obj[i]).closest('.panel').find('button').hasClass('green'))
                 continue;
             if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '') {
                 var ok = false;
