@@ -157,6 +157,7 @@ export class Logging implements OnInit {
     enter() {
         var self = this;
         window.$('.ilogging').removeClass('has-error');
+        self.username = self.username.replace(/ /g, '');
         self.backend.createToken(self.username, self.password, self.persistent).then(function(ticket) {
             self.auth.switchLogin(self.username, ticket._id);
             self.ngOnInit(true);

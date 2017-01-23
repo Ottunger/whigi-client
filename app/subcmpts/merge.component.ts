@@ -57,7 +57,7 @@ export class Merge {
             if(!!params['mergeu'])
                 self.login = params['mergeu'];
             else
-                self.login = '';
+                self.login = ' ';
             if(!!params['mergep'])
                 self.password = params['mergep'];
             else
@@ -68,13 +68,17 @@ export class Merge {
                         self.router.navigate(['/generics', 'generics.profile']);
                     });
                 } else {
-                    //Fallback to a request
+                    //Fallback to moving
                     self.router.navigate(['/generics', 'generics.profile']);
                 }
             } else {
                 //Fallback to a request
                 window.$('#ctn-merge').ready(function() {
                     window.$('#ctn-merge').css('display', 'block');
+                    setImmediate(function() {
+                        self.login = ' ';
+                        self.password = '';
+                    });
                 });
             }
         });
@@ -102,6 +106,7 @@ export class Merge {
         var my_master = this.backend.master_key, my_id = this.backend.profile._id;
 
         return new Promise(function(resolve) {
+            self.login = self.login.replace(/ /g, '');
             if(self.backend.profile._id.toLowerCase() == self.login.toLowerCase()) {
                 self.login = '';
                 self.password = '';

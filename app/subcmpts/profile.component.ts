@@ -124,6 +124,7 @@ export class Profile implements OnInit {
             window.$('.inewname').addClass('has-error');
             return;
         }
+        this.new_name = this.new_name.replace(/ /g, '');
         if(this.dataservice.isWhigi(this.new_name)) {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
             window.$('.inewname').addClass('has-error');

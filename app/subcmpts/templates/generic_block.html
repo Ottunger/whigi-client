@@ -266,7 +266,7 @@
                                 && !backend.generics[g][backend.generics[g].length - 1].new_keys_only" [attr.list]="'suggestions' + dataservice.sanit(g)"
                                 type="text" [(ngModel)]="ass_name[g]" placeholder="{{ backend.generics[g][backend.generics[g].length - 1].name_placeholder | translate }}"
                                 (input)="doCollapse(g, backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys')" name="new_name{{ dataservice.sanit(g) }}"
-                                class="form-control whigi-namer">
+                                class="form-control whigi-namer" autocomplete="false">
                             <datalist *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !backend.generics[g][backend.generics[g].length - 1].new_keys_only"
                                 id="suggestions{{ dataservice.sanit(g) }}">
                                 <option *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].new_key" value="{{ k | translate }}">

@@ -83,7 +83,7 @@
                                         <i class="fa fa-star-half-o" data-toggle="tooltip" title="{{ 'filesystem.name' | translate }}"></i>
                                         <input type="text" [(ngModel)]="new_name[p[1].replace('*', '')]" class="form-control grant-required" [attr.list]="'suggestions' + p[1].replace('*', '')" 
                                             [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))" style="background-color: #ffecbb!important;"
-                                            placeholder="{{ backend.generics[p[0]][backend.generics[p[0]].length - 1].name_placeholder | translate }}">
+                                            placeholder="{{ backend.generics[p[0]][backend.generics[p[0]].length - 1].name_placeholder | translate }}" autocomplete="false">
                                         <datalist id="suggestions{{ p[1].replace('*', '') }}">
                                             <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" value="{{ k | translate }}">
                                         </datalist>

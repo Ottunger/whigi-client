@@ -34,7 +34,7 @@
                                                     <!-- select name any -->
                                                     <input *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only
                                                         && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key_is" type="text" [(ngModel)]="new_names[h.sid + i + s.gen]" name="new_name{{ dataservice.sanit(s.gen) }}"
-                                                        class="form-control whigi-namer" [attr.list]="'suggestions' + dataservice.sanit(s.gen)" placeholder="{{ 'generics.label' | translate }}">
+                                                        class="form-control whigi-namer" [attr.list]="'suggestions' + dataservice.sanit(s.gen)" placeholder="{{ 'generics.label' | translate }}" autocomplete="false">
                                                     <datalist *ngIf="backend.generics[s.gen][backend.generics[s.gen].length - 1].instantiable && !backend.generics[s.gen][backend.generics[s.gen].length - 1].new_keys_only"
                                                         id="suggestions{{ dataservice.sanit(s.gen) }}">
                                                         <option *ngFor="let k of backend.generics[s.gen][backend.generics[s.gen].length - 1].new_key" value="{{ k | translate }}">
