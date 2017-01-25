@@ -167,6 +167,7 @@
    "advert.addi18n": "Add new language",
 
    "profile.oauths": "Authorizations",
+   "profile.changed": "Some of your data has been updated, you might want to reload the page",
    "profile.logout": "Log out",
    "profile.logoutAll": "Log all sessions out",
    "profile.noLogout": "Cannot log out safely",
@@ -484,6 +485,7 @@
    "family_long/": "All relatives, family members, partners, and colleagues",
    "keys/": "Keys folder",
    "keys/pwd/": "Password recovery keys folder",
+   "keys/auth/": "WiSSL as identity provider folder",
 
    "_comment2": "HERE START TRANSLATIONS FOR SELECTS",
 

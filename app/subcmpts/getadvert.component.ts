@@ -49,6 +49,7 @@ export class Getadvert implements OnInit {
         got.forEach(function(cid) {
             self.dataservice.getData('profile/address/' + cid, false, undefined, true).then(function(data) {
                 var addr = JSON.parse(data.decr_data);
+                addr = JSON.parse(addr[addr.length - 1].value);
                 self.dataservice.nominatim(addr, function(res) {
                     var obj = {
                         lat: Math.floor(res[0].lat * 1000)/1000,

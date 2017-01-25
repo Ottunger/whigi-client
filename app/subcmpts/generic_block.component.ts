@@ -460,7 +460,7 @@ export class GenericBlock implements OnInit {
             delete self.previews[fname];
             delete self.asked[fname];
             self.cached[fname].decr_data = res;
-            self.dataservice.preview(self.cached, self.previews, self.asked, name, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys',
+            self.dataservice.preview(self.cached, self.previews, self.asked, fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys',
                 gname, false, self.sincefrom);
         }
 

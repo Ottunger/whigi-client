@@ -92,7 +92,10 @@ export class Happenings {
                             if(toreturn.erase_addr.substr(0, 2) != '<<') {
                                 function complete(naes?: number[]) {
                                     naes = naes || self.backend.newAES();
-                                    self.dataservice.newData(true, 'profile/address/' + toreturn.erase_addr, self.backend.profile.company_info.address, false, 0, true, naes).then(function() {}, function() {});
+                                    self.dataservice.newData(true, 'profile/address/' + toreturn.erase_addr, JSON.stringify({
+                                        from: -2208992400000,
+                                        value: self.backend.profile.company_info.address
+                                    }), false, 0, true, naes).then(function() {}, function() {});
                                 }
                                 //Check if we have this address suitable
                                 if(!!self.backend.profile.data['profile/address/' + toreturn.erase_addr]) {
@@ -249,7 +252,13 @@ export class Happenings {
                     index++;
                     switch(work.mode) {
                         case 'creating':
-                            function complete(force: boolean, decr_aes?: number[]) {
+                            function complete(force: boolean, decr_aes?: number[], decr_data?: string) {
+                                if(force && work.is_dated) {
+                                    //If we had the value and it is dated, we do not erase but rather add a new horology
+                                    var sofar = JSON.parse(decr_data);
+                                    sofar.push(JSON.parse(work.send)[0]);
+                                    work.send = JSON.stringify(sofar.sort(function(a, b): number {return (a.from < b.from)? - 1 : 1;}));
+                                }
                                 self.dataservice.newData(true, work.new_name, work.send, work.is_dated, work.version, force, decr_aes).then(function(naes: number[]) {
                                     self.new_names[work.fid] = '';
                                     if(work.redir) {
@@ -288,7 +297,7 @@ export class Happenings {
                             //Existed as bound?
                             if(!!self.backend.profile.data[work.new_name] && self.backend.profile.data[work.new_name].id.indexOf('datafragment') == 0) {
                                 self.dataservice.getData(self.backend.profile.data[work.new_name].id).then(function(data) {
-                                    complete(true, data.decr_aes);
+                                    complete(true, data.decr_aes, data.decr_data);
                                 });
                             } else {
                                 complete(false);

@@ -513,21 +513,24 @@ export class Data {
                     self.backend.data_trie.add(keys[i], self.backend.profile.data[keys[i]]);
                     //If heavy is on, check for version discordance
                     if(reso) {
-                        var gen_name = undefined;
+                        var gen_name;
                         if(!!self.backend.generics[keys[i]]) {
                             gen_name = keys[i];
                         } else if(!!self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')] && self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')][0].instantiable) {
                             gen_name = keys[i].replace(/\/[^\/]*$/, '');
                         }
-                        if(gen_name && add.data[keys[i]].version < self.backend.generics[gen_name].length - 1) {
-                            var name = keys[i];
-                            self.backend.transitionSchema(gen_name, add.data[keys[i]].version, self.backend.generics[gen_name].length - 1).then(function(js) {
-                                self.getData(add.data[name].id).then(function(data) {
-                                    var got = window.eval.call(window, '(function(got) {' + js.js + '})')(data.decr_data);
-                                    self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
-                                        add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable, data.decr_aes);
+                        if(!!gen_name && add.data[keys[i]].version < self.backend.generics[gen_name].length - 1) {
+                            (function(name, gen_name) {
+                                self.backend.transitionSchema(gen_name, add.data[name].version, self.backend.generics[gen_name].length - 1).then(function(js) {
+                                    self.getData(add.data[name].id).then(function(data) {
+                                        var got = window.eval.call(window, '(function(got) {' + js.js + '})')(data.decr_data);
+                                        self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
+                                            add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable, data.decr_aes).then(function() {
+                                            self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
+                                        }, function(e) {});
+                                    }, function(e) {});
                                 }, function(e) {});
-                            }, function(e) {});
+                            })(keys[i], gen_name);
                         }
                     }
                     //Go through shares
@@ -546,15 +549,16 @@ export class Data {
                         //If heavy is on, check if storable data
                         if(reso) {
                             if(self.backend.profile.shared_with_me[keys[i]][insides[j]].indexOf('storable') == 0) {
-                                var k = keys[i], kkstr = insides[j];
-                                self.getVault(self.backend.profile.shared_with_me[keys[i]][insides[j]]).then(function(vault) {
-                                    self.newData(true, vault.storable[0], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
-                                        self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kkstr]).then(function() {
-                                            self.listData(false);
+                                (function(k, kkstr) {
+                                    self.getVault(self.backend.profile.shared_with_me[k][kkstr]).then(function(vault) {
+                                        self.newData(true, vault.storable[0], vault.decr_data, vault.is_dated, vault.version, false).then(function() {
+                                            self.backend.revokeVaultFromGrantee(self.backend.profile.shared_with_me[k][kkstr]).then(function() {
+                                                self.listData(false);
+                                            }, function(e) {});
+                                            delete self.backend.profile.shared_with_me[k][kkstr];
                                         }, function(e) {});
-                                        delete self.backend.profile.shared_with_me[k][kkstr];
                                     }, function(e) {});
-                                }, function(e) {});
+                                })(keys[i], insides[j]);
                             }
                         }
                     }
@@ -1508,7 +1512,6 @@ export class Data {
                 previews[name][0].trim();
             }
             delete asked[name];
-            self.check.tick();
         }
         //Now get the data or do it right away
         if(name in cached) {

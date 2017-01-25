@@ -601,7 +601,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     transitionSchema(name: string, as: number, to: number): Promise {
-        return this.backend('whigi', false, 'GET', {}, 'schemas/' + name + '/' + as + '/' + to, false, false);
+        return this.backend('whigi', false, 'GET', {}, 'schemas/' + window.encodeURIComponent(name) + '/' + as + '/' + to, false, false);
     }
 
     /**

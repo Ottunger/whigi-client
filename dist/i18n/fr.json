@@ -167,6 +167,7 @@
    "advert.addi18n": "Ajouter une langue",
 
    "profile.oauths": "Permissions",
+   "profile.changed": "Certaines de vos données ont été modifiées, vous devriez recharger la page",
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Fermer toute session",
    "profile.noLogout": "Impossible de quitter avec précautions",
@@ -484,6 +485,7 @@
    "family_long/": "Dossier relations familiales, conjuguales, et de travail",
    "keys/": "Dossier des clés de tout type",
    "keys/pwd/": "Dossier des clés pour la récupération de mot de passe",
+   "keys/auth/": "Dossier WiSSL single-sign-on",
 
    "_comment2": "HERE START TRANSLATIONS FOR SELECTS",
 
