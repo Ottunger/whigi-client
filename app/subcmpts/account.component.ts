@@ -112,14 +112,16 @@ export class Account implements OnInit, OnDestroy {
             window.$('#pick3').datetimepicker('date', window.moment(parseInt(params['expire_epoch'])));
         });
         
-        //We prepare HTTPS
-        if(!/^https/.test(this.return_url_ok)) {
-            this.deny();
-            return;
-        }
-        var parts = this.return_url_ok.split('https://');
+        //We prepare the return
+        var parts = this.return_url_ok.split('//');
         if(parts.length == 3) {
-            this.return_url_ok = 'https://' + parts[1] + window.encodeURIComponent('https://' + parts[2]);
+            var subs = parts[1].split('/');
+            var l = subs.pop();
+            if(l != 'https:') {
+                self.deny();
+                return;
+            }
+            this.return_url_ok = parts[0] + '//' + subs.join('/') + '/' + window.encodeURIComponent(l + '//' + parts[2]);
         }
 
         //List data

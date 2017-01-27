@@ -211,14 +211,14 @@ export class Logging implements OnInit {
                                 end(recup, self.recup_id);
                             } else {
                                 self.backend.createUser(towards, self.backend.generateRandomString(12), [{
-                                    'data': self.recup_id,
-                                    'real_name': 'profile/email/restore',
-                                    'is_dated': false,
-                                    'shared_as': 'profile/email',
-                                    'shared_trigger': '',
-                                    'shared_epoch': 0,
-                                    'shared_to': ['whigi-restore'],
-                                    'version': 0
+                                    data: self.recup_id,
+                                    real_name: 'profile/email/restore',
+                                    is_dated: false,
+                                    shared_as: 'profile/email',
+                                    shared_trigger: '',
+                                    shared_epoch: 0,
+                                    shared_to: ['whigi-restore'],
+                                    version: 0
                                 }], self.recup_id).then(function() {
                                     end(recup, towards);
                                 }, function(e) {
@@ -257,7 +257,7 @@ export class Logging implements OnInit {
             self.backend.createUser(self.username, self.password, [{
                 real_name: 'profile/lang',
                 is_dated: false,
-                decr_data: self.translate.currentLang,
+                data: self.translate.currentLang,
                 version: 0,
                 shared_to: []
             }], undefined, self.is_company).then(function() {

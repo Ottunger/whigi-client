@@ -1349,7 +1349,7 @@ export class Data {
                     self.backend.createUser(uname, pwd, [{
                     real_name: 'profile/lang',
                     is_dated: false,
-                    decr_data: self.translate.currentLang,
+                    data: self.translate.currentLang,
                     version: 0,
                     shared_to: []
                 }], undefined, false).then(function() {
