@@ -526,7 +526,7 @@ export class Data {
                                         var got = window.eval.call(window, '(function(got) {' + js.js + '})')(data.decr_data);
                                         self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
                                             add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable, data.decr_aes).then(function() {
-                                            self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
+                                            self.notif.success(self.translate.instant('success'), self.translate.instant('profile.didChanged'));
                                         }, function(e) {});
                                     }, function(e) {});
                                 }, function(e) {});

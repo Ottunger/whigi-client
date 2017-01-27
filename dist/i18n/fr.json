@@ -167,7 +167,7 @@
    "advert.addi18n": "Ajouter une langue",
 
    "profile.oauths": "Permissions",
-   "profile.changed": "Certaines de vos données ont été modifiées, vous devriez recharger la page",
+   "profile.didChanged": "Certaines de vos données ont été modifiées, vous devriez recharger la page",
    "profile.logout": "Déconnecter",
    "profile.logoutAll": "Fermer toute session",
    "profile.noLogout": "Impossible de quitter avec précautions",
