@@ -552,7 +552,7 @@ export class GenericBlock implements OnInit {
      */
     tgName(folder: string, efix: string, force?: boolean): Promise {
         var self = this; 
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve) {
             if(force === true || window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
                 var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + self.dataservice.sanit(before)).val();
                 if(!window.$('#chgname' + self.dataservice.sanit(before)).val() || window.$('#chgname' + self.dataservice.sanit(before)).val() == '') {
@@ -563,7 +563,7 @@ export class GenericBlock implements OnInit {
                 if(after in self.backend.profile.data) {
                     window.$('#tgname' + self.dataservice.sanit(before)).removeClass('green').addClass('btn-link');
                     window.$('#chgname' + self.dataservice.sanit(before)).attr('readonly', true).val(efix);
-                    reject();
+                    resolve();
                 }
                 self.backend.rename(before, after).then(function() {
                     window.$('#tgname' + self.dataservice.sanit(before)).removeClass('green').addClass('btn-link');
