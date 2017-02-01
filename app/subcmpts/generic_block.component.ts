@@ -177,14 +177,24 @@ export class GenericBlock implements OnInit {
      * @return {Boolean} Doable.
      */
     registerAll(perf: boolean): boolean {
-        var self = this, objs, toclick: any[] = [];
+        var self = this, objs, toclick: any[] = [], work: any[] = [];
         function complete(single: boolean) {
             function end() {
                 //Can redo things
                 self.inreg = false;
                 window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit').attr('disabled', false);
-                for(var i = 0; i < toclick.length; i++) {
-                    window.$('#' + toclick[i]).addClass('in-edit').click();
+                function doClick(idx: number) {
+                    if(idx < toclick.length) {
+                        if(toclick[idx].substr(0, 6) == 'tgdata') {
+                            self.tgData(window.$('#' + toclick[idx]).attr('data-f'), window.$('#' + toclick[idx]).attr('data-g')).then(function() {
+                                doClick(idx + 1);
+                            });
+                        } else {
+                            self.tgName(window.$('#' + toclick[idx]).attr('data-g'), window.$('#' + toclick[idx]).attr('data-d')).then(function() {
+                                doClick(idx + 1);
+                            });
+                        }
+                    }
                 }
                 //For adding data
                 var checks = window.$('.input-holder-' + self.dataservice.sanit(self.group));
@@ -196,13 +206,13 @@ export class GenericBlock implements OnInit {
                                 if(!perf) {
                                     return false;
                                 } else {
-                                    self.register(g, true, self.ass_name[g]);
+                                    work.push([g, true, self.ass_name[g]]);
                                 }
                             } else if(((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g])) {
                                 if(!perf) {
                                     return false;
                                 } else {
-                                    self.register(g, false, self.ass_name[g]);
+                                    work.push([g, false, self.ass_name[g]]);
                                 }
                             }
                         } else if(perf) {
@@ -217,17 +227,28 @@ export class GenericBlock implements OnInit {
                             if(!perf) {
                                 return false;
                             } else {
-                                self.register(g, true);
+                                work.push([g, true, undefined]);
                             }
                         } else if(((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g)) {
                             if(!perf) {
                                 return false;
                             } else {
-                                self.register(g, false);
+                                work.push([g, false, undefined]);
                             }
                         }
                     }
                 }
+                function doOne(idx: number) {
+                    if(idx < work.length) {
+                        self.register(work[idx][0], work[idx][1], work[idx][2]).then(function() {
+                            doOne(idx + 1);
+                        });
+                    } else {
+                        //We terminate with modifications
+                        doClick(0);
+                    }
+                }
+                doOne(0);
                 return true;
             };
             if(single)
@@ -249,7 +270,7 @@ export class GenericBlock implements OnInit {
                 //Save who to click on
                 var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
                 for(var i = 0; i < dt.length; i++)
-                    toclick.push(dt[0].id);
+                    toclick.push(dt[i].id);
                 //Name then click
                 var done = 0;
                 for(var i = 0; i < objs.length; i++) {
@@ -272,7 +293,7 @@ export class GenericBlock implements OnInit {
             //Save who to click on
             var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
             for(var i = 0; i < dt.length; i++)
-                toclick.push(dt[0].id);
+                toclick.push(dt[i].id);
             return complete(true);
         }
     }
@@ -318,68 +339,74 @@ export class GenericBlock implements OnInit {
      * @param {String} name Name of recorded file.
      * @param {Boolean} as_file Load from file.
      * @param {String} new_name Subfolder name for foldered data.
+     * @return {Promise} When done.
      */
-    register(name: string, as_file: boolean, new_name?: string) {
+    register(name: string, as_file: boolean, new_name?: string): Promise {
         var self = this, send;
-        new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
-        new_name = new_name.substr(0, 63).replace(/\./g, '_');
-        //Build and test
-        window.$('.igen' + this.dataservice.sanit(name)).removeClass('whigi-error');
-        send = this.dataservice.recGeneric(this.new_data[name], this.new_data_file[name], this.new_datas[name], name, as_file);
-        if(send.constructor === Array) {
-            if(send[1] != 'generics.silent') {
-                this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                for(var i = 2; i < send.length; i++)
-                    window.$('.igenfiner' + this.dataservice.sanit(name) + this.dataservice.sanit(send[i])).addClass('whigi-error');
-            }
-            return;
-        }
-        //Create it
-        this.dataservice.newData(true, name + new_name, send, this.backend.generics[name][this.backend.generics[name].length - 1].is_dated, this.backend.generics[name].length - 1).then(function() {
-            self.ass_name[name] = '';
-            //Maybe create an emitter for a newly generated data.
-            if(new_name != '')
-                self.resets[name + new_name] = new EventEmitter();
-            self.resets[name].emit([0]);
-            self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
-                self.data_list = now.map(function(el) { return el[0]; });
-                //Maybe you wanted acount creation?
-                if(self.backend.generics[name][self.backend.generics[name].length - 1].can_trigger_account) {
-                    window.$(`
-                        <div class="modal">
-                            <h3>` + self.translate.instant('generics.create') + `</h3>
-                            <div class="row text-center">
-                                <script type="text/javascript">
-                                    window.addUser = function(user, pwd, pwd2, mail) {
-                                        window.ngData.addUser(user, pwd, pwd2, ` + self.new_datas[name]['generics.first_name'] + `, ` + self.new_datas[name]['generics.last_name'] + `, mail).then(function(close) {
-                                            if(close !== false) {
-                                                $('.tp-close').click();
-                                            }
-                                        });
-                                    };
-                                </script>
-                                <p>` + self.translate.instant('generics.createExplain') + `</p>
-                                <label for="useracc">` + self.translate.instant('login.username') + `</label>
-                                <input type="text" id="useracc" class="form-control"/><br />
-                                <label for="pwd1acc">` + self.translate.instant('profile.new') + `</label>
-                                <input type="password" id="pwd1acc" class="form-control"/><br />
-                                <label for="pwd2acc">` + self.translate.instant('profile.new2') + `</label>
-                                <input type="password" id="pwd2acc" class="form-control"/><br />
-                                <label for="emailacc">` + self.translate.instant('login.email') + `</label>
-                                <input type="text" id="emailacc" class="form-control"/><br />
-                                <button class="btn default" onclick="$('.tp-close').click()">` + self.translate.instant('cancel') + `</button>
-                                <button class="btn green" onclick="addUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val(), $('#emailacc').val())">` + self.translate.instant('goOn') + `</button>
-                            </div>
-                        </div>
-                    `).appendTo('body').modal({closeClass: 'tp-close'});
+        return new Promise(function(resolve) {
+            new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
+            new_name = new_name.substr(0, 63).replace(/\./g, '_');
+            //Build and test
+            window.$('.igen' + self.dataservice.sanit(name)).removeClass('whigi-error');
+            send = self.dataservice.recGeneric(self.new_data[name], self.new_data_file[name], self.new_datas[name], name, as_file);
+            if(send.constructor === Array) {
+                if(send[1] != 'generics.silent') {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant(send[1]));
+                    for(var i = 2; i < send.length; i++)
+                        window.$('.igenfiner' + self.dataservice.sanit(name) + self.dataservice.sanit(send[i])).addClass('whigi-error');
                 }
-            });
-        }, function(err) {
-            if(err[0] == 'server') {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-            } else {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
+                resolve();
+                return;
             }
+            //Create it
+            self.dataservice.newData(true, name + new_name, send, self.backend.generics[name][self.backend.generics[name].length - 1].is_dated, self.backend.generics[name].length - 1).then(function() {
+                self.ass_name[name] = '';
+                //Maybe create an emitter for a newly generated data.
+                if(new_name != '')
+                    self.resets[name + new_name] = new EventEmitter();
+                self.resets[name].emit([0]);
+                self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
+                    self.data_list = now.map(function(el) { return el[0]; });
+                    //Maybe you wanted acount creation?
+                    if(self.backend.generics[name][self.backend.generics[name].length - 1].can_trigger_account) {
+                        window.$(`
+                            <div class="modal">
+                                <h3>` + self.translate.instant('generics.create') + `</h3>
+                                <div class="row text-center">
+                                    <script type="text/javascript">
+                                        window.addUser = function(user, pwd, pwd2, mail) {
+                                            window.ngData.addUser(user, pwd, pwd2, ` + self.new_datas[name]['generics.first_name'] + `, ` + self.new_datas[name]['generics.last_name'] + `, mail).then(function(close) {
+                                                if(close !== false) {
+                                                    $('.tp-close').click();
+                                                }
+                                            });
+                                        };
+                                    </script>
+                                    <p>` + self.translate.instant('generics.createExplain') + `</p>
+                                    <label for="useracc">` + self.translate.instant('login.username') + `</label>
+                                    <input type="text" id="useracc" class="form-control"/><br />
+                                    <label for="pwd1acc">` + self.translate.instant('profile.new') + `</label>
+                                    <input type="password" id="pwd1acc" class="form-control"/><br />
+                                    <label for="pwd2acc">` + self.translate.instant('profile.new2') + `</label>
+                                    <input type="password" id="pwd2acc" class="form-control"/><br />
+                                    <label for="emailacc">` + self.translate.instant('login.email') + `</label>
+                                    <input type="text" id="emailacc" class="form-control"/><br />
+                                    <button class="btn default" onclick="$('.tp-close').click()">` + self.translate.instant('cancel') + `</button>
+                                    <button class="btn green" onclick="addUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val(), $('#emailacc').val())">` + self.translate.instant('goOn') + `</button>
+                                </div>
+                            </div>
+                        `).appendTo('body').modal({closeClass: 'tp-close'});
+                    }
+                    resolve();
+                });
+            }, function(err) {
+                if(err[0] == 'server') {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                } else {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
+                }
+                resolve();
+            });
         });
     }
 
@@ -608,8 +635,9 @@ export class GenericBlock implements OnInit {
      * @param {String} fname Full name.
      * @param {String} gname Generic underlying.
      * @param {Boolean} skip Force skip.
+     * @return {Promise} When done.
      */
-    tgData(fname: string, gname: string, skip?: boolean) {
+    tgData(fname: string, gname: string, skip?: boolean): Promise {
         var self = this;
         skip = skip === true;
         function allEmpty(): boolean {
@@ -621,99 +649,110 @@ export class GenericBlock implements OnInit {
             }
             return true;
         }
-        if(!window.$('#tgdata' + this.dataservice.sanit(fname)).hasClass('green')) {
-            window.$('#tgdata' + this.dataservice.sanit(fname)).addClass('green in-edit').removeClass('btn-link').attr('disabled', true);
-            window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'none');
-            window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'block');
-            window.$('#on-edit' + this.dataservice.sanit(fname)).addClass('keys' + this.dataservice.sanit(fname));
-            //Prefill
-            if(!!this.resets[fname])
-                this.resets[fname].emit(this.previews[fname][1]);
-            //Auto expand input_block
-            window.$('#igen2' + this.dataservice.sanit(fname)).click();
-        } else {
-            if(skip || (this.backend.generics[gname][this.backend.generics[gname].length - 1].mode != 'json_keys'
-                && (!this.new_data[fname] || this.new_data[fname] == '') && (!this.new_data_file[fname] || this.new_data_file[fname] == '')) ||
-                (this.backend.generics[gname][this.backend.generics[gname].length - 1].mode == 'json_keys' && allEmpty())) {
-                window.$('#tgdata' + this.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
-                window.$('#tginput' + this.dataservice.sanit(fname)).css('display', 'none');
-                window.$('#tgdisp' + this.dataservice.sanit(fname)).css('display', 'block');
-                window.$('#tgch2' + this.dataservice.sanit(fname)).removeClass('green in-edit');
-                window.$('#on-edit' + this.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + this.dataservice.sanit(fname));
-                if(!!this.resets[fname])
-                    this.resets[fname].emit([]);
-                delete self.new_data[gname];
-                delete self.new_data_file[gname];
-                self.new_datas[gname] = {};
-                return;
-            }
-            //Build and test
-            window.$('.iinput' + this.dataservice.sanit(fname)).removeClass('whigi-error');
-            var send = this.dataservice.recGeneric(this.new_data[fname], this.new_data_file[fname], this.new_datas[fname], gname, this.backend.generics[gname][this.backend.generics[gname].length - 1].mode == 'file');
-            if(send.constructor === Array) {
-                this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
-                for(var i = 2; i < send.length; i++)
-                    window.$('.igenfiner' + this.dataservice.sanit(fname) + this.dataservice.sanit(send[i])).addClass('whigi-error');
-                return;
-            }
-            //If it is dated, some more modifications need to be done
-            var is_dated = this.backend.generics[gname][this.backend.generics[gname].length - 1].is_dated;
-            if(is_dated) {
-                var sd: string = JSON.parse(send)[0].value;
-                var from = window.$('#sincefrom' + this.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
-                var replacement = this.dataservice.strToObj(this.cached[fname].decr_data) || [];
-                if(!!this.foranew[fname]) {
-                    replacement.push({from: from, value: sd});
-                    if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
-                        this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
-                        window.$('.igenfiner' + this.dataservice.sanit(fname) + this.dataservice.sanit(send[2])).addClass('whigi-error');
-                        return;
-                    }
-                } else {
-                    replacement[this.sincefrom[fname].act] = {from: from, value: sd};
-                }
-                replacement = replacement.sort(function(a, b): number {
-                    return (a.from < b.from)? - 1 : 1;
-                });
-                send = JSON.stringify(replacement);
-            }
-            //Create it
-            this.dataservice.modifyData(fname, send, is_dated, this.backend.generics[gname].length - 1, {}, fname != gname, this.cached[fname].decr_aes).then(function() {
-                window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
-                window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
-                window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
-                window.$('#tgch2' + self.dataservice.sanit(fname)).removeClass('green in-edit');
-                window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
-                //Refresh preview
-                delete self.asked[fname];
-                delete self.previews[fname];
-                self.cached[fname].decr_data = send;
-                self.dataservice.preview(self.cached, self.previews, self.asked, fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys',
-                    gname, false, self.sincefrom);
-                //Reset the input blocks
-                self.resets[fname].emit(send);
-                self.resets[fname].emit([]);
-                self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
-                    self.data_list = now.map(function(el) { return el[0]; });
-                });
-                //If this was dated, some more modifs...
-                if(!!self.foranew[fname]) {
-                    self.sincefrom[fname].max++;
-                    window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date', window.moment(replacement[self.sincefrom[fname].act].from));
-                    window.$('#' + self.foranew[fname]).removeClass('green in-edit');
-                    delete self.foranew[fname];
-                }
-                //Reset what we'll enter
-                setImmediate(function() {
+        return new Promise(function(resolve) {
+            if(!window.$('#tgdata' + self.dataservice.sanit(fname)).hasClass('green')) {
+                window.$('#tgdata' + self.dataservice.sanit(fname)).addClass('green in-edit').removeClass('btn-link').attr('disabled', true);
+                window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'none');
+                window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'block');
+                window.$('#on-edit' + self.dataservice.sanit(fname)).addClass('keys' + self.dataservice.sanit(fname));
+                //Prefill
+                if(!!self.resets[fname])
+                    self.resets[fname].emit(self.previews[fname][1]);
+                else
+                    self.resets[fname].emit(self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'json_keys'? {} : ' ');
+                //Auto expand input_block
+                window.$('#igen2' + self.dataservice.sanit(fname)).click();
+                resolve();
+            } else {
+                if(skip || (self.backend.generics[gname][self.backend.generics[gname].length - 1].mode != 'json_keys'
+                    && (!self.new_data[fname] || self.new_data[fname] == '') && (!self.new_data_file[fname] || self.new_data_file[fname] == '')) ||
+                    (self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys' && allEmpty())) {
+                    window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
+                    window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
+                    window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
+                    window.$('#tgch2' + self.dataservice.sanit(fname)).removeClass('green in-edit');
+                    window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
+                    if(!!self.resets[fname])
+                        self.resets[fname].emit([]);
                     delete self.new_data[gname];
                     delete self.new_data_file[gname];
                     self.new_datas[gname] = {};
-                    self.check.tick();
-                }, 100);
-            }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-            });
-        }
+                    resolve();
+                    return;
+                }
+                //Build and test
+                window.$('.iinput' + self.dataservice.sanit(fname)).removeClass('whigi-error');
+                var send = self.dataservice.recGeneric(self.new_data[fname], self.new_data_file[fname], self.new_datas[fname], gname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'file');
+                if(send.constructor === Array) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant(send[1]));
+                    for(var i = 2; i < send.length; i++)
+                        window.$('.igenfiner' + self.dataservice.sanit(fname) + self.dataservice.sanit(send[i])).addClass('whigi-error');
+                    resolve();
+                    return;
+                }
+                //If it is dated, some more modifications need to be done
+                var is_dated = self.backend.generics[gname][self.backend.generics[gname].length - 1].is_dated;
+                if(is_dated) {
+                    var sd: string = JSON.parse(send)[0].value;
+                    var from = window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
+                    var replacement = self.dataservice.strToObj(self.cached[fname].decr_data) || [];
+                    if(!!self.foranew[fname]) {
+                        replacement.push({from: from, value: sd});
+                        if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
+                            self.notif.error(self.translate.instant('error'), self.translate.instant('generics.twicedate'));
+                            window.$('.igenfiner' + self.dataservice.sanit(fname) + self.dataservice.sanit(send[2])).addClass('whigi-error');
+                            resolve();
+                            return;
+                        }
+                    } else {
+                        replacement[self.sincefrom[fname].act] = {from: from, value: sd};
+                    }
+                    replacement = replacement.sort(function(a, b): number {
+                        return (a.from < b.from)? - 1 : 1;
+                    });
+                    send = JSON.stringify(replacement);
+                }
+                //Create it
+                self.dataservice.modifyData(fname, send, is_dated, self.backend.generics[gname].length - 1, {}, fname != gname, self.cached[fname].decr_aes).then(function() {
+                    window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
+                    window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
+                    window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');
+                    window.$('#tgch2' + self.dataservice.sanit(fname)).removeClass('green in-edit');
+                    window.$('#on-edit' + self.dataservice.sanit(fname)).css('display', 'none').removeClass('keys' + self.dataservice.sanit(fname));
+                    //Refresh preview
+                    delete self.asked[fname];
+                    delete self.previews[fname];
+                    self.cached[fname].decr_data = send;
+                    self.dataservice.preview(self.cached, self.previews, self.asked, fname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'json_keys',
+                        gname, false, self.sincefrom);
+                    //Reset the input blocks
+                    self.resets[fname].emit(send);
+                    self.resets[fname].emit([]);
+                    self.dataservice.filterKnown(self.raw_list.map(function(el) { return [el, el]; }), function(now: string[][]) {
+                        self.data_list = now.map(function(el) { return el[0]; });
+                        //Here we are done!
+                        resolve();
+                    });
+                    //If this was dated, some more modifs...
+                    if(!!self.foranew[fname]) {
+                        self.sincefrom[fname].max++;
+                        window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date', window.moment(replacement[self.sincefrom[fname].act].from));
+                        window.$('#' + self.foranew[fname]).removeClass('green in-edit');
+                        delete self.foranew[fname];
+                    }
+                    //Reset what we'll enter
+                    setImmediate(function() {
+                        delete self.new_data[gname];
+                        delete self.new_data_file[gname];
+                        self.new_datas[gname] = {};
+                        self.check.tick();
+                    }, 100);
+                }, function(e) {
+                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    resolve();
+                });
+            }
+        });
     }
 
     /**

@@ -64,9 +64,8 @@
                         </div>
                         <div class="col-md-6 whigi-sm-pad" *ngIf="!!backend.profile.data[g] && !backend.generics[g][backend.generics[g].length - 1].instantiable">
                             <div id="tgdisp{{ dataservice.sanit(g) }}">
-                                <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g))" [attr.data-g]="g"
-                                    [value]="dataservice.preview(cached, previews, asked, g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g, false, sincefrom)"
-                                    attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
+                                <input type="text" readonly="readonly" class="form-control" name="preview" [attr.data-g]="g"
+                                    [value]="dataservice.preview(cached, previews, asked, g, backend.generics[g][backend.profile.data[g].version].mode == 'json_keys', g, false, sincefrom)"/>
                             </div>
                             <div id="tginput{{ dataservice.sanit(g) }}" style="display: none;">
                                 <input_block [standalone]="true" [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [classes]="'iinput' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
@@ -85,9 +84,9 @@
                                         <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
                                     </button>
                                     <ul class="dropdown-menu" style="min-width: 0px;">
-                                        <li *ngIf="backend.profile.data[g].id.indexOf('datafragment') == 0">
-                                            <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link to-click" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g"
-                                                data-toggle="tooltip" title="{{ 'generics.iEdit' | translate }}"><i class="fa fa-pencil"></i></button>
+                                        <li *ngIf="backend.profile.data[g].id.indexOf('datafragment') == 0" style="display: none;">
+                                            <button type="button" id="tgdata{{ dataservice.sanit(g) }}" class="btn btn-link to-click" (click)="tgData(g, g)" [attr.data-g]="g" [attr.data-f]="g">
+                                                <i class="fa fa-pencil"></i></button>
                                         </li>
                                         <li>
                                             <button type="button" class="btn btn-link" (click)="select(g, g)" *ngIf="backend.generics[g][backend.profile.data[g].version].mode == 'json_keys'"
@@ -104,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 whigi-sm-pad" *ngIf="!backend.profile.data[g]
+                        <div class="col-md-6 whigi-sm-pad" *ngIf="!backend.profile.data[g] && !registerAll(false)
                             && !backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
                             <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false" [classes]="'igen' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
                         </div>
@@ -170,9 +169,8 @@
                                             <div class="row">
                                                 <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" style="margin-right: 1px;"
                                                     *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode != 'file'">
-                                                    <input type="text" readonly="readonly" class="form-control" name="preview" (dblclick)="dataservice.clickOnEnter(true, '#tgdata' + dataservice.sanit(g + '/' + d))" [attr.data-g]="g + '/' + d"
-                                                        [value]="dataservice.preview(cached, previews, asked, g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g, false, sincefrom)"
-                                                        attr.data-intro="{{ 'intro.edit' | translate }}" data-step="5"/>
+                                                    <input type="text" readonly="readonly" class="form-control" name="preview" [attr.data-g]="g + '/' + d"
+                                                        [value]="dataservice.preview(cached, previews, asked, g + '/' + d, backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'json_keys', g, false, sincefrom)"/>
                                                 </div>
                                                 <div id="tgdisp{{ dataservice.sanit(g + '/' + d) }}" class="text-center" style="height: 34px;" *ngIf="backend.generics[g][backend.profile.data[g + '/' + d].version].mode == 'file'">
                                                     {{ 'nothing' | translate }}
@@ -190,9 +188,9 @@
                                                         <i class="fa fa-gear" style="float: left;"></i><span class="caret"></span>
                                                     </button>
                                                     <ul class="dropdown-menu" style="min-width: 0px;">
-                                                        <li *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0">
+                                                        <li *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0" style="display: none;">
                                                             <button type="button" id="tgdata{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link to-click" (click)="tgData(g + '/' + d, g)"
-                                                            [attr.data-g]="g" [attr.data-f]="g + '/' + d" data-toggle="tooltip" title="{{ 'generics.iEdit' | translate }}"><i class="fa fa-pencil"></i></button>
+                                                            [attr.data-g]="g" [attr.data-f]="g + '/' + d"><i class="fa fa-pencil"></i></button>
                                                         </li>
                                                         <li>
                                                             <button type="button" class="btn btn-link" (click)="select(g, g + '/' + d)" [disabled]="!cached[g + '/' + d] && cached[g + '/' + d] !== false"
@@ -200,9 +198,9 @@
                                                                 data-toggle="tooltip" title="{{ 'generics.preview' | translate }}"><i class="fa fa-eye-slash"></i></button>
                                                         </li>
                                                         <li>
-                                                            <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link btn-renamer"[attr.data-g]="g"
+                                                            <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link btn-renamer" [attr.data-g]="g"
                                                                 *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0" [attr.data-d]="d" (click)="tgName(g, d)"
-                                                                data-toggle="tooltip" title="{{ 'rename' | translate }}"><i class="fa fa-wrench"></i></button>
+                                                                data-toggle="tooltip" title="{{ 'renameLabel' | translate }}"><i class="fa fa-tag"></i></button>
                                                         </li>
                                                         <li>
                                                             <button type="button" class="btn btn-link" (click)="remove(g + '/' + d)" [disabled]="hasShares(g + '/' + d)"
@@ -258,7 +256,7 @@
                     </div>
                     <!-- END ACTIONS -->
                     <!-- BEGIN SELECT -->
-                    <div class="row">
+                    <div class="row" *ngIf="!registerAll(false)">
                         <!-- description -->
                         <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable">
                             <!-- select name any -->

@@ -46,6 +46,7 @@
    "value": "Valeur",
    "search": "Rechercher",
    "edit": "Modifier",
+   "renameLabel": "Changer le label",
    
    "menus.contacts": "Contacts",
    "menus.mine": "Données Reçues",
@@ -337,7 +338,6 @@
    "generics.lessData": "Replier...",
    "generics.shared": "Partagé à...",
    "generics.tooLong": "Votre entrée est trop longue",
-   "generics.iEdit": "Modification en place",
    "generics.deleteOne": "Supprimer cette valeur",
    "generics.addOne": "Ajouter une valeur délimitée",
    "generics.changeOne": "Changer de début",

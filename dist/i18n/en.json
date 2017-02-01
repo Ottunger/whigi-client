@@ -46,6 +46,7 @@
    "value": "Value",
    "search": "Search",
    "edit": "Edit",
+   "renameLabel": "Edit label",
 
    "menus.contacts": "Contacts",
    "menus.mine": "Shared To Me",
@@ -337,7 +338,6 @@
    "generics.lessData": "Hide inputs...",
    "generics.shared": "Shared to...",
    "generics.tooLong": "Your input is too long to be accepted",
-   "generics.iEdit": "Inline edit",
    "generics.deleteOne": "Suppress this value",
    "generics.addOne": "Add a delimited value",
    "generics.changeOne": "Change beginning",
