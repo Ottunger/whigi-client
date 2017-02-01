@@ -103,7 +103,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-6 whigi-sm-pad" *ngIf="!backend.profile.data[g] && !registerAll(false)
+                        <div class="col-md-6 whigi-sm-pad" *ngIf="!backend.profile.data[g] && writing
                             && !backend.generics[g][backend.generics[g].length - 1].instantiable && backend.generics[g][backend.generics[g].length - 1].mode != 'json_keys'">
                             <input_block [reset]="resets[g]" [g]="g" (out)="regData(g, $event)" [writeDesc]="false" [classes]="'igen' + dataservice.sanit(g) + ' igenfiner' + dataservice.sanit(g)"></input_block>
                         </div>
@@ -256,7 +256,7 @@
                     </div>
                     <!-- END ACTIONS -->
                     <!-- BEGIN SELECT -->
-                    <div class="row" *ngIf="!registerAll(false)">
+                    <div class="row" *ngIf="writing">
                         <!-- description -->
                         <div class="col-md-5 text-right" style="padding-right: 17px;" *ngIf="!backend.profile.data[g] || backend.generics[g][backend.generics[g].length - 1].instantiable">
                             <!-- select name any -->
@@ -315,12 +315,12 @@
         <div class="form-actions">
             <div class="row text-center">
                 <div class="col-md-4" attr.data-intro="{{ 'intro.regGen' | translate }}" data-step="3">
-                    <button type="button" class="btn green btn-reg-gen" (click)="registerAll(true)" *ngIf="!registerAll(false)" [attr.data-group]="group">
+                    <button type="button" class="btn green btn-reg-gen" (click)="writing = false; registerAll(true)" *ngIf="writing" [attr.data-group]="group">
                         <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
-                    <button type="button" class="btn green" (click)="editAll()" *ngIf="registerAll(false)"><i class="fa fa-pencil"></i> {{ 'edit' | translate }}</button>
+                    <button type="button" class="btn green" (click)="writing = true; editAll()" *ngIf="!writing"><i class="fa fa-pencil"></i> {{ 'edit' | translate }}</button>
                 </div>
                 <div class="col-md-4" attr.data-intro="{{ 'intro.canGen' | translate }}" data-step="4">
-                    <button type="button" class="btn default" (click)="cancel()">{{ 'cancel' | translate }}</button>
+                    <button type="button" class="btn default" (click)="writing = false; cancel()">{{ 'cancel' | translate }}</button>
                 </div>
             </div>
         </div>

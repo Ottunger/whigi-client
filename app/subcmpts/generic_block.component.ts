@@ -22,6 +22,7 @@ import * as template from './templates/generic_block.html';
 export class GenericBlock implements OnInit {
 
     public foranew: {[id: string]: string};
+    public writing: boolean;
     public sincefrom: {[id: string]: {min: number, max: number, act: number}};
     public cached: {[id: string]: any};
     public changing: boolean;
@@ -71,6 +72,7 @@ export class GenericBlock implements OnInit {
         this.marked = {};
         this.changing = false;
         this.inreg = false;
+        this.writing = false;
         this.toview = '[]';
         this.rm = new EventEmitter<string>();
         this.rstCsv = new EventEmitter<any>();
@@ -173,10 +175,8 @@ export class GenericBlock implements OnInit {
      * Registers all entered inputs.
      * @function registerAll
      * @public
-     * @param {Boolean} perf Do operation or check.
-     * @return {Boolean} Doable.
      */
-    registerAll(perf: boolean): boolean {
+    registerAll() {
         var self = this, objs, toclick: any[] = [], work: any[] = [];
         function complete(single: boolean) {
             function end() {
@@ -201,40 +201,24 @@ export class GenericBlock implements OnInit {
                 for(var i = 0; i < checks.length; i++) {
                     var g = window.$(checks[i]).attr('data-g');
                     if(self.backend.generics[g][self.backend.generics[g].length - 1].instantiable) {
-                        if(!!self.ass_name[g] && self.ass_name[g] != '') {
+                        if(!!self.ass_name[g]) {
                             if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g])) {
-                                if(!perf) {
-                                    return false;
-                                } else {
-                                    work.push([g, true, self.ass_name[g]]);
-                                }
-                            } else if(((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g])) {
-                                if(!perf) {
-                                    return false;
-                                } else {
-                                    work.push([g, false, self.ass_name[g]]);
-                                }
+                                work.push([g, true, self.ass_name[g]]);
+                            } else if((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g])) {
+                                work.push([g, false, self.ass_name[g]]);
                             }
-                        } else if(perf) {
+                        } else {
                             if(((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g]))
-                                    || (((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
+                                    || ((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
                                 self.notif.alert(self.translate.instant('warning'), self.translate.instant('filesystem.noReg'));
                                 window.$('.igen' + self.dataservice.sanit(g)).addClass('whigi-error');
                             }
                         }
                     } else {
                         if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g)) {
-                            if(!perf) {
-                                return false;
-                            } else {
-                                work.push([g, true, undefined]);
-                            }
-                        } else if(((!!self.new_data[g] && self.new_data[g] != '') || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g)) {
-                            if(!perf) {
-                                return false;
-                            } else {
-                                work.push([g, false, undefined]);
-                            }
+                            work.push([g, true, undefined]);
+                        } else if((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g)) {
+                            work.push([g, false, undefined]);
                         }
                     }
                 }
@@ -249,52 +233,40 @@ export class GenericBlock implements OnInit {
                     }
                 }
                 doOne(0);
-                return true;
             };
             if(single)
-                return end();
+                end();
             else
                 setTimeout(end, 200);
         }
 
-        if(this.inreg)
-            return false;
         this.inreg = true;
         //If some names are on, do them as well first
         objs = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.btn-renamer.green');
         if(!!objs.length) {
-            if(perf == false) {
-                this.inreg = false;
-                return false;
-            } else {
-                //Save who to click on
-                var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
-                for(var i = 0; i < dt.length; i++)
-                    toclick.push(dt[i].id);
-                //Name then click
-                var done = 0;
-                for(var i = 0; i < objs.length; i++) {
-                    var g = window.$(objs[i]).attr('data-g'), d = window.$(objs[i]).attr('data-d');
-                    var idx = toclick.indexOf('tgdata' + this.dataservice.sanit(g + '/' + d));
-                    if(idx != -1)
-                        toclick.splice(idx, 1, 'tgdata' + this.dataservice.sanit(g + '/' + window.$('#chgname' + this.dataservice.sanit(g + '/' + d)).val()));
-                    this.tgName(g, d, true).then(function() {
-                        done++;
-                        if(done >= objs.length)
-                            complete(false);
-                    });
-                }
-            }
-        } else {
-            if(!perf && !!window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit').length) {
-                this.inreg = false;
-                return false;
-            }
             //Save who to click on
             var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
             for(var i = 0; i < dt.length; i++)
                 toclick.push(dt[i].id);
-            return complete(true);
+            //Name then click
+            var done = 0;
+            for(var i = 0; i < objs.length; i++) {
+                var g = window.$(objs[i]).attr('data-g'), d = window.$(objs[i]).attr('data-d');
+                var idx = toclick.indexOf('tgdata' + this.dataservice.sanit(g + '/' + d));
+                if(idx != -1)
+                    toclick.splice(idx, 1, 'tgdata' + this.dataservice.sanit(g + '/' + window.$('#chgname' + this.dataservice.sanit(g + '/' + d)).val()));
+                this.tgName(g, d, true).then(function() {
+                    done++;
+                    if(done >= objs.length)
+                        complete(false);
+                });
+            }
+        } else {
+            //Save who to click on
+            var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
+            for(var i = 0; i < dt.length; i++)
+                toclick.push(dt[i].id);
+            complete(true);
         }
     }
 
