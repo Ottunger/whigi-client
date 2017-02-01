@@ -514,9 +514,9 @@ export class Data {
                     //If heavy is on, check for version discordance
                     if(reso) {
                         var gen_name;
-                        if(!!self.backend.generics[keys[i]]) {
+                        if(!!self.backend.generics && !!self.backend.generics[keys[i]]) {
                             gen_name = keys[i];
-                        } else if(!!self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')] && self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')][0].instantiable) {
+                        } else if(!!self.backend.generics && !!self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')] && self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')][0].instantiable) {
                             gen_name = keys[i].replace(/\/[^\/]*$/, '');
                         }
                         if(!!gen_name && add.data[keys[i]].version < self.backend.generics[gen_name].length - 1) {
