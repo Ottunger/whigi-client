@@ -7,6 +7,8 @@
 <!-- FILE -->
 <button id="fsb{{ dataservice.sanit(g) }}" type="button" class="btn default load-button {{ classes }}" (click)="dataservice.triggerLoad('fs' + dataservice.sanit(g))"
     *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"><i class="fa fa-cloud-upload"></i></button>
+<a href="javascript:;" (click)="out.emit([4, g, g + prefill])"
+    *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file' && !!new_data_file && !!backend.profile.data[g + prefill]">{{ 'generics.seePicture' | translate }}</a>
 <input id="fs{{ dataservice.sanit(g) }}" style="display: none;" type="file" class="form-control grant-required" (change)="fileLoad($event)" name="new_data"
     [attr.data-forid]="'#accord' + dataservice.sanit(g)" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'file'"/>
 <!-- JSON KEYS -->
@@ -25,6 +27,7 @@
             <!-- file -->
             <button id="fsb{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" type="button" class="btn default load-button {{ classes }}{{ dataservice.sanit(k.descr_key) }}"
                 (click)="dataservice.triggerLoad('fs' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))" *ngIf="k.mode == 'file'"><i class="fa fa-cloud-upload"></i></button>
+            <a href="javascript:;" (click)="out.emit([4, g, g + prefill])" *ngIf="k.mode == 'file' && !!new_datas[k.descr_key] && !!backend.profile.data[g + prefill]">{{ 'generics.seePicture' | translate }}</a>
             <input id="fs{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" style="display: none;" [class.grant-required]="k.required" type="file" [disabled]="dataservice.keyCheck(new_datas, k) !== true"
                 class="form-control" (change)="fileLoad($event, k.descr_key)" name="new_datas" [attr.data-forid]="'#accord' + dataservice.sanit(g)" *ngIf="k.mode == 'file'"/>
             <!-- select -->
@@ -40,7 +43,7 @@
                 <span style="margin-top: 1em;"></span>
             </label>
             <!-- date -->
-            <div class="input-group date pickgen{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" *ngIf="k.mode == 'date'">
+            <div class="input-group date pickgen{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}{{ dataservice.sanit(k.descr_key) }}" *ngIf="k.mode == 'date'">
                 <input type='text' class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data{{ g + k.descr_key }}"
                     (keyup)="iChange(3)" (change)="iChange(3)" [disabled]="dataservice.keyCheck(new_datas, k) !== true"/>
                 <span class="input-group-addon">
@@ -72,7 +75,7 @@
     <span style="margin-top: 1em;"></span>
 </label>
 <!-- DATE -->
-<div class="input-group date grant-required pickgen{{ dataservice.sanit(g) }}" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
+<div class="input-group date grant-required pickgen{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'date'">
     <input type='text' class="form-control {{ classes }}" [(ngModel)]="new_data" name="new_data{{ g }}" (keyup)="iChange(1)" (change)="iChange(1)"/>
     <span class="input-group-addon">
         <span class="glyphicon glyphicon-calendar"></span>

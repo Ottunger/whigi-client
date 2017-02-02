@@ -345,6 +345,7 @@
    "generics.clock": "Manage history",
    "generics.select": "--- Select a value ---",
    "generics.create": "Create an account?",
+   "generics.seePicture": "Check picture",
    "generics.createExplain": "You have just entered the details for a person. Would you like to create a full WiSSL account for him, and be granted acces to this account? You should only say yes if you will manage the account, such as for your young children for instance.",
 
    "whoishare.title": "Data Shared By Me",

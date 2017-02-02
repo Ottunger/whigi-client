@@ -133,7 +133,7 @@
    "login.switch": "Changer de compte",
 
    "header.running": "Opérations en cours",
-   "header.operation": "Opération courrante",
+   "header.operation": "Opération courante",
    "header.save": "Sauvegarder les favoris",
    "header.help": "Lancer l'aide",
    "header.oauthing": "Connecté en tant que compte géré",
@@ -345,6 +345,7 @@
    "generics.clock": "Gestion de l'historique",
    "generics.select": "--- Choisissez ---",
    "generics.create": "Créer un compte?",
+   "generics.seePicture": "Voir l'image",
    "generics.createExplain": "Vous venez de rentrer les détails d'une personne, voulez-vous créer un compte WiSSL pour elle, sur lequel vous seriez administrateur? Notez que vous ne devriez répondre oui que pour des comptes que vous allez gérer, comem ceux d'enfants en bas âge par exemple.",
 
    "whoishare.title": "Données Que je Partage",
@@ -372,7 +373,7 @@
    "generics.perso4": "Informations bancaires",
    "generics.family1": "Membres de la famille",
    "generics.family2": "Conjoints",
-   "generics.family3": "Relations de travail",
+   "generics.family3": "Vie professionnelle",
    "generics.corp1": "Dénominations",
    "generics.corp2": "Implantations",
 
@@ -500,7 +501,7 @@
    "Son": "Fils",
    "Daughter": "Fille",
    "Single": "Célibataire",
-   "Married": "Marrié",
+   "Married": "Marié",
    "Divorced": "Divorcé",
    "Cohabitant": "Cohabitant",
    "Unspecified": "Non spécifié",

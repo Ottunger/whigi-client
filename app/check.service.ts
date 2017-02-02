@@ -159,10 +159,11 @@ export class Check {
      * @function isIdentity
      * @public
      * @param {String} test Input.
+     * @param {Boolean} noparse To not parse.
      * @return {String[]|Boolean} String containing error or true.
      */
-    areIdentity(test: string): string[] | boolean {
-        var obj = JSON.parse(test), res, ret: string[] = [];
+    areIdentity(test: string, noparse?: boolean): string[] | boolean {
+        var obj = noparse === true? test : JSON.parse(test), res, ret: string[] = [];
         for(var i = 0; i < obj.length ; i++) {
             var loc = JSON.parse(obj[i].value);
             switch(loc['generics.country']) {
@@ -375,12 +376,25 @@ export class Check {
     keysAre(mode: string[], key: string[], test: string): string[] | boolean {
         var res, ret: string[] = [];
         for(var i = 0; i < mode.length; i++) {
-            res = this.keyIs(mode[i], key[i], test);
-            if(res !== true) {
-                if(ret.length == 0)
-                    ret = res;
-                else
-                    ret.push(...res.slice(1));
+            switch(mode[i]) {
+                case 'identity':
+                    res = this.areIdentity(test);
+                    if(res !== true) {
+                        if(ret.length == 0)
+                            ret = res;
+                        else
+                            ret.push(...res.slice(1));
+                    }
+                    break;
+                default:
+                    res = this.keyIs(mode[i], key[i], test);
+                    if(res !== true) {
+                        if(ret.length == 0)
+                            ret = res;
+                        else
+                            ret.push(...res.slice(1));
+                    }
+                    break;
             }
         }
         return ret.length == 0? true : ret;

@@ -130,6 +130,18 @@ export class GenericBlock implements OnInit {
     }
 
     /**
+     * Register all.
+     * @function make
+     * @public
+     */
+    make() {
+        var self = this;
+        this.registerAll().then(function() {
+            self.writing = false;
+        }, function(e) {});
+    }
+
+    /**
      * Register data from input_block.
      * @function regData
      * @public
@@ -147,6 +159,9 @@ export class GenericBlock implements OnInit {
                 break;
             case 3:
                 this.new_datas[group] = event[1];
+                break;
+            case 4:
+                this.select(event[1], event[2]);
                 break;
         }
         if(!!event[1] && !!window.$('#setname' + this.dataservice.sanit(group)).length && window.$('#setname' + this.dataservice.sanit(group)).length > 0) {
@@ -175,11 +190,12 @@ export class GenericBlock implements OnInit {
      * Registers all entered inputs.
      * @function registerAll
      * @public
+     * @return {Promise} When done.
      */
-    registerAll() {
+    registerAll(): Promise {
         var self = this, objs, toclick: any[] = [], work: any[] = [];
-        function complete(single: boolean) {
-            function end() {
+        return new Promise(function(resolve, reject) {
+            function complete() {
                 //Can redo things
                 self.inreg = false;
                 window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit').attr('disabled', false);
@@ -188,12 +204,18 @@ export class GenericBlock implements OnInit {
                         if(toclick[idx].substr(0, 6) == 'tgdata') {
                             self.tgData(window.$('#' + toclick[idx]).attr('data-f'), window.$('#' + toclick[idx]).attr('data-g')).then(function() {
                                 doClick(idx + 1);
+                            }, function(e) {
+                                reject(e);
                             });
                         } else {
                             self.tgName(window.$('#' + toclick[idx]).attr('data-g'), window.$('#' + toclick[idx]).attr('data-d')).then(function() {
                                 doClick(idx + 1);
+                            }, function(e) {
+                                reject(e);
                             });
                         }
+                    } else {
+                        resolve();
                     }
                 }
                 //For adding data
@@ -226,6 +248,8 @@ export class GenericBlock implements OnInit {
                     if(idx < work.length) {
                         self.register(work[idx][0], work[idx][1], work[idx][2]).then(function() {
                             doOne(idx + 1);
+                        }, function(e) {
+                            reject(e);
                         });
                     } else {
                         //We terminate with modifications
@@ -233,41 +257,37 @@ export class GenericBlock implements OnInit {
                     }
                 }
                 doOne(0);
-            };
-            if(single)
-                end();
-            else
-                setTimeout(end, 200);
-        }
-
-        this.inreg = true;
-        //If some names are on, do them as well first
-        objs = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.btn-renamer.green');
-        if(!!objs.length) {
-            //Save who to click on
-            var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
-            for(var i = 0; i < dt.length; i++)
-                toclick.push(dt[i].id);
-            //Name then click
-            var done = 0;
-            for(var i = 0; i < objs.length; i++) {
-                var g = window.$(objs[i]).attr('data-g'), d = window.$(objs[i]).attr('data-d');
-                var idx = toclick.indexOf('tgdata' + this.dataservice.sanit(g + '/' + d));
-                if(idx != -1)
-                    toclick.splice(idx, 1, 'tgdata' + this.dataservice.sanit(g + '/' + window.$('#chgname' + this.dataservice.sanit(g + '/' + d)).val()));
-                this.tgName(g, d, true).then(function() {
-                    done++;
-                    if(done >= objs.length)
-                        complete(false);
-                });
             }
-        } else {
-            //Save who to click on
-            var dt = window.$('#apsablegen' + this.dataservice.sanit(this.group)).find('.in-edit.to-click');
-            for(var i = 0; i < dt.length; i++)
-                toclick.push(dt[i].id);
-            complete(true);
-        }
+        
+            self.inreg = true;
+            //If some names are on, do them as well first
+            objs = window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.btn-renamer.green');
+            if(!!objs.length) {
+                //Save who to click on
+                var dt = window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit.to-click');
+                for(var i = 0; i < dt.length; i++)
+                    toclick.push(dt[i].id);
+                //Name then click
+                var done = 0;
+                for(var i = 0; i < objs.length; i++) {
+                    var g = window.$(objs[i]).attr('data-g'), d = window.$(objs[i]).attr('data-d');
+                    var idx = toclick.indexOf('tgdata' + self.dataservice.sanit(g + '/' + d));
+                    if(idx != -1)
+                        toclick.splice(idx, 1, 'tgdata' + self.dataservice.sanit(g + '/' + window.$('#chgname' + self.dataservice.sanit(g + '/' + d)).val()));
+                    self.tgName(g, d, true).then(function() {
+                        done++;
+                        if(done >= objs.length)
+                            complete();
+                    });
+                }
+            } else {
+                //Save who to click on
+                var dt = window.$('#apsablegen' + self.dataservice.sanit(self.group)).find('.in-edit.to-click');
+                for(var i = 0; i < dt.length; i++)
+                    toclick.push(dt[i].id);
+                complete();
+            }
+        });
     }
 
     /**
@@ -315,7 +335,7 @@ export class GenericBlock implements OnInit {
      */
     register(name: string, as_file: boolean, new_name?: string): Promise {
         var self = this, send;
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
             new_name = new_name.substr(0, 63).replace(/\./g, '_');
             //Build and test
@@ -327,7 +347,7 @@ export class GenericBlock implements OnInit {
                     for(var i = 2; i < send.length; i++)
                         window.$('.igenfiner' + self.dataservice.sanit(name) + self.dataservice.sanit(send[i])).addClass('whigi-error');
                 }
-                resolve();
+                reject(send[1]);
                 return;
             }
             //Create it
@@ -377,7 +397,7 @@ export class GenericBlock implements OnInit {
                 } else {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
                 }
-                resolve();
+                reject(err[0]);
             });
         });
     }
@@ -551,8 +571,8 @@ export class GenericBlock implements OnInit {
      * @return {Promise} When done.
      */
     tgName(folder: string, efix: string, force?: boolean): Promise {
-        var self = this; 
-        return new Promise(function(resolve) {
+        var self = this, date; 
+        return new Promise(function(resolve, reject) {
             if(force === true || window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
                 var before = folder + '/' + efix, after = folder + '/' + window.$('#chgname' + self.dataservice.sanit(before)).val();
                 if(!window.$('#chgname' + self.dataservice.sanit(before)).val() || window.$('#chgname' + self.dataservice.sanit(before)).val() == '') {
@@ -569,7 +589,10 @@ export class GenericBlock implements OnInit {
                     window.$('#tgname' + self.dataservice.sanit(before)).removeClass('green').addClass('btn-link');
                     window.$('#chgname' + self.dataservice.sanit(before)).attr('readonly', true);
                     if(self.backend.generics[folder][self.backend.generics[folder].length - 1].is_dated) {
-                        var date = window.$('#sincefrom' + self.dataservice.sanit(before)).datetimepicker('date');
+                        if(self.marked[before])
+                            date = window.$('#sincefrom' + self.dataservice.sanit(before)).datetimepicker('date');
+                        else
+                            date = new Date(self.dataservice.strToObj(self.cached[before].decr_data)[self.sincefrom[before].act].from);
                     }
                     self.dataservice.listData(false).then(function() {
                         self.previews[after] = self.previews[before];
@@ -590,7 +613,7 @@ export class GenericBlock implements OnInit {
                 }, function(e) {
                     //Must have been the same name!
                     //self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-                    resolve();
+                    reject(e);
                 });
             } else {
                 window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).addClass('green').removeClass('btn-link');
@@ -621,7 +644,7 @@ export class GenericBlock implements OnInit {
             }
             return true;
         }
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             if(!window.$('#tgdata' + self.dataservice.sanit(fname)).hasClass('green')) {
                 window.$('#tgdata' + self.dataservice.sanit(fname)).addClass('green in-edit').removeClass('btn-link').attr('disabled', true);
                 window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'none');
@@ -659,21 +682,24 @@ export class GenericBlock implements OnInit {
                     self.notif.error(self.translate.instant('error'), self.translate.instant(send[1]));
                     for(var i = 2; i < send.length; i++)
                         window.$('.igenfiner' + self.dataservice.sanit(fname) + self.dataservice.sanit(send[i])).addClass('whigi-error');
-                    resolve();
+                    reject(send[1]);
                     return;
                 }
                 //If it is dated, some more modifications need to be done
                 var is_dated = self.backend.generics[gname][self.backend.generics[gname].length - 1].is_dated;
                 if(is_dated) {
-                    var sd: string = JSON.parse(send)[0].value;
-                    var from = window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
+                    var sd: string = JSON.parse(send)[0].value, from;
+                    if(self.marked[fname])
+                        from = window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
+                    else
+                        from = self.dataservice.strToObj(self.cached[fname].decr_data)[self.sincefrom[fname].act].from;
                     var replacement = self.dataservice.strToObj(self.cached[fname].decr_data) || [];
                     if(!!self.foranew[fname]) {
                         replacement.push({from: from, value: sd});
                         if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
                             self.notif.error(self.translate.instant('error'), self.translate.instant('generics.twicedate'));
                             window.$('.igenfiner' + self.dataservice.sanit(fname) + self.dataservice.sanit(send[2])).addClass('whigi-error');
-                            resolve();
+                            reject('Twice');
                             return;
                         }
                     } else {
@@ -721,7 +747,7 @@ export class GenericBlock implements OnInit {
                     }, 100);
                 }, function(e) {
                     self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
-                    resolve();
+                    reject(e);
                 });
             }
         });

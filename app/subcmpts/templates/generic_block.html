@@ -315,7 +315,7 @@
         <div class="form-actions">
             <div class="row text-center">
                 <div class="col-md-4" attr.data-intro="{{ 'intro.regGen' | translate }}" data-step="3">
-                    <button type="button" class="btn green btn-reg-gen" (click)="writing = false; registerAll(true)" *ngIf="writing" [attr.data-group]="group">
+                    <button type="button" class="btn green btn-reg-gen" (click)="make()" *ngIf="writing" [attr.data-group]="group">
                         <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                     <button type="button" class="btn green" (click)="writing = true; editAll()" *ngIf="!writing"><i class="fa fa-pencil"></i> {{ 'edit' | translate }}</button>
                 </div>
