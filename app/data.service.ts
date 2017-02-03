@@ -513,7 +513,7 @@ export class Data {
                     self.backend.data_trie.add(keys[i], self.backend.profile.data[keys[i]]);
                     //If heavy is on, check for version discordance
                     if(reso) {
-                        var gen_name;
+                        var gen_name = undefined;
                         if(!!self.backend.generics && !!self.backend.generics[keys[i]]) {
                             gen_name = keys[i];
                         } else if(!!self.backend.generics && !!self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')] && self.backend.generics[keys[i].replace(/\/[^\/]*$/, '')][0].instantiable) {
