@@ -93,7 +93,7 @@
                                                             </label>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <button class="btn green" (click)="grant()" [disabled]="!auth || auth == '' || !prefix || prefix == ''">
+                                                            <button class="btn green" (click)="grant()" [disabled]="!auth || auth == '' || !prefix || prefix == '' || backend.profile.company_info.by_key">
                                                                 <i class="fa fa-pencil"></i> {{ 'record' | translate }}</button>
                                                         </div>
                                                     </div>

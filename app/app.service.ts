@@ -195,25 +195,34 @@ export class Backend {
      * @public
      */
     decryptMaster() {
-        try {
-            var kd = this.auth.getParams()[2];
-            for(var i = 0; window.sha256(window.sha256(this.arr2str(this.master_key || []) || '')) != this.profile.sha_master; i++) {
-                var key = this.toBytes(kd);
-                var decrypter = new window.aesjs.ModeOfOperation.ctr(key, new window.aesjs.Counter(0));
-                this.master_key = decrypter.decrypt(this.profile.encr_master_key);
-                kd = window.sha256(kd);
-                if(i == 1) {
-                    //We set to 1 or far more...
-                    for(var j = 0; j < 600; j++)
-                        kd = window.sha256(kd);
+        if(!this.profile.company_info.by_key) {
+            try {
+                var kd = this.auth.getParams()[2];
+                for(var i = 0; window.sha256(window.sha256(this.arr2str(this.master_key || []) || '')) != this.profile.sha_master; i++) {
+                    var key = this.toBytes(kd);
+                    var decrypter = new window.aesjs.ModeOfOperation.ctr(key, new window.aesjs.Counter(0));
+                    this.master_key = decrypter.decrypt(this.profile.encr_master_key);
+                    kd = window.sha256(kd);
+                    if(i == 1) {
+                        //We set to 1 or far more...
+                        for(var j = 0; j < 600; j++)
+                            kd = window.sha256(kd);
+                    }
                 }
+                for(var i = 0; i < this.profile.rsa_pri_key.length; i++) {
+                    decrypter = new window.aesjs.ModeOfOperation.ctr(this.master_key, new window.aesjs.Counter(0));
+                    this.rsa_key[i] = window.aesjs.util.convertBytesToString(decrypter.decrypt(this.profile.rsa_pri_key[i]));
+                }
+            } catch(e) {
+                this.notif.alert(this.translate.instant('error'), this.translate.instant('noKey'));
             }
-            for(var i = 0; i < this.profile.rsa_pri_key.length; i++) {
-                decrypter = new window.aesjs.ModeOfOperation.ctr(this.master_key, new window.aesjs.Counter(0));
-                this.rsa_key[i] = window.aesjs.util.convertBytesToString(decrypter.decrypt(this.profile.rsa_pri_key[i]));
-            }
-        } catch(e) {
-            this.notif.alert(this.translate.instant('error'), this.translate.instant('noKey'));
+        } else {
+            this.rsa_key = [window.prompt(this.translate.instant('login.priKey'))];
+            var nbstr = window.prompt(this.translate.instant('login.mk'));
+            this.master_key = [];
+            nbstr = nbstr.split(',');
+            for(var i = 0; i < nbstr.length; i++)
+                this.master_key.push(parseInt(nbstr[i].replace(/[\[\] ]/g, '')));
         }
     }
 
@@ -804,6 +813,25 @@ export class Backend {
         if(!!is_company)
             post['company_info'] = {is_company: true};
         return this.backend('whigi', true, 'POST', post, 'user/create' + this.regCaptcha(), false, false);
+    }
+
+    /**
+     * Acks a new user.
+     * @function ackUser
+     * @public
+     * @param {String} username Username.
+     * @param {String} pubkey Public key
+     * @param {Boolean} is_company Create a company account.
+     * @return {Promise} JSON response from backend.
+     */
+    ackUser(username: string, pubkey: string, is_company?: boolean): Promise {
+        var post = {
+            username: username,
+            public_pem: pubkey
+        };
+        if(!!is_company)
+            post['company_info'] = {is_company: true};
+        return this.backend('whigi', true, 'POST', post, 'user/ack', false, false);
     }
 
     /**

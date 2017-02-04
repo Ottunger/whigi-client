@@ -23,17 +23,7 @@
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.pass' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" id="wlogin-pass" type="password" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.pass' | translate }}" name="password" /> </div>
-                </div>
-                <div class="form-group ilogging" style="display: none;">
-                    <label class="rememberme mt-checkbox mt-checkbox-outline">
-                        <input type="checkbox" name="remember" [(ngModel)]="use_file" /> {{ 'login.use_file' | translate }}
-                        <span></span>
-                    </label>
-                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
-                    <div class="input-icon">
-                        <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
+                        <input class="form-control placeholder-no-fix" id="wlogin-pass" type="password" [(ngModel)]="password" autocomplete="off" placeholder="{{ 'login.pass' | translate }}" name="password" /> </div>
                 </div>
                 <div class="form-actions">
                     <label class="rememberme mt-checkbox mt-checkbox-outline">
@@ -50,6 +40,9 @@
                 <div class="create-account">
                     <p> {{ 'login.register' | translate }}
                         <a href="javascript:;" id="register-btn" style="color: #FF5000;"> {{ 'login.create' | translate }} </a>
+                    </p>
+                    <p> {{ 'login.registerSafe' | translate }}
+                        <a href="javascript:;" id="register-btn-safe" style="color: #FF5000;"> {{ 'login.click' | translate }} </a>
                     </p>
                 </div>
                 <div class="forget-password" *ngFor="let a of auth.choices()">
@@ -74,7 +67,7 @@
             </form> 
             <!-- END FORGOT PASSWORD FORM -->
             <!-- BEGIN REGISTRATION FORM -->
-            <form class="register-form">
+            <form class="register-form" id="reg1">
                 <h3>{{ 'login.signUp' | translate }}</h3>
                 <p> {{ 'login.sign' | translate }} </p>
                 <div class="form-group iuname">
@@ -87,30 +80,20 @@
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.password' | translate }}</label>
                     <div class="input-icon">
                         <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="password" (input)="dataservice.showStr('pwdstr', 'register_password')" [(ngModel)]="password" [disabled]="use_file" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
+                        <input class="form-control placeholder-no-fix" type="password" (input)="dataservice.showStr('pwdstr', 'register_password')" [(ngModel)]="password" autocomplete="off" id="register_password" placeholder="{{ 'login.password' | translate }}" name="password" /> </div>
                 </div>
                 <div class="form-group ipass">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'login.password2' | translate }}</label>
                     <div class="controls">
                         <div class="input-icon">
                             <i class="fa fa-check"></i>
-                            <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" [disabled]="use_file" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
+                            <input class="form-control placeholder-no-fix" type="password" [(ngModel)]="password2" autocomplete="off" placeholder="{{ 'login.password2' | translate }}" name="rpassword" /> </div>
                     </div>
                 </div>
-                <div class="form-group" *ngIf="!use_file">
+                <div class="form-group">
                     <span class="progress" style="display: block; margin-bottom: 0px;">
                         <span id="pwdstr" style="width: 0%;" class="progress-bar" aria-valuemin="0" aria-valuemax="100"></span>
                     </span>
-                </div>
-                <div class="form-group ipass" style="display: none;">
-                    <label class="rememberme mt-checkbox mt-checkbox-outline">
-                        <input type="checkbox" name="remember" [(ngModel)]="use_file" /> {{ 'login.use_file' | translate }}
-                        <span></span>
-                    </label>
-                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.password_file' | translate }}</label>
-                    <div class="input-icon">
-                        <i class="fa fa-lock"></i>
-                        <input class="form-control placeholder-no-fix" type="file" (change)="fileLoad($event)" [disabled]="!use_file" autocomplete="off" placeholder="{{ 'login.password_file' | translate }}" name="password" /> </div>
                 </div>
                 <div class="form-group ifname" *ngIf="!is_company">
                     <label class="control-label visible-ie8 visible-ie9">{{ 'generics.first_name' | translate }}</label>
@@ -152,11 +135,53 @@
                     <re-captcha (captchaResponse)="backend.cptReg($event)" site_key="6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx"></re-captcha>
                 </div>
                 <div class="form-actions">
-                    <button id="register-back-btn" type="button" class="btn grey-salsa btn-outline"> {{ 'back' | translate }} </button>
+                    <button type="button" class="btn grey-salsa btn-outline register-back-btn"> {{ 'back' | translate }} </button>
                     <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="signUp()"> {{ 'login.signUp' | translate }} </button>
                 </div>
             </form>
             <!-- END REGISTRATION FORM -->
+            <!-- BEGIN REGISTRATION SAFE FORM -->
+            <form class="register-form" id="reg2">
+                <h3>{{ 'login.signUp' | translate }}</h3>
+                <p> {{ 'login.sign' | translate }} </p>
+                <div class="form-group iuname">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.usernameRec' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-user"></i>
+                        <input class="form-control placeholder-no-fix" type="text" [(ngModel)]="username" autocomplete="off" placeholder="{{ 'login.usernameRec' | translate }}" name="username" /> </div>
+                </div>
+                <div class="form-group">
+                    <label class="rememberme mt-checkbox mt-checkbox-outline">
+                        <input type="checkbox" name="is_company" [(ngModel)]="is_company" /> {{ 'login.is_company' | translate }}
+                        <span></span>
+                    </label>
+                </div>
+                <p> {{ 'login.pubKeyExplain' | translate }} </p>
+                <div class="form-group ipubkey">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.pubkey' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-recycle"></i>
+                        <textarea class="form-control placeholder-no-fix" [(ngModel)]="pubkey" placeholder="{{ 'login.pubkey' | translate }}" name="pubkey"></textarea></div>
+                </div>
+                <p> {{ 'login.certExplain' | translate }} </p>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.cert' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-recycle"></i>
+                        <textarea class="form-control placeholder-no-fix" [(ngModel)]="cert" readonly="readonly" placeholder="{{ 'login.cert' | translate }}" name="cert"></textarea></div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label visible-ie8 visible-ie9">{{ 'login.mk' | translate }}</label>
+                    <div class="input-icon">
+                        <i class="fa fa-recycle"></i>
+                        <input type="text" class="form-control placeholder-no-fix" [(ngModel)]="mk" readonly="readonly" placeholder="{{ 'login.mk' | translate }}" name="mk" /></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn grey-salsa btn-outline register-back-btn"> {{ 'back' | translate }} </button>
+                    <button type="submit" id="register-submit-btn" class="btn green pull-right" (click)="dummyUp()"> {{ 'login.signUp' | translate }} </button>
+                </div>
+            </form>
+            <!-- END REGISTRATION SAFE FORM -->
         </div>
         <!-- END LOGIN -->
     </div>

@@ -31,8 +31,10 @@ export class Logging implements OnInit {
     public persistent: boolean;
     public recuperable: boolean;
     public safe: boolean;
-    public use_file: boolean;
     public is_company: boolean;
+    public pubkey: string;
+    public cert: string;
+    public mk: string;
     private onEnd: boolean;
 
     /**
@@ -51,9 +53,9 @@ export class Logging implements OnInit {
         this.persistent = false;
         this.recuperable = false;
         this.safe = false;
-        this.use_file = false;
         this.onEnd = true;
         this.is_company = false;
+        this.password = '';
         window.whigiLogin = this.ngOnInit.bind(this, false);
     }
 
@@ -131,16 +133,20 @@ export class Logging implements OnInit {
             window.$('.forget-form').show();
         });
         window.$('#back-btn').click(function() {
-            window.$('.login-form').show();
             window.$('.forget-form').hide();
+            window.$('.login-form').show();
         });
         window.$('#register-btn').click(function() {
             window.$('.login-form').hide();
-            window.$('.register-form').show();
+            window.$('#reg1').show();
         });
-        window.$('#register-back-btn').click(function() {
-            window.$('.login-form').show();
+        window.$('#register-btn-safe').click(function() {
+            window.$('.login-form').hide();
+            window.$('#reg2').show();
+        });
+        window.$('.register-back-btn').click(function() {
             window.$('.register-form').hide();
+            window.$('.login-form').show();
         });
         if(!this.recuperable) {
             window.$('#recupcheck').ready(function() {
@@ -176,6 +182,52 @@ export class Logging implements OnInit {
     loginas(uid: string) {
         this.auth.switchLogin(uid);
         this.ngOnInit(false);
+    }
+
+    /**
+     * Tries to sign up.
+     * @function dummyUp
+     * @public
+     */
+    dummyUp() {
+        var self = this;
+        //Handlers
+        function complete() {
+            self.backend.ackUser(self.username, self.pubkey, self.is_company).then(function(nuser) {
+                self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                self.cert = nuser.cert;
+                self.mk = '[';
+                var nb = self.backend.newAES();
+                for(var i = 0; i < nb.length - 1; i++)
+                    self.mk += nb[i] + ', ';
+                self.mk += nb[nb.length - 1] + ']';
+                self.username = '';
+            }, function(e) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+            });
+        }
+
+        window.$('.iuname,.ipubkey').removeClass('has-error');
+        self.cert = '';
+        self.mk = '';
+        if(this.dataservice.isWhigi(this.username)) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+            window.$('.iuname').addClass('has-error');
+            return;
+        }
+        if(/[^a-zA-Z0-9\-\_]/.test(this.username)) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
+            window.$('.iuname').addClass('has-error');
+            return;
+        }
+        var enc = new window.JSEncrypt.JSEncrypt();
+        enc.setPublicKey(this.pubkey);
+        if(!enc.encrypt('heythere')) {
+            self.notif.error(self.translate.instant('error'), self.translate.instant('login.badKey'));
+            window.$('.ipubkey').addClass('has-error');
+        } else {
+            complete();
+        }
     }
 
     /**
@@ -346,7 +398,7 @@ export class Logging implements OnInit {
         if(this.password == this.password2) {
             if(!/^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/i.test(this.email)) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('login.badEmail'));
-                 window.$('.imail').addClass('has-error');
+                window.$('.imail').addClass('has-error');
                 return;
             }
             if(this.safe && this.recuperable) {
@@ -366,7 +418,7 @@ export class Logging implements OnInit {
             }
         } else {
             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
-             window.$('.ipass').addClass('has-error');
+            window.$('.ipass').addClass('has-error');
         }
     }
 
@@ -404,26 +456,6 @@ export class Logging implements OnInit {
                 resolve();
             });
         });
-    }
-
-    /**
-     * Loads a file as password.
-     * @function fileLoad
-     * @public
-     * @param {Event} e The change event.
-     */
-    fileLoad(e: any) {
-        var self = this;
-        var file: File = e.target.files[0]; 
-        var r: FileReader = new FileReader();
-        r.onloadend = function(e) {
-            if(/^data:;base64,/.test(r.result)) 
-                self.password = atob(r.result.split(',')[1]);
-            else
-                self.password = r.result;
-            self.password2 = self.password;
-        }
-        r.readAsText(file);
     }
     
 }
