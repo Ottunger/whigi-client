@@ -140,6 +140,7 @@
    "login.cert": "Certificat reçu",
    "login.priKey": "Clé privée",
    "login.certExplain": "Vous allez recevoir un certificat et une clé. Gardez la clé qui vous permettra de lire vos données, puis installez le certificat ainsi que votre clé privée dans votre navigateur.",
+   "login.412": "Le serveur a reçu trop de mauvaise tentatives, votre compte serait-il ouvert aileurs? Vous pouvez réessayer.",
 
    "header.running": "Opérations en cours",
    "header.operation": "Opération courante",

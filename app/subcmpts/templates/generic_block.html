@@ -1,7 +1,7 @@
 <div class="form" id="apsablegen{{ dataservice.sanit(group) }}">
     <!-- BEGIN FORM -->
     <form class="form-horizontal" style="background-color: #fff; border: 2px solid #898373;" role="form">
-        <div class="form-body">
+        <div class="form-body" *ngIf="!!backend.generics">
             <div *ngFor="let g of data_list; let l = last">
                 <div class="row input-holder-{{ dataservice.sanit(group) }}" [attr.data-g]="g">
                     <div class="row">

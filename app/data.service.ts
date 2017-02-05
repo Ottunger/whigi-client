@@ -264,6 +264,10 @@ export class Data {
             callback(alwaysin.concat(more), unreq, req);
         }
 
+        if(!self.backend.generics) {
+            callback([], [], []);
+            return;
+        }
         for(var i = 0; i < l.length; i++) {
             if(!!self.backend.generics[l[i][0]][self.backend.generics[l[i][0]].length - 1].requires)
                 req.push([self.backend.generics[l[i][0]][self.backend.generics[l[i][0]].length - 1].requires, self.backend.generics[l[i][0]][self.backend.generics[l[i][0]].length - 1].requires]);

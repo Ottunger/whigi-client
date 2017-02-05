@@ -168,8 +168,12 @@ export class Logging implements OnInit {
             self.auth.switchLogin(self.username, ticket._id);
             self.ngOnInit(true);
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
-            window.$('.ilogging').addClass('has-error');
+            if(e.status == 412) {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.412'));
+            } else {
+                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noLogin'));
+                window.$('.ilogging').addClass('has-error');
+            }
         });
     }
 

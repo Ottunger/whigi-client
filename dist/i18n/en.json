@@ -140,6 +140,7 @@
    "login.cert": "Issued certificate",
    "login.priKey": "Private key",
    "login.certExplain": "You will get here a certificate and a key. Keep the key as it will allow you to read your data, then install the certificate in your browser, along with the private key you saved.",
+   "login.412": "The server received too many bad attempts, is your account used somewhere else? You can retry in a bit.",
 
    "header.running": "Running operations",
    "header.operation": "Current operation",
