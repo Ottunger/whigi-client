@@ -38,7 +38,7 @@
                         <div class="row text-center">
                             <div class="col-md-6">
                                 <div class="row">
-                                    <div class="col-md-offset-3 col-md-3">
+                                    <div class="col-md-offset-2 col-md-3">
                                         <button type="submit" class="btn green" [disabled]="!login || !password || login == '' || password == ''" (click)="merge()">
                                             {{ 'merge.merge' | translate }}</button>
                                     </div>
@@ -47,6 +47,10 @@
                                             <input type="checkbox" name="erase" [(ngModel)]="erase" /> {{ 'merge.erase' | translate }}
                                             <span></span>
                                         </label>
+                                    </div>
+                                    <div class="col-md-1">
+                                        <button type="submit" class="btn btn-danger" (click)="oblit()">
+                                            <i class="fa fa-trash"></i> {{ 'oblit' | translate }}</button>
                                     </div>
                                 </div>
                             </div>

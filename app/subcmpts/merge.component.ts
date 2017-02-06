@@ -85,11 +85,26 @@ export class Merge {
     }
 
     /**
+     * Destroys the account...
+     * @function oblit
+     * @public
+     */
+    oblit() {
+        var self = this;
+        this.backend.oblit().then(function() {
+            self.auth.deleteUid(undefined, true);
+            self.backend.forceReload();
+            delete self.backend.profile;
+            self.dataservice.navigate(self.router, ['/']);
+        }, function(e) {});
+    }
+
+    /**
      * Called upon destroy.
      * @function ngOnInit
      * @public
      */
-    ngOnDestroy(): void {
+    ngOnDestroy() {
         this.sub.unsubscribe();
     }
 

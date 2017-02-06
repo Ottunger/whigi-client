@@ -676,6 +676,16 @@ export class Backend {
     }
 
     /**
+     * Obliterates profile.
+     * @function oblit
+     * @public
+     * @return {Promise} JSON response from backend.
+     */
+    oblit(): Promise {
+        return this.backend('whigi', true, 'DELETE', {}, 'profile', true, true);
+    }
+
+    /**
      * Posts info for company.
      * @function goCompany
      * @public
