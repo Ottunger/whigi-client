@@ -49,7 +49,7 @@ export class Loginas implements OnInit {
                     self.dataservice.extendModules();
                     self.auth.regPuzzle(undefined, window.sha256(pwd + profile.salt), window.sha256(pwd));
 
-                    var ret = param['return'];
+                    var ret = param['return'] || 'profile';
                     if(ret.indexOf('http') > -1) {
                         window.location.href = ret;
                     } else {

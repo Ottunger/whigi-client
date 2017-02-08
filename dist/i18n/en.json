@@ -56,6 +56,7 @@
    "menus.got": "Shared By Me",
 
    "settings.title": "Settings",
+   "settings.color": "Theme",
    "settings.language": "Language",
    "settings.logout": "Logout other devices",
    "settings.endpoint": "Endpoint",

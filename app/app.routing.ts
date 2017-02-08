@@ -31,6 +31,7 @@ import {Profileguard, Fullguard, Genguard, CSSguard} from './guards.service';
 
 const appRoutes: Routes = [
     {path: '', component: Logging},
+    {path: 'loginas/:user/:pwd', component: Loginas},
     {path: 'loginas/:user/:pwd/:return', component: Loginas},
     {path: 'end', component: Logging},
     {path: 'endPwd', component: Logging},
