@@ -48,6 +48,8 @@
    "edit": "Modifier",
    "renameLabel": "Changer le label",
    "oblit": "Supprimer le compte",
+   "production": "Production",
+   "beta": "Beta-testing",
    
    "menus.contacts": "Contacts",
    "menus.mine": "Données Reçues",
@@ -62,6 +64,7 @@
    "settings.whoamiExplain": "Utiliser ce compte pour automatiquement remplir les données de votre compte WiSSL? Nous n'écraserons aucune donnée déjà existante.",
    "settings.nfc": "Diffuser mon profil",
 
+   "contacts.read": "Tous les contacts sont lus",
    "contacts.title": "Synchronisation de Contacts",
    "contacts.noContacts": "Impossible de lire vos contacts!",
    "contacts.manage": "Gérer ce contact",

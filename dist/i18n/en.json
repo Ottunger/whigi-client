@@ -48,6 +48,8 @@
    "edit": "Edit",
    "renameLabel": "Edit label",
    "oblit": "Obliterate account",
+   "production": "Production",
+   "beta": "Beta-testing",
 
    "menus.contacts": "Contacts",
    "menus.mine": "Shared To Me",
@@ -62,6 +64,7 @@
    "settings.whoamiExplain": "Use this contact to automatically fill in your WiSSL account's profile information? We won't override any different data you might have already inputted.",
    "settings.nfc": "Broadcast myself",
 
+   "contacts.read": "All contacts read",
    "contacts.title": "Contacts Synchronization",
    "contacts.noContacts": "Cannot read your contacts!",
    "contacts.manage": "Manage this contact",
