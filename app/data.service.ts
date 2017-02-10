@@ -1304,25 +1304,20 @@ export class Data {
         //Now try
         return new Promise(function(resolve) {
             //Handler
-            function end(recup: number[], towards: string) {
-                self.grantVault('whigi-restore', 'profile/recup_id', 'profile/recup_id', towards, 0, new Date(0), '', false, recup).then(function() {
-                    self.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', pwd.slice(4), 0, new Date(0), '', false, undefined).then(function() {
-                        self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                        Data.grant({
-                            backend: self.backend,
-                            dataservice: self,
-                            auth: my_id,
-                            prefix: 'profile/',
-                            notif: self.notif,
-                            translate: self.translate,
-                            admin: true
-                        }).then(function() {
-                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
-                        }, function(e) {
-                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
-                        });
+            function end(towards: string) {
+                self.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', pwd.slice(4), 0, new Date(0), '', false, undefined).then(function() {
+                    self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                    Data.grant({
+                        backend: self.backend,
+                        dataservice: self,
+                        auth: my_id,
+                        prefix: 'profile/',
+                        notif: self.notif,
+                        translate: self.translate,
+                        admin: true
+                    }).then(function() {
+                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                         self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     });
                 }, function(e) {
@@ -1330,11 +1325,11 @@ export class Data {
                     self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                 });
             }
-            function safe(recup: number[]) {
+            function safe() {
                 self.newData(false, 'keys/pwd/mine1', pwd.slice(0, 4), false, 0).then(function() {
                     self.newData(false, 'keys/pwd/mine2', pwd.slice(4), false, 0).then(function() {
                         self.grantVault('whigi-restore', 'keys/pwd/mine1', 'keys/pwd/mine1', pwd.slice(0, 4), 0, new Date(0), '', false, undefined).then(function() {
-                            end(recup, my_id);
+                            end(my_id);
                         }, function(e) {
                             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                             self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
@@ -1364,17 +1359,12 @@ export class Data {
                             self.auth.regPuzzle(undefined, window.sha256(pwd + user.salt), window.sha256(pwd));
                             self.listData(false).then(function() {
                                 self.newData(true, 'profile/email/restore', mail, false, 0, true).then(function(email: number[]) {
-                                    self.newData(true, 'profile/recup_id', my_id, false, 0, true).then(function(recup: number[]) {
-                                        self.newData(true, 'profile/name', naming, false, 0, true).then(function(fname: number[]) {
-                                            self.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
-                                                self.grantVault('whigi-wissl', 'profile/name', 'profile/name', naming, 0, new Date(0), '', false, fname).then(function() {
-                                                    self.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
-                                                        safe(recup);
-                                                    }, function() {
-                                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
-                                                    });
-                                                }, function(e) {
+                                    self.newData(true, 'profile/name', naming, false, 0, true).then(function(fname: number[]) {
+                                        self.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
+                                            self.grantVault('whigi-wissl', 'profile/name', 'profile/name', naming, 0, new Date(0), '', false, fname).then(function() {
+                                                self.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
+                                                    safe();
+                                                }, function() {
                                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                                     self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                                 });

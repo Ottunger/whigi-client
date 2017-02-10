@@ -244,27 +244,22 @@ export class Logging implements OnInit {
         var bl: number = (!!this.password)? Math.floor(this.password.length / 2) : 0;
         var naming = JSON.stringify({'generics.last_name': this.lname, 'generics.first_name': this.fname});
         //Handlers
-        function end(recup: number[], towards: string) {
-            self.dataservice.grantVault('whigi-restore', 'profile/recup_id', 'profile/recup_id', towards, 0, new Date(0), '', false, recup).then(function() {
-                self.dataservice.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', self.password.slice(4), 0, new Date(0), '', false, undefined).then(function() {
-                    self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                    self.logout().then(function() {self.enter();});
-                }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                    self.logout();
-                });
+        function end(towards: string) {
+            self.dataservice.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', self.password.slice(4), 0, new Date(0), '', false, undefined).then(function() {
+                self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                self.logout().then(function() {self.enter();});
             }, function(e) {
                 self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                 self.logout();
             });
         }
-        function safe(recup: number[]) {
+        function safe() {
             self.dataservice.newData(false, 'keys/pwd/mine1', self.password.slice(0, 4), false, 0).then(function() {
                 self.dataservice.newData(false, 'keys/pwd/mine2', self.password.slice(4), false, 0).then(function() {
                     if(self.safe) {
                         self.dataservice.grantVault('whigi-restore', 'keys/pwd/mine1', 'keys/pwd/mine1', self.password.slice(0, 4), 0, new Date(0), '', false, undefined).then(function() {
                             if(asEmail == false) {
-                                end(recup, self.recup_id);
+                                end(self.recup_id);
                             } else {
                                 self.backend.createUser(towards, self.backend.generateRandomString(12), [{
                                     data: self.recup_id,
@@ -276,7 +271,7 @@ export class Logging implements OnInit {
                                     shared_to: ['whigi-restore'],
                                     version: 0
                                 }], self.recup_id).then(function() {
-                                    end(recup, towards);
+                                    end(towards);
                                 }, function(e) {
                                     self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                     self.logout();
@@ -325,25 +320,20 @@ export class Logging implements OnInit {
                         self.dataservice.listData(false).then(function() {
                             towards = 'wiuser-' + self.backend.generateRandomString(10);
                             self.dataservice.newData(true, 'profile/email/restore', self.email, false, 0, true).then(function(email: number[]) {
-                                self.dataservice.newData(true, 'profile/recup_id', asEmail? towards : self.recup_id, false, 0, true).then(function(recup: number[]) {
-                                    self.dataservice.newData(true, 'profile/name', naming, false, 0, true).then(function(fname: number[]) {
-                                        self.dataservice.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
-                                            self.dataservice.grantVault('whigi-wissl', 'profile/name', 'profile/name', naming, 0, new Date(0), '', false, fname).then(function() {
-                                                if(self.recuperable) {
-                                                    self.dataservice.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
-                                                        safe(recup);
-                                                    }, function() {
-                                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                        self.logout();
-                                                    });
-                                                } else {
-                                                    self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
-                                                    self.logout().then(function() {self.enter();});
-                                                }
-                                            }, function(e) {
-                                                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
-                                                self.logout();
-                                            });
+                                self.dataservice.newData(true, 'profile/name', naming, false, 0, true).then(function(fname: number[]) {
+                                    self.dataservice.grantVault('whigi-wissl', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
+                                        self.dataservice.grantVault('whigi-wissl', 'profile/name', 'profile/name', naming, 0, new Date(0), '', false, fname).then(function() {
+                                            if(self.recuperable) {
+                                                self.dataservice.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', self.email, 0, new Date(0), '', false, email).then(function() {
+                                                    safe();
+                                                }, function() {
+                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                    self.logout();
+                                                });
+                                            } else {
+                                                self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                                                self.logout().then(function() {self.enter();});
+                                            }
                                         }, function(e) {
                                             self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
                                             self.logout();
