@@ -6,7 +6,7 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnChanges} from '@angular/core';
+import {Component, enableProdMode, Input, OnInit, OnChanges} from '@angular/core';
 import {Router} from '@angular/router';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -17,7 +17,7 @@ import * as template from './templates/sidebar.html';
     selector: 'sidebar',
     template: template
 })
-export class Sidebar implements OnChanges {
+export class Sidebar implements OnInit, OnChanges {
 
     public new_name: string;
     @Input() lighted: number;
@@ -36,11 +36,34 @@ export class Sidebar implements OnChanges {
 
     /**
      * Called upon display.
+     * @function ngOnInit
+     * @public
+     */
+    ngOnInit() {
+        var self = this;
+        window.$('.linkbars').ready(function() {
+            window.$('.linkbars').on('click', function($e) {
+                self.lighted = window.$($e.target).closest('li').attr('data-num');
+                self.set(self.lighted);
+            });
+        });
+    }
+
+    /**
+     * Called upon display.
      * @function ngOnChanges
      * @public
      */
-    ngOnChanges(now: any): void {
-        var self = this, vals = now.lighted.currentValue;
+    ngOnChanges(now: any) {
+        this.set(now.lighted.currentValue);
+    }
+
+    /**
+     * Set value.
+     * @function set
+     * @param {Number} vals Value.
+     */
+    set(vals: number) {
         window.$('.linkbars').removeClass('start active').remove('.selected');
         window.$('#linkbars' + vals).addClass('start active').find('a').append('<span class="selected"></span>');
         setTimeout(function() {
