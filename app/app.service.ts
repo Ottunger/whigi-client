@@ -38,9 +38,10 @@ export class Backend {
         help_url: string,
         icon: string,
         mode: string,
+        multiple?: boolean,
         enum?: string,
         validate: string,
-        json_keys: {descr_key: string, mode: string, enum?: string, enumMore?: string, required: boolean, placeholder?: string, help_url?: string}[],
+        json_keys: {descr_key: string, mode: string, multiple?: boolean, enum?: string, enumMore?: string, required: boolean, placeholder?: string, help_url?: string}[],
         new_key?: string[],
         new_key_is?: string
         new_keys_only?: boolean,

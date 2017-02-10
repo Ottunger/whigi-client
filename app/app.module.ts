@@ -10,6 +10,7 @@ import {FormsModule} from '@angular/forms';
 import {HttpModule, Http} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
+import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect/src/multiselect-dropdown';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 import {ReCaptchaModule} from 'angular2-recaptcha/angular2-recaptcha';
 import {routing, appRoutingProviders} from './app.routing';
@@ -67,6 +68,7 @@ export function createTranslateLoader(http: Http) {
             useFactory: createTranslateLoader,
             deps: [Http]
         }),
+        MultiselectDropdownModule,
         ReCaptchaModule,
         routing
     ],

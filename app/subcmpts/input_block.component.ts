@@ -19,10 +19,11 @@ import * as template from './templates/input_block.html';
 export class InputBlock implements OnInit {
 
     public within: string;
+    public ssettings: any;
     private isClosed: boolean;
-    private new_data: string;
+    private new_data: string | string[];
     private new_data_file: string;
-    private new_datas: {[id: string]: string};
+    private new_datas: {[id: string]: string | string[]};
     @Input() fopen: boolean;
     @Input() classes: string;
     @Input() standalone: boolean;
@@ -43,6 +44,17 @@ export class InputBlock implements OnInit {
     constructor(private backend: Backend, private dataservice: Data) {
         this.out = new EventEmitter<any[]>();
         this.classes = this.classes || '';
+        this.ssettings = {
+            pullRight: false,
+            enableSearch: false,
+            checkedStyle: 'checkboxes',
+            selectionLimit: 0,
+            closeOnSelect: false,
+            showCheckAll: false,
+            showUncheckAll: false,
+            dynamicTitleMaxItems: 2,
+            maxHeight: '34px',
+        };
     }
 
     /**
@@ -104,6 +116,18 @@ export class InputBlock implements OnInit {
                 }
             }
         }
+        //Prepare the multiples
+        if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].multiple) {
+            this.new_data = [];
+        } else if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
+            for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
+                if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].multiple) {
+                    this.new_datas = this.new_datas || {};
+                    this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = [];
+                }
+            }
+        }
+        //Prepare add starting date
         if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_from_ask) {
             window.$('.pickgen' + self.dataservice.sanit(self.g) + 'json_from_ask').ready(function() {
                 window.$('.pickgen' + self.dataservice.sanit(self.g) + 'json_from_ask').datetimepicker()
@@ -112,6 +136,18 @@ export class InputBlock implements OnInit {
                 });
             });
         }
+    }
+
+    /**
+     * Modifier.
+     * @function change
+     * @param {String[][]} input Input.
+     * @return {Array} Change.
+     */
+    change(input: string[][]): {id: string, name: string}[] {
+        return input.map(function(el) {
+            return {id: el[0], name: el[1]};
+        });
     }
 
     /**
@@ -137,11 +173,18 @@ export class InputBlock implements OnInit {
             if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].mode == 'json_keys') {
                 var obj = JSON.parse(this.within);
                 for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
-                    this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
-                        obj[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key];
+                    if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].multiple)
+                        this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                            JSON.parse(obj[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key]);
+                    else
+                        this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                            obj[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key];
                 }
             } else {
-                this.new_data = this.new_data_file = this.within;
+                if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].multiple)
+                    this.new_data = this.new_data_file = JSON.parse(this.within);
+                else
+                    this.new_data = this.new_data_file = this.within;
             }
         }
         this.iChange(1);
@@ -211,12 +254,22 @@ export class InputBlock implements OnInit {
         switch(mode) {
             case 1:
                 val = this.new_data;
+                if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].multiple)
+                    val = JSON.stringify(val);
                 break;
             case 2:
                 val = this.new_data_file;
                 break;
             case 3:
-                val = this.new_datas;
+                val = {};
+                for(var i = 0; i < this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys.length; i++) {
+                    if(this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].multiple)
+                        val[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                            JSON.stringify(this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key]);
+                    else
+                        val[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key] = 
+                            this.new_datas[this.backend.generics[this.g][this.backend.generics[this.g].length - 1].json_keys[i].descr_key];
+                }
                 break;
         }
         this.out.emit([mode, val]);

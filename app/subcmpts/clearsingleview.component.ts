@@ -70,7 +70,10 @@ export class ClearSingleview implements OnInit {
             if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].mode == 'checkbox')
                 return this.translate.instant(this.data? 'Yes' : 'No');
             else if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].mode == 'select')
-                return this.translate.instant(this.data + '');
+                if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].multiple)
+                    try { return '[' + this.translate.instant(JSON.parse(this.data)[0]) + ', ...]' ; } catch(e) { return '[...]'; }
+                else
+                    return this.translate.instant(this.data + '');
         }
         return this.data;
     }
@@ -86,7 +89,10 @@ export class ClearSingleview implements OnInit {
             return '';
         var bk;
         if(key.mode == 'select')
-            try { bk = this.translate.instant(this.asjson[key.descr_key] + ''); } catch(e) { bk = this.asjson[key.descr_key]; }
+            if(key.multiple)
+                try { bk = '[' + this.translate.instant(JSON.parse(this.asjson[key.descr_key])[0]) + ', ...]'; } catch(e) { bk = this.asjson[key.descr_key]; }
+            else
+                try { bk = this.translate.instant(this.asjson[key.descr_key]); } catch(e) { bk = this.asjson[key.descr_key]; }
         else if(key.mode == 'checkbox')
             bk = this.translate.instant(this.asjson[key.descr_key]? 'Yes' : 'No');
         else

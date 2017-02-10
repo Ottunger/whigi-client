@@ -1000,7 +1000,7 @@ export class Data {
      * @param {Object} json_keys Key object.
      * @return {Boolean} Whether show.
      */
-    keyCheck(datas: {[id: string]: string}, json_keys: any): boolean {
+    keyCheck(datas: {[id: string]: string | string[]}, json_keys: any): boolean {
         if(!json_keys.ifKey)
             return true;
         if(!datas)
@@ -1484,7 +1484,10 @@ export class Data {
                 previews[name] = [data.decr_data, data.decr_data];
             }
             if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].mode == 'select') {
-                try { previews[name][0] = self.translate.instant(previews[name][0]) + ' '; } catch(e) {}
+                if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].multiple)
+                    try { previews[name][0] = '[' + self.translate.instant(JSON.parse(previews[name][0])[0]) + ', ...] '; } catch(e) {}
+                else
+                    try { previews[name][0] = self.translate.instant(previews[name][0]) + ' '; } catch(e) {}
             } else if(keyded) {
                 var obj = JSON.parse(previews[name][1]);
                 var keys = Object.getOwnPropertyNames(obj);
@@ -1498,7 +1501,10 @@ export class Data {
                         }
                     }
                     if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select') {
-                        try { previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
+                        if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].multiple)
+                            try { previews[name][0] += '[' + self.translate.instant(JSON.parse(obj[keys[i]])[0]) + ', ...] '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
+                        else
+                            try { previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
                     } else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
                         && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
                         previews[name][0] += obj[keys[i]] + ' ';

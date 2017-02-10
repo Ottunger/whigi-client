@@ -475,6 +475,9 @@
    "generics.issuer": "Issuer",
    "generics.docNo": "Document number",
    "generics.deathdate": "Death date",
+   "generics.sports": "Sports",
+   "generics.books": "Book styles",
+   "generics.interests": "Interests",
 
    "generics.badurl": "Wrong URL format",
    "generics.badtwitter": "Wrong twitter account format",
@@ -533,6 +536,12 @@
    "MD0": "Mental disability < 33%",
    "MD1": "Mental disability < 66%",
    "MD2": "Mental disability > 66%",
+   "Crime": "Crime",
+   "Love": "Love",
+   "Scientific": "Scientific",
+   "Football": "Football",
+   "Volleyball": "Volleyball",
+   "Basket": "Basket",
 
    "om": "Afaan Oromoo",
    "aa": "Afaraf",
