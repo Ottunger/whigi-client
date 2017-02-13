@@ -41,12 +41,14 @@ export class Sidebar implements OnInit, OnChanges {
      */
     ngOnInit() {
         var self = this;
-        window.$('.linkbars').ready(function() {
-            window.$('.linkbars').on('click', function($e) {
-                self.lighted = window.$($e.target).closest('li').attr('data-num');
-                self.set(self.lighted);
-            });
+        window.$('.linkbars').on('click', function($e) {
+            self.lighted = window.$($e.target).closest('li').attr('data-num');
+            self.set(self.lighted);
         });
+        if(this.dataservice.sbfold) {
+            window.$('#mainSidebar').addClass('page-sidebar-menu-closed');
+            window.$('#divSidebar').removeClass('collapse');
+        }
     }
 
     /**

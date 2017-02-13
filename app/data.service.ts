@@ -20,6 +20,7 @@ import * as modules_corpos from './subcmpts/templates/generics_corpos';
 @Injectable()
 export class Data {
 
+    public sbfold: boolean;
     public wentLogin: boolean;
     public m : {keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
     public ev: EventEmitter<[string, boolean]>;
@@ -47,6 +48,7 @@ export class Data {
         private check: ApplicationRef, public checking: Check, private router: Router, private auth: Auth) {
         var self = this;
         this.wentLogin = false;
+        this.sbfold = false;
         this.m = modules.m;
         this.ev = new EventEmitter<[string, boolean]>();
         this.selects = {};
