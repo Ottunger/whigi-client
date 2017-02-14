@@ -11,7 +11,7 @@ import {HttpModule, Http} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect/src/multiselect-dropdown';
 import {SimpleNotificationsModule} from 'angular2-notifications/components';
-import {ReCaptchaModule} from 'angular2-recaptcha/angular2-recaptcha';
+import {RecaptchaModule} from 'ng2-recaptcha';
 import {routing, appRoutingProviders} from './app.routing';
 
 import {TranslatePipe} from './translate.pipe';
@@ -60,7 +60,7 @@ import {Notfound} from './subcmpts/notfound.component';
         HttpModule,
         SimpleNotificationsModule.forRoot(),
         MultiselectDropdownModule,
-        ReCaptchaModule,
+        RecaptchaModule.forRoot(),
         routing
     ],
     declarations: [

@@ -596,11 +596,11 @@ export class Backend {
 
     /**
      * Register a string as captcha.
-     * @function cptReg
+     * @function resolved
      * @public
      * @param {String} cpt Captcha.
      */
-    cptReg(cpt: string) {
+    resolved(cpt: string) {
         this.cpt = cpt;
     }
     
