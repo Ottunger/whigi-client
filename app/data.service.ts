@@ -8,7 +8,7 @@
 declare var window: any
 import {Injectable, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, NavigationExtras} from '@angular/router';
-import {NotificationsService} from 'angular2-notifications';
+import {NotificationsService} from 'angular2-notifications/components';
 import {Auth} from './auth.service';
 import {Backend} from './app.service';
 import {Check} from './check.service';

@@ -11,8 +11,6 @@ import 'rxjs';
 
 // Other vendors for example jQuery, Lodash or Bootstrap
 // You can import js, css, sass, ...
-import 'angular2-notifications';
-
 window.aesjs = require('../js/aesjs.min.js');
 window.JSEncrypt = require('../js/jsencrypt.min.js');
 window.sha256 = require('../js/sha256.js').hash;

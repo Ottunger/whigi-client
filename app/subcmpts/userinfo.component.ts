@@ -7,7 +7,7 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, Input, ApplicationRef, OnInit, EventEmitter} from '@angular/core';
-import {NotificationsService} from 'angular2-notifications';
+import {NotificationsService} from 'angular2-notifications/components';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';

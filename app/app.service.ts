@@ -9,7 +9,7 @@ declare var window: any
 import {Injectable} from '@angular/core';
 import {Headers, Http, Response} from '@angular/http';
 import {Router} from '@angular/router';
-import {NotificationsService} from 'angular2-notifications';
+import {NotificationsService} from 'angular2-notifications/components';
 import * as toPromise from 'rxjs/add/operator/toPromise';
 import {Auth} from './auth.service';
 import {Trie} from '../utils/Trie';

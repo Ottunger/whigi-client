@@ -8,7 +8,7 @@
 declare var window: any
 import {Component, enableProdMode} from '@angular/core';
 import {Router} from '@angular/router';
-import {NotificationsService} from 'angular2-notifications';
+import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();

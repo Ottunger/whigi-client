@@ -22,7 +22,7 @@
     "@angular/router": "3.4.7",
     "@angular/upgrade": "2.4.7",
     "angular-2-dropdown-multiselect": "0.4.1",
-    "angular2-notifications": "0.3.9",
+    "angular2-notifications": "^0.4.53",
     "angular2-recaptcha": "0.1.9",
     "core-js": "2.4.1",
     "reflect-metadata": "0.1.9",
