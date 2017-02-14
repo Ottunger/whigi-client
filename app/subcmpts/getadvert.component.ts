@@ -7,7 +7,6 @@
 'use strict';
 declare var window: any
 import {Component, enableProdMode, OnInit} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -28,12 +27,11 @@ export class Getadvert implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param backend Backend service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
+    constructor(private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         this.locations = [];
         this.results = new Set();
         this.users = {};
@@ -158,7 +156,7 @@ export class Getadvert implements OnInit {
                     }
                 });
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('advert.getError'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('advert.getError'));
             });
         });
     }

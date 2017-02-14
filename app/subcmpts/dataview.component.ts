@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
@@ -43,13 +42,12 @@ export class Dataview implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.=
      * @param notif Notifications service.
      * @param routed Parameters service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router,
+    constructor(private backend: Backend, private router: Router,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data, private check: ApplicationRef) {
         this.decr_data = '[]';
         this.is_generic = false;
@@ -119,7 +117,7 @@ export class Dataview implements OnInit, OnDestroy {
                 self.decr_data = data.decr_data;
                 self.changed.emit(self.decr_data);
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noData'));
             });
             window.$('#pick5').ready(function() {
                 window.$('#pick5').datetimepicker();
@@ -185,11 +183,11 @@ export class Dataview implements OnInit, OnDestroy {
         }, function(err) {
             if(err[0] == 'server')
                 if(err[1].status == 413)
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('tooLarge'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('tooLarge'));
                 else
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
             else
-                self.notif.error(self.translate.instant('error'), self.translate.instant('profile.exists'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('profile.exists'));
         });
     }
 
@@ -200,11 +198,11 @@ export class Dataview implements OnInit, OnDestroy {
      */
     remove() {
         var self = this;
-        if(window.confirm(this.translate.instant('dataview.remove'))) {
+        if(window.confirm(this.backend.transform('dataview.remove'))) {
             this.dataservice.remove(this.data_name).then(function() {
                 self.back(false);
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
             });
         }
     }
@@ -274,12 +272,12 @@ export class Dataview implements OnInit, OnDestroy {
      */
     revoke(shared_to_id: string) {
         var self = this;
-        if(this.data_name.indexOf('keys/pwd/') == 0 && !window.confirm(this.translate.instant('dataview.revokeKey')))
+        if(this.data_name.indexOf('keys/pwd/') == 0 && !window.confirm(this.backend.transform('dataview.revokeKey')))
             return;
         this.dataservice.revoke(this.data_name, shared_to_id).then(function() {
             delete self.sharedVector;
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noRevoke'));
         });
     }
 
@@ -301,12 +299,12 @@ export class Dataview implements OnInit, OnDestroy {
                     delete self.sharedVector;
                     //Housekeeping
                     self.backend.triggerVaults(self.gen_name + '/' + self.filter);
-                    self.notif.success(self.translate.instant('success'), self.translate.instant('dataview.transferred'));
+                    self.notif.success(self.backend.transform('success'), self.backend.transform('dataview.transferred'));
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noGrant'));
                 });
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noData'));
             });
         });
     }
@@ -322,7 +320,7 @@ export class Dataview implements OnInit, OnDestroy {
             self.dataservice.revoke(self.data_name, val).then(function() {
                 delete self.sharedVector;
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noRevoke'));
             });
         });
     }
@@ -343,7 +341,7 @@ export class Dataview implements OnInit, OnDestroy {
             self.is_storable = false;
             delete self.sharedVector;
         }, function() {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noGrant'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noGrant'));
         });
     }
 

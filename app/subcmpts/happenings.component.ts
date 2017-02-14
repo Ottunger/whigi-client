@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode, OnInit, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -37,14 +36,12 @@ export class Happenings {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router,
-        private notif: NotificationsService, private dataservice: Data) {
+    constructor(private backend: Backend, private router: Router, private notif: NotificationsService, private dataservice: Data) {
         this.new_names = {};
         this.new_data = {};
         this.new_data_file = {};
@@ -80,7 +77,7 @@ export class Happenings {
         if(this.onEid && /eidok/.test(window.location.href)) {
             //Back from eID
             this.onEid = false;
-            this.notif.success(this.translate.instant('success'), this.translate.instant('profile.eidRead'));
+            this.notif.success(this.backend.transform('success'), this.backend.transform('profile.eidRead'));
             try {
                 var toreturn = JSON.parse(location.search.replace(/^.*=/, ''));
                 if(toreturn.erase_name) {
@@ -192,7 +189,7 @@ export class Happenings {
         window.$('.igen' + this.dataservice.sanit(sid + step + folder)).removeClass('whigi-error');
         send = this.dataservice.recGeneric(this.new_data[sid + step + folder], this.new_data_file[sid + step + folder], this.new_datas[sid + step + folder], folder, as_file);
         if(send.constructor === Array) {
-            this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
+            this.notif.error(this.backend.transform('error'), this.backend.transform(send[1]));
             for(var i = 2; i < send.length; i++)
                 window.$('.igenfiner' + this.dataservice.sanit(sid + step + folder) + this.dataservice.sanit(send[i])).addClass('whigi-error');
             return false;
@@ -225,13 +222,13 @@ export class Happenings {
         var self = this;
         this.process(sid).then(function() {
             self.works[sid] = [];
-            self.notif.success(self.translate.instant('success'), self.translate.instant('happenings.saved'));
+            self.notif.success(self.backend.transform('success'), self.backend.transform('happenings.saved'));
         }, function(err) {
             self.works[sid] = [];
             if(err.constructor === Array && err[0] != 'server') {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('filesystem.exists'));
             } else {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('happenings.error'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('happenings.error'));
             }
         });
     }

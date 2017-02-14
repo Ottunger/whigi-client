@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Auth} from '../auth.service';
@@ -49,7 +48,6 @@ export class Account implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param auth Auth service.
@@ -58,7 +56,7 @@ export class Account implements OnInit, OnDestroy {
      * @param data Data service.
      * @param check Check service.
      */
-    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService, private auth: Auth,
+    constructor(private router: Router, private notif: NotificationsService, private auth: Auth,
         private routed: ActivatedRoute, private backend: Backend, private dataservice: Data, private check: ApplicationRef) {
         this.requester = {};
         this.new_data = {};
@@ -189,7 +187,7 @@ export class Account implements OnInit, OnDestroy {
                         } else {
                             var arr = self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key || [];
                             for(var j = 0; j < arr.length; j++) {
-                                var check = self.translate.instant(arr[j]);
+                                var check = self.backend.transform(arr[j]);
                                 if(!self.backend.data_trie.has(self.data_list_shared_as[i][1].replace('*', '') + '/' + check)) {
                                     self.new_name[self.data_list_shared_as[i][0]] = check;
                                     break;
@@ -307,7 +305,7 @@ export class Account implements OnInit, OnDestroy {
         var self = this, saves: any[] = [], key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
         if(ok) {
             if(!this.allFilled()) {
-                this.notif.error(this.translate.instant('error'), this.translate.instant('account.fill'));
+                this.notif.error(this.backend.transform('error'), this.backend.transform('account.fill'));
                 return;
             }
             if(this.with_account != 'false' && (!self.backend.profile.data['keys/auth/' + this.id_to] || !self.backend.profile.data['keys/auth/' + this.id_to].shared_to[this.id_to])) {
@@ -353,7 +351,7 @@ export class Account implements OnInit, OnDestroy {
                             if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).find('.in').length)
                                 window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).find('a').click();
                         }
-                        this.notif.error(this.translate.instant('error'), this.translate.instant(send[1]));
+                        this.notif.error(this.backend.transform('error'), this.backend.transform(send[1]));
                         for(var j = 2; j < send.length; j++)
                             window.$('.igenfiner' + this.dataservice.sanit(adata[1].replace('*', '')) + this.dataservice.sanit(send[j])).addClass('whigi-error');
                         return;
@@ -417,7 +415,7 @@ export class Account implements OnInit, OnDestroy {
             this.process(saves).then(function() {
                 self.ok();
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('account.err'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('account.err'));
                 window.setTimeout(function() {
                     self.deny();
                 }, 1500);

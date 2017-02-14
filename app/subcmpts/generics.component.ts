@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode, OnInit, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
@@ -31,13 +30,12 @@ export class Generics implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param routed Current route.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private notif: NotificationsService,
+    constructor(private backend: Backend, private router: Router, private notif: NotificationsService,
         private routed: ActivatedRoute, private dataservice: Data) {
         this.filter = 'generics.any';
         this.lighted = 1;

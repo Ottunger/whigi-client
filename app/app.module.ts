@@ -9,12 +9,12 @@ import {NgModule} from '@angular/core';
 import {FormsModule} from '@angular/forms';
 import {HttpModule, Http} from '@angular/http';
 import {BrowserModule} from '@angular/platform-browser';
-import {TranslateModule, TranslateLoader, TranslateStaticLoader} from 'ng2-translate/ng2-translate';
 import {MultiselectDropdownModule} from 'angular-2-dropdown-multiselect/src/multiselect-dropdown';
 import {SimpleNotificationsModule} from 'angular2-notifications';
 import {ReCaptchaModule} from 'angular2-recaptcha/angular2-recaptcha';
 import {routing, appRoutingProviders} from './app.routing';
 
+import {TranslatePipe} from './translate.pipe';
 import {Backend} from './app.service';
 import {Data} from './data.service';
 import {Check} from './check.service';
@@ -53,26 +53,18 @@ import {Makeadvert} from './subcmpts/makeadvert.component';
 import {Getadvert} from './subcmpts/getadvert.component';
 import {Notfound} from './subcmpts/notfound.component';
 
-export function createTranslateLoader(http: Http) {
-    return new TranslateStaticLoader(http);
-}
-
 @NgModule({
     imports: [
         BrowserModule,
         FormsModule,
         HttpModule,
         SimpleNotificationsModule,
-        TranslateModule.forRoot({
-            provide: TranslateLoader,
-            useFactory: createTranslateLoader,
-            deps: [Http]
-        }),
         MultiselectDropdownModule,
         ReCaptchaModule,
         routing
     ],
     declarations: [
+        TranslatePipe,
         Application,
         Logging,
         Profile,

@@ -10,11 +10,13 @@ import {Injectable} from '@angular/core';
 import {Headers, Http, Response} from '@angular/http';
 import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import * as toPromise from 'rxjs/add/operator/toPromise';
 import {Auth} from './auth.service';
 import {Trie} from '../utils/Trie';
 import * as configs from './configs.js';
+
+import * as en from '../dist/i18n/en.js';
+import * as fr from '../dist/i18n/fr.js';
 
 @Injectable()
 export class Backend {
@@ -60,6 +62,8 @@ export class Backend {
         long_descr_key: string,
         help_url: string
     }};
+    public lang: string;
+    private langs: {[id: string]: {[id: string]: string}};
     private INSTANCE: string = 'localhost';
     public MY_URL = '';
     public EID_HOST = '';
@@ -80,11 +84,10 @@ export class Backend {
      * @public
      * @param http HTTP service.
      * @param notif Notification service.
-     * @param translate Translation service.
      * @param router Routing service.
      * @param auth Auth service.
      */
-    constructor(private http: Http, private notif: NotificationsService, private translate: TranslateService, private router: Router, private auth: Auth) {
+    constructor(private http: Http, private notif: NotificationsService, private router: Router, private auth: Auth) {
         var self = this;
         //Try loading info
         if(!!configs.c[this.INSTANCE]) {
@@ -116,6 +119,27 @@ export class Backend {
             self.generics_paths = response;
         }, function(e) {});
         window.WHIGI_URL = this.BASE_URL;
+        //Langs
+        this.langs = {
+            'en': en.lang,
+            'fr': fr.lang
+        };
+        this.lang = localStorage.getItem('lang') || 'en';
+    }
+
+    /**
+     * Transforms.
+     * @function transform
+     * @public
+     * @param {String} value Value.
+     * @return {String} Translated.
+     */
+    transform(value: string): string {
+        if (!(this.lang in this.langs))
+            return value;
+        if (value in this.langs[this.lang])
+            return this.langs[this.lang][value];
+        return value;
     }
 
     /**
@@ -215,11 +239,11 @@ export class Backend {
                     this.rsa_key[i] = window.aesjs.util.convertBytesToString(decrypter.decrypt(this.profile.rsa_pri_key[i]));
                 }
             } catch(e) {
-                this.notif.alert(this.translate.instant('error'), this.translate.instant('noKey'));
+                this.notif.alert(this.transform('error'), this.transform('noKey'));
             }
         } else {
-            this.rsa_key = [window.prompt(this.translate.instant('login.priKey'))];
-            var nbstr = window.prompt(this.translate.instant('login.mk'));
+            this.rsa_key = [window.prompt(this.transform('login.priKey'))];
+            var nbstr = window.prompt(this.transform('login.mk'));
             this.master_key = [];
             nbstr = nbstr.split(',');
             for(var i = 0; i < nbstr.length; i++)
@@ -476,7 +500,7 @@ export class Backend {
         } else if(auth) {
             headers.append('X-Whigi-Authorization', 'Basic ' + btoa(data.username + ':' + data.password));
         }
-        headers.append('Accept-Language', this.translate.currentLang + ';q=1');
+        headers.append('Accept-Language', this.backend.lang + ';q=1');
         switch(whigi) {
             case 'whigi':
                 dest = this.BASE_URL;
@@ -1159,7 +1183,7 @@ export class Backend {
         return this.backend('whigi-advert-' + ccode, false, 'POST', {
             points: points,
             terms: query.split(/[\s,]/),
-            lang: this.translate.currentLang
+            lang: this.backend.lang
         }, 'search', false, false);
     }
 

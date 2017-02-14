@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
@@ -31,14 +30,13 @@ export class Oauths implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param backend Backend service.
      * @param router Router service.
      * @param dataservice Data service.
      * @param authing Auth service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
+    constructor(private notif: NotificationsService, private backend: Backend,
         private router: Router, private dataservice: Data, private authing: Auth) {
         this.admin = false;
         this.usernames = {};
@@ -96,7 +94,7 @@ export class Oauths implements OnInit {
      */
     loginas(ong: string) {
         var self = this;
-        if(window.confirm(this.translate.instant('profile.loginassure'))) {
+        if(window.confirm(this.backend.transform('profile.loginassure'))) {
             this.dataservice.getVault(this.backend.profile.shared_with_me[ong]['oauth']).then(function(vault) {
                 //Data
                 var obj = JSON.parse(vault.decr_data);
@@ -114,10 +112,10 @@ export class Oauths implements OnInit {
                 }, function(e) {
                     self.authing.deleteUid(undefined, false);
                     self.router.navigate(['/']);
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noGet'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noGet'));
                 });
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noGet'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noGet'));
             });
         }
     }
@@ -139,7 +137,7 @@ export class Oauths implements OnInit {
                 }
             }
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noRevoke'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noRevoke'));
         });
         if(('oauths/' + for_id) in this.backend.profile.data) {
             function complete() {

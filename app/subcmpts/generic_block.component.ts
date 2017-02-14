@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode, ApplicationRef, Input, Output, OnInit, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -49,14 +48,13 @@ export class GenericBlock implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param notif Notification service.
      * @param dataservice Data service.
      * @param check Check service.
      * @param router Routing service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private notif: NotificationsService,
+    constructor(private backend: Backend, private notif: NotificationsService,
         private dataservice: Data, private check: ApplicationRef, private router: Router) {
         this.ass_name = {};
         this.new_data = {};
@@ -110,7 +108,7 @@ export class GenericBlock implements OnInit {
                 this.resets[this.data_list[i]] = new EventEmitter();
                 var arr = this.backend.generics[this.data_list[i]][this.backend.generics[this.data_list[i]].length - 1].new_key || [];
                 for(var j = 0; j < arr.length; j++) {
-                    var check = this.translate.instant(arr[j]);
+                    var check = this.backend.transform(arr[j]);
                     if(!this.backend.data_trie.has(this.data_list[i] + '/' + check)) {
                         this.ass_name[this.data_list[i]] = check;
                         break;
@@ -232,7 +230,7 @@ export class GenericBlock implements OnInit {
                         } else {
                             if(((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g]))
                                     || ((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
-                                self.notif.alert(self.translate.instant('warning'), self.translate.instant('filesystem.noReg'));
+                                self.notif.alert(self.backend.transform('warning'), self.backend.transform('filesystem.noReg'));
                                 window.$('.igen' + self.dataservice.sanit(g)).addClass('whigi-error');
                             }
                         }
@@ -343,7 +341,7 @@ export class GenericBlock implements OnInit {
             send = self.dataservice.recGeneric(self.new_data[name], self.new_data_file[name], self.new_datas[name], name, as_file);
             if(send.constructor === Array) {
                 if(send[1] != 'generics.silent') {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant(send[1]));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform(send[1]));
                     for(var i = 2; i < send.length; i++)
                         window.$('.igenfiner' + self.dataservice.sanit(name) + self.dataservice.sanit(send[i])).addClass('whigi-error');
                 }
@@ -363,7 +361,7 @@ export class GenericBlock implements OnInit {
                     if(self.backend.generics[name][self.backend.generics[name].length - 1].can_trigger_account) {
                         window.$(`
                             <div class="modal">
-                                <h3>` + self.translate.instant('generics.create') + `</h3>
+                                <h3>` + self.backend.transform('generics.create') + `</h3>
                                 <div class="row text-center">
                                     <script type="text/javascript">
                                         window.addUser = function(user, pwd, pwd2, mail) {
@@ -374,17 +372,17 @@ export class GenericBlock implements OnInit {
                                             });
                                         };
                                     </script>
-                                    <p>` + self.translate.instant('generics.createExplain') + `</p>
-                                    <label for="useracc">` + self.translate.instant('login.username') + `</label>
+                                    <p>` + self.backend.transform('generics.createExplain') + `</p>
+                                    <label for="useracc">` + self.backend.transform('login.username') + `</label>
                                     <input type="text" id="useracc" class="form-control"/><br />
-                                    <label for="pwd1acc">` + self.translate.instant('profile.new') + `</label>
+                                    <label for="pwd1acc">` + self.backend.transform('profile.new') + `</label>
                                     <input type="password" id="pwd1acc" class="form-control"/><br />
-                                    <label for="pwd2acc">` + self.translate.instant('profile.new2') + `</label>
+                                    <label for="pwd2acc">` + self.backend.transform('profile.new2') + `</label>
                                     <input type="password" id="pwd2acc" class="form-control"/><br />
-                                    <label for="emailacc">` + self.translate.instant('login.email') + `</label>
+                                    <label for="emailacc">` + self.backend.transform('login.email') + `</label>
                                     <input type="text" id="emailacc" class="form-control"/><br />
-                                    <button class="btn default" onclick="$('.tp-close').click()">` + self.translate.instant('cancel') + `</button>
-                                    <button class="btn green" onclick="addUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val(), $('#emailacc').val())">` + self.translate.instant('goOn') + `</button>
+                                    <button class="btn default" onclick="$('.tp-close').click()">` + self.backend.transform('cancel') + `</button>
+                                    <button class="btn green" onclick="addUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val(), $('#emailacc').val())">` + self.backend.transform('goOn') + `</button>
                                 </div>
                             </div>
                         `).appendTo('body').modal({closeClass: 'tp-close'});
@@ -393,9 +391,9 @@ export class GenericBlock implements OnInit {
                 });
             }, function(err) {
                 if(err[0] == 'server') {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
                 } else {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('filesystem.exists'));
                 }
                 reject(err[0]);
             });
@@ -503,7 +501,7 @@ export class GenericBlock implements OnInit {
         if(mod) {
             ret[this.sincefrom[fname].act].from = window.$('#sincefrom' + this.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
             if(new Set(ret.map(function(el) {return el.from})).size != ret.length) {
-                this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
+                this.notif.error(this.backend.transform('error'), this.backend.transform('generics.twicedate'));
                 return;
             }
         }
@@ -520,7 +518,7 @@ export class GenericBlock implements OnInit {
                 complete(send);
             }, function(e) {
                 self.changing = false;
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
             });
         } else if(place == 0) {
             complete(this.cached[fname].decr_data);
@@ -612,7 +610,7 @@ export class GenericBlock implements OnInit {
                     });
                 }, function(e) {
                     //Must have been the same name!
-                    //self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    //self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
                     reject(e);
                 });
             } else {
@@ -679,7 +677,7 @@ export class GenericBlock implements OnInit {
                 window.$('.iinput' + self.dataservice.sanit(fname)).removeClass('whigi-error');
                 var send = self.dataservice.recGeneric(self.new_data[fname], self.new_data_file[fname], self.new_datas[fname], gname, self.backend.generics[gname][self.backend.generics[gname].length - 1].mode == 'file');
                 if(send.constructor === Array) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant(send[1]));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform(send[1]));
                     for(var i = 2; i < send.length; i++)
                         window.$('.igenfiner' + self.dataservice.sanit(fname) + self.dataservice.sanit(send[i])).addClass('whigi-error');
                     reject(send[1]);
@@ -697,7 +695,7 @@ export class GenericBlock implements OnInit {
                     if(!!self.foranew[fname]) {
                         replacement.push({from: from, value: sd});
                         if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('generics.twicedate'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('generics.twicedate'));
                             window.$('.igenfiner' + self.dataservice.sanit(fname) + self.dataservice.sanit(send[2])).addClass('whigi-error');
                             reject('Twice');
                             return;
@@ -746,7 +744,7 @@ export class GenericBlock implements OnInit {
                         self.check.tick();
                     }, 100);
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
                     reject(e);
                 });
             }
@@ -783,9 +781,9 @@ export class GenericBlock implements OnInit {
      */
     remove(fn: string) {
         var self = this;
-        if(window.confirm(this.translate.instant('dataview.remove'))) {
+        if(window.confirm(this.backend.transform('dataview.remove'))) {
             this.dataservice.remove(fn).then(function() {}, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
             });
         }
     }

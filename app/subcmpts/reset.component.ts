@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Auth} from '../auth.service';
@@ -33,7 +32,6 @@ export class Reset implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
      * @param auth Auth service.
@@ -41,7 +39,7 @@ export class Reset implements OnInit, OnDestroy {
      * @param routed Current route service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private auth: Auth,
+    constructor(private backend: Backend, private router: Router, private auth: Auth,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
         this.use_file = false;
     }
@@ -93,7 +91,7 @@ export class Reset implements OnInit, OnDestroy {
         var self = this;
         window.$('.form-group').removeClass('has-error');
         if(this.password.length < 8) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('login.tooShort'));
             window.$('.form-group').addClass('has-error');
             return;
         }
@@ -112,23 +110,23 @@ export class Reset implements OnInit, OnDestroy {
                                 self.dataservice.modifyData('keys/pwd/mine2', self.password.slice(4), false, 0, self.backend.profile.data['keys/pwd/mine2'].shared_to, false, undefined).then(function() {
                                     self.router.navigate(['/generics', 'generics.profile']);
                                 }, function(e) {
-                                    self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
+                                    self.notif.error(self.backend.transform('error'), self.backend.transform('reset.noReset'));
                                 });
                             }, function(e) {
-                                self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
+                                self.notif.error(self.backend.transform('error'), self.backend.transform('reset.noReset'));
                             });
                         }, function(e) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('reset.noReset'));
                         });
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('reset.noReset'));
                 });
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('reset.noReset'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('reset.noReset'));
             });
         } else {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('login.noMatch'));
             window.$('.form-group').addClass('has-error');
         }
     }

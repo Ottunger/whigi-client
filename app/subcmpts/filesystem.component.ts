@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
@@ -31,7 +30,6 @@ export class Filesystem implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
      * @param routed Route snapshot service.
@@ -40,7 +38,7 @@ export class Filesystem implements OnInit {
      * @param check Check service.
      * @param render Renderer.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router, private routed: ActivatedRoute,
+    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute,
         private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef) {
         this.folders = '';
         this.lighted = 1;
@@ -95,7 +93,7 @@ export class Filesystem implements OnInit {
         window.$('.inaming').removeClass('has-error');
         if(this.completeName(new_name) in this.backend.generics || (this.folders.slice(0, -1) in this.backend.generics && 
             this.backend.generics[this.folders.slice(0, -1)][this.backend.generics[this.folders.slice(0, -1)].length - 1].instantiable)) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.generics'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('filesystem.generics'));
             window.$('.inaming').addClass('has-error');
             return;
         }
@@ -112,11 +110,11 @@ export class Filesystem implements OnInit {
         }, function(err) {
             if(err[0] == 'server') {
                 if(err[1].status == 413)
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('tooLarge'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('tooLarge'));
                 else
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
             } else {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.exists'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('filesystem.exists'));
                 window.$('.inaming').addClass('has-error');
             }
         });

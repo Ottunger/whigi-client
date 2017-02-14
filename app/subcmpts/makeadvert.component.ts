@@ -7,7 +7,6 @@
 'use strict';
 declare var window: any
 import {Component, enableProdMode, ApplicationRef, OnInit} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -39,17 +38,16 @@ export class Makeadvert implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param backend Backend service.
      * @param check Check service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, 
+    constructor(private notif: NotificationsService, private backend: Backend, 
         private check: ApplicationRef, private dataservice: Data) {
         this.campaigns = {};
         this.topics = {};
-        this.topics[this.translate.currentLang] = '';
+        this.topics[this.backend.lang] = '';
     }
 
     /**
@@ -79,7 +77,7 @@ export class Makeadvert implements OnInit {
                 for(var j = 0; j < keys.length; j++) {
                     if(keys[j].indexOf('whigi-advert') == 0) {
                         self.backend.getAccessVault(self.backend.profile.data['corporate/campaigns/' + cid].shared_to[keys[j]]).then(function(info) {
-                            self.campaigns[cid].until = new Date(info.expire_epoch).toLocaleString(self.translate.currentLang);
+                            self.campaigns[cid].until = new Date(info.expire_epoch).toLocaleString(self.backend.lang);
                             self.campaigns[cid].target = keys[j];
                         }, function(e) {
                             delete self.backend.profile.data['corporate/campaigns/' + cid].shared_to[keys[j]];
@@ -140,8 +138,8 @@ export class Makeadvert implements OnInit {
     preview(d: string): {[ln: string]: string} | string {
         if(typeof this.campaigns[d].topics === 'string')
             return this.campaigns[d].topics;
-        else if(!!this.campaigns[d].topics[this.translate.currentLang])
-            return this.campaigns[d].topics[this.translate.currentLang];
+        else if(!!this.campaigns[d].topics[this.backend.lang])
+            return this.campaigns[d].topics[this.backend.lang];
         else if(!!this.campaigns[d].topics['en'])
             return this.campaigns[d].topics['en'];
         return '[]';
@@ -204,11 +202,11 @@ export class Makeadvert implements OnInit {
                     self.redo(cid, true);
                 }, function() {
                     delete self.campaigns[cid];
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('advert.error'));
                 });
             }, function(e) {
                 delete self.campaigns[cid];
-                self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('advert.error'));
             });
         });
     }
@@ -232,7 +230,7 @@ export class Makeadvert implements OnInit {
         });
         //Current restrictions
         if(['whigi-advert-WORLD', 'whigi-advert-BEL'].indexOf(self.campaigns[cid].target) == -1) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('advert.limits'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('advert.limits'));
             if(rem === true)
                 self.check.tick();
             return;
@@ -240,24 +238,24 @@ export class Makeadvert implements OnInit {
         var naes = self.backend.newAES();
         this.dataservice.newData(true, 'corporate/campaigns/' + cid, send, false, 0, true, naes).then(function(data) {
             self.dataservice.grantVault(self.campaigns[cid].target, cid, 'corporate/campaigns/' + cid, send, 0, new Date((new Date).getTime() + 30*24*60*60*1000), '', false, naes).then(function() {
-                self.campaigns[cid].until = new Date((new Date).getTime() + 30*24*60*60*1000).toLocaleString(self.translate.currentLang);
+                self.campaigns[cid].until = new Date((new Date).getTime() + 30*24*60*60*1000).toLocaleString(self.backend.lang);
                 self.credited = false;
                 if(!!self.backend.profile.shared_with_me['whigi-wissl'] && !!self.backend.profile.shared_with_me['whigi-wissl']['payments/adverts'])
                     delete self.backend.profile.shared_with_me['whigi-wissl']['payments/adverts'];
-                self.notif.success(self.translate.instant('success'), self.translate.instant('advert.made'));
+                self.notif.success(self.backend.transform('success'), self.backend.transform('advert.made'));
                 if(rem === true)
                     self.check.tick();
             }, function(e) {
                 if(rem === true)
                     delete self.campaigns[cid];
-                self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('advert.error'));
                 if(rem === true)
                     self.check.tick();
             });
         }, function(e) {
             if(rem === true)
                 delete self.campaigns[cid];
-            self.notif.error(self.translate.instant('error'), self.translate.instant('advert.error'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('advert.error'));
             if(rem === true)
                 self.check.tick();
         });

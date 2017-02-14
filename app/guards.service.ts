@@ -9,7 +9,6 @@ declare var window: any
 import {Injectable} from '@angular/core';
 import {CanActivate} from '@angular/router';
 import {Router, CanDeactivate, ActivatedRouteSnapshot, RouterStateSnapshot} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Auth} from './auth.service';
 import {Backend} from './app.service';
 import {Data} from './data.service';
@@ -26,10 +25,9 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
      * @public
      * @param backend App service.
      * @param router Router.
-     * @param translate Translation service.
      * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private translate: TranslateService, private auth: Auth) {
+    constructor(private backend: Backend, private router: Router, private auth: Auth) {
 
     }
 
@@ -64,13 +62,12 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
     canDeactivate(component: Filesystem, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
         if(this.backend.forceMove)
             return true;
-        if((!component.data_name || component.data_name.length == 0) &&
-            (!component.data_value || component.data_value.length == 0)) {
+        if(!component.data_value_file || component.data_value_file.length == 0) {
             //On route change, reset the route
             component.folders = '';
             return true;
         }
-        return component.dialog(this.translate.instant('confirmation'));
+        return component.dialog(this.backend.transform('confirmation'));
     }
 
 }
@@ -84,10 +81,9 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
      * @public
      * @param backend App service.
      * @param router Router.
-     * @param translate Translation service.
      * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private translate: TranslateService, private auth: Auth) {
+    constructor(private backend: Backend, private router: Router, private auth: Auth) {
 
     }
 
@@ -125,7 +121,7 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
         if((!component.new_data || component.new_data.length == 0) &&
             (!component.new_id || component.new_id.length == 0))
             return true;
-        return component.dialog(this.translate.instant('confirmation'));
+        return component.dialog(this.backend.transform('confirmation'));
     }
 
 }
@@ -139,9 +135,8 @@ export class Genguard implements CanDeactivate<Generics> {
      * @public
      * @param backend App service.
      * @param router Router.
-     * @param translate Translation service.
      */
-    constructor(private backend: Backend, private router: Router, private translate: TranslateService) {
+    constructor(private backend: Backend, private router: Router) {
 
     }
 
@@ -159,7 +154,7 @@ export class Genguard implements CanDeactivate<Generics> {
             return true;
         var btns = window.$('.btn-reg-gen');
         if(!!btns.length)
-            return component.dialog(this.translate.instant('confirmation'));
+            return component.dialog(this.backend.transform('confirmation'));
         return true;
     }
 

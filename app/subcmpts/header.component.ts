@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, Input, EventEmitter, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
@@ -33,13 +32,11 @@ export class Header implements OnInit {
      * @public
      * @param router Routing service.
      * @param backend App service.
-     * @param translate Translation service.
      * @param notif Event service.
      * @param dataservice Data service.
      * @param auth Auth service.
      */
-    constructor(private router: Router, private backend: Backend, private translate: TranslateService, private notif: NotificationsService,
-        private dataservice: Data, private auth: Auth) {
+    constructor(private router: Router, private backend: Backend, private notif: NotificationsService, private dataservice: Data, private auth: Auth) {
         this.run = 0;
         this.cur = 0;
     }
@@ -89,7 +86,7 @@ export class Header implements OnInit {
                 //We were OAuthing...
                 complete();
             } else {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noLogout'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noLogout'));
             }
         });
     }
@@ -125,11 +122,11 @@ export class Header implements OnInit {
      */
     showIntro() {
         window.introJs.introJs().setOptions({
-            nextLabel: this.translate.instant('next'),
-            prevLabel: this.translate.instant('prev'),
-            skipLabel: this.translate.instant('skip'),
-            doneLabel: this.translate.instant('done'),
-            hintButtonLabel: this.translate.instant('hint'),
+            nextLabel: this.backend.transform('next'),
+            prevLabel: this.backend.transform('prev'),
+            skipLabel: this.backend.transform('skip'),
+            doneLabel: this.backend.transform('done'),
+            hintButtonLabel: this.backend.transform('hint'),
             exitOnOverlayClick: false,
             disableInteraction: true
         }).start();

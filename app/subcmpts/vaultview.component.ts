@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
@@ -35,14 +34,13 @@ export class Vaultview implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param router Routing service.
      * @param backend API service.
      * @param notif Notifications service.
      * @param routed Parameters service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private router: Router, private backend: Backend,
+    constructor(private router: Router, private backend: Backend,
         private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
         this.vault = {data_name: '', real_name: ''};
         this.decr_data = '';
@@ -82,9 +80,9 @@ export class Vaultview implements OnInit, OnDestroy {
                 });
             }, function(e) {
                 if(e.status == 417)
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('vaultview.expired'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('vaultview.expired'));
                 else
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('vaultview.noData'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('vaultview.noData'));
                 delete self.backend.profile.shared_with_me[self.sharer_id][params['data_name']];
                 self.back();
             });

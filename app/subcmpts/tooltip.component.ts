@@ -7,7 +7,6 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, Input} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -30,11 +29,10 @@ export class Tooltip {
      * @function constructor
      * @public
      * @param backend App service.
-     * @param translate I18N service.
      * @param notif Event service.
      * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private translate: TranslateService, private notif: NotificationsService, private dataservice: Data) {
+    constructor(private backend: Backend, private notif: NotificationsService, private dataservice: Data) {
         this.mapping = {};
     }
 
@@ -58,11 +56,11 @@ export class Tooltip {
                    + this.mapping[keys[i]] + '\')"><i class="fa fa-trash"></i></button>'))
                    + '</li>';
             }
-            shares = (shares == '')? '<li class="list-group-item">' + this.translate.instant('nothing') + '</li>' : shares;
+            shares = (shares == '')? '<li class="list-group-item">' + this.backend.transform('nothing') + '</li>' : shares;
             //Modal
             window.$(`
                 <div class="modal">
-                    <h3>` + self.translate.instant('dataview.grants') + `</h3>
+                    <h3>` + self.backend.transform('dataview.grants') + `</h3>
                     <div class="row text-center">
                         <script type="text/javascript">
                             function delUserShare(key, lid) {

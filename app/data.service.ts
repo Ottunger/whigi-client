@@ -9,7 +9,6 @@ declare var window: any
 import {Injectable, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, NavigationExtras} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Auth} from './auth.service';
 import {Backend} from './app.service';
 import {Check} from './check.service';
@@ -36,15 +35,14 @@ export class Data {
      * Creates the service.
      * @function constructor
      * @public
-     * @param http HTTP service.
-     * @param router Routing service.
+     * @param notif Notif service.
      * @param backend Backend service.
      * @param check Check service.
      * @param checking Checks service.
      * @param router Routing service.
      * @param auth Auth service.
      */
-    constructor(private notif: NotificationsService, private translate: TranslateService, private backend: Backend,
+    constructor(private notif: NotificationsService, private backend: Backend,
         private check: ApplicationRef, public checking: Check, private router: Router, private auth: Auth) {
         var self = this;
         this.wentLogin = false;
@@ -155,9 +153,9 @@ export class Data {
         for(var i = 0; i < keys.length; i++)
             perso['holds'][keys[i]] = this.m.holds[keys[i]];
         this.newData(true, 'keys/display', JSON.stringify(perso), false, 0, true, this.maes).then(function() {
-            self.notif.success(self.translate.instant('success'), self.translate.instant('sidebar.saved'));
+            self.notif.success(self.backend.transform('success'), self.backend.transform('sidebar.saved'));
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('sidebar.noSave'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('sidebar.noSave'));
         });
     }
 
@@ -322,7 +320,7 @@ export class Data {
                                         <li>
                                             <a href="javascript:;" style="cursor: default;">
                                                 <span class="task">
-                                                    <span class="desc" style="color: white;">` + self.translate.instant('header.operation') + `</span>
+                                                    <span class="desc" style="color: white;">` + self.backend.transform('header.operation') + `</span>
                                                     <span class="percent" style="color: white;" id="worktx">0%</span>
                                                 </span><br />
                                                 <span class="progress">
@@ -368,7 +366,7 @@ export class Data {
                     if(front === true)
                         window.$('.page-content').unblock();
                     self.how.emit(0);
-                    self.notif.error(self.translate.instant(encrypt? 'encrypting' : 'decrypting'), self.translate.instant('corruption'));
+                    self.notif.error(self.backend.transform(encrypt? 'encrypting' : 'decrypting'), self.backend.transform('corruption'));
                     self.check.tick();
                     callback('[]');
                     break;
@@ -532,7 +530,7 @@ export class Data {
                                         var got = window.eval.call(window, '(function(got) {' + js.js + '})')(data.decr_data);
                                         self.modifyData(name, got, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated, self.backend.generics[gen_name].length - 1,
                                             add.data[name].shared_to, self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].instantiable, data.decr_aes).then(function() {
-                                            self.notif.success(self.translate.instant('success'), self.translate.instant('profile.didChanged'));
+                                            self.notif.success(self.backend.transform('success'), self.backend.transform('profile.didChanged'));
                                         }, function(e) {});
                                     }, function(e) {});
                                 }, function(e) {});
@@ -575,7 +573,7 @@ export class Data {
                 self.backend.profile.data = {};
                 self.backend.profile.shared_with_me = {};
                 self.backend.data_loaded = true;
-                self.notif.error(self.translate.instant('error'), self.translate.instant('noData'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('noData'));
                 resolve();
             });
         });
@@ -962,11 +960,11 @@ export class Data {
      */
     getSelect(e: string, moreKey?: string): string[][] {
         var self = this;
-        if(e + moreKey + self.translate.currentLang in self.selectsCache)
-            return self.selectsCache[e + moreKey + self.translate.currentLang];
+        if(e + moreKey + self.backend.lang in self.selectsCache)
+            return self.selectsCache[e + moreKey + self.backend.lang];
         function process(vals: string[]): string[][] {
-            self.selectsCache[e + moreKey + self.translate.currentLang] = vals.map(function(el: string): string[] {
-                return [el, self.translate.instant(el)]
+            self.selectsCache[e + moreKey + self.backend.lang] = vals.map(function(el: string): string[] {
+                return [el, self.backend.transform(el)]
             }).sort(function(a: string[], b: string[]): number {
                 if(a[1] == b[1])
                     return 0;
@@ -974,7 +972,7 @@ export class Data {
                     return -1;
                 return 1;
             });
-            return self.selectsCache[e + moreKey + self.translate.currentLang];
+            return self.selectsCache[e + moreKey + self.backend.lang];
         }
         //Check
         if(e in this.selects && !moreKey)
@@ -1031,8 +1029,8 @@ export class Data {
         window.$('#confipict').click(function() {
             window.$(`
                 <div class="modal">
-                    <h3>` + self.translate.instant('help') + `</h3>
-                    <p>` + self.translate.instant('confidence') + `</p>
+                    <h3>` + self.backend.transform('help') + `</h3>
+                    <p>` + self.backend.transform('confidence') + `</p>
                 </div>
             `).appendTo('body').modal();
         });
@@ -1149,8 +1147,7 @@ export class Data {
      * @param {Boolean} skip Do not save.
      */
     setLang(lang: string, skip?: boolean) {
-        sessionStorage.setItem('lang', lang);
-        this.translate.use(lang);
+        localStorage.setItem('lang', lang);
         if(this.backend.data_loaded && skip !== true)
             this.backend.remLang(lang).then(function() {}, function(e) {});
     }
@@ -1169,12 +1166,12 @@ export class Data {
         this.backend.tooltip(help).then(function(vals) {
             window.$(`
                 <div class="modal">
-                    <h3>` + self.translate.instant('help') + `</h3>
-                    <p>` + vals[self.translate.currentLang] + `</p>
+                    <h3>` + self.backend.transform('help') + `</h3>
+                    <p>` + vals[self.backend.lang] + `</p>
                 </div>
             `).appendTo('body').modal();
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('help.noHelp'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('help.noHelp'));
         });
     }
 
@@ -1205,7 +1202,7 @@ export class Data {
             });
         }, function(e) {
             delete self.backend.profile;
-            self.notif.success(self.translate.instant('success'), self.translate.instant('merge.relog'));
+            self.notif.success(self.backend.transform('success'), self.backend.transform('merge.relog'));
             reject(badbind);
         });
     }
@@ -1218,13 +1215,13 @@ export class Data {
      * @param {Object} me Oauths-like.
      * @return {Promise} When done.
      */
-    static grant(me: {backend: Backend, dataservice: Data, auth: string, prefix: string, notif: NotificationsService, translate: TranslateService, admin: boolean}): Promise {
+    static grant(me: {backend: Backend, dataservice: Data, auth: string, prefix: string, notif: NotificationsService, admin: boolean}): Promise {
         return new Promise(function(resolve, reject) {
             for(var i = 0; i < me.backend.profile.oauth.length; i++) {
                 if(me.backend.profile.oauth[i].for_id == me.auth.toLowerCase()) {
                     me.auth = '';
                     me.prefix = '';
-                    me.notif.success(me.translate.instant('success'), me.translate.instant('oauth.granted'));
+                    me.notif.success(me.backend.transform('success'), me.backend.transform('oauth.granted'));
                     resolve();
                     return;
                 }
@@ -1247,20 +1244,20 @@ export class Data {
                                 me.dataservice.grantVault(me.auth, 'oauth', 'oauths/' + me.auth, obj, 0, new Date(0), '', false, naes).then(function() {
                                     me.auth = '';
                                     me.prefix = '';
-                                    me.notif.success(me.translate.instant('success'), me.translate.instant('oauth.granted'));
+                                    me.notif.success(me.backend.transform('success'), me.backend.transform('oauth.granted'));
                                     resolve();
                                 }, function(e) {
-                                    me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                                    me.notif.error(me.backend.transform('error'), me.backend.transform('oauth.noGrant'));
                                     reject(e);
                                 });
                             } else {
                                 me.auth = '';
                                 me.prefix = '';
-                                me.notif.success(me.translate.instant('success'), me.translate.instant('oauth.granted'));
+                                me.notif.success(me.backend.transform('success'), me.backend.transform('oauth.granted'));
                                 resolve();
                             }
                         }, function(e) {
-                            me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                            me.notif.error(me.backend.transform('error'), me.backend.transform('oauth.noGrant'));
                             reject(e);
                         });
                     }
@@ -1270,18 +1267,18 @@ export class Data {
                         me.dataservice.getData('oauths/' + me.auth, false, undefined, true).then(function(data) {
                             complete(data.decr_aes, false);
                         }, function(e) {
-                            me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                            me.notif.error(me.backend.transform('error'), me.backend.transform('oauth.noGrant'));
                             reject(e);
                         });
                     } else {
                         complete(me.backend.newAES(), true);
                     }
                 }, function(e) {
-                    me.notif.error(me.translate.instant('error'), me.translate.instant('oauth.noGrant'));
+                    me.notif.error(me.backend.transform('error'), me.backend.transform('oauth.noGrant'));
                     reject(e);
                 });
             }, function(e) {
-                me.notif.error(me.translate.instant('error'), me.translate.instant('filesystem.noUser'));
+                me.notif.error(me.backend.transform('error'), me.backend.transform('filesystem.noUser'));
                 reject(e);
             });
         });
@@ -1308,14 +1305,13 @@ export class Data {
             //Handler
             function end(towards: string) {
                 self.grantVault(towards, 'keys/pwd/mine2', 'keys/pwd/mine2', pwd.slice(4), 0, new Date(0), '', false, undefined).then(function() {
-                    self.notif.success(self.translate.instant('success'), self.translate.instant('login.sent'));
+                    self.notif.success(self.backend.transform('success'), self.backend.transform('login.sent'));
                     Data.grant({
                         backend: self.backend,
                         dataservice: self,
                         auth: my_id,
                         prefix: 'profile/',
                         notif: self.notif,
-                        translate: self.translate,
                         admin: true
                     }).then(function() {
                         self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
@@ -1323,7 +1319,7 @@ export class Data {
                         self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                     self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                 });
             }
@@ -1333,15 +1329,15 @@ export class Data {
                         self.grantVault('whigi-restore', 'keys/pwd/mine1', 'keys/pwd/mine1', pwd.slice(0, 4), 0, new Date(0), '', false, undefined).then(function() {
                             end(my_id);
                         }, function(e) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                             self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                         });
                     }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                        self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                         self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                     self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                 });
             }
@@ -1350,7 +1346,7 @@ export class Data {
                     self.backend.createUser(uname, pwd, [{
                     real_name: 'profile/lang',
                     is_dated: false,
-                    data: self.translate.currentLang,
+                    data: self.backend.lang,
                     version: 0,
                     shared_to: []
                 }], undefined, false).then(function() {
@@ -1367,58 +1363,58 @@ export class Data {
                                                 self.grantVault('whigi-restore', 'profile/email', 'profile/email/restore', mail, 0, new Date(0), '', false, email).then(function() {
                                                     safe();
                                                 }, function() {
-                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                    self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                                                     self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                                 });
                                             }, function(e) {
-                                                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                                self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                                                 self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                             });
                                         }, function(e) {
-                                            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                            self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                                             self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                         });
                                     }, function(e) {
-                                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                        self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                                         self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                     });
                                 }, function() {
-                                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                                    self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                                     self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                                 });
                             });
                         }, function(e) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                             self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                         });
                     }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                        self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.noSignup'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('login.noSignup'));
                 });
             }
             if(self.isWhigi(uname)) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('login.usedWhigi'));
                 resolve(false);
             }
             if(/[^a-zA-Z0-9\-\_]/.test(uname)) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('login.badChars'));
                 resolve(false);
             }
             if(pwd.length < 8) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('login.tooShort'));
                 resolve(false);
             }
             if(pwd == pwd2) {
                 if(!/^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/i.test(mail)) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('login.badEmail'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('login.badEmail'));
                     resolve(false);
                     return;
                 }
                 complete();
             } else {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('login.noMatch'));
                 resolve(false);
             }
         });
@@ -1434,7 +1430,7 @@ export class Data {
      */
     nominatim(addr: any, ok: Function, err: Function) {
         var self = this;
-        addr = window.encodeURIComponent(addr['generics.postcode'] + ' ' + addr['generics.city'] + ' ' + self.translate.instant(addr['generics.country']));
+        addr = window.encodeURIComponent(addr['generics.postcode'] + ' ' + addr['generics.city'] + ' ' + self.backend.transform(addr['generics.country']));
         this.backend.nominatim(addr).then(function(res) {
             if(res.length == 0) {
                 err();
@@ -1487,9 +1483,9 @@ export class Data {
             }
             if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].mode == 'select') {
                 if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].multiple)
-                    try { previews[name][0] = '[' + self.translate.instant(JSON.parse(previews[name][0])[0]) + ', ...] '; } catch(e) {}
+                    try { previews[name][0] = '[' + self.backend.transform(JSON.parse(previews[name][0])[0]) + ', ...] '; } catch(e) {}
                 else
-                    try { previews[name][0] = self.translate.instant(previews[name][0]) + ' '; } catch(e) {}
+                    try { previews[name][0] = self.backend.transform(previews[name][0]) + ' '; } catch(e) {}
             } else if(keyded) {
                 var obj = JSON.parse(previews[name][1]);
                 var keys = Object.getOwnPropertyNames(obj);
@@ -1504,9 +1500,9 @@ export class Data {
                     }
                     if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode == 'select') {
                         if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].multiple)
-                            try { previews[name][0] += '[' + self.translate.instant(JSON.parse(obj[keys[i]])[0]) + ', ...] '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
+                            try { previews[name][0] += '[' + self.backend.transform(JSON.parse(obj[keys[i]])[0]) + ', ...] '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
                         else
-                            try { previews[name][0] += self.translate.instant(obj[keys[i]]) + ' '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
+                            try { previews[name][0] += self.backend.transform(obj[keys[i]]) + ' '; } catch(e) { previews[name][0] += obj[keys[i]] + ' '; }
                     } else if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'file'
                         && self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].json_keys[idx].mode != 'checkbox')
                         previews[name][0] += obj[keys[i]] + ' ';

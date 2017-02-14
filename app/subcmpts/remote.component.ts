@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Data} from '../data.service';
@@ -29,14 +28,13 @@ export class Remote implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param routed Activated route service.
      * @param dataservice Data service.
      * @param backend Backend service.
      */
-    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService,
+    constructor(private router: Router, private notif: NotificationsService,
         private routed: ActivatedRoute, private dataservice: Data, private backend: Backend) {
 
     }

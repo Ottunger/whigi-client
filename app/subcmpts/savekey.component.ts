@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Data} from '../data.service';
@@ -29,14 +28,13 @@ export class Savekey implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param routed Activated route service.
      * @param dataservice Data service.
      * @param backend App service.
      */
-    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService,
+    constructor(private router: Router, private notif: NotificationsService,
         private routed: ActivatedRoute, private dataservice: Data, private backend: Backend) {
 
     }
@@ -57,20 +55,20 @@ export class Savekey implements OnInit, OnDestroy {
                 window.location.href = self.return_url;
             //Now try!
             self.dataservice.newData(true, self.key, self.value, params['is_dated'] == 'true', 0, false).then(function() {
-                self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));
+                self.notif.success(self.backend.transform('success'), self.backend.transform('savekey.rec'));
                 setTimeout(function() {
                     window.location.href = self.return_url;
                 }, 1500);
             }, function(err) {
                 if(err[0] == 'exists') {
-                    if(window.confirm(self.translate.instant('savekey.erase'))) {
+                    if(window.confirm(self.backend.transform('savekey.erase'))) {
                         self.dataservice.newData(true, self.key, self.value, params['is_dated'] == 'true', 0, true).then(function() {
-                            self.notif.success(self.translate.instant('success'), self.translate.instant('savekey.rec'));
+                            self.notif.success(self.backend.transform('success'), self.backend.transform('savekey.rec'));
                             setTimeout(function() {
                                 window.location.href = self.return_url;
                             }, 1500);
                         }, function(err) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
                             setTimeout(function() {
                                 window.location.href = self.return_url;
                             }, 1500);
@@ -79,7 +77,7 @@ export class Savekey implements OnInit, OnDestroy {
                         window.location.href = self.return_url;
                     }
                 } else {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('server'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('server'));
                     setTimeout(function() {
                         window.location.href = self.return_url;
                     }, 1500);

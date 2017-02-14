@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Auth} from '../auth.service';
@@ -35,7 +34,6 @@ export class Oauth implements OnInit, OnDestroy {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param auth Auth service.
@@ -44,7 +42,7 @@ export class Oauth implements OnInit, OnDestroy {
      * @param check Check service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private router: Router, private notif: NotificationsService, private auth: Auth,
+    constructor(private router: Router, private notif: NotificationsService, private auth: Auth,
         private routed: ActivatedRoute, private backend: Backend, private check: ApplicationRef, private dataservice: Data) {
         this.requester = {};
     }

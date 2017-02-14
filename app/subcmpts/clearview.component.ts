@@ -7,7 +7,6 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -41,13 +40,12 @@ export class Clearview implements OnInit, OnChanges {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param check Check service.
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
+    constructor(private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         this.values = undefined;
         this.notify = new EventEmitter<string>();
         this.reset = new EventEmitter<any>();
@@ -102,9 +100,9 @@ export class Clearview implements OnInit, OnChanges {
             this.values = this.dataservice.strToObj(this.decr_data);
             for(var i = 0; i < this.values.length; i++) {
                 this.values[i].from = new Date(this.values[i].from);
-                window.$('#pick-chg' + this.dataservice.sanit(this.values[i].from.toLocaleString(this.translate.currentLang))).ready(function() {
-                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.translate.currentLang))).datetimepicker();
-                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.translate.currentLang))).datetimepicker('date', window.moment(self.values[this].from));
+                window.$('#pick-chg' + this.dataservice.sanit(this.values[i].from.toLocaleString(this.backend.lang))).ready(function() {
+                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.backend.lang))).datetimepicker();
+                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.backend.lang))).datetimepicker('date', window.moment(self.values[this].from));
                 }.bind(i));
             }
             if(this.values.length == 0)
@@ -136,7 +134,7 @@ export class Clearview implements OnInit, OnChanges {
         var replacement, done = false, err;
         window.$('.igen' + this.dataservice.sanit(this.gen_name)).removeClass('whigi-error');
         if(this.is_generic && (err = this.dataservice.recGeneric(this.new_data, this.new_data_file, this.new_datas, this.gen_name, this.backend.generics[this.gen_name][this.version].mode == 'file')).constructor === Array) {
-            this.notif.error(this.translate.instant('error'), this.translate.instant(err[1]));
+            this.notif.error(this.backend.transform('error'), this.backend.transform(err[1]));
             for(var i = 2; i < err.length; i++)
                 window.$('.igenfiner' + this.dataservice.sanit(this.gen_name) + this.dataservice.sanit(err[i])).addClass('whigi-error');
             return;
@@ -168,7 +166,7 @@ export class Clearview implements OnInit, OnChanges {
                 });
             }
             if(new Set(replacement.map(function(el) {return el.from})).size != replacement.length) {
-                this.notif.error(this.translate.instant('error'), this.translate.instant('generics.twicedate'));
+                this.notif.error(this.backend.transform('error'), this.backend.transform('generics.twicedate'));
                 window.$('.igen' + this.dataservice.sanit(this.gen_name)).addClass('whigi-error');
                 return;
             }
@@ -210,7 +208,7 @@ export class Clearview implements OnInit, OnChanges {
      */
     getName(): string {
         if(this.is_generic)
-            return this.translate.instant(this.backend.generics[this.gen_name][this.version].descr_key);
+            return this.backend.transform(this.backend.generics[this.gen_name][this.version].descr_key);
         return '';
     }
 

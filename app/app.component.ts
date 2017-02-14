@@ -7,7 +7,6 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {Backend} from './app.service';
 import {Data} from './data.service';
 enableProdMode();
@@ -67,7 +66,7 @@ enableProdMode();
                     <span style="overflow-x: hidden; max-width: 25vw; position: absolute; left: 3px; top: 7px; color: #fff; font-size: 12px;">{{ 'mention' | translate }}</span>
                     <li class="first"><button type="button" class="btn btn-xs green" style="margin-right: 30px;" (click)="sendFeedback()">{{ 'feedback' | translate }}</button></li>
                     <li class="last">
-                        <select [(ngModel)]="dlang" (change)="regLang()" style="background-color: #ff5000;color: #fff;border: 1px solid #ff5000;border-radius: 3px;font-size: 12px;padding-top: 2px; padding-bottom: 1px;">
+                        <select [(ngModel)]="backend.lang" (change)="regLang()" style="background-color: #ff5000;color: #fff;border: 1px solid #ff5000;border-radius: 3px;font-size: 12px;padding-top: 2px; padding-bottom: 1px;">
                             <option value="en">English</option>
                             <option value="fr">Français</option>
                         </select>
@@ -94,27 +93,16 @@ export class Application {
         animate: "scale",
         position: ["right", "bottom"]
     };
-    public dlang: string;
 
     /**
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private dataservice: Data) {
+    constructor(private backend: Backend, private dataservice: Data) {
         var self = this;
-        translate.setDefaultLang('en');
-        if('lang' in sessionStorage) {
-            this.dlang = sessionStorage.getItem('lang');
-            translate.use(sessionStorage.getItem('lang'));
-        } else {
-            var browserLang = translate.getBrowserLang();
-            this.dlang = browserLang.match(/en|fr/) ? browserLang : 'en';
-            translate.use(browserLang.match(/en|fr/) ? browserLang : 'en');
-        }
     }
 
     /**
@@ -125,7 +113,7 @@ export class Application {
     regLang() {
         var self = this;
         setImmediate(function() {
-            self.dataservice.setLang(self.dlang);
+            self.dataservice.setLang(self.backend.lang);
         });
     }
 
@@ -138,7 +126,7 @@ export class Application {
         var name = !!(this.backend.profile)? this.backend.profile._id : 'whigi-no-name';
         window.$(`
             <div class="modal fddiv">
-                <h3 id="fdtitle">` + this.translate.instant('feedback') + `</h3>
+                <h3 id="fdtitle">` + this.backend.transform('feedback') + `</h3>
                 <div>
                     <script type="text/javascript">
                         function fdsend() {
@@ -164,12 +152,12 @@ export class Application {
                                 if(http.readyState == 4 && Math.floor(http.status/10) == 20) {
                                     //End here and now
                                     $('.current').find('.modal').html('\
-                                        <h3>` + this.translate.instant('help') + `</h3>\
-                                        <p>` + this.translate.instant('ctSoon') + `</p>\
+                                        <h3>` + this.backend.transform('help') + `</h3>\
+                                        <p>` + this.backend.transform('ctSoon') + `</p>\
                                         <a href="#close-modal" rel="modal:close" class="close-modal">Close</a>\
                                     ');
                                 } else if(http.readyState == 4) {
-                                    $('.current').find('#fdtitle').css('color', 'red').text('` + this.translate.instant('error') + `');
+                                    $('.current').find('#fdtitle').css('color', 'red').text('` + this.backend.transform('error') + `');
                                 }
                             }
                             http.send(params);
@@ -182,7 +170,7 @@ export class Application {
                         <textarea class="form-control placeholder-no-fix" type="textarea" id="fdfd" autocomplete="off" placeholder="Feedback"></textarea>
                     </div>
                     <div class="form-actions">
-                        <button type="submit" class="btn green pull-right" onclick="fdsend()"> ` + this.translate.instant('goOn') + ` </button>
+                        <button type="submit" class="btn green pull-right" onclick="fdsend()"> ` + this.backend.transform('goOn') + ` </button>
                     </div>
                 </div>
             </div>

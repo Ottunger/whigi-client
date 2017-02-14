@@ -1,12 +1,12 @@
-<a class="whigi-md-block" href="javascript:;" *ngIf="right && mode=='info' && !!uri && uri != '' && uri != translate.instant('whoishare.dunno')"
+<a class="whigi-md-block" href="javascript:;" *ngIf="right && mode=='info' && !!uri && uri != '' && uri != backend.transform('whoishare.dunno')"
     style="float: right;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
-<a class="whigi-md-block" href="javascript:;" *ngIf="!right && mode=='info' && !!uri && uri != '' && uri != translate.instant('whoishare.dunno')"
+<a class="whigi-md-block" href="javascript:;" *ngIf="!right && mode=='info' && !!uri && uri != '' && uri != backend.transform('whoishare.dunno')"
     style="float: left;" (click)="launch()"><i class="fa fa-info-circle"></i></a>
 
-<a class="whigi-md-block" href="javascript:;" *ngIf="right && mode=='shares' && !!uri && uri != '' && uri != translate.instant('whoishare.dunno')" data-toggle="tooltip"
+<a class="whigi-md-block" href="javascript:;" *ngIf="right && mode=='shares' && !!uri && uri != '' && uri != backend.transform('whoishare.dunno')" data-toggle="tooltip"
     title="{{ 'generics.shared' | translate }}" style="position: absolute; top: 6px; z-index: 990; right: 20px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
-<a class="whigi-md-block" href="javascript:;" *ngIf="!right && mode=='shares' && !!uri && uri != '' && uri != translate.instant('whoishare.dunno')" data-toggle="tooltip"
+<a class="whigi-md-block" href="javascript:;" *ngIf="!right && mode=='shares' && !!uri && uri != '' && uri != backend.transform('whoishare.dunno')" data-toggle="tooltip"
     title="{{ 'generics.shared' | translate }}" style="position: absolute; top: 6px; z-index: 990; right: 10px;" (click)="launch()"><i class="fa fa-commenting"></i></a>
 
-<button type="button" *ngIf="mode=='sharesLink' && !!uri && uri != '' && uri != translate.instant('whoishare.dunno')" class="whigi-md-block btn btn-link" (click)="launch()"
+<button type="button" *ngIf="mode=='sharesLink' && !!uri && uri != '' && uri != backend.transform('whoishare.dunno')" class="whigi-md-block btn btn-link" (click)="launch()"
     data-toggle="tooltip" title="{{ 'generics.shared' | translate }}"><i class="fa fa-commenting"></i></button>

@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
@@ -35,13 +34,12 @@ export class Profile implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param backend Backend service.
      * @param router Router service.
      * @param auth Auth service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
+    constructor(private notif: NotificationsService, private backend: Backend,
         private router: Router, private dataservice: Data, private auth: Auth) {
         this.use_file = false;
     }
@@ -57,8 +55,8 @@ export class Profile implements OnInit {
             this.pwd = this.current_pwd = window.location.href.replace(/.+\//, '');
             window.$(`
                 <div class="modal">
-                    <h3>` + self.translate.instant('help') + `</h3>
-                    <p>` + self.translate.instant('profile.doChange') + `</p>
+                    <h3>` + self.backend.transform('help') + `</h3>
+                    <p>` + self.backend.transform('profile.doChange') + `</p>
                 </div>
             `).appendTo('body').modal();
         } else {
@@ -91,22 +89,22 @@ export class Profile implements OnInit {
                             self.password = '';
                             self.password2 = '';
                             self.auth.regPuzzle(undefined, window.sha256(self.password + self.backend.profile.salt), window.sha256(self.password));
-                            self.notif.success(self.translate.instant('success'), self.translate.instant('profile.changed'));
+                            self.notif.success(self.backend.transform('success'), self.backend.transform('profile.changed'));
                         }, function(e) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('profile.warnChange'));
                         });
                     }, function(e) {
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('profile.warnChange'));
+                        self.notif.error(self.backend.transform('error'), self.backend.transform('profile.warnChange'));
                     });
                 }, function(e) {
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noChange'));
                 });
             } else {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('login.tooShort'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('login.tooShort'));
                 window.$('.inewpass').addClass('has-error');
             }
         } else {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noMatch'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('login.noMatch'));
             window.$('.inewpass').addClass('has-error');
         }
     }
@@ -120,18 +118,18 @@ export class Profile implements OnInit {
         var self = this;
         window.$('#inewname').removeClass('has-error');
         if(this.new_name != this.new_name2) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.noUserMatch'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('login.noUserMatch'));
             window.$('.inewname').addClass('has-error');
             return;
         }
         this.new_name = this.new_name.replace(/ /g, '');
         if(this.dataservice.isWhigi(this.new_name)) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.usedWhigi'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('login.usedWhigi'));
             window.$('.inewname').addClass('has-error');
             return;
         }
         if(/[^a-zA-Z0-9\-]/.test(this.new_name)) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('login.badChars'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('login.badChars'));
             window.$('.inewname').addClass('has-error');
             return;
         }
@@ -141,7 +139,7 @@ export class Profile implements OnInit {
             self.backend.createToken(self.new_name, self.current_pwd, false).then(function(ticket) {
                 self.auth.changedUname(now, self.new_name);
                 self.auth.switchLogin(self.new_name, ticket._id);
-                self.notif.success(self.translate.instant('success'), self.translate.instant('profile.chUname'));
+                self.notif.success(self.backend.transform('success'), self.backend.transform('profile.chUname'));
             }, function(e) {
                 self.auth.deleteUid(undefined, false);
                 self.backend.forceReload();
@@ -151,7 +149,7 @@ export class Profile implements OnInit {
             self.new_name = '';
             self.new_name2 = '';
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noChange'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noChange'));
             window.$('#inewname').addClass('has-error');
         });
     }
@@ -163,7 +161,7 @@ export class Profile implements OnInit {
      */
     revokeAll() {
         var self = this, keys = Object.getOwnPropertyNames(this.backend.profile.data);
-        if(window.confirm(this.translate.instant('profile.confirm') + this.revoke_id)) {
+        if(window.confirm(this.backend.transform('profile.confirm') + this.revoke_id)) {
             this.backend.getUser(this.revoke_id).then(function(user) {
                 keys.forEach(function(val) {
                     if(user._id in self.backend.profile[val].shared_to) {
@@ -171,12 +169,12 @@ export class Profile implements OnInit {
                             delete self.backend.profile.data[val].shared_to[user._id];
                             delete self.backend.my_shares[self.revoke_id];
                         }, function(e) {
-                            self.notif.error(self.translate.instant('error'), self.translate.instant('profile.noRevoke'));
+                            self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noRevoke'));
                         });
                     }
                 });
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('filesystem.noUser'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('filesystem.noUser'));
             });
         }
     }

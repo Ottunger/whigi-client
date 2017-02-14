@@ -8,7 +8,6 @@
 declare var window: any
 import {Component, enableProdMode} from '@angular/core';
 import {Router} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -27,13 +26,12 @@ export class WhoIShare {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param backend App service.
      * @param router Routing service.
      * @param notif Notification service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private backend: Backend, private router: Router,
+    constructor(private backend: Backend, private router: Router,
         private notif: NotificationsService, private dataservice: Data) {
         this.users = {};
     }
@@ -48,15 +46,15 @@ export class WhoIShare {
      */
     genName(gen: string, help: boolean): string {
         if(!gen)
-            return this.translate.instant('whoishare.dunno');
+            return this.backend.transform('whoishare.dunno');
         if(!!this.backend.generics[gen]) {
-            return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
+            return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.backend.transform(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         } else if(!!this.backend.generics[gen.replace(/\/[^\/]*$/, '')] &&
             this.backend.generics[gen.replace(/\/[^\/]*$/, '')][this.backend.generics[gen.replace(/\/[^\/]*$/, '')].length - 1].instantiable) {
             gen = gen.replace(/\/[^\/]*$/, '');
-            return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.translate.instant(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
+            return help? this.backend.generics[gen][this.backend.generics[gen].length - 1].help_url : this.backend.transform(this.backend.generics[gen][this.backend.generics[gen].length - 1].descr_key);
         }
-        return this.translate.instant('whoishare.dunno');
+        return this.backend.transform('whoishare.dunno');
     }
 
     /**
@@ -88,7 +86,7 @@ export class WhoIShare {
     realName(name: string) {
         window.$(`
             <div class="modal">
-                <h3>` + this.translate.instant('help') + `</h3>
+                <h3>` + this.backend.transform('help') + `</h3>
                 <p>` + name + `</p>
             </div>
         `).appendTo('body').modal();
@@ -135,12 +133,12 @@ export class WhoIShare {
      */
     revoke(name: string, shared_to_id: string) {
         var self = this;
-        if(name.indexOf('keys/pwd/') == 0 && !window.confirm(this.translate.instant('dataview.revokeKey')))
+        if(name.indexOf('keys/pwd/') == 0 && !window.confirm(this.backend.transform('dataview.revokeKey')))
             return;
         this.dataservice.revoke(name, shared_to_id).then(function() {
             self.dataservice.listData(false);
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noRevoke'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noRevoke'));
         });
     }
     

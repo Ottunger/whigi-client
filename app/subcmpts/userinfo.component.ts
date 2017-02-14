@@ -7,7 +7,6 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, Input, ApplicationRef, OnInit, EventEmitter} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
@@ -32,17 +31,16 @@ export class Userinfo implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param backend App service.
      * @param dataservice Data service.
      * @param check Check service.
      * @param auth Auth service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend,
+    constructor(private notif: NotificationsService, private backend: Backend,
         private dataservice: Data, private check: ApplicationRef, private auth: Auth) {
-        this.erase_addr = this.translate.instant('__no');
-        this.erase_name = this.translate.instant('__no');
+        this.erase_addr = this.backend.transform('__no');
+        this.erase_name = this.backend.transform('__no');
     }
 
     /**
@@ -111,10 +109,10 @@ export class Userinfo implements OnInit {
         var self = this;
         this.backend.goCompany(self.backend.profile.company_info).then(function() {
             self.backend.profile.is_company = 1;
-            self.notif.success(self.translate.instant('success'), self.translate.instant('userinfo.changed'));
+            self.notif.success(self.backend.transform('success'), self.backend.transform('userinfo.changed'));
             self.check.tick();
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('userinfo.notChanged'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('userinfo.notChanged'));
             self.check.tick();
         });
     }
@@ -131,7 +129,7 @@ export class Userinfo implements OnInit {
             window.$('#mypict').attr('src', self.pict);
             self.check.tick();
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('userinfo.notChanged'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('userinfo.notChanged'));
             self.check.tick();
         });
     }
@@ -149,10 +147,10 @@ export class Userinfo implements OnInit {
                 self.backend.profile.company_info.name = decr['generics.first_name'] + ' ' + decr['generics.last_name'];
                 self.modify();
             }, function(e) {
-                self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noData'));
             });
         } else {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('dataview.noData'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('dataview.noData'));
         }
     }
 
@@ -240,9 +238,9 @@ export class Userinfo implements OnInit {
     goBCE() {
         var self = this;
         this.backend.goBCE(this.bce).then(function() {
-            self.notif.success(self.translate.instant('success'), self.translate.instant('userinfo.changed'));
+            self.notif.success(self.backend.transform('success'), self.backend.transform('userinfo.changed'));
         }, function(e) {
-            self.notif.error(self.translate.instant('error'), self.translate.instant('userinfo.notChanged'));
+            self.notif.error(self.backend.transform('error'), self.backend.transform('userinfo.notChanged'));
         });
     }
 

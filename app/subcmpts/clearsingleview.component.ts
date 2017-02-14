@@ -7,7 +7,6 @@
 'use strict';
 declare var window : any
 import {Component, enableProdMode, Input, EventEmitter, OnInit} from '@angular/core';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
@@ -32,13 +31,12 @@ export class ClearSingleview implements OnInit {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param check Check service.
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
+    constructor(private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
         
     }
 
@@ -68,12 +66,12 @@ export class ClearSingleview implements OnInit {
     show(): string {
         if(this.gen in this.backend.generics) {
             if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].mode == 'checkbox')
-                return this.translate.instant(this.data? 'Yes' : 'No');
+                return this.backend.transform(this.data? 'Yes' : 'No');
             else if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].mode == 'select')
                 if(this.backend.generics[this.gen][this.backend.generics[this.gen].length - 1].multiple)
-                    try { return '[' + this.translate.instant(JSON.parse(this.data)[0]) + ', ...]' ; } catch(e) { return '[...]'; }
+                    try { return '[' + this.backend.transform(JSON.parse(this.data)[0]) + ', ...]' ; } catch(e) { return '[...]'; }
                 else
-                    return this.translate.instant(this.data + '');
+                    return this.backend.transform(this.data + '');
         }
         return this.data;
     }
@@ -90,11 +88,11 @@ export class ClearSingleview implements OnInit {
         var bk;
         if(key.mode == 'select')
             if(key.multiple)
-                try { bk = '[' + this.translate.instant(JSON.parse(this.asjson[key.descr_key])[0]) + ', ...]'; } catch(e) { bk = this.asjson[key.descr_key]; }
+                try { bk = '[' + this.backend.transform(JSON.parse(this.asjson[key.descr_key])[0]) + ', ...]'; } catch(e) { bk = this.asjson[key.descr_key]; }
             else
-                try { bk = this.translate.instant(this.asjson[key.descr_key]); } catch(e) { bk = this.asjson[key.descr_key]; }
+                try { bk = this.backend.transform(this.asjson[key.descr_key]); } catch(e) { bk = this.asjson[key.descr_key]; }
         else if(key.mode == 'checkbox')
-            bk = this.translate.instant(this.asjson[key.descr_key]? 'Yes' : 'No');
+            bk = this.backend.transform(this.asjson[key.descr_key]? 'Yes' : 'No');
         else
             bk = this.asjson[key.descr_key];
         if(!bk || bk.trim() == '')

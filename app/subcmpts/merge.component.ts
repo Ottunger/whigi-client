@@ -8,7 +8,6 @@
 declare var window : any
 import {Component, enableProdMode, Input, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
-import {TranslateService} from 'ng2-translate/ng2-translate';
 import {NotificationsService} from 'angular2-notifications';
 import {Subscription} from 'rxjs/Subscription';
 import {Auth} from '../auth.service';
@@ -32,7 +31,6 @@ export class Merge {
      * Creates the component.
      * @function constructor
      * @public
-     * @param translate Translation service.
      * @param notif Notification service.
      * @param backend App service.
      * @param auth Auth service.
@@ -41,7 +39,7 @@ export class Merge {
      * @param routed Activated route.
      * @param router Routing service.
      */
-    constructor(private translate: TranslateService, private notif: NotificationsService, private backend: Backend, private auth: Auth,
+    constructor(private notif: NotificationsService, private backend: Backend, private auth: Auth,
         private dataservice: Data, private check: ApplicationRef, private routed: ActivatedRoute, private router: Router) {
         this.erase = false;
     }
@@ -63,7 +61,7 @@ export class Merge {
             else
                 self.password = '';
             if(!!params['mergeu'] && !!params['mergep'] && self.login != self.backend.profile._id) {
-                if(window.confirm(this.translate.instant('merge.confirm') + self.login)) {
+                if(window.confirm(this.backend.transform('merge.confirm') + self.login)) {
                     self.merge().then(function() {
                         self.router.navigate(['/generics', 'generics.profile']);
                     });
@@ -125,7 +123,7 @@ export class Merge {
             if(self.backend.profile._id.toLowerCase() == self.login.toLowerCase()) {
                 self.login = '';
                 self.password = '';
-                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noSelf'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noSelf'));
                 resolve();
                 return;
             }
@@ -183,7 +181,7 @@ export class Merge {
                                             next();
                                         }, function(e) {
                                             self.manageUI(false);
-                                            self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                            self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                                             self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                                         });
                                         break;
@@ -211,7 +209,7 @@ export class Merge {
                                                     next();
                                                 } else {
                                                     self.manageUI(false);
-                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                    self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                                                     self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                                                 }
                                             });
@@ -242,12 +240,12 @@ export class Merge {
                                                         next();
                                                     }, function(e) {
                                                         self.manageUI(false);
-                                                        self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                        self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                                                         resolve();
                                                     });
                                                 } else {
                                                     self.manageUI(false);
-                                                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                    self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                                                     resolve();
                                                 }
                                             });
@@ -258,7 +256,7 @@ export class Merge {
                                                 self.dataservice.reloadProfile(current[4], current[2], nnew, resolve);
                                             }, function(e) {
                                                 self.manageUI(false);
-                                                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                                                 self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                                             });
                                         } else {
@@ -276,7 +274,7 @@ export class Merge {
                                                 next();
                                             }, function(e) {
                                                 self.manageUI(false);
-                                                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                                                self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                                                 resolve();
                                             });
                                         } else {
@@ -288,7 +286,7 @@ export class Merge {
                                 }
                             } else {
                                 self.manageUI(false);
-                                self.notif.success(self.translate.instant('success'), self.translate.instant('merge.merged'));
+                                self.notif.success(self.backend.transform('success'), self.backend.transform('merge.merged'));
                                 self.login = '';
                                 self.password = '';
                                 resolve();
@@ -297,19 +295,19 @@ export class Merge {
                         next();
                     }, function(e) {
                         self.manageUI(false);
-                        self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                        self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                         self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                         window.$('.imerging').addClass('has-error');
                     });
                 }, function(e) {
                     self.manageUI(false);
-                    self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                    self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                     self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                     window.$('.imerging').addClass('has-error');
                 });
             }, function(e) {
                 self.manageUI(false);
-                self.notif.error(self.translate.instant('error'), self.translate.instant('merge.noMerge'));
+                self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
                 self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                 window.$('.imerging').addClass('has-error');
             });

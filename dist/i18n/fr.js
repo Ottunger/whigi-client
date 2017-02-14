@@ -1,4 +1,4 @@
-{
+exports.lang = {
    "error": "Erreur!",
    "success": "Succès!",
    "confirmation": "Êtes-vous sur de vouloir partir maintenant?",
