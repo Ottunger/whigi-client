@@ -13,10 +13,11 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/logging.html';
+//import * as template from './templates/logging.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/logging.html'
 })
 export class Logging implements OnInit {
 
@@ -34,7 +35,7 @@ export class Logging implements OnInit {
     public pubkey: string;
     public cert: string;
     public mk: string;
-    private onEnd: boolean;
+    public onEnd: boolean;
 
     /**
      * Creates the component.
@@ -46,8 +47,8 @@ export class Logging implements OnInit {
      * @param dataservice Data service.
      * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private notif: NotificationsService,
-        private dataservice: Data, private auth: Auth) {
+    constructor(public backend: Backend, public router: Router, public notif: NotificationsService,
+        public dataservice: Data, public auth: Auth) {
         this.persistent = false;
         this.recuperable = false;
         this.safe = false;
@@ -63,7 +64,7 @@ export class Logging implements OnInit {
      * @public
      * @param {Boolean} set Set the decryption key.
      */
-    ngOnInit(set: boolean): void {
+    ngOnInit(set?: boolean): void {
         var self = this;
         window.$('#wlogin-pass,#wlogin-login').ready(function() {
             window.$('#wlogin-pass,#wlogin-login').keyup(function(e) {
@@ -104,7 +105,7 @@ export class Logging implements OnInit {
                     var ret = sessionStorage.getItem('return_url');
                     ret = JSON.parse(ret);
                     sessionStorage.removeItem('return_url');
-                    self.router.navigate(ret);
+                    self.router.navigate(<string[]><any>ret);
                 } else {
                     sessionStorage.removeItem('return_url');
                     self.router.navigate(['/generics', 'generics.profile']);
@@ -222,7 +223,7 @@ export class Logging implements OnInit {
             window.$('.iuname').addClass('has-error');
             return;
         }
-        var enc = new window.JSEncrypt.JSEncrypt();
+        var enc = new window.JSEncrypt();
         enc.setPublicKey(this.pubkey);
         if(!enc.encrypt('heythere')) {
             self.notif.error(self.backend.transform('error'), self.backend.transform('login.badKey'));
@@ -436,7 +437,7 @@ export class Logging implements OnInit {
      * @private
      * @return {Promise} When done.
      */
-    logout(): Promise {
+    logout(): Promise<undefined> {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.removeTokens(false).then(function() {

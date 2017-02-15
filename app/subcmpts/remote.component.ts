@@ -6,6 +6,8 @@
 
 'use strict';
 declare var window : any
+declare var Android: any
+declare var webkit: any
 import {Component, enableProdMode, OnInit, OnDestroy} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
@@ -19,10 +21,10 @@ enableProdMode();
 })
 export class Remote implements OnInit, OnDestroy {
 
-    private id_to: string;
-    private challenge: string;
-    private return_url: string;
-    private sub: Subscription;
+    public id_to: string;
+    public challenge: string;
+    public return_url: string;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -34,8 +36,8 @@ export class Remote implements OnInit, OnDestroy {
      * @param dataservice Data service.
      * @param backend Backend service.
      */
-    constructor(private router: Router, private notif: NotificationsService,
-        private routed: ActivatedRoute, private dataservice: Data, private backend: Backend) {
+    constructor(public router: Router, public notif: NotificationsService,
+        public routed: ActivatedRoute, public dataservice: Data, public backend: Backend) {
 
     }
 

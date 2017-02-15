@@ -5,7 +5,13 @@
 /dist/*.map
 /dist/*.js
 /dist/*.css
-/dist/index.html
 /dist/assets
 /.vscode
 /debug.log
+/aot
+/app/i18n/en.js
+/app/i18n/fr.js
+/app/configs.js
+/app/subcmpts/templates/generics_corpos.js
+/app/subcmpts/templates/generics.js
+/app/subcmpts/templates/happenings.js

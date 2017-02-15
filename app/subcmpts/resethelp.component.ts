@@ -19,9 +19,9 @@ enableProdMode();
 })
 export class Resethelp implements OnInit, OnDestroy {
 
-    private id: string;
-    private data_name: string;
-    private sub: Subscription;
+    public id: string;
+    public data_name: string;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -33,8 +33,8 @@ export class Resethelp implements OnInit, OnDestroy {
      * @param backend Data service.
      * @param data Higher data service.
      */
-    constructor(private router: Router, private notif: NotificationsService,
-        private routed: ActivatedRoute, private backend: Backend, private dataservice: Data) {
+    constructor(public router: Router, public notif: NotificationsService,
+        public routed: ActivatedRoute, public backend: Backend, public dataservice: Data) {
 
     }
 

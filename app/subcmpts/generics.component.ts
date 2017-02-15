@@ -13,18 +13,19 @@ import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/generics.html';
+//import * as template from './templates/generics.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/generics.html'
 })
 export class Generics implements OnInit {
 
     public filter: string;
     public new_name: string;
-    private lighted: number;
-    private sub: Subscription;
-    private lists: {[id: string]: any};
+    public lighted: number;
+    public sub: Subscription;
+    public lists: {[id: string]: any};
 
     /**
      * Creates the component.
@@ -35,8 +36,8 @@ export class Generics implements OnInit {
      * @param notif Notification service.
      * @param routed Current route.
      */
-    constructor(private backend: Backend, private router: Router, private notif: NotificationsService,
-        private routed: ActivatedRoute, private dataservice: Data) {
+    constructor(public backend: Backend, public router: Router, public notif: NotificationsService,
+        public routed: ActivatedRoute, public dataservice: Data) {
         this.filter = 'generics.any';
         this.lighted = 1;
         this.lists = {}
@@ -120,7 +121,7 @@ export class Generics implements OnInit {
      * @param {String} msg Message.
      * @return {Promise} OK or not.
      */
-    dialog(msg: string): Promise {
+    dialog(msg: string): Promise<boolean> {
         return new Promise<boolean>(function(resolve, reject) {
             resolve(window.confirm(msg));
         });

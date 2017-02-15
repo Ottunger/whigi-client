@@ -28,7 +28,7 @@ export class Loginas implements OnInit {
      * @param dataservice Data service.
      * @param auth Auth service.
      */
-    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute, private dataservice: Data, private auth: Auth) {
+    constructor(public backend: Backend, public router: Router, public routed: ActivatedRoute, public dataservice: Data, public auth: Auth) {
 
     }
 

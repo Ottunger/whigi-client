@@ -12,11 +12,12 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/generic_block.html';
+//import * as template from './templates/generic_block.html';
 
 @Component({
     selector: 'generic_block',
-    template: template
+    //template: template
+    templateUrl: './templates/generic_block.html'
 })
 export class GenericBlock implements OnInit {
 
@@ -38,11 +39,11 @@ export class GenericBlock implements OnInit {
     @Input() group: string;
     @Input() raw_list: string[];
     @Output() rm: EventEmitter<string>;
-    private inreg: boolean;
-    private previews: {[id: string]: string[]};
-    private asked: {[id: string]: boolean};
-    private resets: {[id: string]: EventEmitter<any>}
-    private rstCsv: EventEmitter<any>;
+    public inreg: boolean;
+    public previews: {[id: string]: string[]};
+    public asked: {[id: string]: boolean};
+    public resets: {[id: string]: EventEmitter<any>}
+    public rstCsv: EventEmitter<any>;
 
     /**
      * Creates the component.
@@ -54,8 +55,8 @@ export class GenericBlock implements OnInit {
      * @param check Check service.
      * @param router Routing service.
      */
-    constructor(private backend: Backend, private notif: NotificationsService,
-        private dataservice: Data, private check: ApplicationRef, private router: Router) {
+    constructor(public backend: Backend, public notif: NotificationsService,
+        public dataservice: Data, public check: ApplicationRef, public router: Router) {
         this.ass_name = {};
         this.new_data = {};
         this.new_datas = {};
@@ -190,7 +191,7 @@ export class GenericBlock implements OnInit {
      * @public
      * @return {Promise} When done.
      */
-    registerAll(): Promise {
+    registerAll(): Promise<undefined> {
         var self = this, objs, toclick: any[] = [], work: any[] = [];
         return new Promise(function(resolve, reject) {
             function complete() {
@@ -331,7 +332,7 @@ export class GenericBlock implements OnInit {
      * @param {String} new_name Subfolder name for foldered data.
      * @return {Promise} When done.
      */
-    register(name: string, as_file: boolean, new_name?: string): Promise {
+    register(name: string, as_file: boolean, new_name?: string): Promise<undefined> {
         var self = this, send;
         return new Promise(function(resolve, reject) {
             new_name = (!!new_name)? ('/' + new_name.replace('/', ':')) : '';
@@ -568,7 +569,7 @@ export class GenericBlock implements OnInit {
      * @param {Boolean} force Force do.
      * @return {Promise} When done.
      */
-    tgName(folder: string, efix: string, force?: boolean): Promise {
+    tgName(folder: string, efix: string, force?: boolean): Promise<undefined> {
         var self = this, date; 
         return new Promise(function(resolve, reject) {
             if(force === true || window.$('#tgname' + self.dataservice.sanit(folder + '/' + efix)).hasClass('green')) {
@@ -630,7 +631,7 @@ export class GenericBlock implements OnInit {
      * @param {Boolean} skip Force skip.
      * @return {Promise} When done.
      */
-    tgData(fname: string, gname: string, skip?: boolean): Promise {
+    tgData(fname: string, gname: string, skip?: boolean): Promise<undefined> {
         var self = this;
         skip = skip === true;
         function allEmpty(): boolean {
@@ -686,7 +687,7 @@ export class GenericBlock implements OnInit {
                 //If it is dated, some more modifications need to be done
                 var is_dated = self.backend.generics[gname][self.backend.generics[gname].length - 1].is_dated;
                 if(is_dated) {
-                    var sd: string = JSON.parse(send)[0].value, from;
+                    var sd: string = JSON.parse(<string>send)[0].value, from;
                     if(self.marked[fname])
                         from = window.$('#sincefrom' + self.dataservice.sanit(fname)).datetimepicker('date').toDate().getTime();
                     else
@@ -709,7 +710,7 @@ export class GenericBlock implements OnInit {
                     send = JSON.stringify(replacement);
                 }
                 //Create it
-                self.dataservice.modifyData(fname, send, is_dated, self.backend.generics[gname].length - 1, {}, fname != gname, self.cached[fname].decr_aes).then(function() {
+                self.dataservice.modifyData(fname, <string>send, is_dated, self.backend.generics[gname].length - 1, {}, fname != gname, self.cached[fname].decr_aes).then(function() {
                     window.$('#tgdata' + self.dataservice.sanit(fname)).removeClass('green in-edit').addClass('btn-link');
                     window.$('#tginput' + self.dataservice.sanit(fname)).css('display', 'none');
                     window.$('#tgdisp' + self.dataservice.sanit(fname)).css('display', 'block');

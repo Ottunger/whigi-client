@@ -59,7 +59,7 @@ export class Profileguard implements CanActivate, CanDeactivate<Filesystem> {
      * @param state Actual state.
      * @return {Boolean} Can go through.
      */
-    canDeactivate(component: Filesystem, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    canDeactivate(component: Filesystem, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
         if(this.backend.forceMove)
             return true;
         if(!component.data_value_file || component.data_value_file.length == 0) {
@@ -115,11 +115,10 @@ export class Fullguard implements CanActivate, CanDeactivate<Dataview> {
      * @param state Actual state.
      * @return {Boolean} Can go through.
      */
-    canDeactivate(component: Dataview, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    canDeactivate(component: Dataview, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
         if(this.backend.forceMove)
             return true;
-        if((!component.new_data || component.new_data.length == 0) &&
-            (!component.new_id || component.new_id.length == 0))
+        if(!component.new_id || component.new_id.length == 0)
             return true;
         return component.dialog(this.backend.transform('confirmation'));
     }
@@ -149,7 +148,7 @@ export class Genguard implements CanDeactivate<Generics> {
      * @param state Actual state.
      * @return {Boolean} Can go through.
      */
-    canDeactivate(component: Generics, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    canDeactivate(component: Generics, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
         if(this.backend.forceMove)
             return true;
         var btns = window.$('.btn-reg-gen');
@@ -182,7 +181,7 @@ export class CSSguard implements CanDeactivate<Generics> {
      * @param state Actual state.
      * @return {Boolean} Can go through.
      */
-    canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
+    canDeactivate(component: any, route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> | boolean {
         this.dataservice.normalCSS();
         return true;
     }

@@ -101,7 +101,7 @@ export class Application {
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private dataservice: Data) {
+    constructor(public backend: Backend, public dataservice: Data) {
         var self = this;
     }
 

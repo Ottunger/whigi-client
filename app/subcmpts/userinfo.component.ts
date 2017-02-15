@@ -12,11 +12,12 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/userinfo.html';
+//import * as template from './templates/userinfo.html';
 
 @Component({
     selector: 'user-info',
-    template: template
+    //template: template
+    templateUrl: './templates/userinfo.html'
 })
 export class Userinfo implements OnInit {
 
@@ -25,7 +26,7 @@ export class Userinfo implements OnInit {
     public bce: string;
     public erase_name: string;
     public erase_addr: string;
-    private pict: string;
+    public pict: string;
 
     /**
      * Creates the component.
@@ -37,8 +38,8 @@ export class Userinfo implements OnInit {
      * @param check Check service.
      * @param auth Auth service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend,
-        private dataservice: Data, private check: ApplicationRef, private auth: Auth) {
+    constructor(public notif: NotificationsService, public backend: Backend,
+        public dataservice: Data, public check: ApplicationRef, public auth: Auth) {
         this.erase_addr = this.backend.transform('__no');
         this.erase_name = this.backend.transform('__no');
     }

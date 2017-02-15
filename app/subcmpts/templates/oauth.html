@@ -5,7 +5,7 @@
         </div>
         <!-- BEGIN GRANT -->
         <div class="page-content" id="pict-user">
-            <h1 class="page-title">{{ dataservice.forDisplay(id_to) }}  
+            <h1 class="page-title">{{ dataservice.forDisplay(for_id) }}  
                 <a href="javascript:;" (click)="router.navigate(reqLink())">
                     <small *ngIf="!!request && !!requester && !!requester.company_info && !!requester.company_info.request && !!requester.company_info.request[request]">
                         {{ requester.company_info.request[request] | translate }}
@@ -22,29 +22,29 @@
                 <div class="panel panel-default">
                     <div *ngIf="!!backend.generics_paths[prefix]" class="panel-heading">
                         <h4 class="panel-title" style="text-align: right;">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ sanitarize(prefix) }}">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(prefix) }}">
                                 <div style="float:left;"><i class="fa fa-user"></i>
-                                    <img *ngIf="backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
-                                        src="{{ backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].icon }}" width="20px" />
-                                    <i *ngIf="backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].icon != '' && backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].icon.indexOf('https') != 0"
-                                        class="{{ backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].icon }}"></i>
+                                    <img *ngIf="!!backend.generics_paths[prefix].icon && backend.generics_paths[prefix].icon.indexOf('https') == 0" class="img-circle img-responsive pull-left"
+                                        src="{{ backend.generics_paths[prefix].icon }}" width="20px" />
+                                    <i *ngIf="!!backend.generics_paths[prefix].icon && backend.generics_paths[prefix].icon.indexOf('https') != 0"
+                                        class="{{ backend.generics_paths[prefix].icon }}"></i>
                                 </div>
-                                {{ backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].descr_key | translate }}
+                                {{ backend.generics_paths[prefix].descr_key | translate }}
                                 <div style="padding-left:50px;float:right;">
                                     <i class="fa fa-chevron-down"></i>
                                 </div>
                             </a>
                         </h4>
                     </div>
-                    <div id="tgabble_{{ sanitarize(prefix) }}" class="panel-collapse collapse" >
+                    <div id="tgabble_{{ dataservice.sanit(prefix) }}" class="panel-collapse collapse" >
                         <div class="panel-body" style="max-height:200px; overflow-y:auto;">
-                            <p>{{ backend.generics_paths[prefix][backend.generics_paths[prefix].length - 1].long_descr_key | translate }}</p>
+                            <p>{{ backend.generics_paths[prefix].long_descr_key | translate }}</p>
                         </div>
                     </div>
                 </div>
                 <div class="clearfix" style="padding-top:10px;text-align:right">
-                    <button type="button" class="btn green" (click)="finish(true)" [disabled]="!allFilled()">{{ 'oauth.ok' | translate }}</button>
-                    <button type="button" class="btn grey" (click)="finish(true)">{{ 'oauth.nok' | translate }}</button>
+                    <button type="button" class="btn green" (click)="finish(true)">{{ 'oauth.ok' | translate }}</button>
+                    <button type="button" class="btn grey" (click)="finish(false)">{{ 'oauth.nok' | translate }}</button>
                 </div>
             </div>
             <!-- END DATA -->

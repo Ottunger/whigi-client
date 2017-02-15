@@ -87,7 +87,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-2 text-right" style="padding-right: 20px;"
-                                        *ngIf="!is_generic || !backend.generics[gen_name][backend.generics[gen_name].length - 1].mode == 'json_keys'">
+                                        *ngIf="!is_generic || backend.generics[gen_name][backend.generics[gen_name].length - 1].mode != 'json_keys'">
                                         {{ 'actual' | translate }}<span>*</span>:
                                     </div>
                                     <div class="col-md-3 text-right" style="padding-right: 20px;">

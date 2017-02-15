@@ -13,10 +13,10 @@ import {NotificationsService} from 'angular2-notifications/components';
 import * as toPromise from 'rxjs/add/operator/toPromise';
 import {Auth} from './auth.service';
 import {Trie} from '../utils/Trie';
-import * as configs from './configs.js';
+import * as configs from './configs';
 
-import * as en from '../dist/i18n/en.js';
-import * as fr from '../dist/i18n/fr.js';
+import * as en from './i18n/en';
+import * as fr from './i18n/fr';
 
 @Injectable()
 export class Backend {
@@ -60,7 +60,8 @@ export class Backend {
     public generics_paths: {[id: string]: {
         descr_key: string,
         long_descr_key: string,
-        help_url: string
+        help_url: string,
+        icons?: string
     }};
     public lang: string;
     private langs: {[id: string]: {[id: string]: string}};
@@ -125,6 +126,23 @@ export class Backend {
             'fr': fr.lang
         };
         this.lang = localStorage.getItem('lang') || 'en';
+
+        //Prepare object for captcha
+        window.regCaptcha = function() {
+            if(!window.$('#grecin').children().length)
+                return;
+            window.$('#grecin').remove();
+            window.$('#grec').html('<div id="grecin"></div>');
+            try {
+                window.grecaptcha.render('grecin', {
+                    sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
+                    callback: 'onCaptcha'
+                });
+            } catch(e) {}
+        };
+        window.onCaptcha = function(g) {
+            this.cpt = g;
+        };
     }
 
     /**
@@ -287,7 +305,7 @@ export class Backend {
         if(!this.master_key) {
             this.decryptMaster();
         }
-        return Array.from(new window.aesjs.ModeOfOperation.ctr(this.toBytes(window.sha256(pwd + this.profile.salt)), new window.aesjs.Counter(0)).encrypt(this.master_key));
+        return Array.from(<any[]>new window.aesjs.ModeOfOperation.ctr(this.toBytes(window.sha256(pwd + this.profile.salt)), new window.aesjs.Counter(0)).encrypt(this.master_key));
     }
 
     /**
@@ -339,7 +357,7 @@ export class Backend {
      * @return {String} Encrypted data.
      */
     encryptRSA(data: number[], key: string): string {
-        var enc = new window.JSEncrypt.JSEncrypt();
+        var enc = new window.JSEncrypt();
         enc.setPublicKey(key);
         var dt = this.arr2str(data);
         return enc.encrypt(window.sha256(dt) + dt);
@@ -356,7 +374,7 @@ export class Backend {
         if(this.rsa_key.length == 0) {
             this.decryptMaster();
         }
-        var dec = new window.JSEncrypt.JSEncrypt();
+        var dec = new window.JSEncrypt();
         for(var i = 0; i < this.rsa_key.length; i++) {
             try {
                 dec.setPrivateKey(this.rsa_key[i]);
@@ -457,7 +475,7 @@ export class Backend {
      * @return {Promise} The result. On error, a description can be found in e.msg.
      */
     private backend(whigi: string, block: boolean, method: string, data: any, url: string, auth: boolean, token: boolean, puzzle?: boolean,
-        ok?: Function, nok?: Function, num?: number): Promise {
+        ok?: Function, nok?: Function, num?: number): Promise<any> {
         var call, puzzle = puzzle || false, self = this, dest;
         var headers: Headers = new Headers();
         num = num || 0;
@@ -500,7 +518,7 @@ export class Backend {
         } else if(auth) {
             headers.append('X-Whigi-Authorization', 'Basic ' + btoa(data.username + ':' + data.password));
         }
-        headers.append('Accept-Language', this.backend.lang + ';q=1');
+        headers.append('Accept-Language', this.lang + ';q=1');
         switch(whigi) {
             case 'whigi':
                 dest = this.BASE_URL;
@@ -593,16 +611,6 @@ export class Backend {
         } while(complete.charAt(0) != '0' || complete.charAt(1) != '0' || complete.charAt(2) != '0');
         return '?puzzle=' + (i - 1);
     }
-
-    /**
-     * Register a string as captcha.
-     * @function resolved
-     * @public
-     * @param {String} cpt Captcha.
-     */
-    resolved(cpt: string) {
-        this.cpt = cpt;
-    }
     
     /**
      * Solves the server captcha, then return a string for it.
@@ -621,7 +629,7 @@ export class Backend {
      * @param {String} known Select id.
      * @return {Promise} JSON response from backend.
      */
-    selectValues(known: string): Promise {
+    selectValues(known: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'selects/' + known, false, false);
     }
 
@@ -634,7 +642,7 @@ export class Backend {
      * @param {Number} to To version.
      * @return {Promise} JSON response from backend.
      */
-    transitionSchema(name: string, as: number, to: number): Promise {
+    transitionSchema(name: string, as: number, to: number): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'schemas/' + window.encodeURIComponent(name) + '/' + as + '/' + to, false, false);
     }
 
@@ -645,7 +653,7 @@ export class Backend {
      * @param {String} name Tooltip name.
      * @return {Promise} JSON response from backend.
      */
-    tooltip(name: string): Promise {
+    tooltip(name: string): Promise<any> {
         return this.backend('whigi', true, 'GET', {}, 'helps/' + name, false, false);
     }
 
@@ -656,7 +664,7 @@ export class Backend {
      * @param {String} known Request id.
      * @return {Promise} JSON response from backend.
      */
-    peekUser(known: string): Promise {
+    peekUser(known: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'peek/' + known, false, false);
     }
 
@@ -667,7 +675,7 @@ export class Backend {
      * @param {String} known Request id.
      * @return {Promise} JSON response from backend.
      */
-    getUser(known: string): Promise {
+    getUser(known: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'user/' + known, true, true);
     }
 
@@ -677,7 +685,7 @@ export class Backend {
      * @public
      * @return {Promise} JSON response from backend.
      */
-    getProfile(): Promise {
+    getProfile(): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'profile', true, true);
     }
 
@@ -689,10 +697,10 @@ export class Backend {
      * @param {Number[]} new_master New master key.
      * @return {Promise} JSON response from backend.
      */
-    closeTo(to: string, new_master: number[]): Promise {
+    closeTo(to: string, new_master: number[]): Promise<any> {
         var nk: number[][] = [];
         for(var i = 0; i < this.rsa_key.length; i++) {
-            nk.push(Array.from(new window.aesjs.ModeOfOperation.ctr(new_master, new window.aesjs.Counter(0))
+            nk.push(Array.from(<any[]>new window.aesjs.ModeOfOperation.ctr(new_master, new window.aesjs.Counter(0))
                 .encrypt(window.aesjs.util.convertStringToBytes(this.rsa_key[i]))));
         }
         return this.backend('whigi', true, 'POST', {
@@ -706,7 +714,7 @@ export class Backend {
      * @public
      * @return {Promise} JSON response from backend.
      */
-    oblit(): Promise {
+    oblit(): Promise<any> {
         return this.backend('whigi', true, 'DELETE', {}, 'profile', true, true);
     }
 
@@ -717,7 +725,7 @@ export class Backend {
      * @param {Object} info Informations.
      * @return {Promise} JSON response from backend.
      */
-    goCompany(info: any): Promise {
+    goCompany(info: any): Promise<any> {
         return this.backend('whigi', true, 'POST', info, 'profile/info', true, true);
     }
 
@@ -728,7 +736,7 @@ export class Backend {
      * @param {String} code New lang.
      * @return {Promise} JSON response from backend.
      */
-    remLang(code: string): Promise {
+    remLang(code: string): Promise<any> {
         return this.backend('whigi', false, 'POST', {lang: code}, 'profile/info3', true, true);
     }
 
@@ -739,7 +747,7 @@ export class Backend {
      * @param {String} bce BCE code.
      * @return {Promise} JSON response from backend.
      */
-    goBCE(bce: string): Promise {
+    goBCE(bce: string): Promise<any> {
         return this.backend('whigi', true, 'GET', {}, 'eid/bce/' + bce, true, true);
     }
 
@@ -749,7 +757,7 @@ export class Backend {
      * @public
      * @return {Promise} JSON response from backend.
      */
-    listData(): Promise {
+    listData(): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'profile/data', true, true);
     }
 
@@ -765,7 +773,7 @@ export class Backend {
      * @param {Number[]} encr_aes Crypted used for crypting data.
      * @return {Promise} JSON response from backend.
      */
-    postData(name: string, encr_data: number[], version: number, is_dated: boolean, is_bound: boolean, encr_aes: number[]): Promise {
+    postData(name: string, encr_data: number[], version: number, is_dated: boolean, is_bound: boolean, encr_aes: number[]): Promise<any> {
         return this.backend('whigi', true, 'POST', {
             name: name,
             encr_data: this.arr2str(encr_data),
@@ -784,7 +792,7 @@ export class Backend {
      * @param {String} password Current password for auth.
      * @return {Promise} JSON response from backend.
      */
-    updateProfile(new_password: string, password: string): Promise {
+    updateProfile(new_password: string, password: string): Promise<any> {
         return this.backend('whigi', true, 'POST', {
             new_password: window.sha256(new_password),
             encr_master_key: this.encryptMasterAESAsNumber(new_password),
@@ -802,7 +810,7 @@ export class Backend {
      * @param {String} password Current password for auth.
      * @return {Promise} JSON response from backend.
      */
-    changeUsername(uname: string, password: string): Promise {
+    changeUsername(uname: string, password: string): Promise<any> {
         return this.backend('whigi', true, 'POST', {
             new_username: uname,
             username: this.profile._id,
@@ -818,7 +826,7 @@ export class Backend {
      * @param {String} password Hash of current password for auth.
      * @return {Promise} JSON response from backend.
      */
-    updateProfileForReset(new_password: string, encr_master_key: string): Promise {
+    updateProfileForReset(new_password: string, encr_master_key: string): Promise<any> {
         return this.backend('whigi', true, 'POST', {
             new_password: window.sha256(new_password),
             encr_master_key: encr_master_key
@@ -836,7 +844,7 @@ export class Backend {
      * @param {Boolean} is_company Create a company account.
      * @return {Promise} JSON response from backend.
      */
-    createUser(username: string, password: string, more?: any[], email?: string, is_company?: boolean): Promise {
+    createUser(username: string, password: string, more?: any[], email?: string, is_company?: boolean): Promise<any> {
         var post = {
             username: username,
             password: password
@@ -859,7 +867,7 @@ export class Backend {
      * @param {Boolean} is_company Create a company account.
      * @return {Promise} JSON response from backend.
      */
-    ackUser(username: string, pubkey: string, is_company?: boolean): Promise {
+    ackUser(username: string, pubkey: string, is_company?: boolean): Promise<any> {
         var post = {
             username: username,
             public_pem: pubkey
@@ -878,7 +886,7 @@ export class Backend {
      * @param {Boolean} is_eternal Create a full token.
      * @return {Promise} JSON response from backend.
      */
-    createToken(username: string, password: string, is_eternal: boolean): Promise {
+    createToken(username: string, password: string, is_eternal: boolean): Promise<any> {
         return this.backend('whigi', true, 'POST', {
             username: username,
             password: window.sha256(password),
@@ -893,7 +901,7 @@ export class Backend {
      * @param {Boolean} all To remove all tokens.
      * @return {Promise} JSON response from backend.
      */
-    removeTokens(all: boolean): Promise {
+    removeTokens(all: boolean): Promise<any> {
         return this.backend('whigi', false, 'DELETE', {}, 'profile/token' + (all? '' : ('?token=' + this.auth.getParams()[0])), true, true);
     }
 
@@ -907,7 +915,7 @@ export class Backend {
      * @param {Boolean} admin Create an admin account.
      * @return {Promise} JSON response from backend.
      */
-    createOAuth(for_id: string, prefix: string, token?: string, admin?: boolean): Promise {
+    createOAuth(for_id: string, prefix: string, token?: string, admin?: boolean): Promise<any> {
         var post = {
             for_id: for_id,
             prefix: prefix
@@ -926,7 +934,7 @@ export class Backend {
      * @param {String} id token id.
      * @return {Promise} JSON response from backend.
      */
-    removeOAuth(id: string): Promise {
+    removeOAuth(id: string): Promise<any> {
         return this.backend('whigi', true, 'DELETE', {}, 'oauth/' + id, true, true);
     }
 
@@ -937,7 +945,7 @@ export class Backend {
      * @param {String} query Query.
      * @return {Promise} JSON response from backend.
      */
-    nominatim(query: string): Promise {
+    nominatim(query: string): Promise<any> {
         return this.backend('whigi', false, 'POST', {}, 'nominatim/search.php?format=json&limit=1&q=' + query, true, true);
     }
 
@@ -950,7 +958,7 @@ export class Backend {
      * @param {String} payer_id Payer ID.
      * @return {Promise} JSON response from backend.
      */
-    doPay(pathfor: string, pid:string, payer_id: string): Promise {
+    doPay(pathfor: string, pid:string, payer_id: string): Promise<any> {
         return this.backend('whigi', false, 'POST', {payer_id: payer_id}, 'payed/' + window.encodeURIComponent(pathfor) + '/' + pid, true, true);
     }
 
@@ -961,7 +969,7 @@ export class Backend {
      * @param {String} pathfor Path to be credited.
      * @return {Promise} JSON response from backend.
      */
-    askPay(pathfor: string): Promise {
+    askPay(pathfor: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'payed/init/begin/' + window.encodeURIComponent(pathfor), true, true);
     }
 
@@ -972,7 +980,7 @@ export class Backend {
      * @param {String} dataid Request id.
      * @return {Promise} JSON response from backend.
      */
-    getData(dataid: string): Promise {
+    getData(dataid: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'data/' + dataid, true, true);
     }
 
@@ -983,7 +991,7 @@ export class Backend {
      * @param {String} name Request name.
      * @return {Promise} JSON response from backend.
      */
-    getDataByName(name: string): Promise {
+    getDataByName(name: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'data/byname/' + window.encodeURIComponent(name), true, true);
     }
 
@@ -995,7 +1003,7 @@ export class Backend {
      * @param {String} now New name.
      * @return {Promise} JSON response from backend.
      */
-    rename(old: string, now: string): Promise {
+    rename(old: string, now: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'data/' + window.encodeURIComponent(old) + '/to/' + window.encodeURIComponent(now), true, true, true);
     }
 
@@ -1006,7 +1014,7 @@ export class Backend {
      * @param {String} name Data name.
      * @return {Promise} JSON response from backend.
      */
-    triggerVaults(name: string): Promise {
+    triggerVaults(name: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'data/trigger/' + window.encodeURIComponent(name), true, true);
     }
 
@@ -1017,7 +1025,7 @@ export class Backend {
      * @param {String} name Data name.
      * @return {Promise} JSON response from backend.
      */
-    removeData(name: string): Promise {
+    removeData(name: string): Promise<any> {
         return this.backend('whigi', true, 'DELETE', {}, 'data/' + window.encodeURIComponent(name), true, true);
     }
 
@@ -1029,7 +1037,7 @@ export class Backend {
      * @param {String} link_name New name.
      * @return {Promise} JSON response from backend.
      */
-    linkVault(vault_id: string, link_name: string): Promise {
+    linkVault(vault_id: string, link_name: string): Promise<any> {
         return this.backend('whigi', false, 'POST', {
             vault_id: vault_id,
             data_name: link_name
@@ -1053,7 +1061,7 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     createVault(data_name: string, links: string[], real_name: string, shared_to_id: string, data_crypted_aes: number[], aes_crypted_shared_pub: string,
-        version: number, expire_epoch?: number, trigger?: string, storable?: boolean): Promise {
+        version: number, expire_epoch?: number, trigger?: string, storable?: boolean): Promise<any> {
         var post = {
             data_name: data_name,
             links: links,
@@ -1078,7 +1086,7 @@ export class Backend {
      * @param {String} vault_id Vault id.
      * @return {Promise} JSON response from backend.
      */
-    revokeVault(vault_id: string): Promise {
+    revokeVault(vault_id: string): Promise<any> {
         return this.backend('whigi', true, 'DELETE', {}, 'vault/' + vault_id, true, true);
     }
 
@@ -1089,7 +1097,7 @@ export class Backend {
      * @param {String} vault_id Vault id.
      * @return {Promise} JSON response from backend.
      */
-    revokeVaultFromGrantee(vault_id: string): Promise {
+    revokeVaultFromGrantee(vault_id: string): Promise<any> {
         return this.backend('whigi', false, 'DELETE', {}, 'vault/forother/' + vault_id, true, true);
     }
 
@@ -1100,7 +1108,7 @@ export class Backend {
      * @param {String} vault_id Vault id.
      * @return {Promise} JSON response from backend.
      */
-    getVault(vault_id: string): Promise {
+    getVault(vault_id: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'vault/' + vault_id, true, true);
     }
 
@@ -1111,7 +1119,7 @@ export class Backend {
      * @param {String} vault_id Vault id.
      * @return {Promise} JSON response from backend.
      */
-    getAccessVault(vault_id: string): Promise {
+    getAccessVault(vault_id: string): Promise<any> {
         return this.backend('whigi', false, 'GET', {}, 'vault/time/' + vault_id, true, true);
     }
 
@@ -1126,7 +1134,7 @@ export class Backend {
      * @param {String} lang Language code.
      * @return {Promise} JSON response from backend.
      */
-    askShare(data_list: string[], towards: string, expire_epoch: number, trigger: string, lang: string): Promise {
+    askShare(data_list: string[], towards: string, expire_epoch: number, trigger: string, lang: string): Promise<any> {
         return this.backend('whigi', false, 'POST', {
             list: data_list,
             towards: towards,
@@ -1143,7 +1151,7 @@ export class Backend {
      * @param {String} k Key.
      * @return {Promise} JSON response from backend.
      */
-    getRestore(k: string): Promise {
+    getRestore(k: string): Promise<any> {
         return this.backend('whigi-restore', false, 'GET', {}, 'get/' + k, false, false);
     }
 
@@ -1154,7 +1162,7 @@ export class Backend {
      * @param {String} id Id.
      * @return {Promise} JSON response from backend.
      */
-    requestRestore(id: string): Promise {
+    requestRestore(id: string): Promise<any> {
         return this.backend('whigi-restore', true, 'GET', {}, 'request/' + id, false, false);
     }
 
@@ -1166,7 +1174,7 @@ export class Backend {
      * @param {String} half Half password.
      * @return {Promise} JSON response from backend.
      */
-    mixRestore(id: string, half: string): Promise {
+    mixRestore(id: string, half: string): Promise<any> {
         return this.backend('whigi-restore', false, 'GET', {}, 'mix/' + id + '/' + window.encodeURIComponent(half), false, false);
     }
 
@@ -1179,11 +1187,11 @@ export class Backend {
      * @param {String} query Query.
      * @return {Promise} JSON response from backend.
      */
-    searchAds(ccode: string, points: {lat: number, lon: number}[], query: string): Promise {
+    searchAds(ccode: string, points: {lat: number, lon: number}[], query: string): Promise<any> {
         return this.backend('whigi-advert-' + ccode, false, 'POST', {
             points: points,
             terms: query.split(/[\s,]/),
-            lang: this.backend.lang
+            lang: this.lang
         }, 'search', false, false);
     }
 

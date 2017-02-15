@@ -8,12 +8,13 @@
     "experimentalDecorators": true,
     "lib": ["es2015", "dom"],
     "noImplicitAny": false,
+    "removeComments": true,
     "suppressImplicitAnyIndexErrors": true
   },
 
-  "include": [
-    "utils/*",
-    "app/**/*"
+  "files": [
+    "app/app.module.ts",
+    "app/main.ts"
   ],
 
   "angularCompilerOptions": {

@@ -23,13 +23,13 @@ export class Data {
     public wentLogin: boolean;
     public m : {keys: {[id: string]: {is_i18n: boolean, holds: string[], left_num: number}}, holds: {[id: string]: {is_i18n: boolean, holds: string[], open: boolean}}};
     public ev: EventEmitter<[string, boolean]>;
-    private maes: number[];
-    private selects: {[id: string]: {values: string[], more?: {[id: string]: string[]}}};
-    private selectsCache: {[id: string]: any};
-    private marked: {[id: string]: boolean};
-    private ee: EventEmitter<number>;
-    private how: EventEmitter<number>;
-    private tickee: Function;
+    public maes: number[];
+    public selects: {[id: string]: {values: string[], more?: {[id: string]: string[]}}};
+    public selectsCache: {[id: string]: any};
+    public marked: {[id: string]: boolean};
+    public ee: EventEmitter<number>;
+    public how: EventEmitter<number>;
+    public tickee: Function;
 
     /**
      * Creates the service.
@@ -78,7 +78,7 @@ export class Data {
      * @public
      * @return {Promise} When done.
      */
-    mPublic(): Promise {
+    mPublic(): Promise<any> {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getProfile().then(function(p) {
@@ -441,11 +441,11 @@ export class Data {
      * @param {Boolean} as_file Load as file.
      * @return {String} Built up data or undefined if cannot pass test.
      */
-    recGeneric(raw_data: string, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
+    recGeneric(raw_data: string | false, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
         var thisgen = this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1], since;
         raw_data = (thisgen.mode == 'checkbox')?
             (raw_data || false) : (!!raw_data? raw_data.toString().trim() : '');
-        if(raw_data.length > 127 && !as_file)
+        if(!!raw_data && raw_data.length > 127 && !as_file)
             return ['error', 'generics.tooLong', ''];
         //Build up the data, keys wrapping and date wrapping
         if(thisgen.mode == 'json_keys') {
@@ -487,7 +487,7 @@ export class Data {
         if(res !== true) {
             return ['error', ...res];
         }
-        return raw_data;
+        return raw_data + '';
     }
 
     /**
@@ -497,7 +497,7 @@ export class Data {
      * @param {Boolean} reso Whether to perform heavy computations.
      * @return {Promise} Promise.
      */
-    listData(reso: boolean): Promise {
+    listData(reso: boolean): Promise<undefined> {
         var self = this;
 
         return new Promise(function(resolve, reject) {
@@ -593,7 +593,7 @@ export class Data {
      * @param {Boolean} front Allows to run in background.
      * @return {Promise} Whether it went OK.
      */
-    newData(is_bound: boolean, name: string, value: string, is_dated: boolean, version: number, ignore?: boolean, naes?: number[], front?: boolean): Promise {
+    newData(is_bound: boolean, name: string, value: string, is_dated: boolean, version: number, ignore?: boolean, naes?: number[], front?: boolean): Promise<number[]> {
         var self = this, enc_key: number[];
         ignore = ignore || false;
 
@@ -607,11 +607,11 @@ export class Data {
 
             //If we create/modify a share_as_folder data, we'll end up here. Let's check that to update the upwards data.
             var upwards = name.replace(/\/[^\/]*$/, '');
+            function change(dict: {[id: string]: string}, taes: number[]) {
+                dict[name.replace(/.+\//, '')] = value;
+                self.modifyData(upwards, JSON.stringify(dict), false, 0, {}, false, taes).then(function() {}, function(e) {});
+            }
             if(upwards in self.backend.generics && self.backend.generics[upwards][self.backend.generics[upwards].length - 1].share_as_folder) {
-                function change(dict: {[id: string]: string}, taes: number[]) {
-                    dict[name.replace(/.+\//, '')] = value;
-                    self.modifyData(upwards, JSON.stringify(dict), false, 0, {}, false, taes).then(function() {}, function(e) {});
-                }
                 //Check if built once
                 if(upwards in self.backend.profile.data) {
                     self.getData(self.backend.profile.data[upwards].id, false).then(function(data) {
@@ -658,7 +658,7 @@ export class Data {
      * @param {String} shared_to_id ID to revoke.
      * @return {Promise} Whether went OK.
      */
-    revoke(data_name: string, shared_to_id: string): Promise {
+    revoke(data_name: string, shared_to_id: string): Promise<undefined> {
         var self = this;
         return new Promise(function(resolve, reject) {
             if(!(data_name in self.backend.profile.data)) {
@@ -686,7 +686,7 @@ export class Data {
      * @param {String} name Data name.
      * @return {Promise} Of whether went OK.
      */
-    remove(name: string): Promise {
+    remove(name: string): Promise<undefined> {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.removeData(name).then(function() {
@@ -712,7 +712,8 @@ export class Data {
      * @param {Number[]} enc_key Used encryption key for bound data.
      * @return {Promise} Whether it went OK.
      */
-    modifyData(name: string, value: string, is_dated: boolean, version: number, users_mapping: {[id: string]: {date: Date, trigger: string, shared_as: string}}, is_folder: boolean, enc_key: number[]): Promise {
+    modifyData(name: string, value: string, is_dated: boolean, version: number, users_mapping: {[id: string]: {date: Date, trigger: string, shared_as: string}},
+        is_folder: boolean, enc_key: number[]): Promise<undefined> {
         var i = 0, names = Object.getOwnPropertyNames(users_mapping), max = names.length, went = true;
         var self = this;
 
@@ -757,7 +758,7 @@ export class Data {
      * @param {String} id Vault id.
      * @return {Promise} Responses decrypted.
      */
-    getVault(id: string): Promise {
+    getVault(id: string): Promise<any> {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getVault(id).then(function(vault) {
@@ -789,7 +790,8 @@ export class Data {
      * @param {String[]} links Links to add.
      * @return {Promise} Whether went OK with remote profile and newly created vault.
      */
-    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string, is_storable: boolean, enc_key: number[], front?: boolean, links?: string[]): Promise {
+    grantVault(id: string, name: string, real_name: string, decr_data: string, version: number, max_date: Date, new_trigger: string,
+        is_storable: boolean, enc_key: number[], front?: boolean, links?: string[]): Promise<any[]> {
         var self = this;
         return new Promise(function(resolve, reject) {
             self.backend.getUser(id).then(function(user) {
@@ -836,7 +838,7 @@ export class Data {
      * @param {String[]} User id's.
      * @return {Promise} To have a dictionary indexed by id's.
      */
-    populateUsers(ids: string[]): Promise {
+    populateUsers(ids: string[]): Promise<any> {
         var i = 0, max = ids.length;
         var ret = {}
         var self = this;
@@ -871,7 +873,7 @@ export class Data {
      * @param {Boolean} byName If want to use name rather than ID.
      * @return {Promise} The datafragment, completed with decrypted data.
      */
-    getData(id: string, front?: boolean, inter?: Function, byName?: boolean): Promise {
+    getData(id: string, front?: boolean, inter?: Function, byName?: boolean): Promise<any> {
         var self = this, getter: Function = (!!byName && byName)? this.backend.getDataByName : this.backend.getData;
         return new Promise(function(resolve, reject) {
             getter.call(self.backend, id).then(function(data) {
@@ -933,7 +935,7 @@ export class Data {
      * @param {String} s String.
      * @return {String} Safe.
      */
-    sanit(s: string): string {
+    sanit(s?: string): string {
         if(!s)
             return '';
         return s.replace(/[\/\.# :*à,@]/g, '_');
@@ -1215,7 +1217,7 @@ export class Data {
      * @param {Object} me Oauths-like.
      * @return {Promise} When done.
      */
-    static grant(me: {backend: Backend, dataservice: Data, auth: string, prefix: string, notif: NotificationsService, admin: boolean}): Promise {
+    static grant(me: {backend: Backend, dataservice: Data, auth: string, prefix: string, notif: NotificationsService, admin: boolean}): Promise<undefined> {
         return new Promise(function(resolve, reject) {
             for(var i = 0; i < me.backend.profile.oauth.length; i++) {
                 if(me.backend.profile.oauth[i].for_id == me.auth.toLowerCase()) {
@@ -1296,7 +1298,7 @@ export class Data {
      * @param {String} email Email.
      * @return {Promise} Whether should close.
      */
-    addUser(uname: string, pwd: string, pwd2: string, fname: string, lname: string, mail: string): Promise {
+    addUser(uname: string, pwd: string, pwd2: string, fname: string, lname: string, mail: string): Promise<any> {
         var self = this, cnow = this.auth.getParams();
         var naming = JSON.stringify({'generics.last_name': fname, 'generics.first_name': lname});
         var my_id = self.backend.profile._id;

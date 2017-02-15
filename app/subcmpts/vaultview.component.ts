@@ -13,10 +13,11 @@ import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/vaultview.html';
+//import * as template from './templates/vaultview.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/vaultview.html'
 })
 export class Vaultview implements OnInit, OnDestroy {
 
@@ -27,8 +28,8 @@ export class Vaultview implements OnInit, OnDestroy {
     public is_generic: boolean;
     public version: number;
     public gen_name: string;
-    private route_back: string;
-    private sub: Subscription;
+    public route_back: string;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -40,8 +41,8 @@ export class Vaultview implements OnInit, OnDestroy {
      * @param routed Parameters service.
      * @param dataservice Data service.
      */
-    constructor(private router: Router, private backend: Backend,
-        private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
+    constructor(public router: Router, public backend: Backend,
+        public notif: NotificationsService, public routed: ActivatedRoute, public dataservice: Data) {
         this.vault = {data_name: '', real_name: ''};
         this.decr_data = '';
         this.is_generic = false;

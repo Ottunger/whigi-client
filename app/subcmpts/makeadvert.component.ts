@@ -11,10 +11,11 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/makeadvert.html';
+//import * as template from './templates/makeadvert.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/makeadvert.html'
 })
 export class Makeadvert implements OnInit {
 
@@ -43,8 +44,8 @@ export class Makeadvert implements OnInit {
      * @param check Check service.
      * @param dataservice Data service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend, 
-        private check: ApplicationRef, private dataservice: Data) {
+    constructor(public notif: NotificationsService, public backend: Backend, 
+        public check: ApplicationRef, public dataservice: Data) {
         this.campaigns = {};
         this.topics = {};
         this.topics[this.backend.lang] = '';

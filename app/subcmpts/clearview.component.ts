@@ -11,11 +11,12 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/clearview.html';
+//import * as template from './templates/clearview.html';
 
 @Component({
     selector: 'clear-view',
-    template: template
+    //template: template
+    templateUrl: './templates/clearview.html'
 })
 export class Clearview implements OnInit, OnChanges {
 
@@ -32,9 +33,9 @@ export class Clearview implements OnInit, OnChanges {
     @Input() is_generic: boolean;
     @Input() changed: EventEmitter<string>;
     @Output() notify: EventEmitter<string>;
-    private values: {from: number | Date, value: string}[];
-    private reset: EventEmitter<any>;
-    private cvRst: EventEmitter<any>;
+    public values: {from: number | Date, value: string}[];
+    public reset: EventEmitter<any>;
+    public cvRst: EventEmitter<any>;
 
     /**
      * Creates the component.
@@ -45,7 +46,7 @@ export class Clearview implements OnInit, OnChanges {
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
+    constructor(public notif: NotificationsService, public backend: Backend, public dataservice: Data) {
         this.values = undefined;
         this.notify = new EventEmitter<string>();
         this.reset = new EventEmitter<any>();
@@ -99,16 +100,16 @@ export class Clearview implements OnInit, OnChanges {
         if(!this.values) {
             this.values = this.dataservice.strToObj(this.decr_data);
             for(var i = 0; i < this.values.length; i++) {
-                this.values[i].from = new Date(this.values[i].from);
-                window.$('#pick-chg' + this.dataservice.sanit(this.values[i].from.toLocaleString(this.backend.lang))).ready(function() {
-                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.backend.lang))).datetimepicker();
-                    window.$('#pick-chg' + self.dataservice.sanit(self.values[this].from.toLocaleString(self.backend.lang))).datetimepicker('date', window.moment(self.values[this].from));
+                this.values[i].from = new Date(<any>(this.values[i].from));
+                window.$('#pick-chg' + this.dataservice.sanit((<any>this.values[i].from).toLocaleString(this.backend.lang))).ready(function() {
+                    window.$('#pick-chg' + self.dataservice.sanit((<any>self.values[this].from).toLocaleString(self.backend.lang))).datetimepicker();
+                    window.$('#pick-chg' + self.dataservice.sanit((<any>self.values[this].from).toLocaleString(self.backend.lang))).datetimepicker('date', window.moment(self.values[this].from));
                 }.bind(i));
             }
             if(this.values.length == 0)
                 this.values = undefined;
         }
-        return this.values;
+        return <any>this.values;
     }
 
     /**

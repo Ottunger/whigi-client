@@ -14,18 +14,19 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/merge.html';
+//import * as template from './templates/merge.html';
 
 @Component({
     selector: 'merge-account',
-    template: template
+    //template: template
+    templateUrl: './templates/merge.html'
 })
 export class Merge {
 
     public login: string;
     public password: string;
     public erase: boolean;
-    private sub: Subscription;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -39,8 +40,8 @@ export class Merge {
      * @param routed Activated route.
      * @param router Routing service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend, private auth: Auth,
-        private dataservice: Data, private check: ApplicationRef, private routed: ActivatedRoute, private router: Router) {
+    constructor(public notif: NotificationsService, public backend: Backend, public auth: Auth,
+        public dataservice: Data, public check: ApplicationRef, public routed: ActivatedRoute, public router: Router) {
         this.erase = false;
     }
 
@@ -112,7 +113,7 @@ export class Merge {
      * @public
      * @return {Promise} When done.
      */
-    merge(): Promise {
+    merge(): Promise<undefined> {
         var self = this, fnew: boolean = true;
         var current = this.auth.getParams();
         this.backend.decryptMaster();
@@ -164,6 +165,36 @@ export class Merge {
                         //Manage UI
                         self.manageUI(true);
                         
+                        function nnew(work: any) {
+                            self.dataservice.newData(work.is_bound, work.name, work.decr_data, work.is_dated, work.version, self.erase, undefined, false).then(function(naes: number[]) {
+                                work.mode = 'giveVault',
+                                work.index = 0;
+                                work.decr_aes = naes;
+                                array.push(work);
+                                next();
+                            }, function(e) {
+                                if(e[0] == 'exists') {
+                                    self.dataservice.getData(self.backend.profile.data[work.name].id, false).then(function(data) {
+                                        work.mode = 'giveVault',
+                                        work.index = 0;
+                                        work.decr_data = data.decr_data;
+                                        work.decr_aes = data.decr_aes;
+                                        work.version = data.version;
+                                        work.is_dated = data.is_dated;
+                                        array.push(work);
+                                        next();
+                                    }, function(e) {
+                                        self.manageUI(false);
+                                        self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
+                                        resolve();
+                                    });
+                                } else {
+                                    self.manageUI(false);
+                                    self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
+                                    resolve();
+                                }
+                            });
+                        }
                         function next() {
                             if(index < array.length) {
                                 var work = array[index];
@@ -220,36 +251,6 @@ export class Merge {
                                         }
                                         break;
                                     case 'new':
-                                        function nnew() {
-                                            self.dataservice.newData(work.is_bound, work.name, work.decr_data, work.is_dated, work.version, self.erase, undefined, false).then(function(naes: number[]) {
-                                                work.mode = 'giveVault',
-                                                work.index = 0;
-                                                work.decr_aes = naes;
-                                                array.push(work);
-                                                next();
-                                            }, function(e) {
-                                                if(e[0] == 'exists') {
-                                                    self.dataservice.getData(self.backend.profile.data[work.name].id, false).then(function(data) {
-                                                        work.mode = 'giveVault',
-                                                        work.index = 0;
-                                                        work.decr_data = data.decr_data;
-                                                        work.decr_aes = data.decr_aes;
-                                                        work.version = data.version;
-                                                        work.is_dated = data.is_dated;
-                                                        array.push(work);
-                                                        next();
-                                                    }, function(e) {
-                                                        self.manageUI(false);
-                                                        self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
-                                                        resolve();
-                                                    });
-                                                } else {
-                                                    self.manageUI(false);
-                                                    self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
-                                                    resolve();
-                                                }
-                                            });
-                                        }
                                         if(fnew) {
                                             fnew = false;
                                             self.backend.closeTo(my_id, my_master).then(function() {
@@ -260,15 +261,15 @@ export class Merge {
                                                 self.dataservice.reloadProfile(current[4], current[2], resolve, resolve);
                                             });
                                         } else {
-                                            nnew();
+                                            nnew(work);
                                         }
                                         break;
                                     case 'giveVault':
                                         var keys = Object.getOwnPropertyNames(work.shared_to);
                                         if(keys.length > work.index) {
                                             var key = keys[work.index];
-                                            self.dataservice.grantVault(key, (work.shared_to[key]).sa, work.name, work.decr_data, work.version, (work.shared_to[key]).ee,
-                                                (work.shared_to[key]).trigger, false, work.decr_aes, false, (work.shared_to[key]).links).then(function() {
+                                            self.dataservice.grantVault(key, (<any>work.shared_to[key]).sa, work.name, work.decr_data, work.version, (<any>work.shared_to[key]).ee,
+                                                (<any>work.shared_to[key]).trigger, false, work.decr_aes, false, (<any>work.shared_to[key]).links).then(function() {
                                                 work.index++;
                                                 index--;
                                                 next();

@@ -9,18 +9,19 @@ declare var window : any
 import {Component, enableProdMode, Input, OnInit, OnDestroy, Renderer, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
 enableProdMode();
-import * as template from './templates/breadcrump.html';
+//import * as template from './templates/breadcrump.html';
 
 @Component({
     selector: 'breadcrump',
-    template: template
+    //template: template
+    templateUrl: './templates/breadcrump.html'
 })
 export class Breadcrump implements OnInit, OnDestroy {
 
-    private name: string;
-    private folder: boolean;
+    public name: string;
+    public folder: boolean;
     @Input() ev: EventEmitter<[string, boolean]>;
-    private renderFunc: Function;
+    public renderFunc: Function;
 
     /**
      * Creates the component.
@@ -29,7 +30,7 @@ export class Breadcrump implements OnInit, OnDestroy {
      * @param render Rendering service.
      * @param router Routing service.
      */
-    constructor(private render: Renderer, private router: Router) {
+    constructor(public render: Renderer, public router: Router) {
 
     }
 

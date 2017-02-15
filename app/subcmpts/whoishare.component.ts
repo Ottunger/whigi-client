@@ -12,15 +12,16 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/whoishare.html';
+//import * as template from './templates/whoishare.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/whoishare.html'
 })
 export class WhoIShare {
 
     public users: {[id: string]: any};
-    private my_shares: string[];
+    public my_shares: string[];
 
     /**
      * Creates the component.
@@ -31,8 +32,8 @@ export class WhoIShare {
      * @param notif Notification service.
      * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private router: Router,
-        private notif: NotificationsService, private dataservice: Data) {
+    constructor(public backend: Backend, public router: Router,
+        public notif: NotificationsService, public dataservice: Data) {
         this.users = {};
     }
 

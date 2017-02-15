@@ -13,10 +13,11 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/oauths.html';
+//import * as template from './templates/oauths.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/oauths.html'
 })
 export class Oauths implements OnInit {
 
@@ -36,8 +37,8 @@ export class Oauths implements OnInit {
      * @param dataservice Data service.
      * @param authing Auth service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend,
-        private router: Router, private dataservice: Data, private authing: Auth) {
+    constructor(public notif: NotificationsService, public backend: Backend,
+        public router: Router, public dataservice: Data, public authing: Auth) {
         this.admin = false;
         this.usernames = {};
     }
@@ -139,11 +140,11 @@ export class Oauths implements OnInit {
         }, function(e) {
             self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noRevoke'));
         });
+        function complete() {
+            self.backend.removeData('oauths/' + for_id);
+            delete self.backend.profile.data['oauths/' + for_id];
+        }
         if(('oauths/' + for_id) in this.backend.profile.data) {
-            function complete() {
-                self.backend.removeData('oauths/' + for_id);
-                delete self.backend.profile.data['oauths/' + for_id];
-            }
             //Check if given
             if(for_id in self.backend.profile.data['oauths/' + for_id].shared_to) {
                 self.backend.revokeVault(self.backend.profile.data['oauths/' + for_id].shared_to[for_id]).then(function() {

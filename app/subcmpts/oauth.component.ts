@@ -14,10 +14,11 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/oauth.html';
+//import * as template from './templates/oauth.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/oauth.html'
 })
 export class Oauth implements OnInit, OnDestroy {
 
@@ -28,7 +29,7 @@ export class Oauth implements OnInit, OnDestroy {
     public return_url_deny: string;
     public token: string;
     public requester: any;
-    private sub: Subscription;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -42,8 +43,8 @@ export class Oauth implements OnInit, OnDestroy {
      * @param check Check service.
      * @param dataservice Data service.
      */
-    constructor(private router: Router, private notif: NotificationsService, private auth: Auth,
-        private routed: ActivatedRoute, private backend: Backend, private check: ApplicationRef, private dataservice: Data) {
+    constructor(public router: Router, public notif: NotificationsService, public auth: Auth,
+        public routed: ActivatedRoute, public backend: Backend, public check: ApplicationRef, public dataservice: Data) {
         this.requester = {};
     }
 
@@ -99,6 +100,16 @@ export class Oauth implements OnInit, OnDestroy {
     private mixin(url: string, params: string[]): string {
         var ps = params.join('&');
         return url + (url.indexOf('?') > 0)? '&' : '?' + ps;
+    }
+
+    /**
+     * Link to requester profile.
+     * @function reqLink
+     * @public
+     * @return {String[]} Link.
+     */
+    reqLink(): string[] {
+        return ['/user', window.encodeURIComponent(this.requester._id)];
     }
 
     /**

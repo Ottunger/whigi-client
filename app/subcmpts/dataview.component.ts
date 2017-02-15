@@ -13,10 +13,11 @@ import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/dataview.html';
+//import * as template from './templates/dataview.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/dataview.html'
 })
 export class Dataview implements OnInit, OnDestroy {
 
@@ -32,11 +33,11 @@ export class Dataview implements OnInit, OnDestroy {
     public version: number;
     public gen_name: string;
     public filter: string;
-    private backuri: string;
-    private to_filesystem: boolean;
-    private sharedVector: string[];
-    private changed: EventEmitter<string>;
-    private sub: Subscription;
+    public backuri: string;
+    public to_filesystem: boolean;
+    public sharedVector: string[];
+    public changed: EventEmitter<string>;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -47,8 +48,8 @@ export class Dataview implements OnInit, OnDestroy {
      * @param notif Notifications service.
      * @param routed Parameters service.
      */
-    constructor(private backend: Backend, private router: Router,
-        private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data, private check: ApplicationRef) {
+    constructor(public backend: Backend, public router: Router,
+        public notif: NotificationsService, public routed: ActivatedRoute, public dataservice: Data, public check: ApplicationRef) {
         this.decr_data = '[]';
         this.is_generic = false;
         this.is_storable = false;
@@ -168,10 +169,10 @@ export class Dataview implements OnInit, OnDestroy {
     /**
      * Modifies a data the way asked.
      * @function mod
-     * @private
+     * @public
      * @param {String} replacement New value.
      */
-    private mod(replacement: string) {
+    mod(replacement: string) {
         var self = this, names = this.sharedIds(), dict: {[id: string]: {date: Date, trigger: string, shared_as: string}} = {}
         for(var i = 0; i < names.length; i++) {
             if(!!this.timings[names[i]])
@@ -352,7 +353,7 @@ export class Dataview implements OnInit, OnDestroy {
      * @param {String} msg Message.
      * @return {Promise} OK or not.
      */
-    dialog(msg: string): Promise {
+    dialog(msg: string): Promise<boolean> {
         return new Promise<boolean>(function(resolve, reject) {
             resolve(window.confirm(msg));
         });

@@ -11,17 +11,18 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/getadvert.html';
+//import * as template from './templates/getadvert.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/getadvert.html'
 })
 export class Getadvert implements OnInit {
 
     public query: string;
     public results: Set<{cid: string, who: string, url: string}>;
     public users: {[id: string]: any};
-    private locations: {lat: number, lon: number, ccode: string}[];
+    public locations: {lat: number, lon: number, ccode: string}[];
 
     /**
      * Creates the component.
@@ -31,7 +32,7 @@ export class Getadvert implements OnInit {
      * @param backend Backend service.
      * @param dataservice Data service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
+    constructor(public notif: NotificationsService, public backend: Backend, public dataservice: Data) {
         this.locations = [];
         this.results = new Set();
         this.users = {};

@@ -11,11 +11,12 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/clearsingleview.html';
+//import * as template from './templates/clearsingleview.html';
 
 @Component({
     selector: 'clear-single-view',
-    template: template
+    //template: template
+    templateUrl: './templates/clearsingleview.html'
 })
 export class ClearSingleview implements OnInit {
 
@@ -25,7 +26,7 @@ export class ClearSingleview implements OnInit {
     @Input() gen: string;
     @Input() version: number;
     @Input() rst: EventEmitter<any>;
-    private asjson: any;
+    public asjson: any;
 
     /**
      * Creates the component.
@@ -36,7 +37,7 @@ export class ClearSingleview implements OnInit {
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend, private dataservice: Data) {
+    constructor(public notif: NotificationsService, public backend: Backend, public dataservice: Data) {
         
     }
 

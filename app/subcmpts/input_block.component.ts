@@ -10,20 +10,21 @@ import {Component, enableProdMode, Input, Output, EventEmitter, OnInit} from '@a
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/input_block.html';
+//import * as template from './templates/input_block.html';
 
 @Component({
     selector: 'input_block',
-    template: template
+    //template: template
+    templateUrl: './templates/input_block.html'
 })
 export class InputBlock implements OnInit {
 
     public within: string;
     public ssettings: any;
-    private isClosed: boolean;
-    private new_data: string | string[];
-    private new_data_file: string;
-    private new_datas: {[id: string]: string | string[]};
+    public isClosed: boolean;
+    public new_data: string | string[];
+    public new_data_file: string;
+    public new_datas: {[id: string]: string | string[]};
     @Input() fopen: boolean;
     @Input() classes: string;
     @Input() standalone: boolean;
@@ -41,7 +42,7 @@ export class InputBlock implements OnInit {
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private dataservice: Data) {
+    constructor(public backend: Backend, public dataservice: Data) {
         this.out = new EventEmitter<any[]>();
         this.classes = this.classes || '';
         this.ssettings = {

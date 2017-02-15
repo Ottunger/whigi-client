@@ -19,10 +19,10 @@ enableProdMode();
 })
 export class Savekey implements OnInit, OnDestroy {
 
-    private key: string;
-    private value: string;
-    private return_url: string;
-    private sub: Subscription;
+    public key: string;
+    public value: string;
+    public return_url: string;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -34,8 +34,8 @@ export class Savekey implements OnInit, OnDestroy {
      * @param dataservice Data service.
      * @param backend App service.
      */
-    constructor(private router: Router, private notif: NotificationsService,
-        private routed: ActivatedRoute, private dataservice: Data, private backend: Backend) {
+    constructor(public router: Router, public notif: NotificationsService,
+        public routed: ActivatedRoute, public dataservice: Data, public backend: Backend) {
 
     }
 

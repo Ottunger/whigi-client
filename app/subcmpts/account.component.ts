@@ -6,6 +6,8 @@
 
 'use strict';
 declare var window : any
+declare var Android: any
+declare var webkit: any
 import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
@@ -14,10 +16,11 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/account.html';
+//import * as template from './templates/account.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/account.html'
 })
 export class Account implements OnInit, OnDestroy {
 
@@ -38,11 +41,11 @@ export class Account implements OnInit, OnDestroy {
     public with_account: string;
     public strangeEmail: string;
     public cached: {[id: string]: any};
-    private previews: {[id: string]: string[]};
-    private asked: {[id: string]: boolean};
-    private unreqing: boolean;
-    private cpar: any;
-    private sub: Subscription;
+    public previews: {[id: string]: string[]};
+    public asked: {[id: string]: boolean};
+    public unreqing: boolean;
+    public cpar: any;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -56,8 +59,8 @@ export class Account implements OnInit, OnDestroy {
      * @param data Data service.
      * @param check Check service.
      */
-    constructor(private router: Router, private notif: NotificationsService, private auth: Auth,
-        private routed: ActivatedRoute, private backend: Backend, private dataservice: Data, private check: ApplicationRef) {
+    constructor(public router: Router, public notif: NotificationsService, public auth: Auth,
+        public routed: ActivatedRoute, public backend: Backend, public dataservice: Data, public check: ApplicationRef) {
         this.requester = {};
         this.new_data = {};
         this.new_datas = {};
@@ -215,6 +218,20 @@ export class Account implements OnInit, OnDestroy {
                     }
                 }
                 self.data_list_shared_as.forEach(function(req: string[]) {
+                    var nice = false, did = 0, todo = 0, answ = false;
+                    function completeRound() {
+                        did++;
+                        if(nice || did >= todo) {
+                            if(answ)
+                                return;
+                            answ = true;
+                            if(nice) {
+                                tryMove();
+                            } else {
+                                fallback();
+                            }
+                        }
+                    }
                     //A data to check...
                     if(req[0] in self.backend.generics) {
                         var ret = [];
@@ -228,20 +245,7 @@ export class Account implements OnInit, OnDestroy {
                         }
                         if(ret.length > 0) {
                             //Check each one, is it shared to the person, and under the correct name?
-                            var nice = false, did = 0, todo = ret.length, answ = false;
-                            function completeRound() {
-                                did++;
-                                if(nice || did >= todo) {
-                                    if(answ)
-                                        return;
-                                    answ = true;
-                                    if(nice) {
-                                        tryMove();
-                                    } else {
-                                        fallback();
-                                    }
-                                }
-                            }
+                            todo = ret.length;
                             ret.forEach(function(record) {
                                 if(self.id_to in self.backend.profile.data[record].shared_to) {
                                     if(req[0] == req[1].replace('*', '')) {
@@ -432,7 +436,7 @@ export class Account implements OnInit, OnDestroy {
      * @param {Object[]} array Tasks.
      * @return {Promise} When done.
      */
-    private process(array: any[]): Promise {
+    private process(array: any[]): Promise<undefined> {
         var self = this, index = 0;
         return new Promise(function(resolve, reject) {
             function next() {

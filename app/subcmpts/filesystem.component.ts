@@ -13,18 +13,19 @@ import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/filesystem.html';
+//import * as template from './templates/filesystem.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/filesystem.html'
 })
 export class Filesystem implements OnInit {
 
     public data_value_file: string;
     public folders: string;
-    private mode: string;
-    private lighted: number;
-    private sub: Subscription;
+    public mode: string;
+    public lighted: number;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -38,8 +39,8 @@ export class Filesystem implements OnInit {
      * @param check Check service.
      * @param render Renderer.
      */
-    constructor(private backend: Backend, private router: Router, private routed: ActivatedRoute,
-        private notif: NotificationsService, private dataservice: Data, private check: ApplicationRef) {
+    constructor(public backend: Backend, public router: Router, public routed: ActivatedRoute,
+        public notif: NotificationsService, public dataservice: Data, public check: ApplicationRef) {
         this.folders = '';
         this.lighted = 1;
     }
@@ -219,7 +220,7 @@ export class Filesystem implements OnInit {
      * @param {String} msg Message.
      * @return {Promise} OK or not.
      */
-    dialog(msg: string): Promise {
+    dialog(msg: string): Promise<boolean> {
         var self = this;
         return new Promise<boolean>(function(resolve, reject) {
             if(window.confirm(msg)) {

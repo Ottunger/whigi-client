@@ -73,7 +73,7 @@ export class Check {
      */
     isAccount(test: string): string[] | boolean {
         test = test.replace(/^(.{4})(.*)$/, '$2$1');
-        test = test.replace(/[A-Z]/g, function($e) { return $e.charCodeAt(0) - 'A'.charCodeAt(0) + 10 });
+        test = test.replace(/[A-Z]/g, <any>(function($e) { return $e.charCodeAt(0) - 'A'.charCodeAt(0) + 10 }));
         var $sum = 0, $ei = 1;
         for(var $i = test.length - 1; $i >= 0; $i--) {
             $sum += $ei * parseInt(test.charAt($i),10);

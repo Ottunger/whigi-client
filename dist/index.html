@@ -1,0 +1,35 @@
+<!--
+ * Index page for the whole app to load.
+ * @module index
+ * @author Mathonet Grégoire
+ -->
+
+<html>
+  <head>
+    <base href="/">
+    <title>WiSSL</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="__deps.min.css">
+    <script src="__deps.min.js"></script>
+    <script>
+      window.module = 'aot';
+      window.sha256 = Sha256.hash;
+      window.captchaReady = function() {
+        var handle = setInterval(function() {
+          if(!!window.regCaptcha) {
+            //Run till end of times...
+            window.regCaptcha();
+          }
+        }, 100);
+      };
+    </script>
+    <script src="https://www.google.com/recaptcha/api.js?onload=captchaReady&render=explicit" async defer></script>
+    <script src="https://www.paypalobjects.com/api/checkout.js" sync defer></script>
+  </head>
+  <body>
+    <my-app></my-app>
+  </body>
+  <script src="build.min.js"></script>
+</html>

@@ -14,7 +14,7 @@
                     <!-- BEGIN PAGE TITLE-->
                     <h1 class="page-title">
                         <breadcrump [ev]="dataservice.ev"></breadcrump>
-                        <button type="button" class="btn green" style="float: right;" (click)="back()">{{ 'back' | translate }}</button>
+                        <button type="button" class="btn green" style="float: right;" (click)="back(false)">{{ 'back' | translate }}</button>
                         <button *ngIf="is_generic" type="button" class="btn green" style="float: right; margin-right: 5px;" (click)="back(true)">{{ 'dataview.toGen' | translate }}</button>
                         <!-- personal pages insert -->
                         <!--

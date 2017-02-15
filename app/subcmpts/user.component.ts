@@ -12,18 +12,19 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 enableProdMode();
-import * as template from './templates/user.html';
+//import * as template from './templates/user.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/user.html'
 })
 export class User implements OnInit, OnDestroy {
 
     public user: any;
     public id: string;
     public ret: string[];
-    private sub: Subscription;
-    private ready: EventEmitter<any>;
+    public sub: Subscription;
+    public ready: EventEmitter<any>;
 
     /**
      * Creates the component.
@@ -34,8 +35,8 @@ export class User implements OnInit, OnDestroy {
      * @param notif Notifications service.
      * @param routed Parameters service.
      */
-    constructor(private router: Router, private backend: Backend,
-        private notif: NotificationsService, private routed: ActivatedRoute) {
+    constructor(public router: Router, public backend: Backend,
+        public notif: NotificationsService, public routed: ActivatedRoute) {
         this.user = {};
         this.ready = new EventEmitter<any>();
     }

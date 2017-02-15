@@ -12,11 +12,12 @@ import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/happenings.html';
 import * as happenings from './templates/happenings.js';
+//import * as template from './templates/happenings.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/happenings.html'
 })
 export class Happenings {
 
@@ -28,9 +29,9 @@ export class Happenings {
     public redir: {[id: string]: string};
     public doRedir: {[id: string]: boolean};
     public cstep: {[id :string]: number};
-    private resets: {[id: string]: EventEmitter<any>};
-    private works: {[id: string]: any[]};
-    private onEid: boolean;
+    public resets: {[id: string]: EventEmitter<any>};
+    public works: {[id: string]: any[]};
+    public onEid: boolean;
 
     /**
      * Creates the component.
@@ -41,7 +42,7 @@ export class Happenings {
      * @param notif Notification service.
      * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private router: Router, private notif: NotificationsService, private dataservice: Data) {
+    constructor(public backend: Backend, public router: Router, public notif: NotificationsService, public dataservice: Data) {
         this.new_names = {};
         this.new_data = {};
         this.new_data_file = {};
@@ -86,14 +87,14 @@ export class Happenings {
                             'generics.first_name': self.backend.profile.company_info.first_name,
                             'generics.last_name': self.backend.profile.company_info.last_name
                         }), false, 0, true, data.decr_aes).then(function() {
+                            function complete(naes?: number[]) {
+                                naes = naes || self.backend.newAES();
+                                self.dataservice.newData(true, 'profile/address/' + toreturn.erase_addr, JSON.stringify({
+                                    from: -2208992400000,
+                                    value: self.backend.profile.company_info.address
+                                }), false, 0, true, naes).then(function() {}, function() {});
+                            }
                             if(toreturn.erase_addr.substr(0, 2) != '<<') {
-                                function complete(naes?: number[]) {
-                                    naes = naes || self.backend.newAES();
-                                    self.dataservice.newData(true, 'profile/address/' + toreturn.erase_addr, JSON.stringify({
-                                        from: -2208992400000,
-                                        value: self.backend.profile.company_info.address
-                                    }), false, 0, true, naes).then(function() {}, function() {});
-                                }
                                 //Check if we have this address suitable
                                 if(!!self.backend.profile.data['profile/address/' + toreturn.erase_addr]) {
                                     if(self.backend.profile.data['profile/address/' + toreturn.erase_addr].id.indexOf('datafragment') == 0) {
@@ -240,64 +241,64 @@ export class Happenings {
      * @param {String} sid Soft ID.
      * @return {Promise} When done.
      */
-    private process(sid: string): Promise {
+    private process(sid: string): Promise<undefined> {
         var self = this, index = 0, array = this.works[sid];
         return new Promise(function(resolve, reject) {
+            function end() {
+                self.dataservice.listData(false).then(function() {
+                    next();
+                });
+            }
+            function complete(work: any, force: boolean, decr_aes?: number[], decr_data?: string) {
+                if(force && work.is_dated) {
+                    //If we had the value and it is dated, we do not erase but rather add a new horology
+                    var sofar = JSON.parse(decr_data);
+                    sofar.push(JSON.parse(work.send)[0]);
+                    work.send = JSON.stringify(sofar.sort(function(a, b): number {return (a.from < b.from)? - 1 : 1;}));
+                }
+                self.dataservice.newData(true, work.new_name, work.send, work.is_dated, work.version, force, decr_aes).then(function(naes: number[]) {
+                    self.new_names[work.fid] = '';
+                    if(work.redir) {
+                        var keys = Object.getOwnPropertyNames(self.backend.profile.data[work.towards].shared_to), done = 0;
+                        keys.forEach(function(key) {
+                            self.backend.getAccessVault(self.backend.profile.data[work.towards].shared_to[key]).then(function(info) {
+                                self.dataservice.grantVault(self.backend.profile.data[work.towards].shared_to[key], info.shared_as, work.new_name, work.send, work.version,
+                                    new Date(info.expire_epoch), info.trigger, true, naes).then(function() {
+                                        done++;
+                                        if(done >= keys.length)
+                                            end();
+                                    }, function(e) {
+                                        done++;
+                                        if(done >= keys.length)
+                                            end();
+                                    });
+                            }, function(e) {
+                                done++;
+                                if(done >= keys.length)
+                                    end();
+                            });
+                        });
+                        next();
+                    } else {
+                        next();
+                    }
+                }, function(e) {
+                    reject(e);
+                });
+            }
             function next() {
                 if(index < array.length) {
                     var work = array[index];
                     index++;
                     switch(work.mode) {
                         case 'creating':
-                            function complete(force: boolean, decr_aes?: number[], decr_data?: string) {
-                                if(force && work.is_dated) {
-                                    //If we had the value and it is dated, we do not erase but rather add a new horology
-                                    var sofar = JSON.parse(decr_data);
-                                    sofar.push(JSON.parse(work.send)[0]);
-                                    work.send = JSON.stringify(sofar.sort(function(a, b): number {return (a.from < b.from)? - 1 : 1;}));
-                                }
-                                self.dataservice.newData(true, work.new_name, work.send, work.is_dated, work.version, force, decr_aes).then(function(naes: number[]) {
-                                    self.new_names[work.fid] = '';
-                                    if(work.redir) {
-                                        var keys = Object.getOwnPropertyNames(self.backend.profile.data[work.towards].shared_to), done = 0;
-                                        function complete() {
-                                            self.dataservice.listData(false).then(function() {
-                                                next();
-                                            });
-                                        }
-                                        keys.forEach(function(key) {
-                                            self.backend.getAccessVault(self.backend.profile.data[work.towards].shared_to[key]).then(function(info) {
-                                                self.dataservice.grantVault(self.backend.profile.data[work.towards].shared_to[key], info.shared_as, work.new_name, work.send, work.version,
-                                                    new Date(info.expire_epoch), info.trigger, true, naes).then(function() {
-                                                        done++;
-                                                        if(done >= keys.length)
-                                                            complete();
-                                                    }, function(e) {
-                                                        done++;
-                                                        if(done >= keys.length)
-                                                            complete();
-                                                    });
-                                            }, function(e) {
-                                                done++;
-                                                if(done >= keys.length)
-                                                    complete();
-                                            });
-                                        });
-                                        next();
-                                    } else {
-                                        next();
-                                    }
-                                }, function(e) {
-                                    reject(e);
-                                });
-                            }
                             //Existed as bound?
                             if(!!self.backend.profile.data[work.new_name] && self.backend.profile.data[work.new_name].id.indexOf('datafragment') == 0) {
                                 self.dataservice.getData(self.backend.profile.data[work.new_name].id).then(function(data) {
-                                    complete(true, data.decr_aes, data.decr_data);
+                                    complete(work, true, data.decr_aes, data.decr_data);
                                 });
                             } else {
-                                complete(false);
+                                complete(work, false);
                             }
                             break;
                         default:

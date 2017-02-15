@@ -13,10 +13,11 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/profile.html';
+//import * as template from './templates/profile.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/profile.html'
 })
 export class Profile implements OnInit {
 
@@ -39,8 +40,8 @@ export class Profile implements OnInit {
      * @param router Router service.
      * @param auth Auth service.
      */
-    constructor(private notif: NotificationsService, private backend: Backend,
-        private router: Router, private dataservice: Data, private auth: Auth) {
+    constructor(public notif: NotificationsService, public backend: Backend,
+        public router: Router, public dataservice: Data, public auth: Auth) {
         this.use_file = false;
     }
 
@@ -67,7 +68,7 @@ export class Profile implements OnInit {
                 var ret = sessionStorage.getItem('return_url');
                 ret = JSON.parse(ret);
                 sessionStorage.removeItem('return_url');
-                self.router.navigate(ret);
+                self.router.navigate(<string[]><any>ret);
             }
         });
     }

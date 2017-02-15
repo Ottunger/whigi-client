@@ -14,19 +14,20 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/reset.html';
+//import * as template from './templates/reset.html';
 
 @Component({
-    template: template
+    //template: template
+    templateUrl: './templates/reset.html'
 })
 export class Reset implements OnInit, OnDestroy {
 
     public password: string;
     public password2: string;
     public use_file: boolean;
-    private id: string;
-    private pwd: string;
-    private sub: Subscription;
+    public id: string;
+    public pwd: string;
+    public sub: Subscription;
 
     /**
      * Creates the component.
@@ -39,8 +40,8 @@ export class Reset implements OnInit, OnDestroy {
      * @param routed Current route service.
      * @param dataservice Data service.
      */
-    constructor(private backend: Backend, private router: Router, private auth: Auth,
-        private notif: NotificationsService, private routed: ActivatedRoute, private dataservice: Data) {
+    constructor(public backend: Backend, public router: Router, public auth: Auth,
+        public notif: NotificationsService, public routed: ActivatedRoute, public dataservice: Data) {
         this.use_file = false;
     }
 

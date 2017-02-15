@@ -11,11 +11,12 @@ import {Router} from '@angular/router';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/sidebar.html';
+//import * as template from './templates/sidebar.html';
 
 @Component({
     selector: 'sidebar',
-    template: template
+    //template: template
+    templateUrl: './templates/sidebar.html'
 })
 export class Sidebar implements OnInit, OnChanges {
 
@@ -30,7 +31,7 @@ export class Sidebar implements OnInit, OnChanges {
      * @param backend App service.
      * @param dataservice Data service.
      */
-    constructor(private router: Router, private backend: Backend, private dataservice: Data) {
+    constructor(public router: Router, public backend: Backend, public dataservice: Data) {
 
     }
 

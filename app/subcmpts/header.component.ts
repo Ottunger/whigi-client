@@ -13,16 +13,17 @@ import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
 enableProdMode();
-import * as template from './templates/header.html';
+//import * as template from './templates/header.html';
 
 @Component({
     selector: 'header',
-    template: template
+    //template: template
+    templateUrl: './templates/header.html'
 })
 export class Header implements OnInit {
 
-    private running: number;
-    private current: number;
+    public running: number;
+    public current: number;
     @Input() run: EventEmitter<number> | number;
     @Input() cur: EventEmitter<number> | number;
 
@@ -36,7 +37,7 @@ export class Header implements OnInit {
      * @param dataservice Data service.
      * @param auth Auth service.
      */
-    constructor(private router: Router, private backend: Backend, private notif: NotificationsService, private dataservice: Data, private auth: Auth) {
+    constructor(public router: Router, public backend: Backend, public notif: NotificationsService, public dataservice: Data, public auth: Auth) {
         this.run = 0;
         this.cur = 0;
     }

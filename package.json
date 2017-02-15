@@ -1,6 +1,6 @@
 {
   "name": "whigi-client",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "A front-end for Whigi and Whigi-restore",
   "main": "app/main.js",
   "repository": {
@@ -24,35 +24,23 @@
     "angular-2-dropdown-multiselect": "0.4.1",
     "angular2-notifications": "0.4.53",
     "core-js": "2.4.1",
-    "ng2-recaptcha": "^1.5.4",
     "reflect-metadata": "0.1.9",
     "rxjs": "5.1.1",
-    "zone.js": "0.6.26"
+    "typescript": "^2.0.10",
+    "zone.js": "0.7.4"
   },
   "devDependencies": {
     "@angular/compiler-cli": "2.4.7",
-    "css-loader": "^0.25.0",
-    "cssnano": "^3.8.0",
-    "extract-text-webpack-plugin": "^1.0.1",
-    "file-loader": "^0.9.0",
-    "html-loader": "^0.4.4",
-    "html-webpack-plugin": "^2.22.0",
     "lite-server": "^2.2.2",
-    "null-loader": "^0.1.1",
-    "optimize-css-assets-webpack-plugin": "^1.3.0",
-    "purifycss-webpack-plugin": "^2.0.3",
-    "raw-loader": "^0.5.1",
-    "style-loader": "^0.13.1",
-    "typescript": "^2.0.8",
-    "webpack": "^1.13.2"
+    "rollup": "^0.41.4",
+    "rollup-plugin-commonjs": "^7.0.0",
+    "rollup-plugin-node-resolve": "^2.0.0",
+    "rollup-plugin-uglify": "^1.0.1"
   },
   "scripts": {
     "serve": "lite-server index.html",
-    "build_module": "node_modules/.bin/tsc --experimentalDecorators --emitDecoratorMetadata --removeComments app/app.module.ts && echo ok || echo not ok",
-    "build_main": "node_modules/.bin/tsc --experimentalDecorators --emitDecoratorMetadata --removeComments app/main.ts && echo ok || echo not ok",
-    "build": "npm run build_vendor && npm run build_polyfill && npm run build_module && npm run build_main && npm run dist",
-    "dist": "node_modules/.bin/webpack",
-    "build_vendor": "node_modules/.bin/tsc app/vendor.ts && echo ok || echo not ok",
-    "build_polyfill": "node_modules/.bin/tsc app/polyfill.ts && echo ok || echo not ok"
+    "ngc": "node_modules/.bin/ngc -p tsconfig-aot.json",
+    "rollup": "node_modules/.bin/rollup -c rollup-config.js",
+    "aot": "npm run ngc && npm run rollup"
   }
 }
