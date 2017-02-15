@@ -10,7 +10,7 @@ import {Injectable} from '@angular/core';
 import {Headers, Http, Response} from '@angular/http';
 import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
-import * as toPromise from 'rxjs/add/operator/toPromise';
+import 'rxjs/add/operator/toPromise';
 import {Auth} from './auth.service';
 import {Trie} from '../utils/Trie';
 import * as configs from './configs';
@@ -129,7 +129,7 @@ export class Backend {
 
         //Prepare object for captcha
         window.regCaptcha = function() {
-            if(!window.$('#grecin').children().length)
+            if(!!window.$('#grecin').children().length)
                 return;
             window.$('#grecin').remove();
             window.$('#grec').html('<div id="grecin"></div>');

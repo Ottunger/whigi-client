@@ -185,7 +185,7 @@ export class Makeadvert implements OnInit {
      */
     grant() {
         var self = this, cid = this.backend.generateRandomString(48);
-        setImmediate(function() {
+        setTimeout(function() {
             self.dataservice.getData('corporate/address/' + self.address, true, undefined, true).then(function(data) {
                 var addr = JSON.parse(data.decr_data);
                 addr = JSON.parse(addr[addr.length - 1].value);
@@ -209,7 +209,7 @@ export class Makeadvert implements OnInit {
                 delete self.campaigns[cid];
                 self.notif.error(self.backend.transform('error'), self.backend.transform('advert.error'));
             });
-        });
+        }, 0);
     }
 
     /**

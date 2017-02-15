@@ -284,9 +284,9 @@ export class InputBlock implements OnInit {
      */
     regChange(mode: number) {
         var self = this;
-        setImmediate(function() {
+        setTimeout(function() {
             self.iChange(mode);
-        });
+        }, 0);
     }
 
 }

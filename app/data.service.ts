@@ -1069,7 +1069,7 @@ export class Data {
     showStr(id: string, pass: String) {
         var res = 0, l = 0, L = 0, n = 0, o = 0;
         pass = pass || '';
-        setImmediate(function() {
+        setTimeout(function() {
             pass = window.$('#' + pass).val();
             pass = pass || '';
             for(var i = 0; i < pass.length; i++) {
@@ -1099,7 +1099,7 @@ export class Data {
                 window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-warning');
             else
                 window.$('#' + id).removeClass('progress-bar-success progress-bar-warning progress-bar-danger').addClass('progress-bar-danger');
-        });
+        }, 0);
     }
 
     /**

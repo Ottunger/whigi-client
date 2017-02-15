@@ -109,9 +109,9 @@ export class Generics implements OnInit {
      */
     regUpdate() {
         var self = this;
-        setImmediate(function() {
+        setTimeout(function() {
             self.lighted = self.getLight();
-        });
+        }, 0);
     }
 
     /**

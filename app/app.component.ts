@@ -112,9 +112,9 @@ export class Application {
      */
     regLang() {
         var self = this;
-        setImmediate(function() {
+        setTimeout(function() {
             self.dataservice.setLang(self.backend.lang);
-        });
+        }, 0);
     }
 
     /**

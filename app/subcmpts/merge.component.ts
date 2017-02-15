@@ -74,10 +74,10 @@ export class Merge {
                 //Fallback to a request
                 window.$('#ctn-merge').ready(function() {
                     window.$('#ctn-merge').css('display', 'block');
-                    setImmediate(function() {
+                    setTimeout(function() {
                         self.login = ' ';
                         self.password = '';
-                    });
+                    }, 0);
                 });
             }
         });

@@ -167,9 +167,9 @@ export class GenericBlock implements OnInit {
             this.ass_name[window.$('#setname' + this.dataservice.sanit(group)).attr('g')] = event[1][window.$('#setname' + this.dataservice.sanit(group)).attr('nwkey')];
             window.$('#setname' + this.dataservice.sanit(group)).val(event[1][window.$('#setname' + this.dataservice.sanit(group)).attr('nwkey')]);
         }
-        setImmediate(function() {
+        setTimeout(function() {
             self.check.tick();
-        });
+        }, 0);
     }
 
     /**
@@ -311,7 +311,7 @@ export class GenericBlock implements OnInit {
      */
     firstfrom(name: string, gen_name: string) {
         var self = this;
-        setImmediate(function() {
+        setTimeout(function() {
             window.$('#sincefrom' + self.dataservice.sanit(name)).ready(function() {
                 window.$('#sincefrom' + self.dataservice.sanit(name)).datetimepicker();
                 if(self.backend.generics[gen_name][self.backend.generics[gen_name].length - 1].is_dated_day_only)
@@ -320,7 +320,7 @@ export class GenericBlock implements OnInit {
                     window.moment(self.dataservice.strToObj(self.cached[name].decr_data)[self.sincefrom[name].act].from));
                 self.check.tick();
             });
-        });
+        }, 0);
     }
 
     /**
@@ -549,7 +549,7 @@ export class GenericBlock implements OnInit {
         var self = this;
         if(!ok)
             return;
-        setImmediate(function() {
+        setTimeout(function() {
             if(!!self.ass_name[g] && self.ass_name[g] != '') {
                 window.$('.json' + self.dataservice.sanit(g)).css('display', 'block');
                 window.$('.keys' + self.dataservice.sanit(g)).css('display', (window.innerWidth > 991)? 'block' : 'none');
@@ -557,7 +557,7 @@ export class GenericBlock implements OnInit {
                 window.$('.json' + self.dataservice.sanit(g)).css('display', 'none');
                 window.$('.keys' + self.dataservice.sanit(g)).css('display', 'none');
             }
-        });
+        }, 0);
     }
 
     /**
@@ -738,7 +738,7 @@ export class GenericBlock implements OnInit {
                         delete self.foranew[fname];
                     }
                     //Reset what we'll enter
-                    setImmediate(function() {
+                    setTimeout(function() {
                         delete self.new_data[gname];
                         delete self.new_data_file[gname];
                         self.new_datas[gname] = {};
