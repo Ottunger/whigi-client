@@ -128,7 +128,11 @@ export class Backend {
         this.lang = localStorage.getItem('lang') || 'en';
 
         //Prepare object for captcha
+        window.onCaptcha = function(g) {
+            self.cpt = g;
+        };
         window.regCaptcha = function() {
+            //1
             if(!!window.$('#grecin').children().length)
                 return;
             window.$('#grecin').remove();
@@ -136,12 +140,20 @@ export class Backend {
             try {
                 window.grecaptcha.render('grecin', {
                     sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
-                    callback: 'onCaptcha'
+                    callback: window.onCaptcha
                 });
             } catch(e) {}
-        };
-        window.onCaptcha = function(g) {
-            this.cpt = g;
+            //2
+            if(!!window.$('#grecin2').children().length)
+                return;
+            window.$('#grecin2').remove();
+            window.$('#grec2').html('<div id="grecin2"></div>');
+            try {
+                window.grecaptcha.render('grecin2', {
+                    sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
+                    callback: window.onCaptcha
+                });
+            } catch(e) {}
         };
     }
 
