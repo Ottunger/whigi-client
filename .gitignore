@@ -5,7 +5,6 @@
 /dist/*.map
 /dist/*.js
 /dist/*.css
-/dist/assets
 /.vscode
 /debug.log
 /aot

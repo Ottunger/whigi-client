@@ -114,13 +114,35 @@ export class Merge {
      * @return {Promise} When done.
      */
     merge(): Promise<undefined> {
+        var self = this;
+        this.login = this.login.replace(/ /g, '');
+        return new Promise(function(resolve, reject) {
+            self.backend.canClose(self.login).then(function() {
+                self.doMerge().then(function() {
+                    resolve();
+                }, function(e) {
+                    reject(e);
+                });
+            }, function(e) {
+                self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noSelf'));
+                reject();
+            });
+        });
+    }
+
+    /**
+     * Merges another account.
+     * @function doMerge
+     * @public
+     * @return {Promise} When done.
+     */
+    doMerge(): Promise<undefined> {
         var self = this, fnew: boolean = true;
         var current = this.auth.getParams();
         this.backend.decryptMaster();
         var my_master = this.backend.master_key, my_id = this.backend.profile._id;
 
         return new Promise(function(resolve) {
-            self.login = self.login.replace(/ /g, '');
             if(self.backend.profile._id.toLowerCase() == self.login.toLowerCase()) {
                 self.login = '';
                 self.password = '';
@@ -254,7 +276,7 @@ export class Merge {
                                         if(fnew) {
                                             fnew = false;
                                             self.backend.closeTo(my_id, my_master).then(function() {
-                                                self.dataservice.reloadProfile(current[4], current[2], nnew, resolve);
+                                                self.dataservice.reloadProfile(current[4], current[2], nnew.bind(this, work), resolve);
                                             }, function(e) {
                                                 self.manageUI(false);
                                                 self.notif.error(self.backend.transform('error'), self.backend.transform('merge.noMerge'));
@@ -279,6 +301,8 @@ export class Merge {
                                                 resolve();
                                             });
                                         } else {
+                                            //Need to trigger the trigger to make any update
+                                            self.backend.triggerVaults(work.name).then(function() {}, function(e) {});
                                             next();
                                         }
                                         break;

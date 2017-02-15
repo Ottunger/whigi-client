@@ -690,6 +690,17 @@ export class Backend {
     }
 
     /**
+     * Try closing.
+     * @function canClose
+     * @public
+     * @param {String} to To.
+     * @return {Promise} JSON response from backend.
+     */
+    canClose(to: string): Promise<any> {
+        return this.backend('whigi', true, 'GET', {}, 'close/check/' + to, true, true, true);
+    }
+
+    /**
      * Close an account to another profile.
      * @function closeTo
      * @public

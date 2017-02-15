@@ -344,6 +344,7 @@ export var lang = {
    "merge.explain": "When merging accounts, you enter here an account and copy all of its contents to your profile. The data this account had and how it shared it is perfetcly transferred, however, the data shared to it cannot be directly redirected. Updates on the shared data will be done to this account, but you will not have access to it in the mean time. Therefore, if your to-be-merged account has password recovery keys, we encourage you to ask the sharer to update them.",
    "merge.confirm": "Are you sure you want to incorporate the next account?: ",
    "merge.noSelf": "You are already merged with yourself, dear",
+   "merge.conflict": "There exist conflicts between this account and the want to merge to, please fix them first",
 
    "generics.silent": "Your input lacks required fields",
    "generics.regexp": "Your input lacks required fields",

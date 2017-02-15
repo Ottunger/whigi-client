@@ -66,11 +66,9 @@ export class Logging implements OnInit {
      */
     ngOnInit(set?: boolean): void {
         var self = this;
-        window.$('#wlogin-pass,#wlogin-login').ready(function() {
-            window.$('#wlogin-pass,#wlogin-login').keyup(function(e) {
-                if(e.keyCode == 13)
-                    window.$('#wlogin-btn').click();
-            });
+        window.$('#wlogin-pass,#wlogin-login').keyup(function(e) {
+            if(e.keyCode == 13)
+                window.$('#wlogin-btn').click();
         });
         if(this.onEnd && /end/.test(window.location.href)) {
             //Session has expired, now moves will be done normally
@@ -103,6 +101,11 @@ export class Logging implements OnInit {
                 }
                 if(!!sessionStorage.getItem('return_url') && sessionStorage.getItem('return_url').length > 1) {
                     var ret = sessionStorage.getItem('return_url');
+                    if(self.auth.choices().length > 1 && window.$('#ctn-log').css('display') != 'block') {
+                        //Fallback to a request
+                        window.$('#ctn-log').css('display', 'block');
+                        return;
+                    }
                     ret = JSON.parse(ret);
                     sessionStorage.removeItem('return_url');
                     self.router.navigate(<string[]><any>ret);
@@ -113,15 +116,11 @@ export class Logging implements OnInit {
             }, function(e) {
                 self.auth.deleteUid(undefined, false);
                 //Fallback to a request
-                window.$('#ctn-log').ready(function() {
-                    window.$('#ctn-log').css('display', 'block');
-                });
+                window.$('#ctn-log').css('display', 'block');
             });
         } else {
             //Fallback to a request
-            window.$('#ctn-log').ready(function() {
-                window.$('#ctn-log').css('display', 'block');
-            });
+            window.$('#ctn-log').css('display', 'block');
         }
         //Ticking towards a request
         setTimeout(function() {

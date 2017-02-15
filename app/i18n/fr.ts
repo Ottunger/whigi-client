@@ -344,6 +344,7 @@ export var lang = {
    "merge.explain": "Quand vous fusionnez deux comptes, vous citez un compte ici et copiez ses données dans l'actuel. Les données qu'il possède, ainsi que la façon dont il les partage, sont parfaitement transférées. Cependant, les données qui lui sont partagées ne peuvent être directement transférées, même si de nouveaux changement se récupercuteront dorénavant sur votre compte principal. Entre temps, vous n'y aurez plus accès. Ainsi, si vous possédez des clés de récupération de mot de passe, nous vous encourageons à demander aux tierces parties de les mettre à jour.",
    "merge.confirm": "Êtes-vous sûr de vouloir incorporer le compte suivant?: ",
    "merge.noSelf": "Vous êtes bien entendu déjà fusionné avec vous-même",
+   "merge.conflict": "Il y a des conflits entre votre compte et celui de destination, merci de d'abord les corriger",
 
    "generics.silent": "Vous n'avez pas rempli tous les champs obligatoires",
    "generics.regexp": "Vous n'avez pas rempli tous les champs obligatoires",
