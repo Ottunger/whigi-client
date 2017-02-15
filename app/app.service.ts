@@ -136,7 +136,7 @@ export class Backend {
             if(!!window.$('#grecin').children().length)
                 return;
             window.$('#grecin').remove();
-            window.$('#grec').html('<div id="grecin"></div>');
+            window.$('#grec').html('<div id="grecin" class="recwhigi"></div>');
             try {
                 window.grecaptcha.render('grecin', {
                     sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
@@ -147,7 +147,7 @@ export class Backend {
             if(!!window.$('#grecin2').children().length)
                 return;
             window.$('#grecin2').remove();
-            window.$('#grec2').html('<div id="grecin2"></div>');
+            window.$('#grec2').html('<div id="grecin2" class="recwhigi"></div>');
             try {
                 window.grecaptcha.render('grecin2', {
                     sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',

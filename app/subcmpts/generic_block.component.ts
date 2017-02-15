@@ -248,7 +248,10 @@ export class GenericBlock implements OnInit {
                         self.register(work[idx][0], work[idx][1], work[idx][2]).then(function() {
                             doOne(idx + 1);
                         }, function(e) {
-                            reject(e);
+                            if(e != 'generics.silent')
+                                reject(e);
+                            else
+                                doOne(idx + 1);
                         });
                     } else {
                         //We terminate with modifications
@@ -382,6 +385,7 @@ export class GenericBlock implements OnInit {
                                     <input type="password" id="pwd2acc" class="form-control"/><br />
                                     <label for="emailacc">` + self.backend.transform('login.email') + `</label>
                                     <input type="text" id="emailacc" class="form-control"/><br />
+                                    <div id="grec"><div id="grecin" class="recwhigi"></div></div><br />
                                     <button class="btn default" onclick="$('.tp-close').click()">` + self.backend.transform('cancel') + `</button>
                                     <button class="btn green" onclick="addUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val(), $('#emailacc').val())">` + self.backend.transform('goOn') + `</button>
                                 </div>

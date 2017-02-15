@@ -55,6 +55,10 @@ enableProdMode();
         ul#navigation li.last {
             margin-right: 0;
         }
+        div.row>div>div.recwhigi {
+            margin: 0 auto;
+            width: 66%;
+        }
     `],
     encapsulation: ViewEncapsulation.None,
     template: `
