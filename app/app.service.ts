@@ -122,8 +122,8 @@ export class Backend {
         window.WHIGI_URL = this.BASE_URL;
         //Langs
         this.langs = {
-            'en': en.lang,
-            'fr': fr.lang
+            'en': en.default,
+            'fr': fr.default
         };
         this.lang = localStorage.getItem('lang') || 'en';
 

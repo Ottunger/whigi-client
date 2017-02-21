@@ -1,4 +1,4 @@
-export var lang = {
+export default  {
    "error": "Error!",
    "success": "Success!",
    "confirmation": "Are you sure tou want to move now?",
