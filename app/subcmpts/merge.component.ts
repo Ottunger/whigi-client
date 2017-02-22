@@ -64,7 +64,16 @@ export class Merge {
             if(!!params['mergeu'] && !!params['mergep'] && self.login != self.backend.profile._id) {
                 if(window.confirm(this.backend.transform('merge.confirm') + self.login)) {
                     self.merge().then(function() {
-                        self.router.navigate(['/generics', 'generics.profile']);
+                        if(!params['return']) {
+                            self.router.navigate(['/generics', 'generics.profile']);
+                        } else {
+                            window.location.href = window.decodeURIComponent(params['return']);
+                        }
+                    }, function(e) {
+                        setTimeout(function() {
+                            //Fallback to moving
+                            self.router.navigate(['/generics', 'generics.profile']);
+                        }, 1500);
                     });
                 } else {
                     //Fallback to moving

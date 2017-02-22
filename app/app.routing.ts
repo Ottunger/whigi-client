@@ -59,6 +59,7 @@ const appRoutes: Routes = [
     {path: 'generics', component: Generics, canActivate: [Fullguard], canDeactivate: [Genguard]},
     {path: 'generics/:filter', component: Generics, canActivate: [Fullguard], canDeactivate: [Genguard]},
     {path: 'merge/:mergeu/:mergep', component: Merge, canActivate: [Profileguard]},
+    {path: 'merge/:mergeu/:mergep/:return', component: Merge, canActivate: [Profileguard]},
     {path: 'getadv', component: Getadvert, canActivate: [Fullguard]},
     {path: 'makeadv', component: Makeadvert, canActivate: [Fullguard]},
     {path: '**', component: Notfound}
