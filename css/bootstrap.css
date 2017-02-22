@@ -1305,7 +1305,7 @@ a.bg-primary:focus {
   background-color: #286090; }
 
 .bg-success {
-  background-color: #abe7ed; }
+  background-color: #abc9ed; }
 
 a.bg-success:hover,
 a.bg-success:focus {
@@ -2131,7 +2131,7 @@ table th[class*="col-"] {
 .table > tfoot > tr > th.success,
 .table > tfoot > tr.success > td,
 .table > tfoot > tr.success > th {
-  background-color: #abe7ed; }
+  background-color: #abc9ed; }
 
 .table-hover > tbody > tr > td.success:hover,
 .table-hover > tbody > tr > th.success:hover,
@@ -2632,7 +2632,7 @@ select[multiple].input-lg,
 .has-success .input-group-addon {
   color: #27a4b0;
   border-color: #27a4b0;
-  background-color: #abe7ed; }
+  background-color: #abc9ed; }
 
 .has-success .form-control-feedback {
   color: #27a4b0; }
@@ -4375,8 +4375,8 @@ a.thumbnail.active {
     color: inherit; }
 
 .alert-success {
-  background-color: #abe7ed;
-  border-color: #abe7ed;
+  background-color: #abc9ed;
+  border-color: #abc9ed;
   color: #27a4b0; }
   .alert-success hr {
     border-top-color: #96e1e8; }
@@ -4596,7 +4596,7 @@ button.list-group-item {
 
 .list-group-item-success {
   color: #27a4b0;
-  background-color: #abe7ed; }
+  background-color: #abc9ed; }
 
 a.list-group-item-success,
 button.list-group-item-success {
@@ -4941,18 +4941,18 @@ button.list-group-item-danger {
     border-bottom-color: #342727; }
 
 .panel-success {
-  border-color: #abe7ed; }
+  border-color: #abc9ed; }
   .panel-success > .panel-heading {
     color: #27a4b0;
-    background-color: #abe7ed;
-    border-color: #abe7ed; }
+    background-color: #abc9ed;
+    border-color: #abc9ed; }
     .panel-success > .panel-heading + .panel-collapse > .panel-body {
-      border-top-color: #abe7ed; }
+      border-top-color: #abc9ed; }
     .panel-success > .panel-heading .badge {
-      color: #abe7ed;
+      color: #abc9ed;
       background-color: #27a4b0; }
   .panel-success > .panel-footer + .panel-collapse > .panel-body {
-    border-bottom-color: #abe7ed; }
+    border-bottom-color: #abc9ed; }
 
 .panel-info {
   border-color: #e0ebf9; }

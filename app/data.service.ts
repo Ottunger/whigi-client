@@ -433,16 +433,31 @@ export class Data {
     }
 
     /**
+     * Is forced index.
+     * @function powering
+     * @public
+     * @param {Number} idx Index.
+     * @param {Number} req_idx More indices.
+     * @return {Boolean} Is in.
+     */
+    powering(idx: number, req_idx: number): boolean {
+        return (req_idx >> idx) % 2 != 0;
+    }
+
+    /**
      * Build up a generic and test it.
+     * @function recGeneric
+     * @public
      * @param {String} raw_data Source for data.
      * @param {String} raw_data_file Source for file.
      * @param {Object} data_source Source for keyed values.
      * @param {String} gen_name Generic name.
      * @param {Boolean} as_file Load as file.
+     * @param {Number} req_idx Number that conditions more indexes.
      * @return {String} Built up data or undefined if cannot pass test.
      */
-    recGeneric(raw_data: string | false, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean): string[] | string {
-        var thisgen = this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1], since;
+    recGeneric(raw_data: string | false, raw_data_file: string, data_source: {[id: string]: string}, gen_name: string, as_file: boolean, req_idx: number = 0): string[] | string {
+        var self = this, thisgen = this.backend.generics[gen_name][this.backend.generics[gen_name].length - 1], since;
         raw_data = (thisgen.mode == 'checkbox')?
             (raw_data || false) : (!!raw_data? raw_data.toString().trim() : '');
         if(!!raw_data && raw_data.length > 127 && !as_file)
@@ -455,9 +470,9 @@ export class Data {
                     ret[thisgen.json_keys[i].descr_key] = data_source[thisgen.json_keys[i].descr_key] || false;
                     continue;
                 }
-                if(thisgen.json_keys[i].required && (data_source[thisgen.json_keys[i].descr_key] === undefined || data_source[thisgen.json_keys[i].descr_key].trim() == ''))
+                if((thisgen.json_keys[i].required || this.powering(i, req_idx)) && (data_source[thisgen.json_keys[i].descr_key] === undefined || data_source[thisgen.json_keys[i].descr_key].trim() == ''))
                     return ['error', this.allEmpty(thisgen.json_keys, data_source)? 'generics.silent' : 'generics.regexp',
-                        ...thisgen.json_keys.filter(function(el) {return el.required}).map(function(el) {return el.descr_key})];
+                        ...thisgen.json_keys.filter(function(el, ix) {return el.required || self.powering(ix, req_idx);}).map(function(el) {return el.descr_key})];
                 if(thisgen.json_keys[i].mode != 'file' && !!data_source[thisgen.json_keys[i].descr_key] && data_source[thisgen.json_keys[i].descr_key].length > 127)
                     return ['error', 'generics.tooLong', ''];
                 if(!!data_source[thisgen.json_keys[i].descr_key])
@@ -938,7 +953,7 @@ export class Data {
     sanit(s?: string): string {
         if(!s)
             return '';
-        return s.replace(/[\/\.# :*à,@]/g, '_');
+        return s.replace(/[\/|.# :*à,@]/g, '_');
     }
 
     /**

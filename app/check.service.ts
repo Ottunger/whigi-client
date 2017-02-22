@@ -168,9 +168,11 @@ export class Check {
             var loc = JSON.parse(obj[i].value);
             switch(loc['generics.country']) {
                 case 'BEL':
-                    res = parseInt(loc['generics.eidNo'].replace(/[\.-]/g, ''));
-                    if(Math.floor(res / 100) % 97 != res % 100)
-                        ret = ['generics.badeidno', 'generics.eidNo'];
+                    if(!!loc['generics.eidNo']) {
+                        res = parseInt(loc['generics.eidNo'].replace(/[\.-]/g, ''));
+                        if(Math.floor(res / 100) % 97 != res % 100)
+                            ret = ['generics.badeidno', 'generics.eidNo'];
+                    }
                     if(!!loc['generics.rrn']) {
                         res = parseInt(loc['generics.rrn'].replace(/[\.-]/g, ''));
                         if(97 - (Math.floor(res / 100) % 97) != res % 100) {
@@ -188,7 +190,7 @@ export class Check {
                     }
                     break;
                 case 'FRA':
-                    if(!/^[0-9a-zA-Z]{12,13}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^[0-9a-zA-Z]{12,13}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{2}[A-Z]{2}[0-9]{5}$/.test(loc['generics.driving'])) {
@@ -199,7 +201,7 @@ export class Check {
                     }
                     break;
                 case 'DEU':
-                    if(!/^T[0-9]{8}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^T[0-9]{8}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[A-Z][0-9]{3}[A-Z]{3}[0-9][A-Z][0-9]{2}$/.test(loc['generics.driving'])) {
@@ -210,12 +212,12 @@ export class Check {
                     }
                     break;
                 case 'ITA':
-                    if(!/^[0-9]{5}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^[0-9]{5}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     break;
                 case 'LUX':
-                    if(!/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^[0-9]{12}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{6}$/.test(loc['generics.driving'])) {
@@ -226,7 +228,7 @@ export class Check {
                     }
                     break;
                 case 'NLD':
-                    if(!/^[A-Z]{7}[0-9]{2}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^[A-Z]{7}[0-9]{2}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{10}$/.test(loc['generics.driving'])) {
@@ -237,7 +239,7 @@ export class Check {
                     }
                     break;
                 case 'ESP':
-                    if(!/^[A-Z]{3}[0-9]{6}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^[A-Z]{3}[0-9]{6}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[0-9]{8}-[0-9A-Z]$/.test(loc['generics.driving'])) {
@@ -248,7 +250,7 @@ export class Check {
                     }
                     break;
                 case 'GBR':
-                    if(!/^[0-9]{9}$/.test(loc['generics.eidNo'])) {
+                    if(!!loc['generics.eidNo'] && !/^[0-9]{9}$/.test(loc['generics.eidNo'])) {
                         ret = ['generics.badeidno', 'generics.eidNo'];
                     }
                     if(!!loc['generics.driving'] && !/^[A-Z]+[0-9]{6}[A-Z]{6}$/.test(loc['generics.driving'])) {
@@ -340,15 +342,18 @@ export class Check {
      * @param {String} mode Mode.
      * @param {String} key Key to test.
      * @param {String} test Input.
+     * @param {Boolean} maybe Maybe.
      * @return {String[]|Boolean} String containing error or true.
      */
-    keyIs(mode: string, key: string, test: string): string[] | boolean {
+    keyIs(mode: string, key: string, test: string, maybe?: boolean): string[] | boolean {
         var obj = JSON.parse(test), res, ret: string[] = [];
         obj = (obj.constructor === Array)? obj : [{value: test}];
         for(var i = 0; i < obj.length; i++) {
             var loc = JSON.parse(obj[i].value);
             switch(mode) {
                 case 'date':
+                    if(maybe && !loc[key])
+                        break;
                     res = this.isDate(loc[key]);
                     if(res !== true) {
                         if(ret.length == 0)
@@ -371,9 +376,10 @@ export class Check {
      * @param {String[]} mode Modes.
      * @param {String[]} key Keys to test.
      * @param {String} test Input.
+     * @param {Boolean} maybe Maybe.
      * @return {String[]|Boolean} String containing error or true.
      */
-    keysAre(mode: string[], key: string[], test: string): string[] | boolean {
+    keysAre(mode: string[], key: string[], test: string, maybe?: boolean): string[] | boolean {
         var res, ret: string[] = [];
         for(var i = 0; i < mode.length; i++) {
             switch(mode[i]) {
@@ -387,7 +393,7 @@ export class Check {
                     }
                     break;
                 default:
-                    res = this.keyIs(mode[i], key[i], test);
+                    res = this.keyIs(mode[i], key[i], test, maybe);
                     if(res !== true) {
                         if(ret.length == 0)
                             ret = res;

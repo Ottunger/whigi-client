@@ -27,6 +27,7 @@ export class InputBlock implements OnInit {
     public new_datas: {[id: string]: string | string[]};
     @Input() fopen: boolean;
     @Input() classes: string;
+    @Input() reqs: string;
     @Input() standalone: boolean;
     @Input() g: string;
     @Input() writeDesc: boolean;
@@ -34,6 +35,7 @@ export class InputBlock implements OnInit {
     @Input() prefill: string;
     @Input() reset: EventEmitter<any>;
     @Output() out: EventEmitter<any[]>;
+    private req: number;
 
     /**
      * Creates the component.
@@ -69,6 +71,7 @@ export class InputBlock implements OnInit {
         this.def();
         this.prefill = this.prefill || '';
         this.standalone = this.standalone || false;
+        this.req = parseInt(this.reqs || '0');
         if(!this.standalone || this.prefill != '') {
             window.$('.json' + this.dataservice.sanit(this.g) + this.dataservice.sanit(this.prefill)).ready(function() {
                 window.$('.json' + self.dataservice.sanit(self.g) + self.dataservice.sanit(self.prefill)).addClass(self.writeDesc? 'form-group' : 'row');

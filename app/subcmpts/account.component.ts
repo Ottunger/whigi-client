@@ -24,6 +24,7 @@ enableProdMode();
 })
 export class Account implements OnInit, OnDestroy {
 
+    public finishing: boolean;
     public request: string;
     public sec_key: string;
     public id_to: string;
@@ -46,6 +47,8 @@ export class Account implements OnInit, OnDestroy {
     public unreqing: boolean;
     public cpar: any;
     public sub: Subscription;
+    public MATCHER: RegExp = /^\d*[*|]/;
+    public SPLITTER: RegExp = /(\d+)\|/;
 
     /**
      * Creates the component.
@@ -71,6 +74,7 @@ export class Account implements OnInit, OnDestroy {
         this.asked = {};
         this.strangeEmail = '';
         this.unreqing = false;
+        this.finishing = false;
     }
 
     /**
@@ -165,7 +169,7 @@ export class Account implements OnInit, OnDestroy {
             });
             //Cannot register two under the same name
             if(new Set(self.data_list_shared_as.map(function(el: string[]): string {
-                return el[1].replace('*', '');
+                return el[1].replace(self.MATCHER, '');
             })).size != self.data_list_shared_as.length) {
                 self.deny();
                 return;
@@ -191,7 +195,7 @@ export class Account implements OnInit, OnDestroy {
                             var arr = self.backend.generics[self.data_list_shared_as[i][0]][self.backend.generics[self.data_list_shared_as[i][0]].length - 1].new_key || [];
                             for(var j = 0; j < arr.length; j++) {
                                 var check = self.backend.transform(arr[j]);
-                                if(!self.backend.data_trie.has(self.data_list_shared_as[i][1].replace('*', '') + '/' + check)) {
+                                if(!self.backend.data_trie.has(self.data_list_shared_as[i][1].replace(self.MATCHER, '') + '/' + check)) {
                                     self.new_name[self.data_list_shared_as[i][0]] = check;
                                     break;
                                 }
@@ -248,12 +252,12 @@ export class Account implements OnInit, OnDestroy {
                             todo = ret.length;
                             ret.forEach(function(record) {
                                 if(self.id_to in self.backend.profile.data[record].shared_to) {
-                                    if(req[0] == req[1].replace('*', '')) {
+                                    if(req[0] == req[1].replace(self.MATCHER, '')) {
                                         nice = true;
                                         completeRound();
                                     } else {
                                         self.backend.getAccessVault(self.backend.profile.data[record].shared_to[self.id_to]).then(function(info) {
-                                            if(info.shared_as == req[1].replace('*', '') || info.links.indexOf(req[1].replace('*', '')) != -1) {
+                                            if(info.shared_as == req[1].replace(self.MATCHER, '') || info.links.indexOf(req[1].replace(self.MATCHER, '')) != -1) {
                                                 nice = true;
                                             }
                                             completeRound();
@@ -307,9 +311,11 @@ export class Account implements OnInit, OnDestroy {
      */
     finish(ok: boolean) {
         var self = this, saves: any[] = [], key = (this.sec_key != '')? this.sec_key : this.backend.generateRandomString(64);
+        this.finishing = true;
         if(ok) {
             if(!this.allFilled()) {
                 this.notif.error(this.backend.transform('error'), this.backend.transform('account.fill'));
+                this.finishing = false;
                 return;
             }
             if(this.with_account != 'false' && (!self.backend.profile.data['keys/auth/' + this.id_to] || !self.backend.profile.data['keys/auth/' + this.id_to].shared_to[this.id_to])) {
@@ -344,26 +350,28 @@ export class Account implements OnInit, OnDestroy {
                         until: this.expire_epoch,
                         trigger: this.trigger
                     });
-                } else if((!(adata[1].replace('*', '') in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1].replace('*', '') in this.filter && this.filter[adata[1].replace('*', '')] == '/new')) {
+                } else if((!(adata[1].replace(this.MATCHER, '') in this.filter) && !(adata[0] in this.backend.profile.data)) || (adata[1].replace(this.MATCHER, '') in this.filter && this.filter[adata[1].replace(this.MATCHER, '')] == '/new')) {
                     //Build and test
-                    window.$('.igen' + this.dataservice.sanit(adata[1])).removeClass('whigi-error');
-                    var send = this.dataservice.recGeneric(this.new_data[adata[1].replace('*', '')], '', this.new_datas[adata[1].replace('*', '')], adata[0], false);
+                    var num: number = parseInt((this.SPLITTER.exec(adata[1]) || [undefined, '0'])[1]);
+                    window.$('.igen' + this.dataservice.sanit(adata[1].replace(this.MATCHER, ''))).removeClass('whigi-error');
+                    var send = this.dataservice.recGeneric(this.new_data[adata[1].replace(this.MATCHER, '')], '', this.new_datas[adata[1].replace(this.MATCHER, '')], adata[0], false, num);
                     if(send.constructor === Array) {
-                        if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).hasClass('panel-danger')) {
-                            window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).addClass('panel-danger');
+                        if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace(this.MATCHER, ''))).hasClass('panel-danger')) {
+                            window.$('#accord' + this.dataservice.sanit(adata[1].replace(this.MATCHER, ''))).addClass('panel-danger');
                             //Open the first error
-                            if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).find('.in').length)
-                                window.$('#accord' + this.dataservice.sanit(adata[1].replace('*', ''))).find('a').click();
+                            if(!window.$('#accord' + this.dataservice.sanit(adata[1].replace(this.MATCHER, ''))).find('.in').length)
+                                window.$('#accord' + this.dataservice.sanit(adata[1].replace(this.MATCHER, ''))).find('a').click();
                         }
                         this.notif.error(this.backend.transform('error'), this.backend.transform(send[1]));
                         for(var j = 2; j < send.length; j++)
-                            window.$('.igenfiner' + this.dataservice.sanit(adata[1].replace('*', '')) + this.dataservice.sanit(send[j])).addClass('whigi-error');
+                            window.$('.igenfiner' + this.dataservice.sanit(adata[1].replace(this.MATCHER, '')) + this.dataservice.sanit(send[j])).addClass('whigi-error');
+                        this.finishing = false;
                         return;
                     }
                     //Build name
                     var name = adata[0];
                     if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
-                        name += '/' + this.new_name[adata[1].replace('*', '')];
+                        name += '/' + this.new_name[adata[1].replace(this.MATCHER, '')];
                     }
                     //Create
                     saves.push({
@@ -378,7 +386,7 @@ export class Account implements OnInit, OnDestroy {
                         mode: 'grant',
                         data: send,
                         to: this.id_to,
-                        name: adata[1].replace('*', ''),
+                        name: adata[1].replace(this.MATCHER, ''),
                         real_name: name,
                         until: this.expire_epoch,
                         version: this.backend.generics[adata[0]].length - 1,
@@ -388,7 +396,7 @@ export class Account implements OnInit, OnDestroy {
                     //Build name
                     var name = adata[0];
                     if(this.backend.generics[adata[0]][this.backend.generics[adata[0]].length - 1].instantiable) {
-                        name += '/' + this.filter[adata[1].replace('*', '')];
+                        name += '/' + this.filter[adata[1].replace(this.MATCHER, '')];
                     }
                     //Get and grant
                     if(!!this.cached[name]) {
@@ -396,7 +404,7 @@ export class Account implements OnInit, OnDestroy {
                             mode: 'grant',
                             data: this.cached[name].decr_data,
                             to: this.id_to,
-                            name: adata[1].replace('*', ''),
+                            name: adata[1].replace(this.MATCHER, ''),
                             real_name: name,
                             until: this.expire_epoch,
                             trigger: this.trigger,
@@ -407,7 +415,7 @@ export class Account implements OnInit, OnDestroy {
                         saves.push({
                             mode: 'get-and-grant',
                             to: this.id_to,
-                            name: adata[1].replace('*', ''),
+                            name: adata[1].replace(this.MATCHER, ''),
                             real_name: name,
                             until: this.expire_epoch,
                             trigger: this.trigger
@@ -417,15 +425,18 @@ export class Account implements OnInit, OnDestroy {
             }
             //End by calling process
             this.process(saves).then(function() {
+                self.finishing = false;
                 self.ok();
             }, function(e) {
                 self.notif.error(self.backend.transform('error'), self.backend.transform('account.err'));
                 window.setTimeout(function() {
+                    self.finishing = false;
                     self.deny();
                 }, 1500);
             });
         } else {
-            self.deny();
+            this.finishing = false;
+            this.deny();
         }
     }
 
@@ -655,6 +666,7 @@ export class Account implements OnInit, OnDestroy {
             if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '') {
                 var ok = false;
                 window.$(window.$(obj[i]).attr('data-forid')).addClass('panel-danger');
+                window.$(window.$(obj[i]).attr('data-forid').replace('#accord', '.igen')).addClass('whigi-error');
             }
         }
         return ok;

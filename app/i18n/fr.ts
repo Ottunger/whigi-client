@@ -97,7 +97,7 @@ export default {
    "login.title": "Connectez-vous",
    "login.is_company": "Créer un compte entreprise",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
-   "login.remember": "Gardez moi connecté",
+   "login.remember": "Enregistrez-moi",
    "login.register": "Pas encore de compte?",
    "login.create": "Créer mon compte",
    "login.sent": "Votre compte est créé!",

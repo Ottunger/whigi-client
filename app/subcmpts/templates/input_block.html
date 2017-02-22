@@ -14,26 +14,31 @@
 <!-- JSON KEYS -->
 <div *ngIf="backend.generics[g][backend.generics[g].length - 1].mode == 'json_keys'">
     <button *ngIf="!writeDesc" type="button" id="igen2{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" class="btn btn-link wigen2" (click)="collapse()">{{ getMyText() | translate }}</button>
-    <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys">
+    <div *ngFor="let k of backend.generics[g][backend.generics[g].length - 1].json_keys; let i = index">
         <div class="json{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}" [class.whigi-topped]="dataservice.keyCheck(new_datas, k) !== true" style="display: none;">
-            <div *ngIf="writeDesc" (dblclick)="dataservice.tryHelp(k.help_url)">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
-            <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc" (dblclick)="dataservice.tryHelp(k.help_url)">{{ k.descr_key | translate }}<span *ngIf="k.required">*</span></div>
+            <div *ngIf="writeDesc" (dblclick)="dataservice.tryHelp(k.help_url)">{{ k.descr_key | translate }}<span *ngIf="k.required || dataservice.powering(i, req)">*</span></div>
+            <div class="visible-xs-block visible-sm-block" *ngIf="!writeDesc" (dblclick)="dataservice.tryHelp(k.help_url)">
+                {{ k.descr_key | translate }}<span *ngIf="k.required || dataservice.powering(i, req)">*</span>
+            </div>
             <!-- SUBTYPES -->
             <!-- text -->
-            <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]"
-                (keyup)="iChange(3)" (change)="iChange(3)" [placeholder]="k.placeholder" [attr.data-forid]="'#accord' + dataservice.sanit(g)" [disabled]="dataservice.keyCheck(new_datas, k) !== true"/>
-            <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]"
+            <input type="text" *ngIf="k.mode == 'text' && !!k.placeholder" class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}"
+                [class.grant-required]="k.required || dataservice.powering(i, req)" [(ngModel)]="new_datas[k.descr_key]"
+                (keyup)="iChange(3)" (change)="iChange(3)" [placeholder]="k.placeholder" [attr.data-forid]="'#accord' + dataservice.sanit(g)"
+                [disabled]="dataservice.keyCheck(new_datas, k) !== true"/>
+            <input type="text" *ngIf="k.mode == 'text' && !k.placeholder" class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}"
+                [class.grant-required]="k.required || dataservice.powering(i, req)" [(ngModel)]="new_datas[k.descr_key]"
                 (keyup)="iChange(3)" (change)="iChange(3)" [attr.data-forid]="'#accord' + dataservice.sanit(g)" [disabled]="dataservice.keyCheck(new_datas, k) !== true"/>
             <!-- file -->
             <button id="fsb{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" type="button" class="btn default load-button {{ classes }}{{ dataservice.sanit(k.descr_key) }}"
                 (click)="dataservice.triggerLoad('fs' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))" *ngIf="k.mode == 'file'"><i class="fa fa-cloud-upload"></i></button>
             <a href="javascript:;" (click)="out.emit([4, g, g + prefill])" *ngIf="k.mode == 'file' && !!new_datas[k.descr_key] && !!backend.profile.data[g + prefill]">{{ 'generics.seePicture' | translate }}</a>
-            <input id="fs{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" style="display: none;" [class.grant-required]="k.required" type="file" [disabled]="dataservice.keyCheck(new_datas, k) !== true"
-                class="form-control" (change)="fileLoad($event, k.descr_key)" [attr.data-forid]="'#accord' + dataservice.sanit(g)" *ngIf="k.mode == 'file'"/>
+            <input id="fs{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" style="display: none;" [class.grant-required]="k.required || dataservice.powering(i, req)"
+                type="file" [disabled]="dataservice.keyCheck(new_datas, k) !== true" class="form-control" (change)="fileLoad($event, k.descr_key)" [attr.data-forid]="'#accord' + dataservice.sanit(g)" *ngIf="k.mode == 'file'"/>
             <!-- select -->
             <select class="form-control {{ classes }}{{dataservice.sanit(k.descr_key) }}" [(ngModel)]="new_datas[k.descr_key]" *ngIf="k.mode == 'select' && !k.multiple" 
                 (change)="regChange(3); onceOnly('onlyo' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))" [attr.data-forid]="'#accord' + dataservice.sanit(g)"
-                [disabled]="dataservice.keyCheck(new_datas, k) !== true" [class.grant-required]="k.required">
+                [disabled]="dataservice.keyCheck(new_datas, k) !== true" [class.grant-required]="k.required || dataservice.powering(i, req)">
                 <option id="onlyo{{ dataservice.sanit(g) }}{{ dataservice.sanit(k.descr_key) }}" (click)="onceOnly('onlyo' + dataservice.sanit(g) + dataservice.sanit(k.descr_key))"
                     selected value>{{ 'generics.select' | translate }}</option>
                 <option *ngFor="let f of dataservice.getSelect(k.enum, k.enumMore && new_datas[k.enumMore])" [value]="f[0]">{{ f[1] }}</option>
@@ -42,7 +47,7 @@
             <ss-multiselect-dropdown [options]="change(dataservice.getSelect(k.enum, k.enumMore && new_datas[k.enumMore]))" [(ngModel)]="new_datas[k.descr_key]"
                 (ngModelChange)="regChange(3)" *ngIf="k.mode == 'select' && k.multiple" [disabled]="dataservice.keyCheck(new_datas, k) !== true" 
                 class="{{ classes }}{{dataservice.sanit(k.descr_key) }}" [settings]="ssettings" [attr.data-forid]="'#accord' + dataservice.sanit(g)"
-                [class.grant-required]="k.required"></ss-multiselect-dropdown>
+                [class.grant-required]="k.required || dataservice.powering(i, req)"></ss-multiselect-dropdown>
             <!-- checkbox -->
             <label class="rememberme mt-checkbox mt-checkbox-outline" *ngIf="k.mode == 'checkbox'" (change)="iChange(3)">
                 <input type="checkbox" [(ngModel)]="new_datas[k.descr_key]" value="false" [disabled]="dataservice.keyCheck(new_datas, k) !== true"/>
@@ -50,7 +55,7 @@
             </label>
             <!-- date -->
             <div class="input-group date pickgen{{ dataservice.sanit(g) }}{{ dataservice.sanit(prefill) }}{{ dataservice.sanit(k.descr_key) }}" *ngIf="k.mode == 'date'">
-                <input type='text' class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}" [class.grant-required]="k.required" [(ngModel)]="new_datas[k.descr_key]" name="new_data{{ g + k.descr_key }}"
+                <input type='text' class="form-control {{ classes }}{{ dataservice.sanit(k.descr_key) }}" [class.grant-required]="k.required || dataservice.powering(i, req)" [(ngModel)]="new_datas[k.descr_key]" name="new_data{{ g + k.descr_key }}"
                     (keyup)="iChange(3)" (change)="iChange(3)" [disabled]="dataservice.keyCheck(new_datas, k) !== true"/>
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-calendar"></span>

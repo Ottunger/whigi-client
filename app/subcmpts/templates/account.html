@@ -36,11 +36,11 @@
             <!-- BEGIN DATA -->
             <div class="panel-group accordion" id="tgabble">
                 <div class="panel panel-default panel-clearable" *ngFor="let p of data_list_shared_as" [class.panel-success]="(!backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable 
-                    && !!backend.profile && !backend.profile.data[p[0]]) || (backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && filters(p[0], p[1].replace('*', '')).length == 1)
-                    || backend.generics[p[0]][backend.generics[p[0]].length - 1].share_as_folder" id="accord{{ dataservice.sanit(p[1].replace('*', '')) }}">
+                    && !!backend.profile && !backend.profile.data[p[0]]) || (backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && filters(p[0], p[1].replace(MATCHER, '')).length == 1)
+                    || backend.generics[p[0]][backend.generics[p[0]].length - 1].share_as_folder" id="accord{{ dataservice.sanit(p[1].replace(MATCHER, '')) }}">
                     <div class="panel-heading" *ngIf="!!backend.generics[p[0]]">
                         <h4 class="panel-title" style="text-align: right;">
-                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p[1].replace('*', '')) }}">
+                            <a class="accordion-toggle collapsed" data-toggle="collapse" data-parent="#tgabble" href="#tgabble_{{ dataservice.sanit(p[1].replace(MATCHER, '')) }}">
                                 <div style="float:left;">
                                     <img *ngIf="!!backend.generics[p[0]][backend.generics[p[0]].length - 1].icon && backend.generics[p[0]][backend.generics[p[0]].length - 1].icon.indexOf('https') == 0"
                                         class="img-circle img-responsive pull-left" src="{{ backend.generics[p[0]][backend.generics[p[0]].length - 1].icon }}" width="20px" />
@@ -52,7 +52,7 @@
                                         onclick="$(this).toggleClass('green');event.preventDefault();event.stopPropagation();"><i class="fa fa-remove"></i></button>
                                 </div>
                                 {{ backend.generics[p[0]][backend.generics[p[0]].length - 1].descr_key | translate }}
-                                <span *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && p[0] != p[1].replace('*', '')"> ({{ lightName(p[1].replace('*', '')) }})</span>
+                                <span *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && p[0] != p[1].replace(MATCHER, '')"> ({{ lightName(p[1].replace(MATCHER, '')) }})</span>
                                 <div style="padding-left:50px;float:right;">
                                     <i class="fa fa-chevron-down"></i>
                                 </div>
@@ -60,7 +60,7 @@
                             </a>
                         </h4>
                     </div>
-                    <div id="tgabble_{{ dataservice.sanit(p[1].replace('*', '')) }}" *ngIf="!!backend.generics[p[0]]" class="panel-collapse collapse" >
+                    <div id="tgabble_{{ dataservice.sanit(p[1].replace(MATCHER, '')) }}" *ngIf="!!backend.generics[p[0]]" class="panel-collapse collapse" >
                         <div class="panel-body" style="max-height:450px; overflow-y:auto; padding-top: 7px;">
                             <p *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].long_descr_key != ''">
                                 {{ backend.generics[p[0]][backend.generics[p[0]].length - 1].long_descr_key | translate }}
@@ -70,40 +70,40 @@
                                 <p *ngIf="!!backend.profile && !!backend.profile.data[p[0]]">{{ 'account.shared' | translate }}</p>
                                 <input *ngIf="!!backend.profile && !!backend.profile.data[p[0]]" type="text" readonly="readonly" class="form-control" name="preview"
                                     [value]="dataservice.preview(cached, previews, asked, p[0], backend.generics[p[0]][!!cached[p[0]]? cached[p[0]].version : 0].mode == 'json_keys', p[0], false)"/>
-                                <input_block *ngIf="!!backend.profile && !backend.profile.data[p[0]]" [g]="p[0]" (out)="regData(p[1].replace('*', ''), $event)" [writeDesc]="true"
-                                    [classes]="'igenfiner' + dataservice.sanit(p[1].replace('*', ''))"></input_block>
+                                <input_block *ngIf="!!backend.profile && !backend.profile.data[p[0]]" [g]="p[0]" (out)="regData(p[1].replace(MATCHER, ''), $event)" [writeDesc]="true"
+                                    [classes]="'igenfiner' + dataservice.sanit(p[1].replace(MATCHER, ''))"></input_block>
                             </div>
                             <div *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && !backend.generics[p[0]][backend.generics[p[0]].length - 1].share_as_folder">
-                                <select class="form-control" [(ngModel)]="filter[p[1].replace('*', '')]">
-                                    <option *ngFor="let f of filters(p[0], p[1].replace('*', ''))" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
+                                <select class="form-control" [(ngModel)]="filter[p[1].replace(MATCHER, '')]">
+                                    <option *ngFor="let f of filters(p[0], p[1].replace(MATCHER, ''))" [value]="f"><span *ngIf="f != '/new'">{{ f }}</span><span *ngIf="f == '/new'">{{ 'account.new' | translate }}</span></option>
                                 </select><br />
-                                <div *ngIf="filter[p[1].replace('*', '')] == '/new'">
+                                <div *ngIf="filter[p[1].replace(MATCHER, '')] == '/new'">
                                     <!-- free name -->
                                     <div *ngIf="!backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" class="input-icon">
                                         <i class="fa fa-star-half-o" data-toggle="tooltip" title="{{ 'filesystem.name' | translate }}"></i>
-                                        <input type="text" [(ngModel)]="new_name[p[1].replace('*', '')]" class="form-control grant-required" [attr.list]="'suggestions' + p[1].replace('*', '')" 
-                                            [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))" style="background-color: #ffecbb!important;"
+                                        <input type="text" [(ngModel)]="new_name[p[1].replace(MATCHER, '')]" class="form-control grant-required" [attr.list]="'suggestions' + p[1].replace(MATCHER, '')" 
+                                            [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace(MATCHER, ''))" style="background-color: #ffecbb!important;"
                                             placeholder="{{ backend.generics[p[0]][backend.generics[p[0]].length - 1].name_placeholder | translate }}" autocomplete="false">
-                                        <datalist id="suggestions{{ p[1].replace('*', '') }}">
+                                        <datalist id="suggestions{{ p[1].replace(MATCHER, '') }}">
                                             <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" value="{{ k | translate }}">
                                         </datalist>
                                     </div>
                                     <!-- end free name -->
                                     <!-- forced name -->
-                                    <select *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" [(ngModel)]="new_name[p[1].replace('*', '')]"
-                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace('*', ''))" style="background-color: #ffecbb!important;">
+                                    <select *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" [(ngModel)]="new_name[p[1].replace(MATCHER, '')]"
+                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace(MATCHER, ''))" style="background-color: #ffecbb!important;">
                                         <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
                                     </select>
                                     <!-- end forced name -->
                                     <br />
-                                    <input_block *ngIf="strangeEmail=='' || p[0]!='profile/email'" [g]="p[0]" (out)="regData(p[1].replace('*', ''), $event)" [writeDesc]="true"
-                                        [classes]="'igenfiner' + dataservice.sanit(p[1].replace('*', ''))"></input_block>
-                                    <input_block *ngIf="strangeEmail!='' && p[0]=='profile/email'" [prefill]="strangeEmail" [g]="p[0]" (out)="regData(p[1].replace('*', ''), $event)"
-                                        [writeDesc]="true" [classes]="'igenfiner' + dataservice.sanit(p[1].replace('*', ''))"></input_block>
+                                    <input_block *ngIf="strangeEmail=='' || p[0]!='profile/email'" [g]="p[0]" (out)="regData(p[1].replace(MATCHER, ''), $event)" [writeDesc]="true"
+                                        [classes]="'igen' + dataservice.sanit(p[1].replace(MATCHER, '')) + ' igenfiner' + dataservice.sanit(p[1].replace(MATCHER, ''))" [reqs]="(SPLITTER.exec(p[1]) || [undefined, '0'])[1]"></input_block>
+                                    <input_block *ngIf="strangeEmail!='' && p[0]=='profile/email'" [prefill]="strangeEmail" [g]="p[0]" (out)="regData(p[1].replace(MATCHER, ''), $event)"
+                                        [writeDesc]="true" [classes]="'igen' + dataservice.sanit(p[1].replace(MATCHER, '')) + ' igenfiner' + dataservice.sanit(p[1].replace(MATCHER, ''))" [reqs]="(SPLITTER.exec(p[1]) || [undefined, '0'])[1]"></input_block>
                                 </div>
-                                <input *ngIf="filter[p[1].replace('*', '')] != '/new'" type="text" readonly="readonly" class="form-control" name="preview"
-                                    [value]="dataservice.preview(cached, previews, asked, p[0] + '/' + filter[p[1].replace('*', '')],
-                                    backend.generics[p[0]][!!cached[p[0] + '/' + filter[p[1].replace('*', '')]]? cached[p[0] + '/' + filter[p[1].replace('*', '')]].version : 0].mode == 'json_keys', p[0], false)"/>
+                                <input *ngIf="filter[p[1].replace(MATCHER, '')] != '/new'" type="text" readonly="readonly" class="form-control" name="preview"
+                                    [value]="dataservice.preview(cached, previews, asked, p[0] + '/' + filter[p[1].replace(MATCHER, '')],
+                                    backend.generics[p[0]][!!cached[p[0] + '/' + filter[p[1].replace(MATCHER, '')]]? cached[p[0] + '/' + filter[p[1].replace(MATCHER, '')]].version : 0].mode == 'json_keys', p[0], false)"/>
                             </div>
                             <div *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].instantiable && backend.generics[p[0]][backend.generics[p[0]].length - 1].share_as_folder">
                                 <p>{{ 'account.folderShared' | translate }}</p>
@@ -113,10 +113,10 @@
                     </div>
                 </div>
                 <div class="clearfix" style="padding-top:10px;text-align:right">
-                    <button *ngIf="strangeEmail==''" type="button" class="btn green" (click)="finish(true)">{{ 'account.ok' | translate }}</button>
-                    <button *ngIf="strangeEmail==''" type="button" class="btn grey" (click)="finish(false)">{{ 'account.nok' | translate }}</button>
-                    <button *ngIf="strangeEmail!=''" type="button" class="btn green" (click)="finish(true)">{{ 'login.signUp' | translate }}</button>
-                    <button *ngIf="strangeEmail!=''" type="button" class="btn grey" (click)="finish(false)">{{ 'back' | translate }}</button>
+                    <button *ngIf="strangeEmail==''" type="button" class="btn green" [disabled]="finishing" (click)="finish(true)">{{ 'account.ok' | translate }}</button>
+                    <button *ngIf="strangeEmail==''" type="button" class="btn grey" [disabled]="finishing" (click)="finish(false)">{{ 'account.nok' | translate }}</button>
+                    <button *ngIf="strangeEmail!=''" type="button" class="btn green" [disabled]="finishing" (click)="finish(true)">{{ 'login.signUp' | translate }}</button>
+                    <button *ngIf="strangeEmail!=''" type="button" class="btn grey" [disabled]="finishing" (click)="finish(false)">{{ 'back' | translate }}</button>
                 </div>
             </div>
             <!-- END DATA -->
