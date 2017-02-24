@@ -452,6 +452,7 @@ export default {
    "generics.tel": "Numéro de téléphone",
    "generics.tellong": "Tous les formats internationaux sont acceptés",
    "generics.rrn": "Numéro national",
+   "generics.affil": "Affiliation mutuelle",
    "generics.langs": "Langue",
    "generics.langslong": "Langue de communication",
    "generics.religion": "Religion",
