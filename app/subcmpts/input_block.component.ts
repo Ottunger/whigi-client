@@ -6,15 +6,12 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, Input, Output, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit} from '@angular/core';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/input_block.html';
 
 @Component({
     selector: 'input_block',
-    //template: template
     templateUrl: './templates/input_block.html'
 })
 export class InputBlock implements OnInit {

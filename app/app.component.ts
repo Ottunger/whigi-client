@@ -6,10 +6,9 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation} from '@angular/core';
 import {Backend} from './app.service';
 import {Data} from './data.service';
-enableProdMode();
 
 @Component({
     selector: 'my-app',

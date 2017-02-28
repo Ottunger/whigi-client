@@ -6,19 +6,16 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Subscription} from 'rxjs/Subscription';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/merge.html';
 
 @Component({
     selector: 'merge-account',
-    //template: template
     templateUrl: './templates/merge.html'
 })
 export class Merge {

@@ -6,16 +6,13 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/whoishare.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/whoishare.html'
 })
 export class WhoIShare {

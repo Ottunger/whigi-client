@@ -6,18 +6,15 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
+import {Component, OnInit, OnDestroy, ApplicationRef} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Subscription} from 'rxjs/Subscription';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/oauth.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/oauth.html'
 })
 export class Oauth implements OnInit, OnDestroy {

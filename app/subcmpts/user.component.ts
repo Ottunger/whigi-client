@@ -6,16 +6,13 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit, OnDestroy, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
-enableProdMode();
-//import * as template from './templates/user.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/user.html'
 })
 export class User implements OnInit, OnDestroy {

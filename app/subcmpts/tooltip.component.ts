@@ -6,16 +6,13 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input} from '@angular/core';
+import {Component, Input} from '@angular/core';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/tooltip.html';
 
 @Component({
     selector: 'tooltip',
-    //template: template
     templateUrl: './templates/tooltip.html'
 })
 export class Tooltip {

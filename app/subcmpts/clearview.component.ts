@@ -6,16 +6,13 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
+import {Component, Input, Output, EventEmitter, OnInit, OnChanges} from '@angular/core';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/clearview.html';
 
 @Component({
     selector: 'clear-view',
-    //template: template
     templateUrl: './templates/clearview.html'
 })
 export class Clearview implements OnInit, OnChanges {

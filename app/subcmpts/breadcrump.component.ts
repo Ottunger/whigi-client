@@ -6,14 +6,11 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnInit, OnDestroy, Renderer, EventEmitter} from '@angular/core';
+import {Component, Input, OnInit, OnDestroy, Renderer, EventEmitter} from '@angular/core';
 import {Router} from '@angular/router';
-enableProdMode();
-//import * as template from './templates/breadcrump.html';
 
 @Component({
     selector: 'breadcrump',
-    //template: template
     templateUrl: './templates/breadcrump.html'
 })
 export class Breadcrump implements OnInit, OnDestroy {

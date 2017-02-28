@@ -5,13 +5,10 @@
  */
 
 'use strict';
-import {Component, enableProdMode} from '@angular/core';
+import {Component} from '@angular/core';
 import {Router} from '@angular/router';
-enableProdMode();
-//import * as template from './templates/notfound.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/notfound.html'
 })
 export class Notfound {

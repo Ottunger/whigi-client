@@ -6,16 +6,13 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, OnInit, OnChanges} from '@angular/core';
+import {Component, Input, OnInit, OnChanges} from '@angular/core';
 import {Router} from '@angular/router';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/sidebar.html';
 
 @Component({
     selector: 'sidebar',
-    //template: template
     templateUrl: './templates/sidebar.html'
 })
 export class Sidebar implements OnInit, OnChanges {

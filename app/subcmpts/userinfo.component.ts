@@ -6,17 +6,14 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, ApplicationRef, OnInit, EventEmitter} from '@angular/core';
+import {Component, Input, ApplicationRef, OnInit, EventEmitter} from '@angular/core';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/userinfo.html';
 
 @Component({
     selector: 'user-info',
-    //template: template
     templateUrl: './templates/userinfo.html'
 })
 export class Userinfo implements OnInit {

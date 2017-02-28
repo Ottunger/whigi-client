@@ -6,18 +6,15 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, Input, EventEmitter, OnInit} from '@angular/core';
+import {Component, Input, EventEmitter, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/header.html';
 
 @Component({
     selector: 'header',
-    //template: template
     templateUrl: './templates/header.html'
 })
 export class Header implements OnInit {

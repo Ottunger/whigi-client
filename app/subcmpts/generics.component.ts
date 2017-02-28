@@ -6,17 +6,14 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, EventEmitter} from '@angular/core';
+import {Component, OnInit, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/generics.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/generics.html'
 })
 export class Generics implements OnInit {

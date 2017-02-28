@@ -6,17 +6,14 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
+import {Component, OnInit, OnDestroy, ApplicationRef, EventEmitter} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Subscription} from 'rxjs/Subscription';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/filesystem.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/filesystem.html'
 })
 export class Filesystem implements OnInit {

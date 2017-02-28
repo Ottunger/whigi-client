@@ -6,12 +6,11 @@
 
 'use strict';
 declare var window : any
-import {Component, enableProdMode, OnInit} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {Router, ActivatedRoute} from '@angular/router';
 import {Auth} from '../auth.service';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
 
 @Component({
     template: ''

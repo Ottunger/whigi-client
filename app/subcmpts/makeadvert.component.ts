@@ -6,15 +6,12 @@
 
 'use strict';
 declare var window: any
-import {Component, enableProdMode, ApplicationRef, OnInit} from '@angular/core';
+import {Component, ApplicationRef, OnInit} from '@angular/core';
 import {NotificationsService} from 'angular2-notifications/components';
 import {Backend} from '../app.service';
 import {Data} from '../data.service';
-enableProdMode();
-//import * as template from './templates/makeadvert.html';
 
 @Component({
-    //template: template
     templateUrl: './templates/makeadvert.html'
 })
 export class Makeadvert implements OnInit {
