@@ -95,6 +95,7 @@ export default {
    "intro.edit": "Double cliquez une valeur pour passer en mode d'édition rapidement",
 
    "login.title": "Connectez-vous",
+   "login.clear": "Supprimer les connections?",
    "login.is_company": "Créer un compte entreprise",
    "login.alert": "Entrez n'importe quel nom de compte et mot de passe",
    "login.remember": "Enregistrez-moi",

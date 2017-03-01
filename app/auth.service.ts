@@ -102,6 +102,18 @@ export class Auth {
     }
 
     /**
+     * Flush all.
+     * @function clear
+     * @public
+     */
+    clear() {
+        localStorage.clear();
+        this.oids = {};
+        this.uid = '';
+        this.logged = false;
+    }
+
+    /**
      * Get auth params.
      * @function getParams
      * @public

@@ -85,7 +85,7 @@ export class Logging implements OnInit {
                 self.backend.profile = profile;
                 self.dataservice.wentLogin = true;
                 self.dataservice.extendModules();
-                if(self.backend.profile._id.indexOf('wiuser-') == 0 && (!sessionStorage.getItem('return_url') || !/account/.test(sessionStorage.getItem('return_url')))) {
+                if(self.backend.profile._id.indexOf('wiuser-') == 0 && !sessionStorage.getItem('return_url')) {
                     window.$(`
                         <div class="modal">
                             <h3>` + self.backend.transform('help') + `</h3>

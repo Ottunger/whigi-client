@@ -49,6 +49,10 @@
                     <p> {{ 'login.loginas' | translate }}
                         <a href="javascript:;" style="color: #FF5000;" (click)="loginas(a)">{{ dataservice.forDisplay(a) }}</a></p>
                 </div>
+                <div class="forget-password">
+                    <p> {{ 'login.clear' | translate }}
+                        <a href="javascript:;" style="color: #FF5000;" (click)="auth.clear()"> {{ 'login.click' | translate }}</a></p>
+                </div>
             </form>
             <!-- END LOGIN FORM -->
             <!-- BEGIN FORGOT PASSWORD FORM -->

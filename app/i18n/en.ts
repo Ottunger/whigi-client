@@ -95,6 +95,7 @@ export default  {
    "intro.edit": "Jump to edit mode by double clicking the values",
 
    "login.title": "Login to your account",
+   "login.clear": "Clear all accounts?",
    "login.is_company": "Create a company account",
    "login.alert": "Enter any username and password.",
    "login.remember": "Remember me",

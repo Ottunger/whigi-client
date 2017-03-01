@@ -59,7 +59,7 @@ export class Merge {
             else
                 self.password = '';
             if(!!params['mergeu'] && !!params['mergep'] && self.login != self.backend.profile._id) {
-                if(window.confirm(this.backend.transform('merge.confirm') + self.login)) {
+                if(window.confirm(self.backend.transform('merge.confirm') + self.login)) {
                     self.merge().then(function() {
                         if(!params['return']) {
                             self.router.navigate(['/generics', 'generics.profile']);

@@ -132,20 +132,21 @@ export class Profile implements OnInit {
             return;
         }
         this.backend.changeUsername(this.new_name, this.current_pwd).then(function() {
-            var now = self.backend.profile._id;
+            var before = self.backend.profile._id;
             self.backend.profile._id = self.new_name;
             self.backend.createToken(self.new_name, self.current_pwd, false).then(function(ticket) {
-                self.auth.changedUname(now, self.new_name);
+                self.auth.changedUname(before, self.new_name);
                 self.auth.switchLogin(self.new_name, ticket._id);
                 self.notif.success(self.backend.transform('success'), self.backend.transform('profile.chUname'));
+                //We're good
+                self.current_pwd = self.pwd;
+                self.new_name = '';
+                self.new_name2 = '';
             }, function(e) {
                 self.auth.deleteUid(undefined, false);
                 self.backend.forceReload();
                 self.router.navigate(['/']);
             });
-            self.current_pwd = self.pwd;
-            self.new_name = '';
-            self.new_name2 = '';
         }, function(e) {
             self.notif.error(self.backend.transform('error'), self.backend.transform('profile.noChange'));
             window.$('#inewname').addClass('has-error');
