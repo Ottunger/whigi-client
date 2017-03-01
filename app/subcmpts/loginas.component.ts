@@ -47,6 +47,9 @@ export class Loginas implements OnInit {
                     self.backend.profile = profile;
                     self.dataservice.extendModules();
                     self.auth.regPuzzle(undefined, window.sha256(pwd + profile.salt), window.sha256(pwd));
+                    //Last check
+                    if(self.dataservice.mustChange(pwd))
+                        return;
 
                     var ret = param['return'] || 'profile';
                     if(ret.indexOf('http') > -1) {

@@ -366,7 +366,7 @@ export class GenericBlock implements OnInit {
                                 <div class="row text-center">
                                     <script type="text/javascript">
                                         window.addUser = function(user, pwd, pwd2, mail) {
-                                            window.ngData.addUser(user, pwd, pwd2, ` + self.new_datas[name]['generics.first_name'] + `, ` + self.new_datas[name]['generics.last_name'] + `, mail).then(function(close) {
+                                            window.ngData.addUser.bind(ngData)(user, pwd, pwd2, '` + self.new_datas[name]['generics.first_name'] + `', '` + self.new_datas[name]['generics.last_name'] + `', mail).then(function(close) {
                                                 if(close !== false) {
                                                     $('.tp-close').click();
                                                 }

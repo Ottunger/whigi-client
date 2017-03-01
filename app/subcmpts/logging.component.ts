@@ -79,23 +79,19 @@ export class Logging implements OnInit {
                 }, 500);
             }
         }
-        if(this.auth.isLogged()) {
+        if(this.auth.isLogged() && (!/^wiuser/.test(this.auth.uid) || !!this.password)) {
             this.dataservice.mPublic().then(function(profile) {
                 //Router.go...
                 self.backend.profile = profile;
                 self.dataservice.wentLogin = true;
                 self.dataservice.extendModules();
-                if(self.backend.profile._id.indexOf('wiuser-') == 0 && !sessionStorage.getItem('return_url')) {
-                    window.$(`
-                        <div class="modal">
-                            <h3>` + self.backend.transform('help') + `</h3>
-                            <p>` + self.backend.transform('login.wiuser') + `</p>
-                        </div>
-                    `).appendTo('body').modal();
-                }
                 if(!!set) {
                     self.auth.regPuzzle(undefined, window.sha256(self.password + profile.salt), window.sha256(self.password));
                 }
+                //Last check
+                if(self.dataservice.mustChange(self.password))
+                    return;
+
                 if(!!sessionStorage.getItem('return_url') && sessionStorage.getItem('return_url').length > 1) {
                     var ret = sessionStorage.getItem('return_url');
                     if(self.auth.choices().length > 1 && window.$('#ctn-log').css('display') != 'block') {
@@ -179,6 +175,7 @@ export class Logging implements OnInit {
      * @param {String} uid User.
      */
     loginas(uid: string) {
+        //Auth does not give transient accounts here...
         this.auth.switchLogin(uid);
         this.ngOnInit(false);
     }

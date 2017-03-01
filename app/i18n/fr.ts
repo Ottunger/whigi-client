@@ -134,7 +134,7 @@ export default {
    "login.badChars": "Mauvais carcatères utilisés: utilisez des lettres et chiffres",
    "login.names": "Merci de spécifier vos nom et prénom",
    "login.noUserMatch": "Les noms de compte ne correspondent pas",
-   "login.wiuser": "Merci de changer votre nom de compte, votre compte sera limité jusqu'à ce moment.",
+   "login.wiuser": "Merci de choisir un nouveau nom de compte et mot de passe pour: ",
    "login.stillDo": "Il semble que vous soyez déjà connecté. Êtes-vous sûr de vouloir vous reconnecter?",
    "login.switch": "Changer de compte",
    "login.registerSafe": "Créer un compte plus sécurisé? Attention, certaines applications ne fonctionneront pas avec ces comptes actuellement.",

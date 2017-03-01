@@ -1302,6 +1302,47 @@ export class Data {
     }
 
     /**
+     * Check for a change.
+     * @function mustChange
+     * @public
+     * @param {String} pwd Password used.
+     * @return {Boolean} Whether must.
+     */
+    mustChange(pwd: string): boolean {
+        if(/^wiuser/.test(this.backend.profile._id)) {
+            //We logged in as a transient account...
+            window.$(`
+                <div class="modal">
+                    <h3>` + this.backend.transform('help') + `</h3>
+                    <div class="row text-center">
+                        <script type="text/javascript">
+                            window.prepUser = function(user, pwd, pwd2) {
+                                window.ngData.addUser.bind(ngData)(user, pwd, pwd2, '', '', '', false).then(function(close) {
+                                    $('.jquery-modal').remove();
+                                    if(window.ngData.backend.profile._id.indexOf('wiuser') == 0)
+                                        return;
+                                    window.ngData.navigate(window.ngData.router, ['/merge', '` + this.backend.profile._id + `', '` + pwd + `', 'true' + sessionStorage['return_url']]);
+                                });
+                            };
+                        </script>
+                        <p>` + this.backend.transform('login.wiuser') + this.backend.profile._id + `</p>
+                        <label for="useracc">` + this.backend.transform('login.username') + `</label>
+                        <input type="text" id="useracc" class="form-control"/><br />
+                        <label for="pwd1acc">` + this.backend.transform('profile.new') + `</label>
+                        <input type="password" id="pwd1acc" class="form-control"/><br />
+                        <label for="pwd2acc">` + this.backend.transform('profile.new2') + `</label>
+                        <input type="password" id="pwd2acc" class="form-control"/><br />
+                        <div id="grec3"><div id="grecin3" class="recwhigi"></div></div><br />
+                        <button class="btn green" onclick="prepUser($('#useracc').val(), $('#pwd1acc').val(), $('#pwd2acc').val())">` + this.backend.transform('goOn') + `</button>
+                    </div>
+                </div>
+            `).appendTo('body').modal({escapeClose: false, clickClose: false, showClose: false});
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * Adds a user from data.
      * @function addUser
      * @public
@@ -1311,9 +1352,10 @@ export class Data {
      * @param {String} fname First name.
      * @param {String} lname Last name.
      * @param {String} email Email.
+     * @param {Boolean} reload Should reload.
      * @return {Promise} Whether should close.
      */
-    addUser(uname: string, pwd: string, pwd2: string, fname: string, lname: string, mail: string): Promise<any> {
+    addUser(uname: string, pwd: string, pwd2: string, fname: string, lname: string, mail: string, reload: boolean = true): Promise<any> {
         var self = this, cnow = this.auth.getParams();
         var naming = JSON.stringify({'generics.last_name': fname, 'generics.first_name': lname});
         var my_id = self.backend.profile._id;
@@ -1331,7 +1373,10 @@ export class Data {
                         notif: self.notif,
                         admin: true
                     }).then(function() {
-                        self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
+                        if(reload)
+                            self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
+                        else
+                            resolve();
                     }, function(e) {
                         self.reloadProfile(cnow[4], cnow[2], resolve, resolve, cnow[3], true, true);
                     });
@@ -1424,7 +1469,7 @@ export class Data {
                 resolve(false);
             }
             if(pwd == pwd2) {
-                if(!/^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/i.test(mail)) {
+                if(!/^([\w-]+(?:\.[\w-]+)*)@(.)+\.(.+)$/i.test(mail) && reload) {
                     self.notif.error(self.backend.transform('error'), self.backend.transform('login.badEmail'));
                     resolve(false);
                     return;

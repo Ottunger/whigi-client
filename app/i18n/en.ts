@@ -134,7 +134,7 @@ export default  {
    "login.badChars": "Bad characters used: only can use letters and digits",
    "login.names": "Please fill first and last names",
    "login.noUserMatch": "Usernames do not match",
-   "login.wiuser": "Please change your username as your account will be limited until you do so.",
+   "login.wiuser": "Please select a new username and password for: ",
    "login.stillDo": "It seems that you already are connected. Are you sure you want to connect anew?",
    "login.switch": "Switch account",
    "login.registerSafe": "Create a safer account? Careful, all applications might not work with those accounts at the moment.",

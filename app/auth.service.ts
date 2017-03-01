@@ -185,7 +185,9 @@ export class Auth {
      * @return {String[]} Choices.
      */
     choices(): string[] {
-        return Object.getOwnPropertyNames(this.oids);
+        return Object.getOwnPropertyNames(this.oids).filter(function(el) {
+            return !/^wiuser/.test(el);
+        });
     }
 
 }

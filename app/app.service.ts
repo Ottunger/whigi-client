@@ -133,27 +133,38 @@ export class Backend {
         };
         window.regCaptcha = function() {
             //1
-            if(!!window.$('#grecin').children().length)
-                return;
-            window.$('#grecin').remove();
-            window.$('#grec').html('<div id="grecin" class="recwhigi"></div>');
-            try {
-                window.grecaptcha.render('grecin', {
-                    sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
-                    callback: window.onCaptcha
-                });
-            } catch(e) {}
+            if(!window.$('#grecin').children().length) {
+                window.$('#grecin').remove();
+                window.$('#grec').html('<div id="grecin" class="recwhigi"></div>');
+                try {
+                    window.grecaptcha.render('grecin', {
+                        sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
+                        callback: window.onCaptcha
+                    });
+                } catch(e) {}
+            }
             //2
-            if(!!window.$('#grecin2').children().length)
-                return;
-            window.$('#grecin2').remove();
-            window.$('#grec2').html('<div id="grecin2" class="recwhigi"></div>');
-            try {
-                window.grecaptcha.render('grecin2', {
-                    sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
-                    callback: window.onCaptcha
-                });
-            } catch(e) {}
+            if(!window.$('#grecin2').children().length) {
+                window.$('#grecin2').remove();
+                window.$('#grec2').html('<div id="grecin2" class="recwhigi"></div>');
+                try {
+                    window.grecaptcha.render('grecin2', {
+                        sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
+                        callback: window.onCaptcha
+                    });
+                } catch(e) {}
+            }
+            //3
+            if(!window.$('#grecin3').children().length) {
+                window.$('#grecin3').remove();
+                window.$('#grec3').html('<div id="grecin3" class="recwhigi"></div>');
+                try {
+                    window.grecaptcha.render('grecin3', {
+                        sitekey: '6LfleigTAAAAALOtJgNBGWu4A0ZiHRvetRorXkDx',
+                        callback: window.onCaptcha
+                    });
+                } catch(e) {}
+            }
         };
     }
 

@@ -59,12 +59,14 @@ export class Merge {
             else
                 self.password = '';
             if(!!params['mergeu'] && !!params['mergep'] && self.login != self.backend.profile._id) {
-                if(window.confirm(self.backend.transform('merge.confirm') + self.login)) {
+                self.erase = /^true/.test(params['return']);
+                if(self.erase || window.confirm(self.backend.transform('merge.confirm') + self.login)) {
+                    //If we accept or we are forced...
                     self.merge().then(function() {
-                        if(!params['return']) {
+                        if(!params['return'] || self.erase) {
                             self.router.navigate(['/generics', 'generics.profile']);
                         } else {
-                            window.location.href = window.decodeURIComponent(params['return']);
+                            window.location.href = window.decodeURIComponent(params['return'].replace(/^true/, ''));
                         }
                     }, function(e) {
                         setTimeout(function() {
