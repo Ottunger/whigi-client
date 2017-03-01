@@ -401,7 +401,7 @@ export class Data {
     /**
      * Checks if a source was empty.
      * @function allEmpty
-     * @private
+     * @public
      * @param {Array} gen JSON keys.
      * @param {Object} data_source Source.
      * @return {Boolean} If empty.

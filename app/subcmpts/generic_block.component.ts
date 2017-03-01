@@ -222,12 +222,12 @@ export class GenericBlock implements OnInit {
                         if(!!self.ass_name[g]) {
                             if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g])) {
                                 work.push([g, true, self.ass_name[g]]);
-                            } else if((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g])) {
+                            } else if((!!self.new_data[g] || !self.dataservice.allEmpty(self.backend.generics[g], self.new_datas[g])) && self.notOrEdit(g + '/' + self.ass_name[g])) {
                                 work.push([g, false, self.ass_name[g]]);
                             }
                         } else {
                             if(((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g]))
-                                    || ((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
+                                    || ((!!self.new_data[g] || !self.dataservice.allEmpty(self.backend.generics[g], self.new_datas[g])) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
                                 self.notif.alert(self.backend.transform('warning'), self.backend.transform('filesystem.noReg'));
                                 window.$('.igen' + self.dataservice.sanit(g)).addClass('whigi-error');
                             }
@@ -235,7 +235,7 @@ export class GenericBlock implements OnInit {
                     } else {
                         if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g)) {
                             work.push([g, true, undefined]);
-                        } else if((!!self.new_data[g] || Object.getOwnPropertyNames(self.new_datas[g]).length > 0) && self.notOrEdit(g)) {
+                        } else if((!!self.new_data[g] || !self.dataservice.allEmpty(self.backend.generics[g], self.new_datas[g])) && self.notOrEdit(g)) {
                             work.push([g, false, undefined]);
                         }
                     }

@@ -661,9 +661,11 @@ export class Account implements OnInit, OnDestroy {
             if(!!window.$(obj[i]).closest('.panel').find('button').length && window.$(obj[i]).closest('.panel').find('button').hasClass('green'))
                 continue;
             if(typeof window.$(obj[i]).val() === undefined || window.$(obj[i]).val() == '') {
-                var ok = false;
-                window.$(window.$(obj[i]).attr('data-forid')).addClass('panel-danger');
-                window.$(window.$(obj[i]).attr('data-forid').replace('#accord', '.igen')).addClass('whigi-error');
+                var ok = false, for_id = window.$(obj[i]).attr('data-forid');
+                if(!for_id)
+                    continue;
+                window.$(for_id).addClass('panel-danger');
+                window.$(for_id.replace('#accord', '.igen')).addClass('whigi-error');
             }
         }
         return ok;
