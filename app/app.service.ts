@@ -868,9 +868,12 @@ export class Backend {
      * @return {Promise} JSON response from backend.
      */
     createUser(username: string, password: string, more?: any[], email?: string, is_company?: boolean): Promise<any> {
+        var kg = new window.JSEncrypt({default_key_size: 1024}).getKey();
         var post = {
             username: username,
-            password: password
+            password: password,
+            public_key: kg.getPublicKey(),
+            private_key: kg.getPrivateKey()
         };
         if(!!more)
             post['more'] = more;
