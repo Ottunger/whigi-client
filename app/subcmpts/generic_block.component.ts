@@ -217,25 +217,25 @@ export class GenericBlock implements OnInit {
                 //For adding data
                 var checks = window.$('.input-holder-' + self.dataservice.sanit(self.group));
                 for(var i = 0; i < checks.length; i++) {
-                    var g = window.$(checks[i]).attr('data-g');
-                    if(self.backend.generics[g][self.backend.generics[g].length - 1].instantiable) {
+                    var g = window.$(checks[i]).attr('data-g'), gen = self.backend.generics[g][self.backend.generics[g].length - 1];
+                    if(gen.instantiable) {
                         if(!!self.ass_name[g]) {
-                            if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g])) {
+                            if((gen.mode == 'file' && !!self.new_data_file[g]) && self.notOrEdit(g + '/' + self.ass_name[g])) {
                                 work.push([g, true, self.ass_name[g]]);
-                            } else if((!!self.new_data[g] || !self.dataservice.allEmpty(self.backend.generics[g], self.new_datas[g])) && self.notOrEdit(g + '/' + self.ass_name[g])) {
+                            } else if((!!self.new_data[g] || !self.dataservice.allEmpty(gen.json_keys, self.new_datas[g])) && self.notOrEdit(g + '/' + self.ass_name[g])) {
                                 work.push([g, false, self.ass_name[g]]);
                             }
                         } else {
-                            if(((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g + '/' + self.ass_name[g]))
-                                    || ((!!self.new_data[g] || !self.dataservice.allEmpty(self.backend.generics[g], self.new_datas[g])) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
+                            if(((gen.mode == 'file' && !!self.new_data_file[g]) && self.notOrEdit(g + '/' + self.ass_name[g]))
+                                    || ((!!self.new_data[g] || !self.dataservice.allEmpty(gen.json_keys, self.new_datas[g])) && self.notOrEdit(g + '/' + self.ass_name[g]))) {
                                 self.notif.alert(self.backend.transform('warning'), self.backend.transform('filesystem.noReg'));
                                 window.$('.igen' + self.dataservice.sanit(g)).addClass('whigi-error');
                             }
                         }
                     } else {
-                        if((self.backend.generics[g][self.backend.generics[g].length - 1].mode == 'file' && !!self.new_data_file[g] && self.new_data_file[g] != '') && self.notOrEdit(g)) {
+                        if((gen.mode == 'file' && !!self.new_data_file[g]) && self.notOrEdit(g)) {
                             work.push([g, true, undefined]);
-                        } else if((!!self.new_data[g] || !self.dataservice.allEmpty(self.backend.generics[g], self.new_datas[g])) && self.notOrEdit(g)) {
+                        } else if((!!self.new_data[g] || !self.dataservice.allEmpty(gen.json_keys, self.new_datas[g])) && self.notOrEdit(g)) {
                             work.push([g, false, undefined]);
                         }
                     }
