@@ -199,7 +199,8 @@
                                                         </li>
                                                         <li>
                                                             <button type="button" id="tgname{{ dataservice.sanit(g + '/' + d) }}" class="btn btn-link btn-renamer" [attr.data-g]="g"
-                                                                *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0" [attr.data-d]="d" (click)="tgName(g, d)"
+                                                                *ngIf="backend.profile.data[g + '/' + d].id.indexOf('datafragment') == 0 && !backend.generics[g][backend.profile.data[g + '/' + d].version].new_key_is
+                                                                && !backend.generics[g][backend.profile.data[g + '/' + d].version].new_keys_only" [attr.data-d]="d" (click)="tgName(g, d)"
                                                                 data-toggle="tooltip" title="{{ 'renameLabel' | translate }}"><i class="fa fa-tag"></i></button>
                                                         </li>
                                                         <li>

@@ -3,7 +3,7 @@ export var m = {
         "generics.profile": {
             "is_i18n": true,
             "left_num": 1000,
-            "holds": ["generics.perso1", "generics.perso2", "generics.perso3", "generics.perso4"]
+            "holds": ["generics.perso1", "generics.perso2", "generics.perso3", "generics.perso4", "generics.diploma"]
         },
         "generics.family": {
             "is_i18n": true,
@@ -31,6 +31,11 @@ export var m = {
             "open": false,
             "is_i18n": true,
             "holds": ["profile/bank"]
+        },
+        "generics.diploma": {
+            "open": false,
+            "is_i18n": true,
+            "holds": ["profile/diploma"]
         },
         "generics.family1": {
             "open": true,
