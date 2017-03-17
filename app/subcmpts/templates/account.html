@@ -89,12 +89,18 @@
                                         </datalist>
                                     </div>
                                     <!-- end free name -->
-                                    <!-- forced name -->
-                                    <select *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only" [(ngModel)]="new_name[p[1].replace(MATCHER, '')]"
-                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace(MATCHER, ''))" style="background-color: #ffecbb!important;">
+                                    <!-- select forced name -->
+                                    <select *ngIf="backend.generics[p[0]][backend.generics[p[0]].length - 1].new_keys_only && !backend.generics[g][backend.generics[g].length - 1].new_key_is"
+                                        class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace(MATCHER, ''))"
+                                        style="background-color: #ffecbb!important;" [(ngModel)]="new_name[p[1].replace(MATCHER, '')]">
                                         <option *ngFor="let k of backend.generics[p[0]][backend.generics[p[0]].length - 1].new_key" [value]="k.substr(4)">{{ k | translate }}</option>
                                     </select>
-                                    <!-- end forced name -->
+                                    <!-- end select forced name -->
+                                    <!-- force name -->
+                                    <input type="text" *ngIf="backend.generics[g][backend.generics[g].length - 1].instantiable && !!backend.generics[g][backend.generics[g].length - 1].new_key_is"
+                                        readonly="readonly" class="form-control grant-required" [attr.data-forid]="'#accord' + dataservice.sanit(p[1].replace(MATCHER, ''))"
+                                        style="background-color: #ffecbb!important;" [(ngModel)]="new_name[p[1].replace(MATCHER, '')]"/>
+                                    <!-- end force name -->
                                     <br />
                                     <input_block *ngIf="strangeEmail=='' || p[0]!='profile/email'" [g]="p[0]" (out)="regData(p[1].replace(MATCHER, ''), $event)" [writeDesc]="true"
                                         [classes]="'igen' + dataservice.sanit(p[1].replace(MATCHER, '')) + ' igenfiner' + dataservice.sanit(p[1].replace(MATCHER, ''))" [reqs]="(SPLITTER.exec(p[1]) || [undefined, '0'])[1]"></input_block>
