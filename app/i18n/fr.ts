@@ -346,6 +346,7 @@ export default {
     "merge.confirm": "Êtes-vous sûr de vouloir incorporer le compte suivant?: ",
     "merge.noSelf": "Vous êtes bien entendu déjà fusionné avec vous-même",
     "merge.conflict": "Il y a des conflits entre votre compte et celui de destination, merci de d'abord les corriger",
+    "merge.mine": "Mon compte actuel: ",
 
     "generics.silent": "Vous n'avez pas rempli tous les champs obligatoires",
     "generics.regexp": "Vous n'avez pas rempli tous les champs obligatoires",

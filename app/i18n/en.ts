@@ -346,6 +346,7 @@ export default  {
     "merge.confirm": "Are you sure you want to incorporate the next account?: ",
     "merge.noSelf": "You are already merged with yourself, dear",
     "merge.conflict": "There exist conflicts between this account and the want to merge to, please fix them first",
+    "merge.mine": "My actual account: ",
 
     "generics.silent": "Your input lacks required fields",
     "generics.regexp": "Your input lacks required fields",

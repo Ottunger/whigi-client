@@ -119,7 +119,7 @@ export class Header implements OnInit {
      * @public
      */
     showIntro() {
-        window.introJs.introJs().setOptions({
+        window.introJs().setOptions({
             nextLabel: this.backend.transform('next'),
             prevLabel: this.backend.transform('prev'),
             skipLabel: this.backend.transform('skip'),
