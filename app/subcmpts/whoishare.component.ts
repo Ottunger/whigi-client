@@ -76,21 +76,6 @@ export class WhoIShare {
     }
 
     /**
-     * Show real name.
-     * @function realName
-     * @public
-     * @param {String} name Real name.
-     */
-    realName(name: string) {
-        window.$(`
-            <div class="modal">
-                <h3>` + this.backend.transform('help') + `</h3>
-                <p>` + name + `</p>
-            </div>
-        `).appendTo('body').modal();
-    }
-
-    /**
      * Keys.
      * @function regables
      * @public

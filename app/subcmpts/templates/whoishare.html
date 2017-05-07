@@ -31,10 +31,6 @@
                                         </div>
                                     </div>
                                     <div class="portlet-body form" id="apsableshare{{ dataservice.sanit(p) }}" style="display: none;text-align:center;">
-                                        <kbd *ngFor="let n of (!!users[p] && !!users[p].company_info && !!users[p].company_info.request)? dataservice.keys(users[p].company_info.request) : []">
-                                            {{ n }}: {{ users[p].company_info.request[n] | translate }}</kbd>
-                                        <kbd *ngIf="!users[p] || !users[p].company_info || !users[p].company_info.request || dataservice.keys(users[p].company_info.request).length == 0">
-                                            {{ 'requests.unspecified' | translate }}</kbd>
                                         <!-- BEGIN TABLE -->
                                         <div class="table-responsive">
                                             <table class="table table-hover">
@@ -42,6 +38,7 @@
                                                     <tr>
                                                         <th>{{ 'whoishare.generic' | translate }}</th>
                                                         <th>{{ 'whoishare.dname' | translate }}</th>
+                                                        <th>{{ 'whoishare.role' | translate }}</th>
                                                         <th>{{ 'action' | translate }}</th>
                                                     </tr>
                                                 </thead>
@@ -51,7 +48,13 @@
                                                             <tooltip [mode]="'info'" [uri]="genName(g, true)" [right]="false"></tooltip>
                                                             {{ genName(g, false) }}
                                                         </td>
-                                                        <td><a href="javascript:;" (click)="realName(g)"><i class="fa fa-info-circle"></i></a></td>
+                                                        <td style="opacity: 0.65;">{{ g }}</td>
+                                                        <td>
+                                                            <span *ngFor="let n of (!!users[p] && !!users[p].company_info && !!users[p].company_info.request)? dataservice.keys(users[p].company_info.request) : []; let l = last">
+                                                                {{ n }}: {{ users[p].company_info.request[n] | translate }}<br *ngIf="!l" /></span>
+                                                            <span *ngIf="!users[p] || !users[p].company_info || !users[p].company_info.request || dataservice.keys(users[p].company_info.request).length == 0">
+                                                                {{ 'requests.unspecified' | translate }}</span>
+                                                        </td>
                                                         <td>
                                                             <button type="button" class="btn default" (click)="goTo(g)">{{ 'filesystem.goTo' | translate }}</button>
                                                             <button type="button" class="btn green" [disabled]="dataservice.isWhigi(p)" (click)="revoke(g, p)">

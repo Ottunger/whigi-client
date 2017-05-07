@@ -24,13 +24,11 @@
                                             <div class="caption">
                                                 <i class="fa fa-user"></i>{{ 'profile.mines' | translate }}</div>
                                             <div class="tools">
-                                                <a *ngIf="ongs.length > 0" href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable')"> </a>
-                                                <span *ngIf="ongs.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
-                                            </div>
+                                                <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable')"> </a></div>
                                         </div>
-                                        <div *ngIf="ongs.length > 0" class="portlet-body form" id="apsable">
+                                        <div class="portlet-body form" id="apsable">
                                             <!-- BEGIN FORM-->
-                                            <div class="table-responsive">
+                                            <div *ngIf="ongs.length > 0" class="table-responsive">
                                                 <table class="table table-hover">
                                                     <thead>
                                                         <tr>
@@ -45,6 +43,9 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
+                                            </div>
+                                            <div class="row" *ngIf="ongs.length == 0">
+                                                <p style="margin-left: 15px;">{{ 'oauth.noONG' | translate }}</p>
                                             </div>
                                             <!-- END FORM-->
                                         </div>
@@ -113,14 +114,11 @@
                                             <div class="caption">
                                                 <i class="fa fa-user"></i>{{ 'profile.oauth' | translate }}</div>
                                             <div class="tools">
-                                                <a *ngIf="!!backend.profile && !!backend.profile.oauth && backend.profile.oauth.length > 0" href="javascript:;" class="tl-link expand"
-                                                    (click)="dataservice.collapse('apsable3')"> </a>
-                                                <span *ngIf="!backend.profile || !backend.profile.oauth || backend.profile.oauth.length == 0"><i class="fa fa-exclamation-triangle"></i> </span>
-                                            </div>
+                                                <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable3')"> </a></div>
                                         </div>
-                                        <div *ngIf="!!backend.profile && !!backend.profile.oauth && backend.profile.oauth.length > 0" class="portlet-body form" id="apsable3">
+                                        <div class="portlet-body form" id="apsable3">
                                             <!-- BEGIN FORM-->
-                                            <div class="table-responsive">
+                                            <div *ngIf="!!backend.profile && !!backend.profile.oauth && backend.profile.oauth.length > 0" class="table-responsive">
                                                 <table class="table table-hover">
                                                     <thead>
                                                         <tr>
@@ -139,6 +137,9 @@
                                                 </table>
                                             </div>
                                             <!-- END FORM-->
+                                            <div class="row" *ngIf="!backend.profile || !backend.profile.oauth || backend.profile.oauth.length ==  0">
+                                                <p style="margin-left: 15px;">{{ 'oauth.noGiven' | translate }}</p>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

@@ -59,10 +59,6 @@
                                                     <button type="submit" class="btn green" (click)="revokeAll()">
                                                         <i class="fa fa-exclamation"></i> {{ 'dataview.revokeAll' | translate }}</button>
                                                 </div>
-                                                <div class="col-md-3">
-                                                    <button type="submit" class="btn green" [disabled]="shared() || !!backend.generics[data_name]" (click)="remove()">
-                                                        <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
-                                                </div>
                                             </div>
                                             <div class="table-responsive" style="overflow-x: inherit;">
                                                 <table class="table table-hover">
@@ -105,7 +101,9 @@
                                                             </td>
                                                             <td *ngIf="!!timings[d] && !timings[d].ends">{{ 'dataview.forever' | translate }}</td>
                                                             <td *ngIf="!timings[d]"></td>
-                                                            <td *ngIf="!!timings[d]" style="max-width: 100px;overflow-x: auto;">{{ timings[d].trigger }}</td>
+                                                            <td *ngIf="!!timings[d]">
+                                                                <a href="{{ timings[d].trigger }}" onclick="return false;"><i class="fa fa-flag"></i></a>
+                                                            </td>
                                                             <td *ngIf="!timings[d]"></td>
 
                                                             <td><input type="checkbox" [checked]="backend.profile.data[data_name].shared_to[d].indexOf('storable') == 0" disabled="disabled" /></td>
@@ -141,6 +139,39 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- END BLOCK -->
+                            <!-- BEGIN BLOCK -->
+                            <div class="tab-content">
+                                <div class="tab-pane active">
+                                    <div class="portlet box blue-madison">
+                                        <div class="portlet-title">
+                                            <div class="caption">
+                                                <i class="fa fa-user"></i>{{ 'remove' | translate }}</div>
+                                            <div class="tools">
+                                                <a href="javascript:;" class="tl-link expand" (click)="dataservice.collapse('apsable2')"> </a>
+                                                <!-- <a href="javascript:;" class="remove"> </a> -->
+                                            </div>
+                                        </div>
+                                        <div class="portlet-body form" id="apsable2">
+                                            <!-- BEGIN FORM-->
+                                            <form class="form-horizontal" role="form">
+                                                <div class="form-body">
+                                                    {{ 'dataview.removeWhen' | translate }}
+                                                </div>
+                                                <div class="form-actions">
+                                                    <div class="row text-center">
+                                                        <div class="col-md-12">
+                                                            <button type="button" class="btn green" [disabled]="shared() || !!backend.generics[data_name]" (click)="remove()">
+                                                                <i class="fa fa-exclamation"></i> {{ 'remove' | translate }}</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <!-- END FORM-->
                                         </div>
                                     </div>
                                 </div>
