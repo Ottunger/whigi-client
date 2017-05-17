@@ -1,7 +1,7 @@
 export default  {
     "error": "Error!",
     "success": "Success!",
-    "confirmation": "Are you sure tou want to move now?",
+    "confirmation": "Are you sure you want to move now?",
     "action": "Action",
     "record": "Record",
     "remove": "Remove",
